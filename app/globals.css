@@ -1,42 +1,201 @@
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@import "pretendard/dist/web/static/pretendard.css";
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 html,
 body {
-  max-width: 100vw;
-  overflow-x: hidden;
+  line-height: 1;
+  font-family: var(--font-main);
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-* {
-  box-sizing: border-box;
-  padding: 0;
   margin: 0;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
 }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+  display: block;
+}
+
+ol,
+ul {
+  list-style: none;
+}
+
+blockquote,
+q {
+  quotes: none;
+}
+
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+  content: "";
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+@font-face {
+  font-family: "HakgyoansimB";
+  src: url("/fonts/Hakgyoansim-Dunggeunmiso-OTF-B.otf") format("opentype");
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "HakgyoansimR";
+  src: url("/fonts/Hakgyoansim-Dunggeunmiso-OTF-R.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+:root {
+  --font-main: "Pretendard", sans-serif;
+  --font-sub: "HakgyoansimB", sans-serif;
+
+  /* --font-size-xxl: 60px;
+  --font-size-xl: 48px;
+  --font-size-lg: 32px;
+  --font-size-md: 20px;
+  --font-size-sm: 16px;
+  --font-size-xs: 12px;
+  --font-size-xxs: 8px; */
+
+  --primary-color: #fdbb09;
+  --background-color: #f8fafb;
+  --disabled-color: #909090;
+  --grey-1-color: #2f2f2f;
+  --grey-2-color: #909090; // disabled
+  --grey-3-color: #585858;
+  --red-1-color: #eb2828;
+  --red-flower-color: #f44336;
+  --green-flower-color: #2e9e41;
+  --orange-flower-color: #ff7d03;
+  --blue-flower-color: #3196f3;
+}
+
+body,
+button {
+  font-family: var(--font-main);
+}
+
+button {
+  padding: 0;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  max-width: 480px;
+  width: 100%;
+  height: 100vh;
+  margin: 0 auto;
+  padding: 0 1.25rem;
+  background-color: var(--background-color);
 }
