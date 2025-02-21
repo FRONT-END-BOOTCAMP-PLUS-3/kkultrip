@@ -143,14 +143,14 @@ table {
 }
 @font-face {
   font-family: "HakgyoansimB";
-  src: url("/fonts/Hakgyoansim-Dunggeunmiso-OTF-B.otf") format("opentype");
+  src: url("/fonts/Hakgyoansim Dunggeunmiso OTF B.otf") format("opentype");
   font-weight: bold;
   font-style: normal;
 }
 
 @font-face {
   font-family: "HakgyoansimR";
-  src: url("/fonts/Hakgyoansim-Dunggeunmiso-OTF-R.otf") format("opentype");
+  src: url("/fonts/Hakgyoansim Dunggeunmiso OTF R.otf") format("opentype");
   font-weight: normal;
   font-style: normal;
 }
@@ -169,8 +169,8 @@ table {
 
   --primary-color: #fdbb09;
   --background-color: #f8fafb;
-  --disabled-color: #909090;
-  --grey-1-color: #2f2f2f;
+  --disabled-color: #d9d9d9;
+  --grey-1-color: #efefef;
   --grey-2-color: #909090;
   --grey-3-color: #585858;
   --red-1-color: #eb2828;
@@ -192,10 +192,9 @@ button {
 .container {
   display: flex;
   flex-direction: column;
-  max-width: 480px;
+  max-width: 30rem;
   width: 100%;
   height: 100vh;
   margin: 0 auto;
-  padding: 0 1.25rem;
   background-color: var(--background-color);
 }

@@ -1,5 +1,5 @@
-const SpotPage = () => {
-  return <div>SpotPage</div>;
+const SpotDetailLayout = ({ children }: { children: React.ReactNode }) => {
+  return <div>{children}</div>;
 };
 
-export default SpotPage;
+export default SpotDetailLayout;
