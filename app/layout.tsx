@@ -1,19 +1,21 @@
 import "./globals.css";
+import Header from "@/components/header/Header";
 
 export const metadata = {
   title: "kkultrip",
   description: "관광 명소 도슨트 서비스",
 };
-export default function RootLayout({
+
+const RootLayout = ({
   children,
 }: Readonly<{
   children: React.ReactNode;
-}>) {
+}>) => {
+  const isLoggedIn = true;
+
   return (
     <html lang="ko">
       <head>
-        <link rel="manifest" href="/manifest.json" />
-
         <meta charSet="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>꿀트립</title>
@@ -38,8 +40,12 @@ export default function RootLayout({
         <meta property="og:type" content="website" />
       </head>
       <body>
-        <div className="container">{children}</div>
+        <div className="container">
+          <Header isLoggedIn={isLoggedIn} />
+          {children}
+        </div>
       </body>
     </html>
   );
-}
+};
+export default RootLayout;

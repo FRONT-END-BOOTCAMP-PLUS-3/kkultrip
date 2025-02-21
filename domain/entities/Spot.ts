@@ -10,6 +10,7 @@ export interface Spot {
   link: string | null;
   img: string;
   avgPrice: number | null;
+  avgWaitingTime: number | null;
   createdAt: Date;
   updatedAt: Date;
 }
