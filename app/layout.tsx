@@ -1,5 +1,4 @@
 import "./globals.css";
-import Header from "@/components/header/Header";
 
 export const metadata = {
   title: "kkultrip",
@@ -11,8 +10,6 @@ const RootLayout = ({
 }: Readonly<{
   children: React.ReactNode;
 }>) => {
-  const isLoggedIn = true;
-
   return (
     <html lang="ko">
       <head>
@@ -39,12 +36,7 @@ const RootLayout = ({
         <meta property="og:url" content="https://kkultrip.vercel.app/" />
         <meta property="og:type" content="website" />
       </head>
-      <body>
-        <div className="container">
-          <Header isLoggedIn={isLoggedIn} />
-          {children}
-        </div>
-      </body>
+      <body>{children}</body>
     </html>
   );
 };
