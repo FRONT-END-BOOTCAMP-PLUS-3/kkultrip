@@ -1,13 +1,33 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
 import UserTable from "../components/UserTable";
 import styles from "./AdminSpotsPage.module.scss";
-import { prisma } from "@/lib/prisma";
 
-const AdminSpotsPage = async () => {
-  const spots = await prisma.spot.findMany(); // Spot 테이블 조회
-  console.log("Spot 데이터:", spots); // 콘솔에 데이터 출력
+const AdminSpotsPage = () => {
+  const [spots, setSpots] = useState([]);
+
+  useEffect(() => {
+    const fetchSpots = async () => {
+      try {
+        const res = await fetch("/api/admin/spots");
+        if (!res.ok) {
+          throw new Error("Failed to fetch spots");
+        }
+        const data = await res.json();
+        setSpots(data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchSpots();
+  }, []);
+
+  console.log("Spot 데이터:", spots);
 
   return (
     <div className={styles.container}>
