@@ -1,8 +1,6 @@
-export default interface SpotRepository {
-  createSpot(
-    name: string,
-    description: string,
-    latitude: number,
-    longitude: number
-  ): Promise<void>;
+import { Spot } from "@/domain/entities/Spot";
+
+export interface SpotRepository {
+  getAllSpots(): Promise<Spot[]>;
+  createSpot(spot: Omit<Spot, "id" | "createdAt" | "updatedAt">): Promise<void>;
 }
