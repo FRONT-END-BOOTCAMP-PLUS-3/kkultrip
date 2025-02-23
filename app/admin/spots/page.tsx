@@ -6,9 +6,10 @@ import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
 import UserTable from "../components/UserTable";
 import styles from "./AdminSpotsPage.module.scss";
+import { Spot } from "@/domain/entities/Spot";
 
 const AdminSpotsPage = () => {
-  const [spots, setSpots] = useState([]);
+  const [spots, setSpots] = useState<Spot[]>([]);
 
   useEffect(() => {
     const fetchSpots = async () => {
@@ -17,7 +18,7 @@ const AdminSpotsPage = () => {
         if (!res.ok) {
           throw new Error("Failed to fetch spots");
         }
-        const data = await res.json();
+        const data: Spot[] = await res.json();
         setSpots(data);
       } catch (error) {
         console.error(error);
@@ -34,7 +35,7 @@ const AdminSpotsPage = () => {
       <Sidebar />
       <main className={styles.main}>
         <Header title="명소 관리" />
-        <UserTable />
+        <UserTable spots={spots} />
         <button className={styles.addButton}>
           <FaPlus />
         </button>
