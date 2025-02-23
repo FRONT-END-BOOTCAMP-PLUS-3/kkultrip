@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation"; // 추가
 import { FaPlus } from "react-icons/fa";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
@@ -9,6 +10,7 @@ import styles from "./AdminSpotsPage.module.scss";
 import { Spot } from "@/domain/entities/Spot";
 
 const AdminSpotsPage = () => {
+  const router = useRouter(); // 추가
   const [spots, setSpots] = useState<Spot[]>([]);
 
   useEffect(() => {
@@ -36,7 +38,10 @@ const AdminSpotsPage = () => {
       <main className={styles.main}>
         <Header title="명소 관리" />
         <UserTable spots={spots} />
-        <button className={styles.addButton}>
+        <button
+          className={styles.addButton}
+          onClick={() => router.push("/admin/spots/create")}
+        >
           <FaPlus />
         </button>
       </main>
