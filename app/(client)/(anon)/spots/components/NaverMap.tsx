@@ -8,16 +8,20 @@ declare global {
   }
 }
 
-interface Place {
+interface Spot {
   id: number;
   name: string;
   category: string;
-  price: number;
+  avgPrice?: number;
   lat: number;
   lng: number;
+  bookmark?: number;
+  phone?: number;
+  time?: string;
+  img: string;
 }
 
-const NaverMap = ({ places }: { places: Place[] }) => {
+const NaverMap = ({ spots }: { spots: Spot[] }) => {
   const [mapLoaded, setMapLoaded] = useState(false);
   const [map, setMap] = useState<naver.maps.Map | null>(null);
   const apiKey = process.env.NEXT_PUBLIC_NAVER_MAP_CLIENT_ID;
@@ -64,14 +68,14 @@ const NaverMap = ({ places }: { places: Place[] }) => {
         );
 
         // ✅ 내 위치 마커 추가 (bee 아이콘)
-        // new window.naver.maps.Marker({
-        //   position: userLocation,
-        //   map: map,
-        //   icon: {
-        //     url: "/images/bee.svg",
-        //     size: new window.naver.maps.Size(317, 367),
-        //   },
-        // });
+        new window.naver.maps.Marker({
+          position: userLocation,
+          map: map,
+          icon: {
+            url: "/images/bee_50x58.png",
+            size: new window.naver.maps.Size(50, 58),
+          },
+        });
 
         // 지도 중심을 내 위치로 이동
         map.setCenter(userLocation);
@@ -82,19 +86,19 @@ const NaverMap = ({ places }: { places: Place[] }) => {
     );
 
     // ✅ 명소 마커 추가
-    places.forEach((place) => {
+    spots.forEach((spot) => {
       new window.naver.maps.Marker({
-        position: new window.naver.maps.LatLng(place.lat, place.lng),
+        position: new window.naver.maps.LatLng(spot.lat, spot.lng),
         map: map,
         icon: {
-          url: `/images/${place.category}.svg`,
-          size: new window.naver.maps.Size(40, 40),
+          url: `/images/flower-${spot.category}.svg`,
+          size: new window.naver.maps.Size(50, 50),
         },
       });
     });
-  }, [map, places]);
+  }, [map, spots]);
 
-  return <div id="map" style={{ height: "100vh", width: "100%" }} />;
+  return <div id="map" style={{ height: "90vh", width: "100%" }} />;
 };
 
 export default NaverMap;

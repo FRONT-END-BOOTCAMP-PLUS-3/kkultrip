@@ -1,32 +1,41 @@
-interface Place {
+import styles from "./BottomSheet.module.scss";
+import DraggableBottomSheet from "./DraggableBottomSheet";
+
+interface Spot {
   id: number;
   name: string;
   category: string;
-  price: number;
+  avgPrice?: number;
   lat: number;
   lng: number;
+  bookmarkCnt: number;
+  tipCnt: number;
+  time?: string;
+  img: string;
 }
 
-export default async function BottomSheet({ places }: { places: Place[] }) {
+export default function BottomSheet({ spots }: { spots: Spot[] }) {
   return (
-    <div
-      style={{
-        position: "absolute",
-        bottom: 0,
-        width: "100%",
-        background: "white",
-      }}
-    >
-      <h2>명소 리스트</h2>
-      <div>
-        {places.map((place) => (
-          <div key={place.id}>
-            <h3>{place.name}</h3>
-            <p>카테고리: {place.category}</p>
-            <p>1인 평균 비용: {place.price}원</p>
+    <div className={styles.bottomSheetContainer}>
+      {/* 🚀 장소 정보는 SSR에서 렌더링 (SEO 적용 가능) */}
+      <div className={styles.hiddenSEO}>
+        {spots.map((spot) => (
+          <div key={spot.id} className={styles.spotSEO}>
+            <h3>{spot.name}</h3>
+            <p className={styles.category}>{spot.category}</p>
+            <p className={styles.location}>
+              📍 {spot.lat}, {spot.lng}
+            </p>
+            <p className={styles.details}>⭐ {spot.bookmarkCnt || 0}</p>
+            <p className={styles.price}>
+              💰 {spot.avgPrice?.toLocaleString() || "정보 없음"}원
+            </p>
           </div>
         ))}
       </div>
+
+      {/* 🚀 CSR에서 드래그 기능을 담당 */}
+      <DraggableBottomSheet spots={spots} />
     </div>
   );
 }

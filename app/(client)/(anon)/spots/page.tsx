@@ -1,13 +1,17 @@
 import NaverMap from "./components/NaverMap";
 import BottomSheet from "./components/BottomSheet";
 
-interface Place {
+interface Spot {
   id: number;
   name: string;
   category: string;
-  price: number;
+  avgPrice?: number;
   lat: number;
   lng: number;
+  bookmarkCnt: number;
+  tipCnt: number;
+  time?: string;
+  img: string;
 }
 
 // ✅ 서버에서 명소 데이터를 가져오는 함수
@@ -19,30 +23,73 @@ interface Place {
 const Spots = async () => {
   // const places = await getPlaces(); // ✅ 서버에서 데이터 가져오기 (SEO 가능)
 
-  const places: Place[] = [
+  const spots: Spot[] = [
     {
       id: 1,
-      name: "경복궁",
+      name: "불국사",
       category: "landmark",
-      price: 3000,
-      lat: 37.579617,
-      lng: 126.977041,
+      avgPrice: 10900,
+      lat: 37.5665,
+      lng: 126.978,
+      bookmarkCnt: 130,
+      tipCnt: 150,
+      time: "16:00~22:00",
+      img: "https://www.gyeongju.go.kr/upload/content/thumb/20191221/EE09467CAC7043D9969AD488AB8BC662.jpg",
     },
     {
       id: 2,
-      name: "남산 타워",
+      name: "불국사",
       category: "landmark",
-      price: 10000,
-      lat: 37.551169,
-      lng: 126.988227,
+      avgPrice: 10900,
+      lat: 37.5665,
+      lng: 126.978,
+      bookmarkCnt: 130,
+      tipCnt: 150,
+      time: "16:00~22:00",
+      img: "https://www.gyeongju.go.kr/upload/content/thumb/20191221/EE09467CAC7043D9969AD488AB8BC662.jpg",
+    },
+    {
+      id: 3,
+      name: "불국사",
+      category: "landmark",
+      avgPrice: 10900,
+      lat: 37.5665,
+      lng: 126.978,
+      bookmarkCnt: 130,
+      tipCnt: 150,
+      time: "16:00~22:00",
+      img: "https://www.gyeongju.go.kr/upload/content/thumb/20191221/EE09467CAC7043D9969AD488AB8BC662.jpg",
+    },
+    {
+      id: 4,
+      name: "불국사",
+      category: "landmark",
+      avgPrice: 10900,
+      lat: 37.5665,
+      lng: 126.978,
+      bookmarkCnt: 130,
+      tipCnt: 150,
+      time: "16:00~22:00",
+      img: "https://www.gyeongju.go.kr/upload/content/thumb/20191221/EE09467CAC7043D9969AD488AB8BC662.jpg",
+    },
+    {
+      id: 5,
+      name: "불국사",
+      category: "landmark",
+      avgPrice: 10900,
+      lat: 37.5665,
+      lng: 126.978,
+      bookmarkCnt: 130,
+      tipCnt: 150,
+      time: "16:00~22:00",
+      img: "https://www.gyeongju.go.kr/upload/content/thumb/20191221/EE09467CAC7043D9969AD488AB8BC662.jpg",
     },
   ];
+
   return (
     <div>
-      <h1>명소 리스트</h1>
-      {/* <NaverMap places={places} /> */}
-      <NaverMap places={places} />
-      <BottomSheet places={places} />
+      <NaverMap spots={spots} />
+      <BottomSheet spots={spots} />
     </div>
   );
 };
