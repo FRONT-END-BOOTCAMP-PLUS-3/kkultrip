@@ -1,11 +1,18 @@
-import styles from "./UserTable.module.scss";
-import { Spot } from "@/domain/entities/Spot";
+import { useRouter } from "next/navigation";
+import styles from "./SpotTable.module.scss";
+import { Spot } from "@prisma/client";
 
-interface UserTableProps {
+interface SpotTableProps {
   spots: Spot[];
 }
 
-const UserTable = ({ spots }: UserTableProps) => {
+const SpotTable = ({ spots }: SpotTableProps) => {
+  const router = useRouter();
+
+  const handleEdit = (id: string) => {
+    router.push(`/admin/spots/${id}/edit`);
+  };
+
   return (
     <table className={styles.table}>
       <thead>
@@ -15,6 +22,7 @@ const UserTable = ({ spots }: UserTableProps) => {
           <th>주소</th>
           <th>카테고리</th>
           <th>평균가격</th>
+          <th>관리</th>
         </tr>
       </thead>
       <tbody>
@@ -30,11 +38,19 @@ const UserTable = ({ spots }: UserTableProps) => {
                   ? `${spot.avgPrice.toLocaleString()}원`
                   : "정보 없음"}
               </td>
+              <td>
+                <button
+                  className={styles.editButton}
+                  onClick={() => handleEdit(spot.id.toString())}
+                >
+                  수정
+                </button>
+              </td>
             </tr>
           ))
         ) : (
           <tr>
-            <td colSpan={5} className={styles.noData}>
+            <td colSpan={6} className={styles.noData}>
               데이터가 없습니다.
             </td>
           </tr>
@@ -44,4 +60,4 @@ const UserTable = ({ spots }: UserTableProps) => {
   );
 };
 
-export default UserTable;
+export default SpotTable;

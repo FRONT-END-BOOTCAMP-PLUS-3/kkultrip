@@ -7,6 +7,12 @@ export class PgSpotRepository implements SpotRepository {
     return await prisma.spot.findMany();
   }
 
+  async getSpotById(id: number): Promise<Spot | null> {
+    return await prisma.spot.findUnique({
+      where: { id },
+    });
+  }
+
   async createSpot(
     spot: Omit<Spot, "id" | "createdAt" | "updatedAt">
   ): Promise<Spot> {
@@ -17,6 +23,13 @@ export class PgSpotRepository implements SpotRepository {
         avgPrice: spot.avgPrice ?? 0,
         avgWaitingTime: spot.avgWaitingTime ?? 0,
       },
+    });
+  }
+
+  async updateSpot(id: number, data: Partial<Spot>): Promise<Spot | null> {
+    return await prisma.spot.update({
+      where: { id },
+      data,
     });
   }
 }
