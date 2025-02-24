@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { GetSpotUseCase } from "@/application/usecases/GetSpotUseCase";
+import { GetSpotUseCase } from "@/application/usecases/admin/spot/GetSpotUseCase";
 import { PgSpotRepository } from "@/infrastructure/repositories/PgSpotRepository";
 
 export async function GET() {
