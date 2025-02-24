@@ -32,4 +32,15 @@ export class PgSpotRepository implements SpotRepository {
       data,
     });
   }
+
+  async deleteSpot(id: number): Promise<Spot | null> {
+    try {
+      return await prisma.spot.delete({
+        where: { id },
+      });
+    } catch (error) {
+      console.error("Error deleting spot:", error);
+      return null; // 존재하지 않는 경우를 고려해 null 반환
+    }
+  }
 }

@@ -42,6 +42,22 @@
   border-radius: 4px;
   cursor: pointer;
   font-size: 0.9rem;
+  margin-right: 0.5rem; // 삭제 버튼과 간격 조정
+}
+
+.deleteButton {
+  background-color: #e74c3c; // 빨간색
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background 0.2s ease-in-out;
+
+  &:hover {
+    background-color: #c0392b; // 좀 더 어두운 빨간색
+  }
 }
 
 @media (max-width: 768px) {
