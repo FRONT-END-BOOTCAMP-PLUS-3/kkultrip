@@ -39,7 +39,7 @@ const SpotsCreatePage = () => {
       updatedAt: new Date(),
     };
 
-    const res = await fetch("/api/spots", {
+    const res = await fetch("/api/admin/spots/create", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
