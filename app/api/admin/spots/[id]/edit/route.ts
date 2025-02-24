@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { GetSpotUseCase } from "@/application/usecases/admin/spot/GetSpotUseCase";
+import { GetSpotByIdUseCase } from "@/application/usecases/admin/spot/GetSpotsByIdUseCase";
 import { UpdateSpotUseCase } from "@/application/usecases/UpdateSpotUseCase";
 import { PgSpotRepository } from "@/infrastructure/repositories/PgSpotRepository";
 
@@ -15,8 +15,8 @@ export async function GET(
     }
 
     const spotRepository = new PgSpotRepository();
-    const getSpotUseCase = new GetSpotUseCase(spotRepository);
-    const spot = await getSpotUseCase.executeById(Number(id));
+    const getSpotUseCase = new GetSpotByIdUseCase(spotRepository);
+    const spot = await getSpotUseCase.execute(Number(id));
 
     if (!spot) {
       return NextResponse.json({ error: "Spot not found" }, { status: 404 });

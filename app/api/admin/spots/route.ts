@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server";
-import { GetSpotUseCase } from "@/application/usecases/admin/spot/GetSpotUseCase";
+import { GetSpotsUseCase } from "@/application/usecases/admin/spot/GetSpotsUseCase";
 import { PgSpotRepository } from "@/infrastructure/repositories/PgSpotRepository";
 
 export async function GET() {
   try {
     const spotRepository = new PgSpotRepository();
-    const getSpotUseCase = new GetSpotUseCase(spotRepository);
+    const getSpotUseCase = new GetSpotsUseCase(spotRepository);
     const spots = await getSpotUseCase.execute();
 
     return NextResponse.json(spots, { status: 200 });
