@@ -25,21 +25,20 @@ const SpotsEditPage = () => {
 
   useEffect(() => {
     if (!id) return;
+
     const fetchSpot = async () => {
       try {
-        const res = await fetch(`/api/admin/spots/${id}/edit`);
+        const res = await fetch(`/api/admin/spots/${id}/edit`); // ✅ API 경로 유지
         if (!res.ok) throw new Error("Failed to fetch spot");
+
         const data = await res.json();
+        if (!data || data.id !== Number(id)) {
+          // ✅ id 일치 여부 확인
+          throw new Error("Invalid spot data received");
+        }
 
-        // id에 해당하는 데이터만 필터링
-        const spot = Array.isArray(data)
-          ? data.find((item) => item.id === Number(id))
-          : data;
-
-        if (!spot) throw new Error("Spot not found");
-
-        console.log(`Spot ID ${id}:`, spot);
-        setFormData(spot);
+        console.log(`Spot ID ${id}:`, data);
+        setFormData(data);
       } catch (error) {
         console.error(error);
         alert("데이터를 불러오는 데 실패했습니다.");
