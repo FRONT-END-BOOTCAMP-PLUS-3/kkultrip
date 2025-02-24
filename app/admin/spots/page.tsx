@@ -7,7 +7,7 @@ import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
 import UserTable from "../components/UserTable";
 import styles from "./AdminSpotsPage.module.scss";
-import { Spot } from "@/domain/entities/Spot";
+import { Spot } from "@prisma/client";
 
 const AdminSpotsPage = () => {
   const router = useRouter(); // 추가
