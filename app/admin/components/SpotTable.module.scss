@@ -13,6 +13,13 @@
   font-weight: bold;
   padding: 1rem;
   text-align: left;
+  cursor: pointer;
+  transition: background 0.2s ease-in-out;
+}
+
+.table th.sorted {
+  background: #e0e0e0;
+  transform: scale(1.05);
 }
 
 .table td {
@@ -34,30 +41,29 @@
   color: #888;
 }
 
+.editButton,
+.deleteButton {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
 .editButton {
   background-color: var(--primary-color);
   color: #fff;
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 0.9rem;
-  margin-right: 0.5rem; // 삭제 버튼과 간격 조정
+  margin-right: 0.5rem;
 }
 
 .deleteButton {
-  background-color: #e74c3c; // 빨간색
+  background-color: #e74c3c;
   color: #fff;
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 0.9rem;
   transition: background 0.2s ease-in-out;
+}
 
-  &:hover {
-    background-color: #c0392b; // 좀 더 어두운 빨간색
-  }
+.deleteButton:hover {
+  background-color: #c0392b;
 }
 
 @media (max-width: 768px) {

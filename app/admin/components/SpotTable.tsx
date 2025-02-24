@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./SpotTable.module.scss";
 import { Spot } from "@prisma/client";
@@ -6,12 +7,33 @@ interface SpotTableProps {
   spots: Spot[];
 }
 
+type SortKey = "id" | "name" | "address" | "category" | "avgPrice";
+type SortOrder = "asc" | "desc";
+
 const SpotTable = ({ spots }: SpotTableProps) => {
   const router = useRouter();
+  const [sortKey, setSortKey] = useState<SortKey>("id");
+  const [sortOrder, setSortOrder] = useState<SortOrder>("asc");
 
-  const handleEdit = (id: string) => {
-    router.push(`/admin/spots/${id}/edit`);
+  const handleSort = (key: SortKey) => {
+    setSortOrder(sortKey === key && sortOrder === "asc" ? "desc" : "asc");
+    setSortKey(key);
   };
+
+  const sortedSpots = [...spots].sort((a, b) => {
+    const aValue = a[sortKey] || "";
+    const bValue = b[sortKey] || "";
+
+    return typeof aValue === "number" && typeof bValue === "number"
+      ? sortOrder === "asc"
+        ? aValue - bValue
+        : bValue - aValue
+      : sortOrder === "asc"
+      ? String(aValue).localeCompare(String(bValue))
+      : String(bValue).localeCompare(String(aValue));
+  });
+
+  const handleEdit = (id: string) => router.push(`/admin/spots/${id}/edit`);
 
   const handleDelete = async (id: number) => {
     if (!confirm("정말로 삭제하시겠습니까?")) return;
@@ -23,12 +45,10 @@ const SpotTable = ({ spots }: SpotTableProps) => {
         body: JSON.stringify({ id }),
       });
 
-      if (!response.ok) {
-        throw new Error("삭제 실패");
-      }
+      if (!response.ok) throw new Error("삭제 실패");
 
       alert("삭제되었습니다.");
-      router.refresh(); // 삭제 후 목록 새로고침
+      window.location.reload();
     } catch (error) {
       console.error("Error deleting spot:", error);
       alert("삭제 중 오류가 발생했습니다.");
@@ -39,45 +59,57 @@ const SpotTable = ({ spots }: SpotTableProps) => {
     <table className={styles.table}>
       <thead>
         <tr>
-          <th>번호</th>
-          <th>이름</th>
-          <th>주소</th>
-          <th>카테고리</th>
-          <th>평균가격</th>
+          {(["id", "name", "address", "category", "avgPrice"] as SortKey[]).map(
+            (key) => (
+              <th
+                key={key}
+                onClick={() => handleSort(key)}
+                className={sortKey === key ? styles.sorted : ""}
+              >
+                {key === "id"
+                  ? "번호"
+                  : key === "name"
+                  ? "이름"
+                  : key === "address"
+                  ? "주소"
+                  : key === "category"
+                  ? "카테고리"
+                  : "평균가격"}
+              </th>
+            )
+          )}
           <th>관리</th>
         </tr>
       </thead>
       <tbody>
-        {spots.length > 0 ? (
-          spots
-            .sort((a, b) => a.id - b.id) // ID 기준 오름차순 정렬
-            .map((spot, index) => (
-              <tr key={spot.id}>
-                <td>{index + 1}</td>
-                <td>{spot.name}</td>
-                <td>{spot.address}</td>
-                <td>{spot.category}</td>
-                <td>
-                  {spot.avgPrice
-                    ? `${spot.avgPrice.toLocaleString()}원`
-                    : "정보 없음"}
-                </td>
-                <td>
-                  <button
-                    className={styles.editButton}
-                    onClick={() => handleEdit(spot.id.toString())}
-                  >
-                    수정
-                  </button>
-                  <button
-                    className={styles.deleteButton}
-                    onClick={() => handleDelete(spot.id)}
-                  >
-                    삭제
-                  </button>
-                </td>
-              </tr>
-            ))
+        {sortedSpots.length > 0 ? (
+          sortedSpots.map((spot) => (
+            <tr key={spot.id}>
+              <td>{spot.id}</td>
+              <td>{spot.name}</td>
+              <td>{spot.address}</td>
+              <td>{spot.category}</td>
+              <td>
+                {spot.avgPrice
+                  ? `${spot.avgPrice.toLocaleString()}원`
+                  : "정보 없음"}
+              </td>
+              <td>
+                <button
+                  className={styles.editButton}
+                  onClick={() => handleEdit(spot.id.toString())}
+                >
+                  수정
+                </button>
+                <button
+                  className={styles.deleteButton}
+                  onClick={() => handleDelete(spot.id)}
+                >
+                  삭제
+                </button>
+              </td>
+            </tr>
+          ))
         ) : (
           <tr>
             <td colSpan={6} className={styles.noData}>
