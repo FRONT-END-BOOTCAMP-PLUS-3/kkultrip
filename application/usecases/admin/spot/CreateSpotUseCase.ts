@@ -1,4 +1,4 @@
-import { Spot } from "@/domain/entities/Spot";
+import { Spot } from "@prisma/client";
 import { SpotRepository } from "@/domain/repositories/SpotRepository";
 import { CreateSpotDto } from "./dto/CreateSpotDto";
 
@@ -13,12 +13,12 @@ export class CreateSpotUseCase {
       lon: dto.lon,
       lat: dto.lat,
       phone: dto.phone,
-      info: dto.info ?? null,
+      info: dto.info ?? "",
       category: dto.category,
       link: dto.link ?? null,
       img: dto.img,
-      avgPrice: dto.avgPrice ?? null,
-      avgWaitingTime: dto.avgWaitingTime ?? null,
+      avgPrice: dto.avgPrice ?? 0,
+      avgWaitingTime: dto.avgWaitingTime ?? 0,
       createdAt: new Date(),
       updatedAt: new Date(),
     };

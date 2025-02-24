@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
-import { Spot } from "@/domain/entities/Spot";
 import { SpotRepository } from "@/domain/repositories/SpotRepository";
+import { Spot } from "@prisma/client"; // Prisma의 Spot 타입 사용
 
 export class PgSpotRepository implements SpotRepository {
   async getAllSpots(): Promise<Spot[]> {

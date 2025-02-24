@@ -1,4 +1,4 @@
-import { Spot } from "@/domain/entities/Spot";
+import { Spot } from "@prisma/client";
 
 export interface SpotRepository {
   getAllSpots(): Promise<Spot[]>;
