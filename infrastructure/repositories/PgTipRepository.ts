@@ -21,4 +21,5 @@ export class PgTipRepository implements TipRepository {
 
   async countBySpot(spotId: number): Promise<number> {
     return prisma.tip.count({ where: { spotId } });
+  }
 }

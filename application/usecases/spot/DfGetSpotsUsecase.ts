@@ -1,8 +1,8 @@
-import SpotRepository from "@/domain/repositories/SpotRepository";
 import { GetSpotsDTO } from "./dto/GetSpotsDto";
 import BookmarkRepository from "@/domain/repositories/BookmarkRepository";
 import TipRepository from "@/domain/repositories/TipRepository";
 import TimeRepository from "@/domain/repositories/TimeRepository";
+import { SpotRepository } from "@/domain/repositories/SpotRepository";
 
 export class DfGetSpotsUsecase {
   constructor(
