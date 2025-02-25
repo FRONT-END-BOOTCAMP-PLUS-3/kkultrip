@@ -12,7 +12,7 @@ interface SpotTableProps {
 type SortKey = "id" | "name" | "address" | "phone" | "category" | "avgPrice";
 type SortOrder = "asc" | "desc";
 
-const SpotTable = ({ spots }: SpotTableProps) => {
+const Spottable = ({ spots }: SpotTableProps) => {
   const router = useRouter();
   const [sortKey, setSortKey] = useState<SortKey>("id");
   const [sortOrder, setSortOrder] = useState<SortOrder>("asc");
@@ -130,4 +130,4 @@ const SpotTable = ({ spots }: SpotTableProps) => {
   );
 };
 
-export default SpotTable;
+export default Spottable;
