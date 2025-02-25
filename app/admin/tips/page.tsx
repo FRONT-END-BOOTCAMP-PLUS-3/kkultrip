@@ -1,7 +1,6 @@
 import { FaPlus } from "react-icons/fa";
-import Sidebar from "../components/Sidebar";
-import Header from "../components/Header";
-import UserTable from "../components/SpotTable";
+import Sidebar from "../components/Sidebar/Sidebar";
+import Header from "../components/Header/Header";
 import styles from "./AdminTipsPage.module.scss";
 
 const AdminTipsPage = () => {
@@ -10,7 +9,6 @@ const AdminTipsPage = () => {
       <Sidebar />
       <main className={styles.main}>
         <Header title="꿀팁 관리" />
-        <UserTable />
         <button className={styles.addButton}>
           <FaPlus />
         </button>
