@@ -1,7 +1,7 @@
 import { FaPlus } from "react-icons/fa";
-import Sidebar from "../components/Sidebar/Sidebar";
-import Header from "../components/Header/Header";
-import UserTable from "../components/SpotTable/SpotTable";
+import Sidebar from "../components/sidebar/Sidebar";
+import Header from "../components/header/Header";
+import UserTable from "../components/spotTable/SpotTable";
 import styles from "./AdminUsersPage.module.scss";
 
 const AdminUsersPage = () => {
