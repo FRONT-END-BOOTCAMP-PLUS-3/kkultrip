@@ -1,6 +1,6 @@
 import { Spot } from "@prisma/client";
 import { SpotRepository } from "@/domain/repositories/SpotRepository";
-import { UpdateSpotDto } from "./admin/spot/dto/UpdateSpotDto";
+import { UpdateSpotDto } from "./dto/UpdateSpotDto";
 
 export class UpdateSpotUseCase {
   constructor(private spotRepository: SpotRepository) {}
@@ -11,6 +11,7 @@ export class UpdateSpotUseCase {
       throw new Error("Spot not found");
     }
 
+    // 기존 명소 내용과 비교하여 변경된 내용만 업데이트!
     const updatedSpot: Partial<Spot> = {
       name: dto.name ?? existingSpot.name,
       address: dto.address ?? existingSpot.address,

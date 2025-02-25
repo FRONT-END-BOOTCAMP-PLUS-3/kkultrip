@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { GetSpotsUseCase } from "@/application/usecases/admin/spot/GetSpotsUseCase";
-import { DeleteSpotUseCase } from "@/application/usecases/admin/spot/DeleteSpotUseCase";
+import { CreateSpotUseCase } from "@/application/usecases/admin/spot/CreateSpotUseCase";
 import { PgSpotRepository } from "@/infrastructure/repositories/PgSpotRepository";
 
 export async function GET() {
@@ -20,27 +20,18 @@ export async function GET() {
   }
 }
 
-export async function DELETE(req: Request) {
+export async function POST(req: Request) {
   try {
-    const { id } = await req.json();
-
-    if (!id) {
-      return NextResponse.json(
-        { error: "Spot ID is required" },
-        { status: 400 }
-      );
-    }
-
+    const body = await req.json();
     const spotRepository = new PgSpotRepository();
-    const deleteSpotUseCase = new DeleteSpotUseCase(spotRepository);
-    const deletedSpot = await deleteSpotUseCase.execute(id);
+    const createSpotUseCase = new CreateSpotUseCase(spotRepository);
+    const spot = await createSpotUseCase.execute(body);
 
-    return NextResponse.json(deletedSpot, { status: 200 });
+    return NextResponse.json(spot, { status: 201 });
   } catch (error) {
-    console.error("Error deleting spot:", error);
-
+    console.error("Spot 생성 오류:", error);
     return NextResponse.json(
-      { error: "Failed to delete spot" },
+      { error: "서버 오류가 발생했습니다." },
       { status: 500 }
     );
   }

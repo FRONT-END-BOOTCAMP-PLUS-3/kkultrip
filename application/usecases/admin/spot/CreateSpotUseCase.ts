@@ -6,8 +6,8 @@ export class CreateSpotUseCase {
   constructor(private spotRepository: SpotRepository) {}
 
   async execute(dto: CreateSpotDto): Promise<Spot> {
-    const newSpot: Spot = {
-      id: 0, // DB에서 자동 생성
+    //DTO에서 받은 데이터 Spot 객체로 변환하면서 누락값에 대한 기본값 설정
+    const newSpot = {
       name: dto.name,
       address: dto.address,
       lon: dto.lon,
@@ -19,8 +19,6 @@ export class CreateSpotUseCase {
       img: dto.img,
       avgPrice: dto.avgPrice ?? 0,
       avgWaitingTime: dto.avgWaitingTime ?? 0,
-      createdAt: new Date(),
-      updatedAt: new Date(),
     };
 
     return await this.spotRepository.createSpot(newSpot);

@@ -5,14 +5,10 @@ import { useRouter } from "next/navigation";
 import styles from "./Spottable.module.scss";
 import { Spot } from "@prisma/client";
 
-interface SpotTableProps {
-  spots: Spot[];
-}
-
 type SortKey = "id" | "name" | "address" | "phone" | "category" | "avgPrice";
 type SortOrder = "asc" | "desc";
 
-const Spottable = ({ spots }: SpotTableProps) => {
+const Spottable = ({ spots }: { spots: Spot[] }) => {
   const router = useRouter();
   const [sortKey, setSortKey] = useState<SortKey>("id");
   const [sortOrder, setSortOrder] = useState<SortOrder>("asc");
@@ -41,10 +37,9 @@ const Spottable = ({ spots }: SpotTableProps) => {
     if (!confirm("정말로 삭제하시겠습니까?")) return;
 
     try {
-      const response = await fetch("/api/admin/spots", {
+      const response = await fetch(`/api/admin/spots/${id}`, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id }),
       });
 
       if (!response.ok) throw new Error("삭제 실패");

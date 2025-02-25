@@ -75,7 +75,6 @@ const SpotsCreatePage = () => {
     }
   };
 
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -88,7 +87,7 @@ const SpotsCreatePage = () => {
       updatedAt: new Date(),
     };
 
-    const res = await fetch("/api/admin/spots/create", {
+    const res = await fetch("/api/admin/spots", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
@@ -218,10 +217,10 @@ const SpotsCreatePage = () => {
           required
         >
           <option value="">카테고리 선택</option>
-          <option value="activity">액티비티</option>
-          <option value="landmark">랜드마크</option>
-          <option value="cafe">카페</option>
-          <option value="restaurant">음식점</option>
+          <option value="액티비티">액티비티</option>
+          <option value="랜드마크">랜드마크</option>
+          <option value="카페">카페</option>
+          <option value="음식점">음식점</option>
         </select>
 
         <input

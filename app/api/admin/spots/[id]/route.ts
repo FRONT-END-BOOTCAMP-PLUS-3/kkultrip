@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import { GetSpotByIdUseCase } from "@/application/usecases/admin/spot/GetSpotsByIdUseCase";
-import { UpdateSpotUseCase } from "@/application/usecases/UpdateSpotUseCase";
+import { UpdateSpotUseCase } from "@/application/usecases/admin/spot/UpdateSpotUseCase";
 import { PgSpotRepository } from "@/infrastructure/repositories/PgSpotRepository";
+import { DeleteSpotUseCase } from "@/application/usecases/admin/spot/DeleteSpotUseCase";
 
 export async function GET(
   req: Request,
@@ -49,6 +50,32 @@ export async function PATCH(req: Request) {
     console.error("Error updating spot:", error);
     return NextResponse.json(
       { error: "Failed to update spot" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function DELETE(req: Request) {
+  try {
+    const { id } = await req.json();
+
+    if (!id) {
+      return NextResponse.json(
+        { error: "Spot ID is required" },
+        { status: 400 }
+      );
+    }
+
+    const spotRepository = new PgSpotRepository();
+    const deleteSpotUseCase = new DeleteSpotUseCase(spotRepository);
+    const deletedSpot = await deleteSpotUseCase.execute(id);
+
+    return NextResponse.json(deletedSpot, { status: 200 });
+  } catch (error) {
+    console.error("Error deleting spot:", error);
+
+    return NextResponse.json(
+      { error: "Failed to delete spot" },
       { status: 500 }
     );
   }

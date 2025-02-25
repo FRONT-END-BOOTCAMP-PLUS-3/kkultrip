@@ -6,8 +6,8 @@ import styles from "./SpotsEditPage.module.scss";
 
 const SpotsEditPage = () => {
   const router = useRouter();
-  const params = useParams(); // ✅ 동적 경로에서 id 가져오기
-  const spotId = params.id as string | undefined; // ✅ TypeScript 적용
+  const params = useParams();
+  const spotId = params.id as string | undefined;
 
   const [formData, setFormData] = useState({
     name: "",
@@ -29,7 +29,7 @@ const SpotsEditPage = () => {
 
   useEffect(() => {
     if (spotId) {
-      fetch(`/api/admin/spots/${spotId}/edit`)
+      fetch(`/api/admin/spots/${spotId}`)
         .then((res) => res.json())
         .then((data) => {
           const [phone1, phone2, phone3] = data.phone?.split("-") || [
@@ -86,7 +86,7 @@ const SpotsEditPage = () => {
     const phone = `${formData.phone1}-${formData.phone2}-${formData.phone3}`;
     const data = { ...formData, phone, updatedAt: new Date() };
 
-    const res = await fetch(`/api/admin/spots/${spotId}/edit`, {
+    const res = await fetch(`/api/admin/spots/${spotId}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),

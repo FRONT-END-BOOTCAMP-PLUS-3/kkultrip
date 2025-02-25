@@ -57,18 +57,7 @@
 }
 
 .deleteButton {
-  background-color: #e74c3c;
+  background-color: var(--red-1-color);
   color: white;
   transition: background 0.2s ease-in-out;
-  .deleteButton:hover {
-    background-color: #c0392b;
-  }
-}
-
-@media (max-width: 768px) {
-  .table {
-    display: block;
-    overflow-x: auto;
-    white-space: nowrap;
-  }
 }

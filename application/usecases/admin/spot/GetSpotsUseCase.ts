@@ -8,18 +8,7 @@ export class GetSpotsUseCase {
     const spots = await this.spotRepository.getAllSpots();
 
     return spots.map((spot) => ({
-      id: spot.id,
-      name: spot.name,
-      address: spot.address,
-      lon: spot.lon,
-      lat: spot.lat,
-      phone: spot.phone,
-      info: spot.info ?? null,
-      category: spot.category,
-      link: spot.link ?? null,
-      img: spot.img,
-      avgPrice: spot.avgPrice ?? null,
-      avgWaitingTime: spot.avgWaitingTime ?? null,
+      ...spot,
       createdAt: spot.createdAt.toISOString(), // Date → string 변환
       updatedAt: spot.updatedAt.toISOString(), // Date → string 변환
     }));
