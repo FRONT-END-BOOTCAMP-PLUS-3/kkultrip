@@ -1,0 +1,31 @@
+.userContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+  margin: 0.625rem 1.25rem;
+  padding: 0.375rem 0;
+  border: 1px solid var(--primary-color);
+  border-radius: 1.5625rem;
+  background-color: white;
+
+  .profile {
+    width: 10rem;
+    aspect-ratio: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 1rem 1.25rem;
+    border-radius: 50%;
+    background-color: white;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  }
+
+  .nickname {
+    margin: 0.5rem 0;
+    span {
+      font-size: 1.875rem;
+      font-weight: bold;
+    }
+  }
+}
