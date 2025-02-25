@@ -54,7 +54,7 @@ const getFilteredSpots = async (
     spots = await res.json();
   }
 
-  // ✅ 카테고리 필터링
+  // 카테고리 필터링
   if (category) {
     spots = spots.filter((spot) => spot.category === category);
   }

@@ -62,7 +62,7 @@ const NaverMap = ({ initialSpots }: { initialSpots: Spot[] }) => {
   useEffect(() => {
     if (!map) return;
 
-    // ✅ 내 위치 가져오기 (비동기)
+    // 내 위치 가져오기 (비동기)
     navigator.geolocation.getCurrentPosition(
       async (position) => {
         const userLocation = new window.naver.maps.LatLng(
@@ -70,7 +70,7 @@ const NaverMap = ({ initialSpots }: { initialSpots: Spot[] }) => {
           position.coords.longitude
         );
 
-        // ✅ 내 위치 마커 추가 (bee 아이콘)
+        // 내 위치 마커 추가 (bee 아이콘)
         new window.naver.maps.Marker({
           position: userLocation,
           map: map,
@@ -83,7 +83,7 @@ const NaverMap = ({ initialSpots }: { initialSpots: Spot[] }) => {
         // 지도 중심을 내 위치로 이동
         map.setCenter(userLocation);
 
-        // ✅ 내 위치를 기반으로 새로운 명소 리스트 불러오기
+        // 내 위치를 기반으로 새로운 명소 리스트 불러오기
         setLoading(true);
         const res = await fetch(
           `/api/spots?lat=${position.coords.latitude}&lng=${position.coords.longitude}`
@@ -102,7 +102,7 @@ const NaverMap = ({ initialSpots }: { initialSpots: Spot[] }) => {
   useEffect(() => {
     if (!map) return;
 
-    // ✅ 지도에 명소 마커 추가
+    // 지도에 명소 마커 추가
     spots.forEach((spot) => {
       new window.naver.maps.Marker({
         position: new window.naver.maps.LatLng(spot.lat, spot.lng),
@@ -117,7 +117,7 @@ const NaverMap = ({ initialSpots }: { initialSpots: Spot[] }) => {
 
   return (
     <div id="map" style={{ height: "90vh", width: "100%" }}>
-      {loading && <p>🔄 내 위치 기반 명소 불러오는 중...</p>}
+      {loading && <p> 내 위치 기반 명소 불러오는 중...</p>}
     </div>
   );
 };

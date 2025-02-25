@@ -1,31 +1,7 @@
 .bottomSheetContainer {
   width: 100%;
   position: relative;
-}
-
-.hiddenSEO {
-  display: none; // 🚀 SEO용 SSR 데이터 숨김
-}
-
-.spotSEO {
-  h3 {
-    font-size: 1rem;
-    margin: 0;
-  }
-
-  .category {
-    font-size: 0.75rem;
-  }
-
-  .location {
-    font-size: 0.75rem;
-  }
-
-  .details {
-    font-size: 0.75rem;
-  }
-
-  .price {
-    font-size: 0.75rem;
+  .hiddenSEO {
+    display: none; // SEO용 SSR 데이터 숨김
   }
 }
