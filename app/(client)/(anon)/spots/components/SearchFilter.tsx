@@ -4,6 +4,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import styles from "./SearchFilter.module.scss";
 import Image from "next/image";
+import { IoSearch } from "react-icons/io5";
 
 const categories = [
   { id: "undefined", name: "전체" },
@@ -30,8 +31,11 @@ const SearchFilter = () => {
   const [selectedPrice, setSelectedPrice] = useState(
     searchParams.get("price") || ""
   );
+  const [searchQuery, setSearchQuery] = useState(
+    searchParams.get("query") || ""
+  );
 
-  const updateFilter = (category?: string, price?: string) => {
+  const updateFilter = (category?: string, price?: string, query?: string) => {
     const params = new URLSearchParams();
     if (category) {
       params.set("category", category);
@@ -41,11 +45,33 @@ const SearchFilter = () => {
       params.set("price", price);
       setSelectedPrice(price);
     }
+    if (query) {
+      params.set("query", query);
+      setSearchQuery(query);
+    }
+
     router.push(`/spots?${params.toString()}`);
+  };
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    updateFilter(selectedCategory, selectedPrice, searchQuery);
   };
 
   return (
     <div className={styles.filterContainer}>
+      {/* 검색창 */}
+      <form onSubmit={handleSearch} className={styles.searchBox}>
+        <input
+          type="text"
+          placeholder="명소 이름 또는 지역 검색"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+        <button type="submit">
+          <IoSearch />
+        </button>
+      </form>
       {/* 카테고리 필터 */}
       <div className={styles.categoryFilter}>
         {categories.map((category) => (

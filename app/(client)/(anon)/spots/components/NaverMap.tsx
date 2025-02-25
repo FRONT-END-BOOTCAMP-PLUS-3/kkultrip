@@ -21,9 +21,12 @@ interface Spot {
   img: string;
 }
 
-const NaverMap = ({ spots }: { spots: Spot[] }) => {
+const NaverMap = ({ initialSpots }: { initialSpots: Spot[] }) => {
   const [mapLoaded, setMapLoaded] = useState(false);
   const [map, setMap] = useState<naver.maps.Map | null>(null);
+  const [spots, setSpots] = useState<Spot[]>(initialSpots);
+  const [loading, setLoading] = useState(true);
+
   const apiKey = process.env.NEXT_PUBLIC_NAVER_MAP_CLIENT_ID;
 
   useEffect(() => {
@@ -61,7 +64,7 @@ const NaverMap = ({ spots }: { spots: Spot[] }) => {
 
     // ✅ 내 위치 가져오기 (비동기)
     navigator.geolocation.getCurrentPosition(
-      (position) => {
+      async (position) => {
         const userLocation = new window.naver.maps.LatLng(
           position.coords.latitude,
           position.coords.longitude
@@ -79,13 +82,27 @@ const NaverMap = ({ spots }: { spots: Spot[] }) => {
 
         // 지도 중심을 내 위치로 이동
         map.setCenter(userLocation);
+
+        // ✅ 내 위치를 기반으로 새로운 명소 리스트 불러오기
+        setLoading(true);
+        const res = await fetch(
+          `/api/spots?lat=${position.coords.latitude}&lng=${position.coords.longitude}`
+        );
+        const data = await res.json();
+        setSpots(data);
+        setLoading(false);
       },
       (error) => {
         console.error("위치 정보를 가져올 수 없습니다:", error);
+        setLoading(false);
       }
     );
+  }, [map]);
 
-    // ✅ 명소 마커 추가
+  useEffect(() => {
+    if (!map) return;
+
+    // ✅ 지도에 명소 마커 추가
     spots.forEach((spot) => {
       new window.naver.maps.Marker({
         position: new window.naver.maps.LatLng(spot.lat, spot.lng),
@@ -98,7 +115,11 @@ const NaverMap = ({ spots }: { spots: Spot[] }) => {
     });
   }, [map, spots]);
 
-  return <div id="map" style={{ height: "90vh", width: "100%" }} />;
+  return (
+    <div id="map" style={{ height: "90vh", width: "100%" }}>
+      {loading && <p>🔄 내 위치 기반 명소 불러오는 중...</p>}
+    </div>
+  );
 };
 
 export default NaverMap;
