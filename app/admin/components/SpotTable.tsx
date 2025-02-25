@@ -7,7 +7,7 @@ interface SpotTableProps {
   spots: Spot[];
 }
 
-type SortKey = "id" | "name" | "address" | "category" | "avgPrice";
+type SortKey = "id" | "name" | "address" | "phone" | "category" | "avgPrice";
 type SortOrder = "asc" | "desc";
 
 const SpotTable = ({ spots }: SpotTableProps) => {
@@ -59,25 +59,34 @@ const SpotTable = ({ spots }: SpotTableProps) => {
     <table className={styles.table}>
       <thead>
         <tr>
-          {(["id", "name", "address", "category", "avgPrice"] as SortKey[]).map(
-            (key) => (
-              <th
-                key={key}
-                onClick={() => handleSort(key)}
-                className={sortKey === key ? styles.sorted : ""}
-              >
-                {key === "id"
-                  ? "번호"
-                  : key === "name"
-                  ? "이름"
-                  : key === "address"
-                  ? "주소"
-                  : key === "category"
-                  ? "카테고리"
-                  : "정보"}
-              </th>
-            )
-          )}
+          {(
+            [
+              "id",
+              "name",
+              "address",
+              "phone",
+              "category",
+              "avgPrice",
+            ] as SortKey[]
+          ).map((key) => (
+            <th
+              key={key}
+              onClick={() => handleSort(key)}
+              className={sortKey === key ? styles.sorted : ""}
+            >
+              {key === "id"
+                ? "번호"
+                : key === "name"
+                ? "이름"
+                : key === "address"
+                ? "주소"
+                : key === "phone"
+                ? "전화번호"
+                : key === "category"
+                ? "카테고리"
+                : "정보"}
+            </th>
+          ))}
           <th>관리</th>
         </tr>
       </thead>
@@ -88,6 +97,7 @@ const SpotTable = ({ spots }: SpotTableProps) => {
               <td>{spot.id}</td>
               <td>{spot.name}</td>
               <td>{spot.address}</td>
+              <td>{spot.phone}</td>
               <td>{spot.category}</td>
               <td>{spot.info}</td>
               <td>
