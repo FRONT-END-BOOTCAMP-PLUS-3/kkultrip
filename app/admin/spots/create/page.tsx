@@ -1,27 +1,64 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation"; // 추가
+import { useState, useRef } from "react";
+import { useRouter } from "next/navigation";
 import styles from "./SpotsCreatePage.module.scss";
 
 const SpotsCreatePage = () => {
-  const router = useRouter(); // 추가
+  const router = useRouter();
   const [formData, setFormData] = useState({
     name: "",
     address: "",
     lon: null,
     lat: null,
-    phone: "",
+    phone1: "",
+    phone2: "",
+    phone3: "",
     info: "",
     category: "",
     link: "",
     img: "",
-    avgPrice: null,
-    avgWaitingTime: null,
   });
 
+  // 입력 필드 참조 (자동 포커스 이동을 위해)
+  const phoneRef1 = useRef<HTMLInputElement>(null);
+  const phoneRef2 = useRef<HTMLInputElement>(null);
+  const phoneRef3 = useRef<HTMLInputElement>(null);
+
+  // 전화번호 입력 핸들러
+  const handlePhoneChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    part: "phone1" | "phone2" | "phone3"
+  ) => {
+    let value = e.target.value.replace(/\D/g, ""); // 숫자만 입력받기
+
+    if (part === "phone1" && value.length > 3) value = value.slice(0, 3);
+    if (part === "phone2" && value.length > 4) value = value.slice(0, 4);
+    if (part === "phone3" && value.length > 4) value = value.slice(0, 4);
+
+    setFormData((prev) => ({ ...prev, [part]: value }));
+
+    // 자동 포커스 이동
+    if (part === "phone1" && value.length === 3) phoneRef2.current?.focus();
+    if (part === "phone2" && (value.length === 4 || value.length === 4))
+      phoneRef3.current?.focus();
+  };
+
+  // 백스페이스로 이전 칸 이동
+  const handleKeyDown = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+    part: "phone1" | "phone2" | "phone3"
+  ) => {
+    if (e.key === "Backspace" && formData[part] === "") {
+      if (part === "phone3") phoneRef2.current?.focus();
+      if (part === "phone2") phoneRef1.current?.focus();
+    }
+  };
+
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
   ) => {
     const { name, value, type } = e.target;
     setFormData((prev) => ({
@@ -30,11 +67,22 @@ const SpotsCreatePage = () => {
     }));
   };
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const imageUrl = URL.createObjectURL(file);
+      setFormData((prev) => ({ ...prev, img: imageUrl }));
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    const phone = `${formData.phone1}-${formData.phone2}-${formData.phone3}`;
+
     const data = {
       ...formData,
+      phone, // 하나의 필드로 합쳐서 전송
       createdAt: new Date(),
       updatedAt: new Date(),
     };
@@ -52,15 +100,15 @@ const SpotsCreatePage = () => {
         address: "",
         lon: null,
         lat: null,
-        phone: "",
+        phone1: "",
+        phone2: "",
+        phone3: "",
         info: "",
         category: "",
         link: "",
         img: "",
-        avgPrice: null,
-        avgWaitingTime: null,
       });
-      router.push("/admin/spots"); // 생성 후 자동 이동
+      router.push("/admin/spots");
     } else {
       alert("Spot 생성에 실패했습니다.");
     }
@@ -114,15 +162,46 @@ const SpotsCreatePage = () => {
           step="any"
           required
         />
-        <input
-          type="text"
-          name="phone"
-          placeholder="전화번호"
-          value={formData.phone}
-          onChange={handleChange}
-          className={styles.inputField}
-          required
-        />
+
+        {/* 전화번호 입력 (3개 칸) */}
+        <div className={styles.phoneInputContainer}>
+          <input
+            type="text"
+            ref={phoneRef1}
+            value={formData.phone1}
+            onChange={(e) => handlePhoneChange(e, "phone1")}
+            onKeyDown={(e) => handleKeyDown(e, "phone1")}
+            className={styles.inputField}
+            placeholder="000"
+            maxLength={3}
+            required
+          />
+          <span>-</span>
+          <input
+            type="text"
+            ref={phoneRef2}
+            value={formData.phone2}
+            onChange={(e) => handlePhoneChange(e, "phone2")}
+            onKeyDown={(e) => handleKeyDown(e, "phone2")}
+            className={styles.inputField}
+            placeholder="0000"
+            maxLength={4}
+            required
+          />
+          <span>-</span>
+          <input
+            type="text"
+            ref={phoneRef3}
+            value={formData.phone3}
+            onChange={(e) => handlePhoneChange(e, "phone3")}
+            onKeyDown={(e) => handleKeyDown(e, "phone3")}
+            className={styles.inputField}
+            placeholder="0000"
+            maxLength={4}
+            required
+          />
+        </div>
+
         <textarea
           name="info"
           placeholder="정보"
@@ -130,15 +209,20 @@ const SpotsCreatePage = () => {
           onChange={handleChange}
           className={styles.textareaField}
         />
-        <input
-          type="text"
+        <select
           name="category"
-          placeholder="카테고리"
           value={formData.category}
           onChange={handleChange}
-          className={styles.inputField}
+          className={`${styles.inputField} ${styles.selectField}`}
           required
-        />
+        >
+          <option value="">카테고리 선택</option>
+          <option value="activity">액티비티</option>
+          <option value="landmark">랜드마크</option>
+          <option value="cafe">카페</option>
+          <option value="restaurant">음식점</option>
+        </select>
+
         <input
           type="url"
           name="link"
@@ -148,29 +232,11 @@ const SpotsCreatePage = () => {
           className={styles.inputField}
         />
         <input
-          type="text"
-          name="img"
-          placeholder="이미지 URL"
-          value={formData.img}
-          onChange={handleChange}
+          type="file"
+          accept="image/*"
+          onChange={handleFileChange}
           className={styles.inputField}
           required
-        />
-        <input
-          type="number"
-          name="avgPrice"
-          placeholder="평균 가격"
-          value={formData.avgPrice ?? ""}
-          onChange={handleChange}
-          className={styles.inputField}
-        />
-        <input
-          type="number"
-          name="avgWaitingTime"
-          placeholder="평균 대기 시간(분)"
-          value={formData.avgWaitingTime ?? ""}
-          onChange={handleChange}
-          className={styles.inputField}
         />
         <button type="submit" className={styles.submitButton}>
           Spot 생성

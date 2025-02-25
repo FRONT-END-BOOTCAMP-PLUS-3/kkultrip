@@ -1,55 +1,70 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
 import styles from "./SpotsEditPage.module.scss";
 
 const SpotsEditPage = () => {
   const router = useRouter();
   const params = useParams(); // ✅ 동적 경로에서 id 가져오기
-  const id = params.id as string | undefined; // ✅ TypeScript 적용
+  const spotId = params.id as string | undefined; // ✅ TypeScript 적용
 
   const [formData, setFormData] = useState({
     name: "",
     address: "",
     lon: null,
     lat: null,
-    phone: "",
+    phone1: "",
+    phone2: "",
+    phone3: "",
     info: "",
     category: "",
     link: "",
     img: "",
-    avgPrice: null,
-    avgWaitingTime: null,
   });
 
+  const phoneRef1 = useRef<HTMLInputElement>(null);
+  const phoneRef2 = useRef<HTMLInputElement>(null);
+  const phoneRef3 = useRef<HTMLInputElement>(null);
+
   useEffect(() => {
-    if (!id) return;
+    if (spotId) {
+      fetch(`/api/admin/spots/${spotId}/edit`)
+        .then((res) => res.json())
+        .then((data) => {
+          const [phone1, phone2, phone3] = data.phone?.split("-") || [
+            "",
+            "",
+            "",
+          ];
+          setFormData({
+            ...data,
+            phone1,
+            phone2,
+            phone3,
+          });
+        });
+    }
+  }, [spotId]);
 
-    const fetchSpot = async () => {
-      try {
-        const res = await fetch(`/api/admin/spots/${id}/edit`); // ✅ API 경로 유지
-        if (!res.ok) throw new Error("Failed to fetch spot");
+  const handlePhoneChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    part: "phone1" | "phone2" | "phone3"
+  ) => {
+    let value = e.target.value.replace(/\D/g, "");
+    if (part === "phone1" && value.length > 3) value = value.slice(0, 3);
+    if (part === "phone2" && value.length > 4) value = value.slice(0, 4);
+    if (part === "phone3" && value.length > 4) value = value.slice(0, 4);
+    setFormData((prev) => ({ ...prev, [part]: value }));
 
-        const data = await res.json();
-        if (!data || data.id !== Number(id)) {
-          // ✅ id 일치 여부 확인
-          throw new Error("Invalid spot data received");
-        }
-
-        console.log(`Spot ID ${id}:`, data);
-        setFormData(data);
-      } catch (error) {
-        console.error(error);
-        alert("데이터를 불러오는 데 실패했습니다.");
-      }
-    };
-
-    fetchSpot();
-  }, [id]);
+    if (part === "phone1" && value.length === 3) phoneRef2.current?.focus();
+    if (part === "phone2" && value.length === 4) phoneRef3.current?.focus();
+  };
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
   ) => {
     const { name, value, type } = e.target;
     setFormData((prev) => ({
@@ -58,13 +73,27 @@ const SpotsEditPage = () => {
     }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleFileChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
+    const file = (e.target as HTMLInputElement).files?.[0];
+    if (file) {
+      const imageUrl = URL.createObjectURL(file);
+      setFormData((prev) => ({ ...prev, img: imageUrl }));
+    }
+  };
 
-    const res = await fetch(`/api/admin/spots/${id}/edit`, {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const phone = `${formData.phone1}-${formData.phone2}-${formData.phone3}`;
+    const data = { ...formData, phone, updatedAt: new Date() };
+
+    const res = await fetch(`/api/admin/spots/${spotId}/edit`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData),
+      body: JSON.stringify(data),
     });
 
     if (res.ok) {
@@ -88,7 +117,6 @@ const SpotsEditPage = () => {
         <input
           type="text"
           name="name"
-          placeholder="이름"
           value={formData.name}
           onChange={handleChange}
           className={styles.inputField}
@@ -97,7 +125,6 @@ const SpotsEditPage = () => {
         <input
           type="text"
           name="address"
-          placeholder="주소"
           value={formData.address}
           onChange={handleChange}
           className={styles.inputField}
@@ -106,79 +133,80 @@ const SpotsEditPage = () => {
         <input
           type="number"
           name="lon"
-          placeholder="경도 (lon)"
           value={formData.lon ?? ""}
           onChange={handleChange}
           className={styles.inputField}
-          step="any"
           required
         />
         <input
           type="number"
           name="lat"
-          placeholder="위도 (lat)"
           value={formData.lat ?? ""}
           onChange={handleChange}
           className={styles.inputField}
-          step="any"
           required
         />
-        <input
-          type="text"
-          name="phone"
-          placeholder="전화번호"
-          value={formData.phone}
-          onChange={handleChange}
-          className={styles.inputField}
-          required
-        />
+        <div className={styles.phoneInputContainer}>
+          <input
+            type="text"
+            ref={phoneRef1}
+            value={formData.phone1}
+            onChange={(e) => handlePhoneChange(e, "phone1")}
+            className={styles.inputField}
+            maxLength={3}
+            required
+          />
+          <span>-</span>
+          <input
+            type="text"
+            ref={phoneRef2}
+            value={formData.phone2}
+            onChange={(e) => handlePhoneChange(e, "phone2")}
+            className={styles.inputField}
+            maxLength={4}
+            required
+          />
+          <span>-</span>
+          <input
+            type="text"
+            ref={phoneRef3}
+            value={formData.phone3}
+            onChange={(e) => handlePhoneChange(e, "phone3")}
+            className={styles.inputField}
+            maxLength={4}
+            required
+          />
+        </div>
         <textarea
           name="info"
-          placeholder="정보"
           value={formData.info}
           onChange={handleChange}
           className={styles.textareaField}
         />
-        <input
-          type="text"
+        <select
           name="category"
-          placeholder="카테고리"
           value={formData.category}
           onChange={handleChange}
-          className={styles.inputField}
+          className={`${styles.inputField} ${styles.selectField}`}
           required
-        />
+        >
+          <option value="">카테고리 선택</option>
+          <option value="activity">액티비티</option>
+          <option value="landmark">랜드마크</option>
+          <option value="cafe">카페</option>
+          <option value="restaurant">음식점</option>
+        </select>
         <input
           type="url"
           name="link"
-          placeholder="웹사이트 링크"
           value={formData.link}
           onChange={handleChange}
           className={styles.inputField}
         />
         <input
-          type="text"
-          name="img"
-          placeholder="이미지 URL"
-          value={formData.img}
-          onChange={handleChange}
-          className={styles.inputField}
-          required
-        />
-        <input
-          type="number"
-          name="avgPrice"
-          placeholder="평균 가격"
-          value={formData.avgPrice ?? ""}
-          onChange={handleChange}
-          className={styles.inputField}
-        />
-        <input
-          type="number"
-          name="avgWaitingTime"
-          placeholder="평균 대기 시간(분)"
-          value={formData.avgWaitingTime ?? ""}
-          onChange={handleChange}
+          type="file"
+          accept="image/*"
+          onChange={handleFileChange}
           className={styles.inputField}
         />
         <button type="submit" className={styles.submitButton}>

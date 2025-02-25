@@ -26,7 +26,14 @@
   border-radius: 4px;
   font-size: 1rem;
 }
-
+.phoneInputContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  .inputField {
+    width: 30%;
+  }
+}
 .textareaField {
   @extend .inputField;
   resize: none;

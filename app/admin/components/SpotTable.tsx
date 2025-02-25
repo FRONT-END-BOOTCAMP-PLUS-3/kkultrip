@@ -74,7 +74,7 @@ const SpotTable = ({ spots }: SpotTableProps) => {
                   ? "주소"
                   : key === "category"
                   ? "카테고리"
-                  : "평균가격"}
+                  : "정보"}
               </th>
             )
           )}
@@ -89,11 +89,7 @@ const SpotTable = ({ spots }: SpotTableProps) => {
               <td>{spot.name}</td>
               <td>{spot.address}</td>
               <td>{spot.category}</td>
-              <td>
-                {spot.avgPrice
-                  ? `${spot.avgPrice.toLocaleString()}원`
-                  : "정보 없음"}
-              </td>
+              <td>{spot.info}</td>
               <td>
                 <button
                   className={styles.editButton}
