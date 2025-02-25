@@ -1,0 +1,21 @@
+.container {
+  display: flex;
+  height: 100vh;
+  .main {
+    flex: 1;
+    padding: 2rem;
+    background: white;
+    position: relative;
+    .addButton {
+      position: absolute;
+      bottom: 2rem;
+      right: 2rem;
+      background: var(--primary-color); // 글로벌 CSS 변수 사용
+      color: #000;
+      padding: 1rem;
+      border-radius: 50%;
+      border: none;
+      cursor: pointer;
+    }
+  }
+}
