@@ -1,5 +1,6 @@
 import NaverMap from "./components/NaverMap";
 import BottomSheet from "./components/BottomSheet";
+import SearchFilter from "./components/SearchFilter";
 
 interface Spot {
   id: number;
@@ -14,15 +15,45 @@ interface Spot {
   img: string;
 }
 
-// ✅ 서버에서 명소 데이터를 가져오는 함수
-// async function getPlaces(): Promise<Place[]> {
-//   const res = await fetch("https://api.example.com/places", { cache: "no-store" });
-//   return res.json();
-// }
+const getFilteredSpots = async (
+  category?: string,
+  maxPrice?: number
+): Promise<Spot[]> => {
+  // ✅ 내 위치 기준 1km 이내 명소 가져오기
+  const userLat = 37.5665; // 예제: 실제 유저 위치 적용 필요
+  const userLng = 126.978;
 
-const Spots = async () => {
-  // const places = await getPlaces(); // ✅ 서버에서 데이터 가져오기 (SEO 가능)
+  const res = await fetch(
+    `https://api.example.com/spots?lat=${userLat}&lng=${userLng}&radius=1000`,
+    { cache: "no-store" }
+  );
+  let spots: Spot[] = await res.json();
 
+  // ✅ 카테고리 필터링
+  if (category) {
+    spots = spots.filter((spot) => spot.category === category);
+  }
+
+  // ✅ 가격 필터링 (선택한 금액 이하)
+  if (maxPrice !== undefined) {
+    spots = spots.filter((spot) => (spot.avgPrice ?? 0) <= maxPrice);
+  }
+
+  return spots;
+};
+
+const Spots = async ({
+  searchParams,
+}: {
+  searchParams: { category?: string; price?: string };
+}) => {
+  const category = searchParams.category || undefined;
+  const maxPrice = searchParams.price
+    ? parseInt(searchParams.price, 10)
+    : undefined;
+
+  // ✅ 필터링된 명소 리스트 가져오기
+  // const spots = await getFilteredSpots(category, maxPrice);
   const spots: Spot[] = [
     {
       id: 1,
@@ -88,9 +119,16 @@ const Spots = async () => {
 
   return (
     <div>
+      {/* 검색 및 필터 UI */}
+      <SearchFilter />
+
+      {/* 네이버 지도 */}
       <NaverMap spots={spots} />
+
+      {/* 바텀시트 리스트 */}
       <BottomSheet spots={spots} />
     </div>
   );
 };
+
 export default Spots;
