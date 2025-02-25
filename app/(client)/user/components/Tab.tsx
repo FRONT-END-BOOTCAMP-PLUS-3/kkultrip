@@ -1,28 +1,19 @@
 "use client";
 
-import { useState } from "react";
-import styles from "./Tab.module.scss";
 import Link from "next/link";
+import styles from "./Tab.module.scss";
 
 type TabProps = {
   tabs: { name: string; path: string }[];
+  pathname: string;
 };
 
-const Tab = ({ tabs }: TabProps) => {
-  const [activeTab, setActiveTab] = useState(0);
-
-  const handleTabClick = (index: number) => {
-    setActiveTab(index);
-  };
-
+const Tab = ({ tabs, pathname }: TabProps) => {
   return (
     <div className={styles.tabContainer}>
       {tabs.map((tab, index) => (
         <Link href={tab.path} key={index} className={styles.tabLink}>
-          <div
-            className={activeTab === index ? styles.active : ""}
-            onClick={() => handleTabClick(index)}
-          >
+          <div className={pathname === tab.path ? styles.active : ""}>
             {tab.name}
           </div>
         </Link>
