@@ -57,7 +57,8 @@ export async function PATCH(req: Request) {
 
 export async function DELETE(req: Request) {
   try {
-    const { id } = await req.json();
+    const url = new URL(req.url);
+    const id = url.pathname.split("/").pop(); // URL에서 ID 추출
 
     if (!id) {
       return NextResponse.json(
@@ -68,7 +69,7 @@ export async function DELETE(req: Request) {
 
     const spotRepository = new PgSpotRepository();
     const deleteSpotUseCase = new DeleteSpotUseCase(spotRepository);
-    const deletedSpot = await deleteSpotUseCase.execute(id);
+    const deletedSpot = await deleteSpotUseCase.execute(Number(id));
 
     return NextResponse.json(deletedSpot, { status: 200 });
   } catch (error) {

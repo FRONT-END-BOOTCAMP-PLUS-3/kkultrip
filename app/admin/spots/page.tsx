@@ -30,8 +30,6 @@ const AdminSpotsPage = () => {
     fetchSpots();
   }, []);
 
-  console.log("Spot 데이터:", spots);
-
   return (
     <div className={styles.container}>
       <Sidebar />
