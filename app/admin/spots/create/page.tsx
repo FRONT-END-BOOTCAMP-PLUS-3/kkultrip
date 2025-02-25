@@ -18,6 +18,7 @@ const SpotsCreatePage = () => {
     category: "",
     link: "",
     img: "",
+    tickets: [{ name: "", price: "" }], // [수정] 티켓 배열 추가
   });
 
   // 입력 필드 참조 (자동 포커스 이동을 위해)
@@ -107,11 +108,37 @@ const SpotsCreatePage = () => {
         category: "",
         link: "",
         img: "",
+        tickets: [{ name: "", price: "" }], // [수정] 티켓 배열 추가
       });
       router.push("/admin/spots");
     } else {
       alert("Spot 생성에 실패했습니다.");
     }
+  };
+
+  const handleTicketChange = <T extends keyof (typeof formData.tickets)[0]>(
+    index: number,
+    field: T,
+    value: (typeof formData.tickets)[0][T]
+  ) => {
+    const updatedTickets = [...formData.tickets];
+    updatedTickets[index][field] = value;
+
+    setFormData((prev) => ({ ...prev, tickets: updatedTickets }));
+  };
+
+  const addTicket = () => {
+    setFormData((prev) => ({
+      ...prev,
+      tickets: [...prev.tickets, { name: "", price: "" }],
+    }));
+  };
+
+  const removeTicket = (index: number) => {
+    setFormData((prev) => ({
+      ...prev,
+      tickets: prev.tickets.filter((_, i) => i !== index),
+    }));
   };
 
   return (
@@ -248,6 +275,44 @@ const SpotsCreatePage = () => {
             />
           </div>
         )}
+
+        <div className={styles.ticketsContainer}>
+          <h2>티켓 정보</h2>
+          {formData.tickets.map((ticket, index) => (
+            <div key={index} className={styles.ticketRow}>
+              <input
+                type="text"
+                placeholder="티켓 이름"
+                value={ticket.name}
+                className={styles.inputField}
+                onChange={(e) =>
+                  handleTicketChange(index, "name", e.target.value)
+                }
+                required
+              />
+              <input
+                type="number"
+                placeholder="티켓 가격"
+                value={ticket.price}
+                className={styles.inputField}
+                onChange={(e) =>
+                  handleTicketChange(index, "price", e.target.value)
+                }
+                required
+              />
+              <button type="button" onClick={() => removeTicket(index)}>
+                삭제
+              </button>
+            </div>
+          ))}
+          <button
+            type="button"
+            onClick={addTicket}
+            className={styles.addButton}
+          >
+            티켓 추가
+          </button>
+        </div>
 
         <button type="submit" className={styles.submitButton}>
           Spot 생성
