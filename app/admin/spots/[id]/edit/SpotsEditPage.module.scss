@@ -1,0 +1,74 @@
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 2rem;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+
+  .title {
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+
+  .form {
+    display: flex;
+    flex-direction: column;
+    .inputField {
+      margin-bottom: 1rem;
+      padding: 0.8rem;
+      border: 1px solid var(--grey-1-color);
+      border-radius: 4px;
+      font-size: 1rem;
+    }
+    .phoneInputContainer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      .inputField {
+        width: 30%;
+      }
+    }
+
+    .textareaField {
+      @extend .inputField;
+      resize: none;
+      height: 100px;
+    }
+
+    .submitButton {
+      background: var(--primary-color);
+      font-size: 1rem;
+      padding: 0.8rem;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .imagePreviewContainer {
+      margin-top: 10px;
+      text-align: center;
+    }
+
+    .imagePreview {
+      width: 100%;
+      max-width: 300px;
+      height: auto;
+      border-radius: 8px;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    }
+  }
+
+  .backButton {
+    background: var(--primary-color);
+    border: none;
+    padding: 0.6rem 1rem;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-bottom: 1rem;
+  }
+}
