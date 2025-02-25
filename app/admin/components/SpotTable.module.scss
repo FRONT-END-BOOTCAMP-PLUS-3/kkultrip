@@ -6,7 +6,7 @@
   overflow: hidden;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 
-  .table th {
+  th {
     background: #f4f4f4;
     color: #333;
     font-weight: bold;
@@ -15,22 +15,22 @@
     cursor: pointer;
     transition: background 0.2s ease-in-out;
 
-    .table th.sorted {
+    th.sorted {
       background: #e0e0e0;
       transform: scale(1.05);
     }
+
+    tbody tr:hover {
+      background: #f9f9f9;
+      transition: background 0.2s ease-in-out;
+    }
   }
 
-  .table td {
+  td {
     border-bottom: 1px solid #e0e0e0;
     padding: 1rem;
     text-align: left;
     color: #555;
-  }
-
-  .table tbody tr:hover {
-    background: #f9f9f9;
-    transition: background 0.2s ease-in-out;
   }
 }
 
