@@ -1,3 +1,3 @@
 export default interface TipRepository {
-  createTip(spotId: number): Promise<void>;
+  countBySpot(spotId: number): Promise<number>;
 }

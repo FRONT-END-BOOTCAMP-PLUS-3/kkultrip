@@ -1,8 +1,8 @@
 export default interface SpotRepository {
-  createSpot(
-    name: string,
-    description: string,
-    latitude: number,
-    longitude: number
-  ): Promise<void>;
+  getNearbySpots(
+    lat: number,
+    lng: number,
+    category?: string,
+    maxPrice?: number
+  ): Promise<Spot[]>;
 }

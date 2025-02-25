@@ -32,13 +32,13 @@ const getFilteredSpots = async (
     if (geoData?.lat && geoData?.lng) {
       // 지역 검색: 해당 지역을 중심으로 1km 이내 명소 가져오기
       const res = await fetch(
-        `https://api.example.com/spots?lat=${geoData.lat}&lng=${geoData.lng}&radius=1000`,
+        `/api/spots?lat=${geoData.lat}&lng=${geoData.lng}&radius=1000`,
         { cache: "no-store" }
       );
       spots = await res.json();
     } else {
       // 명소 검색: 해당 명소만 가져오기
-      const res = await fetch(`https://api.example.com/spots?query=${query}`, {
+      const res = await fetch(`/api/spots?query=${query}`, {
         cache: "no-store",
       });
       spots = await res.json();
@@ -48,7 +48,7 @@ const getFilteredSpots = async (
     const userLat = 37.5665;
     const userLng = 126.978;
     const res = await fetch(
-      `https://api.example.com/spots?lat=${userLat}&lng=${userLng}&radius=1000`,
+      `/api/spots?lat=${userLat}&lng=${userLng}&radius=1000`,
       { cache: "no-store" }
     );
     spots = await res.json();
@@ -79,69 +79,71 @@ const Spots = async ({
     : undefined;
 
   // 필터링된 명소 리스트 가져오기
-  // const spots = await getFilteredSpots(query,category, maxPrice);
-  const spots: Spot[] = [
-    {
-      id: 1,
-      name: "불국사",
-      category: "landmark",
-      avgPrice: 10900,
-      lat: 37.5665,
-      lng: 126.978,
-      bookmarkCnt: 130,
-      tipCnt: 150,
-      time: "16:00~22:00",
-      img: "https://www.gyeongju.go.kr/upload/content/thumb/20191221/EE09467CAC7043D9969AD488AB8BC662.jpg",
-    },
-    {
-      id: 2,
-      name: "불국사",
-      category: "landmark",
-      avgPrice: 10900,
-      lat: 37.5665,
-      lng: 126.978,
-      bookmarkCnt: 130,
-      tipCnt: 150,
-      time: "16:00~22:00",
-      img: "https://www.gyeongju.go.kr/upload/content/thumb/20191221/EE09467CAC7043D9969AD488AB8BC662.jpg",
-    },
-    {
-      id: 3,
-      name: "불국사",
-      category: "landmark",
-      avgPrice: 10900,
-      lat: 37.5665,
-      lng: 126.978,
-      bookmarkCnt: 130,
-      tipCnt: 150,
-      time: "16:00~22:00",
-      img: "https://www.gyeongju.go.kr/upload/content/thumb/20191221/EE09467CAC7043D9969AD488AB8BC662.jpg",
-    },
-    {
-      id: 4,
-      name: "불국사",
-      category: "landmark",
-      avgPrice: 10900,
-      lat: 37.5665,
-      lng: 126.978,
-      bookmarkCnt: 130,
-      tipCnt: 150,
-      time: "16:00~22:00",
-      img: "https://www.gyeongju.go.kr/upload/content/thumb/20191221/EE09467CAC7043D9969AD488AB8BC662.jpg",
-    },
-    {
-      id: 5,
-      name: "불국사",
-      category: "landmark",
-      avgPrice: 10900,
-      lat: 37.5665,
-      lng: 126.978,
-      bookmarkCnt: 130,
-      tipCnt: 150,
-      time: "16:00~22:00",
-      img: "https://www.gyeongju.go.kr/upload/content/thumb/20191221/EE09467CAC7043D9969AD488AB8BC662.jpg",
-    },
-  ];
+  const spots = await getFilteredSpots(query, category, maxPrice);
+
+  // 명소 리스트 mock data
+  // const spots: Spot[] = [
+  //   {
+  //     id: 1,
+  //     name: "불국사",
+  //     category: "landmark",
+  //     avgPrice: 10900,
+  //     lat: 37.5665,
+  //     lng: 126.978,
+  //     bookmarkCnt: 130,
+  //     tipCnt: 150,
+  //     time: "16:00~22:00",
+  //     img: "https://www.gyeongju.go.kr/upload/content/thumb/20191221/EE09467CAC7043D9969AD488AB8BC662.jpg",
+  //   },
+  //   {
+  //     id: 2,
+  //     name: "불국사",
+  //     category: "landmark",
+  //     avgPrice: 10900,
+  //     lat: 37.5665,
+  //     lng: 126.978,
+  //     bookmarkCnt: 130,
+  //     tipCnt: 150,
+  //     time: "16:00~22:00",
+  //     img: "https://www.gyeongju.go.kr/upload/content/thumb/20191221/EE09467CAC7043D9969AD488AB8BC662.jpg",
+  //   },
+  //   {
+  //     id: 3,
+  //     name: "불국사",
+  //     category: "landmark",
+  //     avgPrice: 10900,
+  //     lat: 37.5665,
+  //     lng: 126.978,
+  //     bookmarkCnt: 130,
+  //     tipCnt: 150,
+  //     time: "16:00~22:00",
+  //     img: "https://www.gyeongju.go.kr/upload/content/thumb/20191221/EE09467CAC7043D9969AD488AB8BC662.jpg",
+  //   },
+  //   {
+  //     id: 4,
+  //     name: "불국사",
+  //     category: "landmark",
+  //     avgPrice: 10900,
+  //     lat: 37.5665,
+  //     lng: 126.978,
+  //     bookmarkCnt: 130,
+  //     tipCnt: 150,
+  //     time: "16:00~22:00",
+  //     img: "https://www.gyeongju.go.kr/upload/content/thumb/20191221/EE09467CAC7043D9969AD488AB8BC662.jpg",
+  //   },
+  //   {
+  //     id: 5,
+  //     name: "불국사",
+  //     category: "landmark",
+  //     avgPrice: 10900,
+  //     lat: 37.5665,
+  //     lng: 126.978,
+  //     bookmarkCnt: 130,
+  //     tipCnt: 150,
+  //     time: "16:00~22:00",
+  //     img: "https://www.gyeongju.go.kr/upload/content/thumb/20191221/EE09467CAC7043D9969AD488AB8BC662.jpg",
+  //   },
+  // ];
 
   return (
     <div>
