@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import styles from "./SpotTable.module.scss";
+import styles from "./Spottable.module.scss";
 import { Spot } from "@prisma/client";
 
 interface SpotTableProps {

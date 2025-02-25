@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation"; // 추가
 import { FaPlus } from "react-icons/fa";
 import Sidebar from "../components/sidebar/Sidebar";
 import Header from "../components/header/Header";
-import SpotTable from "../components/spotTable/SpotTable";
+import SpotTable from "../components/spottable/Spottable";
 import styles from "./AdminSpotsPage.module.scss";
 import { Spot } from "@prisma/client";
 
