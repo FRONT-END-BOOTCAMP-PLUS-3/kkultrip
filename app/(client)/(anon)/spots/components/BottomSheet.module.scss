@@ -1,0 +1,7 @@
+.bottomSheetContainer {
+  width: 100%;
+  position: relative;
+  .hiddenSEO {
+    display: none; // SEO용 SSR 데이터 숨김
+  }
+}
