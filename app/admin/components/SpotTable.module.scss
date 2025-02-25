@@ -5,33 +5,33 @@
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
 
-.table th {
-  background: #f4f4f4;
-  color: #333;
-  font-weight: bold;
-  padding: 1rem;
-  text-align: left;
-  cursor: pointer;
-  transition: background 0.2s ease-in-out;
-}
+  .table th {
+    background: #f4f4f4;
+    color: #333;
+    font-weight: bold;
+    padding: 1rem;
+    text-align: left;
+    cursor: pointer;
+    transition: background 0.2s ease-in-out;
 
-.table th.sorted {
-  background: #e0e0e0;
-  transform: scale(1.05);
-}
+    .table th.sorted {
+      background: #e0e0e0;
+      transform: scale(1.05);
+    }
+  }
 
-.table td {
-  border-bottom: 1px solid #e0e0e0;
-  padding: 1rem;
-  text-align: left;
-  color: #555;
-}
+  .table td {
+    border-bottom: 1px solid #e0e0e0;
+    padding: 1rem;
+    text-align: left;
+    color: #555;
+  }
 
-.table tbody tr:hover {
-  background: #f9f9f9;
-  transition: background 0.2s ease-in-out;
+  .table tbody tr:hover {
+    background: #f9f9f9;
+    transition: background 0.2s ease-in-out;
+  }
 }
 
 .noData {
@@ -60,10 +60,9 @@
   background-color: #e74c3c;
   color: #fff;
   transition: background 0.2s ease-in-out;
-}
-
-.deleteButton:hover {
-  background-color: #c0392b;
+  .deleteButton:hover {
+    background-color: #c0392b;
+  }
 }
 
 @media (max-width: 768px) {

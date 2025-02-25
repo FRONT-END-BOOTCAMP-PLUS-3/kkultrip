@@ -2,24 +2,24 @@
   width: 15rem;
   padding: 2rem;
   background-color: var(--primary-color);
-}
 
-.logo {
-  font-size: 2rem;
-  font-weight: bold;
-  text-align: center;
-}
+  .logo {
+    font-size: 2rem;
+    font-weight: bold;
+    text-align: center;
+  }
 
-.navList {
-  list-style: none;
-  padding: 0;
-  margin-top: 2rem;
-}
+  .navList {
+    list-style: none;
+    padding: 0;
+    margin-top: 2rem;
 
-.navItem {
-  font-size: 1.2rem;
-  padding: 1rem;
-  cursor: pointer;
+    .navItem {
+      font-size: 1.2rem;
+      padding: 1rem;
+      cursor: pointer;
+    }
+  }
 }
 
 .active {
