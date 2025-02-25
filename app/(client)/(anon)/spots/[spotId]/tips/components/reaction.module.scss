@@ -1,0 +1,28 @@
+.reactionContainer {
+  margin-top: 0.75rem;
+  display: flex;
+  gap: 0.625rem;
+}
+
+.reactionButton {
+  background: none;
+  border: 0.5px solid var(--primary-color);
+  border-radius: 0.4rem;
+  padding: 0.25rem;
+  display: flex;
+  gap: 0.25rem;
+}
+
+.sirenButton {
+  background: none;
+  border: 0;
+  align-self: center;
+  width: 1rem;
+  height: 1rem;
+  margin-left: 1rem;
+}
+
+.emotionContainer{
+  display: flex;
+  margin-left: auto;
+}
