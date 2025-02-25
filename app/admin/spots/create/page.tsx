@@ -75,6 +75,7 @@ const SpotsCreatePage = () => {
     }
   };
 
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -238,6 +239,17 @@ const SpotsCreatePage = () => {
           className={styles.inputField}
           required
         />
+        {/* 이미지 미리보기 */}
+        {formData.img && (
+          <div className={styles.imagePreviewContainer}>
+            <img
+              src={formData.img}
+              alt="미리보기"
+              className={styles.imagePreview}
+            />
+          </div>
+        )}
+
         <button type="submit" className={styles.submitButton}>
           Spot 생성
         </button>

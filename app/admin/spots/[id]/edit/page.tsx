@@ -73,12 +73,8 @@ const SpotsEditPage = () => {
     }));
   };
 
-  const handleFileChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
-  ) => {
-    const file = (e.target as HTMLInputElement).files?.[0];
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
     if (file) {
       const imageUrl = URL.createObjectURL(file);
       setFormData((prev) => ({ ...prev, img: imageUrl }));
@@ -209,6 +205,17 @@ const SpotsEditPage = () => {
           onChange={handleFileChange}
           className={styles.inputField}
         />
+        {/* 이미지 미리보기 */}
+        {formData.img && (
+          <div className={styles.imagePreviewContainer}>
+            <img
+              src={formData.img}
+              alt="미리보기"
+              className={styles.imagePreview}
+            />
+          </div>
+        )}
+
         <button type="submit" className={styles.submitButton}>
           Spot 수정
         </button>

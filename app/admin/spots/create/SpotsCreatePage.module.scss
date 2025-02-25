@@ -47,6 +47,19 @@
       cursor: pointer;
       transition: background 0.3s;
     }
+
+    .imagePreviewContainer {
+      margin-top: 10px;
+      text-align: center;
+    }
+
+    .imagePreview {
+      width: 100%;
+      max-width: 300px;
+      height: auto;
+      border-radius: 8px;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    }
   }
 
   .backButton {
