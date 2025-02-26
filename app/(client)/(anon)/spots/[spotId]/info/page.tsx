@@ -5,6 +5,7 @@ import { IoIosArrowDown } from "react-icons/io";
 import { FaWonSign } from "react-icons/fa6";
 import { IoIosLink } from "react-icons/io";
 import { IoMdPerson } from "react-icons/io";
+import { FaClock } from "react-icons/fa";
 import styles from "./infoPage.module.scss";
 
 const InfoPage = () => {
@@ -24,22 +25,22 @@ const InfoPage = () => {
                 </li>
                 <li>
                     <FaRegClock color="var(--grey-2-color)" size={18} />
-                    <p className={styles.timeInfo}>
+                    <div className={styles.timeInfo}>
                         <span className={styles.label}>월요일</span>
                         <div className={styles.line}></div>
                         <span>오전 10시 ~ 오후 5시</span>
-                    </p>
+                    </div>
                     <button>
                         <IoIosArrowDown color="black" />
                     </button>
                 </li>
                 <li>
                     <FaWonSign color="var(--grey-2-color)" />
-                    <p className={styles.priceInfo}>
+                    <div className={styles.priceInfo}>
                         <span className={styles.label}>성인</span>
                         <div className={styles.line}></div>
                         <span className={styles.bold}>10,000원</span>
-                    </p>
+                    </div>
                     <button>
                         <IoIosArrowDown color="black" />
                     </button>
@@ -54,6 +55,11 @@ const InfoPage = () => {
                     <IoMdPerson color="var(--grey-2-color)" />
                     <span className={styles.subText}>1인 평균 비용</span>
                     <span className={styles.primaryBold}>10,000원</span>
+                </li>
+                <li>
+                    <FaClock color="var(--grey-2-color)" />
+                    <span className={styles.subText}>평균 대기 시간</span>
+                    <span className={styles.primaryBold}>2시간</span>
                 </li>
             </ul>
         </div>
