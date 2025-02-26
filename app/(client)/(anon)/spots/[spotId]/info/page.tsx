@@ -8,20 +8,25 @@ import { IoMdPerson } from "react-icons/io";
 import { FaClock } from "react-icons/fa";
 import styles from "./infoPage.module.scss";
 
-const InfoPage = () => {
+const InfoPage = async ({ params }: { params: { spotId: string } }) => {
+    const data = await fetch(
+        `http://localhost:3000/api/spots/${params.spotId}/info`
+    );
+    const spotData = await data.json();
+
     return (
         <div className={styles.infoContainer}>
-            <h2 className={styles.srOnly}>불국사 상세 정보</h2>
-            <p className={styles.info}>경주에 있는 문화유적입니다.</p>
+            <h2 className={styles.srOnly}>{spotData.name} 상세 정보</h2>
+            <p className={styles.info}>{spotData.info}</p>
 
             <ul className={styles.infoList}>
                 <li>
                     <IoLocation color="var(--grey-2-color)" size={18} />
-                    경상북도 경주시 불국로 385
+                    {spotData.address}
                 </li>
                 <li>
                     <BiPhoneCall color="var(--grey-2-color)" size={18} />
-                    054-746-9913
+                    {spotData.phone}
                 </li>
                 <li>
                     <FaRegClock color="var(--grey-2-color)" size={18} />
@@ -47,19 +52,19 @@ const InfoPage = () => {
                 </li>
                 <li>
                     <IoIosLink color="var(--grey-2-color)" />
-                    <a href="http://www.bulguksa.or.kr">
-                        http://www.bulguksa.or.kr
-                    </a>
+                    <a href={spotData.link}>{spotData.link}</a>
                 </li>
                 <li>
                     <IoMdPerson color="var(--grey-2-color)" />
                     <span className={styles.subText}>1인 평균 비용</span>
-                    <span className={styles.primaryBold}>10,000원</span>
+                    <span className={styles.primaryBold}>{spotData.avgPrice}원</span>
                 </li>
                 <li>
                     <FaClock color="var(--grey-2-color)" />
                     <span className={styles.subText}>평균 대기 시간</span>
-                    <span className={styles.primaryBold}>2시간</span>
+                    <span className={styles.primaryBold}>
+                        {spotData.avgWaitingTime}시간
+                    </span>
                 </li>
             </ul>
         </div>
