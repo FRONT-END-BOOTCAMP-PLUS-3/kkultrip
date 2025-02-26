@@ -15,7 +15,7 @@ const TicketList = ({ tickets }: { tickets: TicketDetailDto[] }) => {
     };
 
     return (
-        <div className={styles.ticketListContainer}>
+        <li className={styles.ticketListContainer}>
             <FaWonSign color="var(--grey-2-color)" className={styles.icon} />
 
             <ul className={styles.ticketListWrapper}>
@@ -39,7 +39,7 @@ const TicketList = ({ tickets }: { tickets: TicketDetailDto[] }) => {
                     <IoIosArrowDown color="black" />
                 )}
             </button>
-        </div>
+        </li>
     );
 };
 
