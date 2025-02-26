@@ -1,4 +1,5 @@
-import { TicketDetailDto } from "./ticketDetailDto";
+import { TicketDetailDto } from "./TicketDetailDto";
+import { TimeDetailDto } from "./TimeDetailDto";
 
 export interface SpotDetailDto {
     id: number;
@@ -10,5 +11,6 @@ export interface SpotDetailDto {
     link: string;
     avgPrice: number;
     avgWaitingTime: number;
-    ticketDetail : TicketDetailDto[];
+    ticketDetail: TicketDetailDto[];
+    timeDetail: TimeDetailDto[];
 }
