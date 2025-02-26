@@ -28,37 +28,10 @@
     gap: 0.8rem;
     margin-top: 1rem;
 
-    li {
+    p {
       display: flex;
       align-items: center;
       gap: 0.5rem;
-
-      span {
-        margin: 0;
-      }
-      
-      .detailInfo {
-        display: flex;
-        align-items: center;
-        width: 100%;
-
-        .label {
-          flex-shrink: 0;
-          margin-right: 0.5rem;
-        }
-
-        .line {
-          flex-grow: 1;
-          height: 1px;
-          background-color: var(--grey-1-color);
-          margin: 0 0.5rem;
-        }
-
-        .bold {
-          flex-shrink: 0;
-          font-weight: bold;
-        }
-      }
 
       button {
         background-color: transparent;

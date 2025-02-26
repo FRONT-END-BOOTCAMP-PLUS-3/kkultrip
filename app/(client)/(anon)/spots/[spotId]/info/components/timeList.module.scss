@@ -10,7 +10,7 @@
     clip: rect(0 0 0 0);
   }
 
-  .ticketListContainer {
+  .timeListContainer {
     display: flex;
     align-items: flex-start;
 
@@ -19,7 +19,7 @@
       align-self: flex-start;
     }
 
-    .ticketListWrapper {
+    .timeListWrapper {
       display: flex;
       flex-direction: column;
       width: 100%;

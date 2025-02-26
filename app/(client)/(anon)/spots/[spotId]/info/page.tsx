@@ -1,13 +1,11 @@
-import { IoLocation } from "react-icons/io5";
-import { BiPhoneCall } from "react-icons/bi";
-import { FaRegClock } from "react-icons/fa";
-import { IoIosArrowDown } from "react-icons/io";
-import { IoIosLink } from "react-icons/io";
-import { IoMdPerson } from "react-icons/io";
-import { FaClock } from "react-icons/fa";
-import styles from "./infoPage.module.scss";
 import { SpotDetailDto } from "@/application/usecases/spot/dto/SpotDetailDto";
+import { BiPhoneCall } from "react-icons/bi";
+import { FaClock } from "react-icons/fa";
+import { IoIosLink, IoMdPerson } from "react-icons/io";
+import { IoLocation } from "react-icons/io5";
 import TicketList from "./components/TicketList";
+import TimeList from "./components/TimeList";
+import styles from "./infoPage.module.scss";
 
 const InfoPage = async ({ params }: { params: { spotId: string } }) => {
     const data = await fetch(
@@ -15,53 +13,55 @@ const InfoPage = async ({ params }: { params: { spotId: string } }) => {
     );
     const spotData: SpotDetailDto = await data.json();
 
-    console.log(spotData);
-
     return (
         <div className={styles.infoContainer}>
             <h2 className={styles.srOnly}>{spotData.name} 상세 정보</h2>
             <p className={styles.info}>{spotData.info}</p>
 
-            <ul className={styles.infoList}>
-                <li>
+            <div className={styles.infoList}>
+                <span className={styles.srOnly}>{spotData.name} 주소</span>
+                <p>
                     <IoLocation color="var(--grey-2-color)" size={18} />
                     {spotData.address}
-                </li>
-                <li>
+                </p>
+                <span className={styles.srOnly}>{spotData.name} 전화번호</span>
+                <p>
                     <BiPhoneCall color="var(--grey-2-color)" size={18} />
                     {spotData.phone}
-                </li>
-                <li>
-                    <FaRegClock color="var(--grey-2-color)" size={18} />
-                    <div className={styles.detailInfo}>
-                        <span className={styles.label}>월요일</span>
-                        <div className={styles.line}></div>
-                        <span>오전 10시 ~ 오후 5시</span>
-                    </div>
-                    <button>
-                        <IoIosArrowDown color="black" />
-                    </button>
-                </li>
-                <TicketList tickets={spotData.ticketDetail} />
-                <li>
+                </p>
+
+                <TimeList times={spotData.timeDetail} name={spotData.name} />
+
+                <TicketList
+                    tickets={spotData.ticketDetail}
+                    name={spotData.name}
+                />
+                <span className={styles.srOnly}>{spotData.name} 링크</span>
+                <p>
                     <IoIosLink color="var(--grey-2-color)" />
                     <a href={spotData.link}>{spotData.link}</a>
-                </li>
-                <li>
-                    <IoMdPerson color="var(--grey-2-color)" />
+                </p>
+                <span className={styles.srOnly}>
+                    {spotData.name} 1인 평균 비용
+                </span>
+                <p>
+                    <IoMdPerson color="var(--grey-2-color)" size={18} />
                     <span className={styles.subText}>1인 평균 비용</span>
                     <span className={styles.primaryBold}>
                         {spotData.avgPrice}원
                     </span>
-                </li>
-                <li>
-                    <FaClock color="var(--grey-2-color)" />
+                </p>
+                <span className={styles.srOnly}>
+                    {spotData.name} 평균 대기 시간
+                </span>
+                <p>
+                    <FaClock color="var(--grey-2-color)" size={18} />
                     <span className={styles.subText}>평균 대기 시간</span>
                     <span className={styles.primaryBold}>
                         {spotData.avgWaitingTime}시간
                     </span>
-                </li>
-            </ul>
+                </p>
+            </div>
         </div>
     );
 };
