@@ -19,7 +19,6 @@ const AdminTipsPage = () => {
         }
         const data: Tip[] = await res.json();
         setTips(data);
-        console.log(data);
       } catch (error) {
         console.error(error);
       }
