@@ -2,17 +2,20 @@ import { IoLocation } from "react-icons/io5";
 import { BiPhoneCall } from "react-icons/bi";
 import { FaRegClock } from "react-icons/fa";
 import { IoIosArrowDown } from "react-icons/io";
-import { FaWonSign } from "react-icons/fa6";
 import { IoIosLink } from "react-icons/io";
 import { IoMdPerson } from "react-icons/io";
 import { FaClock } from "react-icons/fa";
 import styles from "./infoPage.module.scss";
+import { SpotDetailDto } from "@/application/usecases/spot/dto/SpotDetailDto";
+import TicketList from "./components/TicketList";
 
 const InfoPage = async ({ params }: { params: { spotId: string } }) => {
     const data = await fetch(
         `http://localhost:3000/api/spots/${params.spotId}/info`
     );
-    const spotData = await data.json();
+    const spotData: SpotDetailDto = await data.json();
+
+    console.log(spotData);
 
     return (
         <div className={styles.infoContainer}>
@@ -30,7 +33,7 @@ const InfoPage = async ({ params }: { params: { spotId: string } }) => {
                 </li>
                 <li>
                     <FaRegClock color="var(--grey-2-color)" size={18} />
-                    <div className={styles.timeInfo}>
+                    <div className={styles.detailInfo}>
                         <span className={styles.label}>월요일</span>
                         <div className={styles.line}></div>
                         <span>오전 10시 ~ 오후 5시</span>
@@ -39,17 +42,7 @@ const InfoPage = async ({ params }: { params: { spotId: string } }) => {
                         <IoIosArrowDown color="black" />
                     </button>
                 </li>
-                <li>
-                    <FaWonSign color="var(--grey-2-color)" />
-                    <div className={styles.priceInfo}>
-                        <span className={styles.label}>성인</span>
-                        <div className={styles.line}></div>
-                        <span className={styles.bold}>10,000원</span>
-                    </div>
-                    <button>
-                        <IoIosArrowDown color="black" />
-                    </button>
-                </li>
+                <TicketList tickets={spotData.ticketDetail} />
                 <li>
                     <IoIosLink color="var(--grey-2-color)" />
                     <a href={spotData.link}>{spotData.link}</a>
@@ -57,7 +50,9 @@ const InfoPage = async ({ params }: { params: { spotId: string } }) => {
                 <li>
                     <IoMdPerson color="var(--grey-2-color)" />
                     <span className={styles.subText}>1인 평균 비용</span>
-                    <span className={styles.primaryBold}>{spotData.avgPrice}원</span>
+                    <span className={styles.primaryBold}>
+                        {spotData.avgPrice}원
+                    </span>
                 </li>
                 <li>
                     <FaClock color="var(--grey-2-color)" />

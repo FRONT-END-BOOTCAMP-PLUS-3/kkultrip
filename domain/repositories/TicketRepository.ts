@@ -1,3 +1,5 @@
+import { Ticket } from "@prisma/client";
+
 export default interface TicketRepository {
-  createTicket(spotId: number): Promise<void>;
+    getTicketBySpotId(spotId: number): Promise<Ticket[] | null>;
 }

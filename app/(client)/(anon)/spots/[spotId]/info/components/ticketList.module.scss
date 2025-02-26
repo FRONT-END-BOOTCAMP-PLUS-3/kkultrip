@@ -1,0 +1,46 @@
+.ticketListContainer {
+  display: flex;
+  align-items: flex-start;
+
+  .icon {
+    flex-shrink: 0;
+    margin-right: 0.5rem;
+  }
+
+  .ticketListWrapper {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 0.5rem;
+
+    li {
+      display: flex;
+      align-items: center;
+      width: 100%;
+
+      .label {
+        flex-shrink: 0;
+        margin-right: 0.5rem;
+      }
+
+      .line {
+        flex-grow: 1;
+        height: 1px;
+        background-color: var(--grey-2-color);
+        margin: 0 0.5rem;
+      }
+
+      .bold {
+        flex-shrink: 0;
+        font-weight: bold;
+      }
+    }
+  }
+
+  button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    margin-left: 0.5rem;
+  }
+}

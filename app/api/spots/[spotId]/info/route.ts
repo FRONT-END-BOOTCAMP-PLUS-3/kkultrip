@@ -1,5 +1,6 @@
 import { GetSpotDetailUsecase } from "@/application/usecases/spot/GetSpotDetailUsecase";
 import { PgSpotRepository } from "@/infrastructure/repositories/PgSpotRepository";
+import PgTicketRepository from "@/infrastructure/repositories/PgTicketRepository";
 import { NextResponse } from "next/server";
 
 export async function GET(
@@ -8,7 +9,11 @@ export async function GET(
 ) {
     const { spotId } = params;
     const spotRepository = new PgSpotRepository();
-    const spotDetailUsecase = new GetSpotDetailUsecase(spotRepository);
+    const ticketRepository = new PgTicketRepository();
+    const spotDetailUsecase = new GetSpotDetailUsecase(
+        spotRepository,
+        ticketRepository
+    );
     const spotDetail = await spotDetailUsecase.execute(Number(spotId));
 
     if (!spotDetail) {
