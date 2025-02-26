@@ -1,13 +1,12 @@
 "use client";
 
-import { useSearchParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import styles from "./SearchFilter.module.scss";
-import Image from "next/image";
 import { IoSearch } from "react-icons/io5";
+import Image from "next/image";
 
 const categories = [
-  { id: "undefined", name: "전체" },
+  { id: "", name: "전체", icon: "" },
   { id: "landmark", name: "랜드마크", icon: "/images/landmark.svg" },
   { id: "activity", name: "액티비티", icon: "/images/activity.svg" },
   { id: "cafe", name: "카페", icon: "/images/cafe.svg" },
@@ -15,96 +14,97 @@ const categories = [
 ];
 
 const prices = [
-  { value: undefined, label: "전체" },
-  { value: 0, label: "무료" },
-  { value: 10000, label: "~ 1만원" },
-  { value: 30000, label: "~ 3만원" },
-  { value: 50000, label: "~ 5만원" },
+  { value: "", label: "전체" },
+  { value: "0", label: "무료" },
+  { value: "10000", label: "~ 1만원" },
+  { value: "30000", label: "~ 3만원" },
+  { value: "50000", label: "~ 5만원" },
 ];
 
-const SearchFilter = () => {
-  const searchParams = useSearchParams();
-  const router = useRouter();
-  const [selectedCategory, setSelectedCategory] = useState(
-    searchParams.get("category") || ""
-  );
-  const [selectedPrice, setSelectedPrice] = useState(
-    searchParams.get("price") || ""
-  );
-  const [searchQuery, setSearchQuery] = useState(
-    searchParams.get("query") || ""
-  );
-
-  const updateFilter = (category?: string, price?: string, query?: string) => {
-    const params = new URLSearchParams();
-    if (category) {
-      params.set("category", category);
-      setSelectedCategory(category);
-    }
-    if (price) {
-      params.set("price", price);
-      setSelectedPrice(price);
-    }
-    if (query) {
-      params.set("query", query);
-      setSearchQuery(query);
-    }
-
-    router.push(`/spots?${params.toString()}`);
-  };
+const SearchFilter = ({
+  updateFilters,
+  tempQuery,
+  setTempQuery,
+  initialCategory,
+  initialPrice,
+}: {
+  updateFilters: (filters: {
+    query?: string;
+    category?: string;
+    price?: string;
+  }) => void;
+  tempQuery: string;
+  setTempQuery: (value: string) => void;
+  initialCategory: string;
+  initialPrice: string;
+}) => {
+  const [selectedCategory, setSelectedCategory] = useState(initialCategory);
+  const [selectedPrice, setSelectedPrice] = useState(initialPrice);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    updateFilter(selectedCategory, selectedPrice, searchQuery);
+    updateFilters({
+      query: tempQuery,
+      category: selectedCategory,
+      price: selectedPrice,
+    });
+  };
+
+  const handleCategorySelect = (category: string) => {
+    setSelectedCategory(category);
+    updateFilters({ category, price: selectedPrice, query: tempQuery });
+  };
+
+  const handlePriceSelect = (price: string) => {
+    setSelectedPrice(price);
+    updateFilters({ category: selectedCategory, price, query: tempQuery });
   };
 
   return (
     <div className={styles.filterContainer}>
-      {/* 검색창 */}
+      {/* 🔍 검색창 */}
       <form onSubmit={handleSearch} className={styles.searchBox}>
         <input
           type="text"
-          placeholder="명소 이름 또는 지역 검색"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
+          placeholder="명소 검색"
+          value={tempQuery}
+          onChange={(e) => setTempQuery(e.target.value)} // 실시간 URL 변경 X
         />
         <button type="submit">
           <IoSearch />
         </button>
       </form>
-      {/* 카테고리 필터 */}
+
+      {/* 🏷 카테고리 필터 */}
       <div className={styles.categoryFilter}>
         {categories.map((category) => (
           <button
             key={category.id}
-            className={selectedCategory === category.id ? styles.selected : ""}
-            onClick={() => updateFilter(category.id, selectedPrice)}
+            className={
+              selectedCategory === category.name ? styles.selected : ""
+            }
+            onClick={() => handleCategorySelect(category.name)}
           >
-            {category.icon !== undefined ? (
+            {category.icon && (
               <Image
                 src={category.icon}
                 alt={category.name}
                 width={20}
                 height={20}
-                className={styles.icon}
               />
-            ) : (
-              ""
             )}
-            <span className={styles.label}> {category.name}</span>
+            <span className={styles.label}>{category.name}</span>
           </button>
         ))}
       </div>
 
-      {/* 가격 필터 */}
+      {/* 💰 가격 필터 (추가) */}
       <div className={styles.priceFilter}>
-        {prices.map((price, index) => (
+        {prices.map((price) => (
           <button
-            key={index}
-            className={
-              selectedPrice === String(price.value) ? styles.selected : ""
-            }
-            onClick={() => updateFilter(selectedCategory, String(price.value))}
+            key={price.value}
+            className={selectedPrice === price.value ? styles.selected : ""}
+            onClick={() => handlePriceSelect(price.value)}
           >
             {price.label}
           </button>

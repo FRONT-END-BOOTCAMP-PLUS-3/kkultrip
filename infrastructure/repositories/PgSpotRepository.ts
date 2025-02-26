@@ -1,5 +1,5 @@
-import { prisma } from "@/lib/prisma";
 import { SpotRepository } from "@/domain/repositories/SpotRepository";
+import { prisma } from "@/lib/prisma";
 import { Spot } from "@prisma/client"; // Prisma의 Spot 타입 사용
 
 export class PgSpotRepository implements SpotRepository {
@@ -54,8 +54,19 @@ export class PgSpotRepository implements SpotRepository {
       where: {
         category: category ? category : undefined,
         avgPrice: maxPrice ? { lte: maxPrice } : undefined,
-        lat: { gte: lat - 0.01, lte: lat + 0.01 },
-        lon: { gte: lng - 0.01, lte: lng + 0.01 },
+        lat: { gte: lat - 1, lte: lat + 1 }, // 위도(lat), 경도(lon)를 ± 0.01 정도로 검색 => 대략 1.1km
+        lon: { gte: lng - 1, lte: lng + 1 },
+      },
+    });
+  }
+
+  async getSpotByName(name: string): Promise<Spot | null> {
+    return prisma.spot.findFirst({
+      where: {
+        name: {
+          contains: name, // 부분 검색 가능 (예: "불국사" 입력 시 "경주 불국사"도 검색 가능)
+          mode: "insensitive", // 대소문자 구분 없이 검색
+        },
       },
     });
   }

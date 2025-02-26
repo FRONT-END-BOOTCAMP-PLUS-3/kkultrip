@@ -17,4 +17,6 @@ export interface SpotRepository {
     category?: string,
     maxPrice?: number
   ): Promise<Spot[]>;
+
+  getSpotByName(name: string): Promise<Spot | null>;
 }

@@ -30,6 +30,8 @@ declare global {
             size: Size;
           };
         });
+
+        setMap(map: Map | null): void;
       }
 
       class Size {

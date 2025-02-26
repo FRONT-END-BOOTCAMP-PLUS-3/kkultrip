@@ -4,7 +4,7 @@ import TipRepository from "@/domain/repositories/TipRepository";
 import TimeRepository from "@/domain/repositories/TimeRepository";
 import { SpotRepository } from "@/domain/repositories/SpotRepository";
 
-export class DfGetSpotsUsecase {
+export class GetSpotsUsecase {
   constructor(
     private spotRepo: SpotRepository,
     private bookmarkRepo: BookmarkRepository,
@@ -18,13 +18,18 @@ export class DfGetSpotsUsecase {
     category?: string,
     maxPrice?: number
   ): Promise<GetSpotsDTO[]> {
-    // 기본 명소 조회
+    // ✅ 기본 명소 조회
     const spots = await this.spotRepo.getNearbySpots(
       lat,
       lng,
       category,
       maxPrice
     );
+
+    // ✅ 명소가 없으면 빈 배열 반환 (에러 발생 X)
+    if (spots.length === 0) {
+      return [];
+    }
 
     // 추가 정보 (북마크 수, 꿀팁 수, 영업시간) 조회
     const spotsWithDetails = await Promise.all(
@@ -33,12 +38,7 @@ export class DfGetSpotsUsecase {
         const tipCnt = await this.tipRepo.countBySpot(spot.id);
         const time = await this.timeRepo.getTodayHours(spot.id);
 
-        return {
-          ...spot,
-          bookmarkCnt,
-          tipCnt,
-          time,
-        };
+        return { ...spot, bookmarkCnt, tipCnt, time };
       })
     );
 
