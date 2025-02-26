@@ -18,4 +18,8 @@ export class PgTipRepository implements TipRepository {
   async getAllTips(): Promise<Tip[]> {
     return await prisma.tip.findMany();
   }
+
+  async countBySpot(spotId: number): Promise<number> {
+    return prisma.tip.count({ where: { spotId } });
+  }
 }

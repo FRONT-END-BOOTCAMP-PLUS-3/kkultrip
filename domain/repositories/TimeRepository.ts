@@ -1,3 +1,3 @@
 export default interface TimeRepository {
-  createTime(spotId: number): Promise<void>;
+  getTodayHours(spotId: number): Promise<string | null>;
 }

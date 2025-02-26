@@ -43,4 +43,20 @@ export class PgSpotRepository implements SpotRepository {
       return null; // 존재하지 않는 경우를 고려해 null 반환
     }
   }
+
+  async getNearbySpots(
+    lat: number,
+    lng: number,
+    category?: string,
+    maxPrice?: number
+  ): Promise<Spot[]> {
+    return prisma.spot.findMany({
+      where: {
+        category: category ? category : undefined,
+        avgPrice: maxPrice ? { lte: maxPrice } : undefined,
+        lat: { gte: lat - 0.01, lte: lat + 0.01 },
+        lon: { gte: lng - 0.01, lte: lng + 0.01 },
+      },
+    });
+  }
 }
