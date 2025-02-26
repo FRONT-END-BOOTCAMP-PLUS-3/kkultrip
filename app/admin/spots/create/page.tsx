@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef } from "react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import styles from "./SpotsCreatePage.module.scss";
 
@@ -18,20 +19,18 @@ const SpotsCreatePage = () => {
     category: "",
     link: "",
     img: "",
-    tickets: [{ name: "", price: "" }], // [수정] 티켓 배열 추가
+    tickets: [{ name: "", price: "" }],
   });
 
-  // 입력 필드 참조 (자동 포커스 이동을 위해)
   const phoneRef1 = useRef<HTMLInputElement>(null);
   const phoneRef2 = useRef<HTMLInputElement>(null);
   const phoneRef3 = useRef<HTMLInputElement>(null);
 
-  // 전화번호 입력 핸들러
   const handlePhoneChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     part: "phone1" | "phone2" | "phone3"
   ) => {
-    let value = e.target.value.replace(/\D/g, ""); // 숫자만 입력받기
+    let value = e.target.value.replace(/\D/g, "");
 
     if (part === "phone1" && value.length > 3) value = value.slice(0, 3);
     if (part === "phone2" && value.length > 4) value = value.slice(0, 4);
@@ -39,13 +38,11 @@ const SpotsCreatePage = () => {
 
     setFormData((prev) => ({ ...prev, [part]: value }));
 
-    // 자동 포커스 이동
     if (part === "phone1" && value.length === 3) phoneRef2.current?.focus();
     if (part === "phone2" && (value.length === 4 || value.length === 4))
       phoneRef3.current?.focus();
   };
 
-  // 백스페이스로 이전 칸 이동
   const handleKeyDown = (
     e: React.KeyboardEvent<HTMLInputElement>,
     part: "phone1" | "phone2" | "phone3"
@@ -83,7 +80,7 @@ const SpotsCreatePage = () => {
 
     const data = {
       ...formData,
-      phone, // 하나의 필드로 합쳐서 전송
+      phone,
       createdAt: new Date(),
       updatedAt: new Date(),
     };
@@ -108,7 +105,7 @@ const SpotsCreatePage = () => {
         category: "",
         link: "",
         img: "",
-        tickets: [{ name: "", price: "" }], // [수정] 티켓 배열 추가
+        tickets: [{ name: "", price: "" }],
       });
       router.push("/admin/spots");
     } else {
@@ -116,14 +113,13 @@ const SpotsCreatePage = () => {
     }
   };
 
-  const handleTicketChange = <T extends keyof (typeof formData.tickets)[0]>(
+  const handleTicketChange = (
     index: number,
-    field: T,
-    value: (typeof formData.tickets)[0][T]
+    field: keyof (typeof formData.tickets)[0],
+    value: string
   ) => {
     const updatedTickets = [...formData.tickets];
     updatedTickets[index][field] = value;
-
     setFormData((prev) => ({ ...prev, tickets: updatedTickets }));
   };
 
@@ -268,10 +264,14 @@ const SpotsCreatePage = () => {
         {/* 이미지 미리보기 */}
         {formData.img && (
           <div className={styles.imagePreviewContainer}>
-            <img
+            <Image
               src={formData.img}
               alt="미리보기"
               className={styles.imagePreview}
+              width={300}
+              height={300}
+              style={{ objectFit: "cover" }}
+              objectFit="cover"
             />
           </div>
         )}
