@@ -21,6 +21,7 @@ const SpotsEditPage = () => {
     category: "",
     link: "",
     img: "",
+    tickets: [{ name: "", price: "" }],
   });
 
   const phoneRef1 = useRef<HTMLInputElement>(null);
@@ -32,6 +33,7 @@ const SpotsEditPage = () => {
       fetch(`/api/admin/spots/${spotId}`)
         .then((res) => res.json())
         .then((data) => {
+          console.log(data);
           const [phone1, phone2, phone3] = data.phone?.split("-") || [
             "",
             "",
@@ -98,6 +100,38 @@ const SpotsEditPage = () => {
     } else {
       alert("Spot 수정에 실패했습니다.");
     }
+  };
+
+  const handleTicketChange = (
+    index: number,
+    field: "name" | "price",
+    value: string
+  ) => {
+    setFormData((prev) => ({
+      ...prev,
+      tickets: prev.tickets.map((ticket, i) =>
+        i === index
+          ? {
+              ...ticket,
+              [field]: field === "price" ? Number(value) || 0 : value,
+            }
+          : ticket
+      ),
+    }));
+  };
+
+  const addTicket = () => {
+    setFormData((prev) => ({
+      ...prev,
+      tickets: [...prev.tickets, { name: "", price: "" }],
+    }));
+  };
+
+  const removeTicket = (index: number) => {
+    setFormData((prev) => ({
+      ...prev,
+      tickets: prev.tickets.filter((_, i) => i !== index),
+    }));
   };
 
   return (
@@ -215,6 +249,44 @@ const SpotsEditPage = () => {
             />
           </div>
         )}
+
+        <div className={styles.ticketsContainer}>
+          <h2>티켓 정보</h2>
+          {formData.tickets.map((ticket, index) => (
+            <div key={index} className={styles.ticketRow}>
+              <input
+                type="text"
+                placeholder="티켓 이름"
+                value={ticket.name}
+                className={styles.inputField}
+                onChange={(e) =>
+                  handleTicketChange(index, "name", e.target.value)
+                }
+                required
+              />
+              <input
+                type="number"
+                placeholder="티켓 가격"
+                value={ticket.price}
+                className={styles.inputField}
+                onChange={(e) =>
+                  handleTicketChange(index, "price", e.target.value)
+                }
+                required
+              />
+              <button type="button" onClick={() => removeTicket(index)}>
+                삭제
+              </button>
+            </div>
+          ))}
+          <button
+            type="button"
+            onClick={addTicket}
+            className={styles.addButton}
+          >
+            티켓 추가
+          </button>
+        </div>
 
         <button type="submit" className={styles.submitButton}>
           Spot 수정

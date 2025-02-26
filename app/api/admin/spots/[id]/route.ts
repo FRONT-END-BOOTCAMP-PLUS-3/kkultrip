@@ -3,6 +3,7 @@ import { GetSpotByIdUseCase } from "@/application/usecases/admin/spot/GetSpotsBy
 import { UpdateSpotUseCase } from "@/application/usecases/admin/spot/UpdateSpotUseCase";
 import { PgSpotRepository } from "@/infrastructure/repositories/PgSpotRepository";
 import { DeleteSpotUseCase } from "@/application/usecases/admin/spot/DeleteSpotUseCase";
+import { PgTicketRepository } from "@/infrastructure/repositories/PgTicketRepository";
 
 export async function GET(
   req: Request,
@@ -16,7 +17,11 @@ export async function GET(
     }
 
     const spotRepository = new PgSpotRepository();
-    const getSpotUseCase = new GetSpotByIdUseCase(spotRepository);
+    const ticketRepository = new PgTicketRepository();
+    const getSpotUseCase = new GetSpotByIdUseCase(
+      spotRepository,
+      ticketRepository
+    );
     const spot = await getSpotUseCase.execute(Number(id));
 
     if (!spot) {
@@ -58,7 +63,7 @@ export async function PATCH(req: Request) {
 export async function DELETE(req: Request) {
   try {
     const url = new URL(req.url);
-    const id = url.pathname.split("/").pop(); // URL에서 ID 추출
+    const id = url.pathname.split("/").pop();
 
     if (!id) {
       return NextResponse.json(
