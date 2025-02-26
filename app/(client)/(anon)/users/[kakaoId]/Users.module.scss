@@ -1,0 +1,71 @@
+.usersContainer {
+  .profileWrapper {
+    display: grid;
+    grid-template-columns: 1.3fr 2fr;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--disabled-color);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: white;
+
+    .profile {
+      justify-self: center;
+      width: 6rem;
+      aspect-ratio: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border: 2px solid var(--primary-color);
+      border-radius: 50%;
+      background-color: white;
+    }
+
+    .nickname {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-evenly;
+      align-items: center;
+
+      .name {
+        font-size: 1.25rem;
+        font-weight: bold;
+      }
+
+      .tipCount {
+        font-size: 1rem;
+        span {
+          color: var(--primary-color);
+        }
+      }
+    }
+  }
+
+  .sortWrapper {
+    display: flex;
+    gap: 1.25rem;
+    justify-content: flex-end;
+    margin: 1rem 1rem 0 0;
+
+    .sortButton {
+      font-size: 0.75rem;
+      cursor: pointer;
+      color: var(--grey-2-color);
+
+      &.active {
+        color: var(--primary-color);
+      }
+    }
+  }
+
+  .categoryWrapper {
+    margin: 0.625rem 0;
+  }
+
+  .tipsWrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    width: 100%;
+    gap: 0.625rem;
+    padding: 0.625rem 1.25rem;
+  }
+}
