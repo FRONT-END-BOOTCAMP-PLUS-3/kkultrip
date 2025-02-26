@@ -1,3 +1,15 @@
-export default interface TicketRepository {
-  createTicket(spotId: number): Promise<void>;
+import { prisma } from "@/lib/prisma";
+import TicketRepository from "@/domain/repositories/TicketRepository";
+import { Ticket } from "@prisma/client";
+
+export class PgTicketRepository implements TicketRepository {
+  async createTicket(
+    ticket: Omit<Ticket, "id" | "createdAt" | "updatedAt">
+  ): Promise<Ticket> {
+    return await prisma.ticket.create({
+      data: {
+        ...ticket,
+      },
+    });
+  }
 }

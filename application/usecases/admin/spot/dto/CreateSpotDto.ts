@@ -1,3 +1,5 @@
+import { CreateTicketDto } from "../ticket/dto/CreateTicketDto";
+
 export interface CreateSpotDto {
   name: string;
   address: string;
@@ -10,4 +12,5 @@ export interface CreateSpotDto {
   img: string;
   avgPrice?: number | null;
   avgWaitingTime?: number | null;
+  tickets?: CreateTicketDto[];
 }

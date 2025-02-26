@@ -1,12 +1,18 @@
-import { Spot } from "@prisma/client";
+import { Spot, Ticket } from "@prisma/client";
 import { SpotRepository } from "@/domain/repositories/SpotRepository";
+import TicketRepository from "@/domain/repositories/TicketRepository";
 import { CreateSpotDto } from "./dto/CreateSpotDto";
 
 export class CreateSpotUseCase {
-  constructor(private spotRepository: SpotRepository) {}
+  constructor(
+    private spotRepository: SpotRepository,
+    private ticketRepository: TicketRepository
+  ) {}
 
-  async execute(dto: CreateSpotDto): Promise<Spot> {
-    //DTO에서 받은 데이터 Spot 객체로 변환하면서 누락값에 대한 기본값 설정
+  async execute(
+    dto: CreateSpotDto
+  ): Promise<{ spot: Spot; tickets: Ticket[] }> {
+    // Spot 데이터 생성
     const newSpot = {
       name: dto.name,
       address: dto.address,
@@ -21,6 +27,25 @@ export class CreateSpotUseCase {
       avgWaitingTime: dto.avgWaitingTime ?? 0,
     };
 
-    return await this.spotRepository.createSpot(newSpot);
+    // Spot 생성
+    const createdSpot = await this.spotRepository.createSpot(newSpot);
+
+    // Ticket 생성 (Spot과 연결된 티켓이 있는 경우)
+    const tickets: Ticket[] = [];
+    if (dto.tickets && dto.tickets.length > 0) {
+      for (const ticketDto of dto.tickets) {
+        const newTicket = {
+          spotId: createdSpot.id,
+          name: ticketDto.name,
+          price: ticketDto.price,
+        };
+        const createdTicket = await this.ticketRepository.createTicket(
+          newTicket
+        );
+        tickets.push(createdTicket);
+      }
+    }
+
+    return { spot: createdSpot, tickets };
   }
 }

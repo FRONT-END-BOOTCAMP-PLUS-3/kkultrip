@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { GetSpotsUseCase } from "@/application/usecases/admin/spot/GetSpotsUseCase";
 import { CreateSpotUseCase } from "@/application/usecases/admin/spot/CreateSpotUseCase";
 import { PgSpotRepository } from "@/infrastructure/repositories/PgSpotRepository";
+import { PgTicketRepository } from "@/infrastructure/repositories/PgTicketRepository"; // TicketRepository 추가
 
 export async function GET() {
   try {
@@ -24,10 +25,15 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
     const spotRepository = new PgSpotRepository();
-    const createSpotUseCase = new CreateSpotUseCase(spotRepository);
-    const spot = await createSpotUseCase.execute(body);
+    const ticketRepository = new PgTicketRepository();
+    const createSpotUseCase = new CreateSpotUseCase(
+      spotRepository,
+      ticketRepository
+    );
 
-    return NextResponse.json(spot, { status: 201 });
+    const { spot, tickets } = await createSpotUseCase.execute(body);
+
+    return NextResponse.json({ spot, tickets }, { status: 201 });
   } catch (error) {
     console.error("Spot 생성 오류:", error);
     return NextResponse.json(

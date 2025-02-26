@@ -1,3 +1,7 @@
+import { Ticket } from "@prisma/client";
+
 export default interface TicketRepository {
-  createTicket(spotId: number): Promise<void>;
+  createTicket(
+    data: Omit<Ticket, "id" | "createdAt" | "updatedAt">
+  ): Promise<Ticket>;
 }

@@ -115,12 +115,20 @@ const SpotsCreatePage = () => {
 
   const handleTicketChange = (
     index: number,
-    field: keyof (typeof formData.tickets)[0],
+    field: "name" | "price",
     value: string
   ) => {
-    const updatedTickets = [...formData.tickets];
-    updatedTickets[index][field] = value;
-    setFormData((prev) => ({ ...prev, tickets: updatedTickets }));
+    setFormData((prev) => ({
+      ...prev,
+      tickets: prev.tickets.map((ticket, i) =>
+        i === index
+          ? {
+              ...ticket,
+              [field]: field === "price" ? Number(value) || 0 : value,
+            }
+          : ticket
+      ),
+    }));
   };
 
   const addTicket = () => {
