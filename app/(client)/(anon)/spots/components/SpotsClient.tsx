@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { GetSpotsDTO } from "@/application/usecases/spot/dto/GetSpotsDto";
 import SearchFilter from "./SearchFilter";
 import NaverMap from "./NaverMap";
-import DraggableBottomSheet from "./DraggableBottomSheet";
+import BottomSheet from "./BottomSheet";
 
 const SpotsClient = ({
   initialLat,
@@ -21,9 +21,11 @@ const SpotsClient = ({
 
   const [lat, setLat] = useState(initialLat);
   const [lon, setLon] = useState(initialLon);
+  const [userLat, setUserLat] = useState(37.5665);
+  const [userLon, setUserLon] = useState(126.978);
   const [spots, setSpots] = useState<GetSpotsDTO[]>(initialSpots || []);
   const [isLocationUpdated, setIsLocationUpdated] = useState(false);
-  const [tempQuery, setTempQuery] = useState(searchParams.get("query") || ""); // 🔹 입력 중인 검색어 상태
+  const [tempQuery, setTempQuery] = useState(searchParams.get("query") || "");
 
   // ✅ URL에 있는 lat, lon을 기반으로 지도 이동 & 데이터 요청
   useEffect(() => {
@@ -61,6 +63,8 @@ const SpotsClient = ({
 
           setLat(userLat);
           setLon(userLon);
+          setUserLat(userLat);
+          setUserLon(userLon);
           setIsLocationUpdated(true);
 
           const params = new URLSearchParams(searchParams.toString());
@@ -131,11 +135,6 @@ const SpotsClient = ({
     }
   };
 
-  console.log(
-    `📌 최종 데이터 (SpotsClient.tsx) - lon: ${lon}, lat: ${lat}, spots:`,
-    spots
-  );
-
   return (
     <div>
       <SearchFilter
@@ -146,7 +145,7 @@ const SpotsClient = ({
         initialPrice={searchParams.get("price") || ""}
       />
       <NaverMap lat={lat} lon={lon} spots={spots} />
-      <DraggableBottomSheet spots={spots} />
+      <BottomSheet spots={spots} userLat={userLat} userLon={userLon} />
     </div>
   );
 };

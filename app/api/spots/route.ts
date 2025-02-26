@@ -41,21 +41,15 @@ export const GET = async (req: Request) => {
   );
 
   try {
+    let spots: GetSpotsDTO[] = [];
+
     if (query) {
-      // ✅ 특정 명소 검색
+      // ✅ 특정 단어를 포함하는 명소 검색 (예: "서울" → "서울타워", "서울역")
       const spotByName: GetSpotsDTO[] = await getSpotByNameUsecase.execute(
         query
       );
-      if (spotByName.length > 0) {
-        console.log("📌 특정 명소 검색 결과:", spotByName);
-        return NextResponse.json({
-          spots: spotByName,
-          lat: spotByName[0].lat, // ✅ 특정 명소의 lat 추가
-          lon: spotByName[0].lon, // ✅ 특정 명소의 lon 추가
-        });
-      }
 
-      // ✅ 특정 명소가 아니라면 지역 이름 검색
+      // ✅ 지역 좌표 검색 (네이버 Geocode API 사용)
       const apiBaseUrl =
         process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3000";
       const geoResponse = await fetch(
@@ -63,32 +57,38 @@ export const GET = async (req: Request) => {
       );
       const geoData = await geoResponse.json();
 
+      let locationBasedSpots: GetSpotsDTO[] = [];
       if (geoData.lat && geoData.lon) {
-        const locationBasedSpots: GetSpotsDTO[] = await getSpotsUsecase.execute(
+        locationBasedSpots = await getSpotsUsecase.execute(
           geoData.lat,
           geoData.lon,
           category,
           maxPrice
         );
-        console.log("📌 지역 검색 결과:", locationBasedSpots);
-        return NextResponse.json({
-          spots: locationBasedSpots,
-          lat: geoData.lat, // ✅ 검색된 지역의 lat 추가
-          lon: geoData.lon, // ✅ 검색된 지역의 lon 추가
-        });
       }
 
-      return NextResponse.json({ spots: [], lat: undefined, lon: undefined });
+      // ✅ 중복 명소 제거 (ID 기준)
+      const mergedSpots = [...spotByName, ...locationBasedSpots].reduce(
+        (acc, spot) => {
+          if (!acc.some((s) => s.id === spot.id)) acc.push(spot);
+          return acc;
+        },
+        [] as GetSpotsDTO[]
+      );
+
+      return NextResponse.json({
+        spots: mergedSpots,
+        lat: geoData.lat || (spotByName.length > 0 ? spotByName[0].lat : null),
+        lon: geoData.lon || (spotByName.length > 0 ? spotByName[0].lon : null),
+      });
     }
 
-    // ✅ 위치 기반 검색 (`lat, lon`만 있는 경우)
+    // ✅ 위치 기반 검색 (lat, lon이 있을 때)
     if (lat !== undefined && lon !== undefined) {
-      const spots = await getSpotsUsecase.execute(lat, lon, category, maxPrice);
-      console.log("📌 위치 기반 검색 결과:", spots);
-      return NextResponse.json({ spots, lat, lon });
+      spots = await getSpotsUsecase.execute(lat, lon, category, maxPrice);
     }
 
-    return NextResponse.json({ spots: [], lat: undefined, lon: undefined });
+    return NextResponse.json({ spots, lat, lon });
   } catch (error) {
     console.error("❌ API 오류 발생:", error);
     return NextResponse.json({ error: "서버 오류 발생" }, { status: 500 });
