@@ -17,6 +17,7 @@ const RootLayout = ({
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>꿀트립</title>
         <link rel="icon" href="/favicon.ico" />
+
         <meta
           name="description"
           content="관광명소에 대한 정보를 제공하는 도슨트 서비스"
