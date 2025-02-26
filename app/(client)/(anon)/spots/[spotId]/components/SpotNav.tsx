@@ -14,7 +14,7 @@ const SpotNav = ({ spotId }: { spotId: string }) => {
     };
 
     return (
-        <ul className={styles.spotNav}>
+        <ul className={styles.navContainer}>
             <li
                 className={
                     isActive(`/spots/${spotId}/info`, "") ? styles.active : ""

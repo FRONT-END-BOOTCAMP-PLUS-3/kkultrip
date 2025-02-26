@@ -2,84 +2,81 @@
   padding: 1.25rem;
   background-color: white;
 
-}
+  .srOnly {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    border: 0;
+    clip: rect(0 0 0 0);
+  }
 
-.srOnly {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip-path: inset(50%);
-  border: 0;
-  clip: rect(0 0 0 0);
-}
+  .info {
+    padding: 1.25rem;
+    background-color: rgba(253, 187, 9, 0.2);
+    border-radius: 0.625rem;
+    font-size: 0.75rem;
+    color: black;
+  }
 
-.info {
-  padding: 1.25rem;
-  background-color: rgba(253, 187, 9, 0.2);
-  border-radius: 0.625rem;
-  font-size: 0.75rem;
-  color: black;
-}
-
-.infoList {
-  display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
-  margin-top: 1rem;
-
-  li {
+  .infoList {
     display: flex;
-    align-items: center;
-    gap: 0.5rem;
+    flex-direction: column;
+    gap: 0.8rem;
+    margin-top: 1rem;
 
-    p {
-      margin: 0;
-    }
-
-    .timeInfo,
-    .priceInfo {
+    li {
       display: flex;
       align-items: center;
-      width: 100%;
+      gap: 0.5rem;
 
-      .label {
-        flex-shrink: 0;
-        margin-right: 0.5rem;
+      span {
+        margin: 0;
       }
 
-      .line {
-        flex-grow: 1;
-        height: 1px;
-        background-color: var(--grey-1-color);
-        margin: 0 0.5rem;
+      .timeInfo,
+      .priceInfo {
+        display: flex;
+        align-items: center;
+        width: 100%;
+
+        .label {
+          flex-shrink: 0;
+          margin-right: 0.5rem;
+        }
+
+        .line {
+          flex-grow: 1;
+          height: 1px;
+          background-color: var(--grey-1-color);
+          margin: 0 0.5rem;
+        }
+
+        .bold {
+          flex-shrink: 0;
+          font-weight: bold;
+        }
       }
 
-      .bold {
-        flex-shrink: 0;
+      button {
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
       }
-    }
 
-    button {
-      background-color: transparent;
-      border: none;
-      cursor: pointer;
+      .subText {
+        font-size: 0.625rem;
+        color: var(--grey-2-color);
+      }
+
+
+      .primaryBold {
+        color: var(--primary-color);
+        font-weight: bold;
+      }
     }
   }
-}
-
-.subText {
-  font-size: 0.625rem;
-  color: var(--grey-2-color);
-}
-
-.bold {
-  font-weight: bold;
-}
-
-.primaryBold {
-  color: var(--primary-color);
-  font-weight: bold;
 }

@@ -17,14 +17,14 @@ const Reaction = () => {
                 />
                 <p>반응 남기기</p>
             </button>
-            <div className={styles.emotionContainer}>
+            <div className={styles.emotionWrapper}>
                 <Emotion count={7} />
                 <Emotion count={5} />
                 <Emotion count={4} />
-                <button className={styles.sirenButton}>
-                    <PiSirenFill color="var(--red-1-color)" size={16} />
-                </button>
             </div>
+            <button className={styles.sirenButton}>
+                <PiSirenFill color="var(--red-1-color)" size={16} />
+            </button>
         </div>
     );
 };

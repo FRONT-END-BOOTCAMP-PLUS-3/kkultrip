@@ -25,7 +25,7 @@ const DocentContent = ({ content }: { content: string }) => {
 
     return (
         <div className={styles.docentContainer}>
-            <div className={styles.docentBox}>
+            <div className={styles.docentWrapper}>
                 <h3>불국사의 역사</h3>
                 <HiSpeakerWave size={16} color="var(--primary-color)" />
             </div>

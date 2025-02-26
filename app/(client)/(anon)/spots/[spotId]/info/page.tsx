@@ -24,22 +24,22 @@ const InfoPage = () => {
                 </li>
                 <li>
                     <FaRegClock color="var(--grey-2-color)" size={18} />
-                    <div className={styles.timeInfo}>
-                      <p className={styles.label}>월요일</p>
-                      <div className={styles.line}></div>
-                      <p>오전 10시 ~ 오후 5시</p>
-                    </div>
+                    <p className={styles.timeInfo}>
+                        <span className={styles.label}>월요일</span>
+                        <div className={styles.line}></div>
+                        <span>오전 10시 ~ 오후 5시</span>
+                    </p>
                     <button>
                         <IoIosArrowDown color="black" />
                     </button>
                 </li>
                 <li>
                     <FaWonSign color="var(--grey-2-color)" />
-                    <div className={styles.priceInfo}>
-                        <p className={styles.label}>성인</p>
+                    <p className={styles.priceInfo}>
+                        <span className={styles.label}>성인</span>
                         <div className={styles.line}></div>
-                        <p className={styles.bold}>10,000원</p>
-                    </div>
+                        <span className={styles.bold}>10,000원</span>
+                    </p>
                     <button>
                         <IoIosArrowDown color="black" />
                     </button>
@@ -52,8 +52,8 @@ const InfoPage = () => {
                 </li>
                 <li>
                     <IoMdPerson color="var(--grey-2-color)" />
-                    <p className={styles.subText}>1인 평균 비용</p>
-                    <p className={styles.primaryBold}>10,000원</p>
+                    <span className={styles.subText}>1인 평균 비용</span>
+                    <span className={styles.primaryBold}>10,000원</span>
                 </li>
             </ul>
         </div>

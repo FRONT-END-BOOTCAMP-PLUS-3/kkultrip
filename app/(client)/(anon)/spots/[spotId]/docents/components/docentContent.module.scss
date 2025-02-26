@@ -1,42 +1,42 @@
 .docentContainer {
   border-bottom: 1px solid var(--grey-1-color);
   padding: 1rem 0;
-}
 
-.docentBox {
-  display: flex;
-  gap: 0.625rem;
-  align-items: center;
-  margin-bottom: 0.625rem;
-}
+  .docentWrapper {
+    display: flex;
+    gap: 0.625rem;
+    align-items: center;
+    margin-bottom: 0.625rem;
+  }
 
-.contentWrapper {
-  display: flex;
-  flex-direction: column;
-}
+  .contentWrapper {
+    display: flex;
+    flex-direction: column;
 
-.clampedText,
-.expandedText {
-  line-height: 1.25rem;
-  display: -webkit-box;
-  -webkit-line-clamp: 5;
-  line-clamp: 5;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
+    .clampedText,
+    .expandedText {
+      line-height: 1.25rem;
+      display: -webkit-box;
+      -webkit-line-clamp: 5;
+      line-clamp: 5;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
 
-.expandedText {
-  display: block;
-  -webkit-line-clamp: unset;
-  line-clamp: unset;
-}
+    .expandedText {
+      display: block;
+      -webkit-line-clamp: unset;
+      line-clamp: unset;
+    }
 
-.moreButton {
-  background: none;
-  border: none;
-  color: var(--grey-2-color);
-  cursor: pointer;
-  padding: 0;
-  align-self: flex-end;
+    .moreButton {
+      background: none;
+      border: none;
+      color: var(--grey-2-color);
+      cursor: pointer;
+      padding: 0;
+      align-self: flex-end;
+    }
+  }
 }
