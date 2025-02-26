@@ -2,10 +2,16 @@ import SpotNav from "./SpotNav";
 import Image from "next/image";
 import styles from "./spotHeader.module.scss";
 import { FaRegBookmark } from "react-icons/fa";
+import { SpotHeaderDto } from "@/application/usecases/spot/dto/SpotHeaderDto";
 
 const SpotHeader = async ({ spotId }: { spotId: string }) => {
     const data = await fetch(`http://localhost:3000/api/spots/${spotId}`);
-    const spotHeaderData = await data.json();
+    const spotHeaderData: SpotHeaderDto | null = await data.json();
+
+    if (!spotHeaderData) {
+        return <div>Spot not found</div>;
+    }
+
     return (
         <>
             <Image
