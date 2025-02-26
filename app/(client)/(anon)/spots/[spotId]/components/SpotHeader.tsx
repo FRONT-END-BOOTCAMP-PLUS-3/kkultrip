@@ -5,11 +5,11 @@ import { FaRegBookmark } from "react-icons/fa";
 
 const SpotHeader = async ({ spotId }: { spotId: string }) => {
     const data = await fetch(`http://localhost:3000/api/spots/${spotId}`);
-    const spotLayoutData = await data.json();
+    const spotHeaderData = await data.json();
     return (
         <>
             <Image
-                src={spotLayoutData.img}
+                src={spotHeaderData.img}
                 alt="불국사"
                 width={100}
                 height={100}
@@ -18,8 +18,8 @@ const SpotHeader = async ({ spotId }: { spotId: string }) => {
             <div className={styles.spotContainer}>
                 <div className={styles.spotHeader}>
                     <div className={styles.spotTitle}>
-                        <h1>{spotLayoutData.name}</h1>
-                        <p>{spotLayoutData.category}</p>
+                        <h1>{spotHeaderData.name}</h1>
+                        <p>{spotHeaderData.category}</p>
                     </div>
                     <button className={styles.bookmarkButton}>
                         <FaRegBookmark size={24} color="var(--primary-color)" />
