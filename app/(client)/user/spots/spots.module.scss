@@ -1,0 +1,8 @@
+.spotsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  width: 100%;
+  gap: 0.625rem;
+  padding: 0.625rem 1.25rem;
+}
