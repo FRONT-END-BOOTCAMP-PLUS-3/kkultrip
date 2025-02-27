@@ -18,11 +18,10 @@ const UserLayout = ({ children }: { children: React.ReactNode }) => {
     <div className={styles.userContainer}>
       <div className={styles.profile}>
         <Image
-          src="/images/bee.svg"
-          width={160}
-          height={160}
+          src="/images/test.png"
+          fill
           alt="profile image"
-          style={{ objectFit: "contain", width: "70%", height: "70%" }}
+          className={styles.profileImage}
         />
       </div>
       <div className={styles.nickname}>

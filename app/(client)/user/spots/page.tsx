@@ -6,57 +6,57 @@ import styles from "./spots.module.scss";
 const Spots = () => {
   const spotsData = [
     {
-      imageSrc: "/images/test.png",
+      img: "/images/test.png",
       category: "음식점",
       name: "테스트중입니다.테스트중입니다.테스트중입니다.",
     },
     {
-      imageSrc: "/images/test.png",
+      img: "/images/test.png",
       category: "카페",
       name: "테스트중입니다.",
     },
     {
-      imageSrc: "/images/test.png",
+      img: "/images/test.png",
       category: "카페",
       name: "테스트중입니다.",
     },
     {
-      imageSrc: "/images/test.png",
+      img: "/images/test.png",
       category: "카페",
       name: "테스트중입니다.",
     },
     {
-      imageSrc: "/images/test.png",
+      img: "/images/test.png",
       category: "카페",
       name: "테스트중입니다.",
     },
     {
-      imageSrc: "/images/test.png",
+      img: "/images/test.png",
       category: "카페",
       name: "테스트중입니다.",
     },
     {
-      imageSrc: "/images/test.png",
+      img: "/images/test.png",
       category: "카페",
       name: "테스트중입니다.",
     },
     {
-      imageSrc: "/images/test.png",
+      img: "/images/test.png",
       category: "카페",
       name: "테스트중입니다.",
     },
     {
-      imageSrc: "/images/test.png",
+      img: "/images/test.png",
       category: "카페",
       name: "테스트중입니다.",
     },
     {
-      imageSrc: "/images/test.png",
+      img: "/images/test.png",
       category: "카페",
       name: "테스트중입니다.",
     },
     {
-      imageSrc: "/images/test.png",
+      img: "/images/test.png",
       category: "카페",
       name: "테스트중입니다.",
     },
@@ -66,7 +66,7 @@ const Spots = () => {
       {spotsData.map((spot, index) => (
         <SpotImageCard
           key={index}
-          imageSrc={spot.imageSrc}
+          imageSrc={spot.img}
           spotCategory={spot.category}
           spotName={spot.name}
         />
