@@ -23,6 +23,25 @@ const TimeList = ({
         new Date()
     );
 
+    // 요일 순서 배열
+    const weekDays = ["일", "월", "화", "수", "목", "금", "토"];
+
+    // 오늘 요일을 기준으로 정렬
+    const sortedTimes = [...times].sort((a, b) => {
+        const todayIndex = weekDays.indexOf(today);
+        const aIndex = weekDays.indexOf(a.day);
+        const bIndex = weekDays.indexOf(b.day);
+
+        // 오늘 요일을 맨 앞으로
+        if (a.day === today) return -1;
+        if (b.day === today) return 1;
+
+        // 나머지 요일은 순서대로 정렬
+        return (
+            ((aIndex - todayIndex + 7) % 7) - ((bIndex - todayIndex + 7) % 7)
+        );
+    });
+
     return (
         <>
             <span className={styles.srOnly}>{name} 영업시간</span>
@@ -33,8 +52,8 @@ const TimeList = ({
                 />
 
                 <ul className={styles.timeListWrapper}>
-                    {times
-                        .slice(0, showAllTimes ? times.length : 1)
+                    {sortedTimes
+                        .slice(0, showAllTimes ? sortedTimes.length : 1)
                         .map((time) => (
                             <li key={time.day}>
                                 <span
@@ -47,10 +66,18 @@ const TimeList = ({
                                 <div className={styles.line}></div>
                                 <span
                                     className={
-                                        time.day === today ? styles.bold : ""
+                                        time.closeDay
+                                            ? styles.red
+                                            : time.day === today
+                                            ? styles.bold
+                                            : ""
                                     }
                                 >
-                                    {time.open} ~ {time.close}
+                                    {time.closeDay
+                                        ? "휴무"
+                                        : time.allHours
+                                        ? "24시간"
+                                        : `${time.open} ~ ${time.close}`}
                                 </span>
                             </li>
                         ))}
@@ -69,17 +96,3 @@ const TimeList = ({
 };
 
 export default TimeList;
-
-// return (
-//     <li>
-//         <FaRegClock color="var(--grey-2-color)" size={18} />
-//         <div className={styles.detailInfo}>
-//             <span className={styles.label}>월요일</span>
-//             <div className={styles.line}></div>
-//             <span>오전 10시 ~ 오후 5시</span>
-//         </div>
-//         <button>
-//             <IoIosArrowDown color="black" />
-//         </button>
-//     </li>
-// );
