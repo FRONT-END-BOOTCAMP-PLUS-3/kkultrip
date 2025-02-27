@@ -39,7 +39,7 @@ const TicketList = ({
                                 </span>
                                 <div className={styles.line}></div>
                                 <span className={styles.bold}>
-                                    {ticket.price}원
+                                    {ticket.price.toLocaleString()}원
                                 </span>
                             </li>
                         ))}
