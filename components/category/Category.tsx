@@ -3,6 +3,7 @@ import Image from "next/image";
 import styles from "./Category.module.scss";
 
 const categories = [
+  { id: "all", label: "전체" },
   { id: "activity", label: "액티비티", icon: "/images/activity.svg" },
   { id: "landmark", label: "랜드마크", icon: "/images/landmark.svg" },
   { id: "cafe", label: "카페", icon: "/images/cafe.svg" },
@@ -10,7 +11,7 @@ const categories = [
 ];
 
 const Category = () => {
-  const [selected, setSelected] = useState<string | null>(null);
+  const [selected, setSelected] = useState<string>("all");
 
   return (
     <div className={styles.container}>
@@ -22,13 +23,15 @@ const Category = () => {
           }`}
           onClick={() => setSelected(category.id)}
         >
-          <Image
-            src={category.icon}
-            alt={category.label}
-            width={20}
-            height={20}
-            className={styles.icon}
-          />
+          {category.icon && (
+            <Image
+              src={category.icon}
+              alt={category.label}
+              width={16}
+              height={16}
+              className={styles.icon}
+            />
+          )}
           <span className={styles.label}>{category.label}</span>
         </button>
       ))}
