@@ -1,3 +1,5 @@
+import { Docent } from "@prisma/client";
+
 export default interface DocentRepository {
-  createDocent(spotId: number, description: string): Promise<void>;
+    getDocentBySpotId(spotId: number): Promise<Docent[] | null>;
 }
