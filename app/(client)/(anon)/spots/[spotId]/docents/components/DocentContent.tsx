@@ -9,14 +9,17 @@ import SpeakerAnimation from "./SpeakerAnimation";
 const DocentContent = ({
     title,
     description,
+    audioPath,
 }: {
     title: string;
     description: string;
+    audioPath: string;
 }) => {
     const [isExpanded, setIsExpanded] = useState(false);
     const [isOverflowing, setIsOverflowing] = useState(false);
     const [isPlaying, setIsPlaying] = useState(false);
     const contentRef = useRef<HTMLParagraphElement>(null);
+    const audioRef = useRef<HTMLAudioElement | null>(null);
 
     const handleToggleText = () => {
         setIsExpanded(!isExpanded);
@@ -31,6 +34,23 @@ const DocentContent = ({
             setIsOverflowing(contentRef.current.scrollHeight > maxHeight);
         }
     }, [description]);
+
+    useEffect(() => {
+        if (!audioRef.current) {
+            audioRef.current = new Audio(audioPath);
+        }
+
+        if (isPlaying) {
+            audioRef.current.play();
+        } else {
+            audioRef.current.pause();
+        }
+
+        return () => {
+            audioRef.current?.pause();
+            audioRef.current = null;
+        };
+    }, [isPlaying, audioPath]);
 
     return (
         <div className={styles.docentContainer}>

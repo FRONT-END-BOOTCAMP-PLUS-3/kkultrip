@@ -18,6 +18,7 @@ const DocentsPage = async ({ params }: { params: { spotId: string } }) => {
                         key={docent.id}
                         title={docent.title}
                         description={docent.description}
+                        audioPath={docent.audioPath}
                     />
                 ))}
             </div>
