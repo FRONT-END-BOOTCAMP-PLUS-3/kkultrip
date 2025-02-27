@@ -22,10 +22,9 @@ export class PgTimeRepository implements TimeRepository {
     if (!timeInfo) return null;
 
     // 휴무일인지 확인
-    if (timeInfo.closeDay === "true") return "휴무";
+    if (timeInfo.closeDay === true) return "휴무";
 
-    if (timeInfo.open === "00:00" && timeInfo.close === "00:00")
-      return "24시간 영업";
+    if (timeInfo.all_hours === true) return "24시간";
 
     // 영업시간 반환 (예: "09:00 ~ 18:00")
     return `${timeInfo.open} ~ ${timeInfo.close}`;

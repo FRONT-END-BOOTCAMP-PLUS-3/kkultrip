@@ -1,9 +1,9 @@
 "use client";
 
 import styles from "./SearchFilter.module.scss";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { IoSearch } from "react-icons/io5";
+import { IoSearch, IoClose } from "react-icons/io5";
 import { TbCurrentLocation } from "react-icons/tb";
 import Image from "next/image";
 
@@ -30,14 +30,37 @@ const SearchFilter = ({
 
   const [selectedCategory, setSelectedCategory] = useState(initialCategory);
   const [selectedPrice, setSelectedPrice] = useState(initialPrice);
+  const [recentSearches, setRecentSearches] = useState<string[]>([]);
+  const [isRecentVisible, setIsRecentVisible] = useState(false); // 🔹 최근 검색어 표시 여부
+
+  // 로컬 스토리지에서 최근 검색어 불러오기
+  useEffect(() => {
+    const storedSearches = JSON.parse(
+      localStorage.getItem("recentSearches") || "[]"
+    );
+    setRecentSearches(storedSearches);
+  }, []);
+
+  // 최근 검색어 저장 함수
+  const saveRecentSearch = (query: string) => {
+    if (!query.trim()) return; // 빈 값 저장 방지
+
+    let updatedSearches = [query, ...recentSearches.filter((q) => q !== query)];
+    updatedSearches = updatedSearches.slice(0, 5); // 최대 5개 유지
+
+    setRecentSearches(updatedSearches);
+    localStorage.setItem("recentSearches", JSON.stringify(updatedSearches));
+  };
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
+    saveRecentSearch(tempQuery);
     updateFilters({
       query: tempQuery,
       category: selectedCategory,
       price: selectedPrice,
     });
+    setIsRecentVisible(false);
   };
 
   const handleCategorySelect = (category: string) => {
@@ -83,6 +106,20 @@ const SearchFilter = ({
     );
   };
 
+  // 최근 검색어 클릭 시 검색어 입력
+  const handleRecentSearchClick = (query: string) => {
+    setTempQuery(query);
+    updateFilters({ query, category: selectedCategory, price: selectedPrice });
+    setIsRecentVisible(false);
+  };
+
+  // 최근 검색어 개별 삭제
+  const removeRecentSearch = (query: string) => {
+    const updatedSearches = recentSearches.filter((q) => q !== query);
+    setRecentSearches(updatedSearches);
+    localStorage.setItem("recentSearches", JSON.stringify(updatedSearches));
+  };
+
   return (
     <div className={styles.filterContainer}>
       {/* 검색창 */}
@@ -92,11 +129,34 @@ const SearchFilter = ({
           placeholder="명소, 주소 검색"
           value={tempQuery}
           onChange={(e) => setTempQuery(e.target.value)} // 실시간 URL 변경 X
+          onFocus={() => setIsRecentVisible(true)} // 포커스 시 최근 검색어 표시
+          onBlur={() => setTimeout(() => setIsRecentVisible(false), 200)} // 포커스 해제 시 숨김
         />
         <button type="submit">
           <IoSearch />
         </button>
       </form>
+
+      {/*  최근 검색어 리스트 */}
+      {isRecentVisible && (
+        <div className={styles.recentSearchContainer}>
+          <div className={styles.title}>최근 검색어</div>
+          {recentSearches.length > 0 ? (
+            recentSearches.map((search, index) => (
+              <div key={index} className={styles.recentSearchItem}>
+                <span onClick={() => handleRecentSearchClick(search)}>
+                  {search}
+                </span>
+                <button onClick={() => removeRecentSearch(search)}>
+                  <IoClose />
+                </button>
+              </div>
+            ))
+          ) : (
+            <p className={styles.noRecentSearch}>최근 검색어가 없습니다.</p>
+          )}
+        </div>
+      )}
 
       {/* 카테고리 필터 */}
       <div className={styles.categoryFilter}>

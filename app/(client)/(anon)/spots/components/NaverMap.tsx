@@ -44,7 +44,7 @@ const NaverMap = ({
       });
     } else {
       mapRef.current.setCenter(new window.naver.maps.LatLng(lat, lon));
-      mapRef.current.setZoom(13);
+      mapRef.current.setZoom(17);
     }
   }, [isMapLoaded, lat, lon]);
 
@@ -79,7 +79,7 @@ const NaverMap = ({
       });
 
       window.naver.maps.Event.addListener(marker, "click", () => {
-        router.push(`/spots/${spot.id}`);
+        router.push(`/spots/${spot.id}/info`);
       });
 
       // 마커 아래 명소 이름 표시
