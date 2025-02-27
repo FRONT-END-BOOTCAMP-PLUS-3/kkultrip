@@ -1,4 +1,4 @@
-import { SpotDetailDto } from "@/application/usecases/spot/dto/SpotDetailDto";
+import { SpotInfoDto } from "@/application/usecases/spot/dto/SpotInfoDto";
 import { BiPhoneCall } from "react-icons/bi";
 import { FaClock } from "react-icons/fa";
 import { IoIosLink, IoMdPerson } from "react-icons/io";
@@ -12,7 +12,7 @@ const InfoPage = async ({ params }: { params: { spotId: string } }) => {
     const data = await fetch(
         `http://localhost:3000/api/spots/${params.spotId}/info`
     );
-    const spotData: SpotDetailDto = await data.json();
+    const spotData: SpotInfoDto = await data.json();
 
     return (
         <div className={styles.infoContainer}>
@@ -86,10 +86,12 @@ const InfoPage = async ({ params }: { params: { spotId: string } }) => {
                         계산되었으며 실제와 다를 수 있습니다.
                     </li>
                     <li>
-                        티켓 가격은 {spotData.ticketDetail[0].updatedAt} 기준입니다.
+                        티켓 가격은 {spotData.ticketDetail[0].updatedAt}{" "}
+                        기준입니다.
                     </li>
                     <li>
-                        영업 시간은 {spotData.timeDetail[0].updatedAt} 기준입니다.
+                        영업 시간은 {spotData.timeDetail[0].updatedAt}{" "}
+                        기준입니다.
                     </li>
                 </ul>
             </div>

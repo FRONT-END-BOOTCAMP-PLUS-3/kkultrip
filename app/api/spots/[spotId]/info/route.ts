@@ -1,4 +1,8 @@
-import { GetSpotDetailUsecase } from "@/application/usecases/spot/GetSpotDetailUsecase";
+import { SpotInfoDto } from "@/application/usecases/spot/dto/SpotInfoDto";
+import { GetSpotInfoUsecase } from "@/application/usecases/spot/GetSpotInfoUsecase";
+import SpotRepository from "@/domain/repositories/SpotRepository";
+import TicketRepository from "@/domain/repositories/TicketRepository";
+import TimeRepository from "@/domain/repositories/TimeRepository";
 import { PgSpotRepository } from "@/infrastructure/repositories/PgSpotRepository";
 import PgTicketRepository from "@/infrastructure/repositories/PgTicketRepository";
 import { PgTimeRepository } from "@/infrastructure/repositories/PgTimeRepository";
@@ -9,21 +13,23 @@ export async function GET(
     { params }: { params: { spotId: string } }
 ) {
     const { spotId } = params;
-    const spotRepository = new PgSpotRepository();
-    const ticketRepository = new PgTicketRepository();
-    const timeRepository = new PgTimeRepository();
+    const spotRepository: SpotRepository = new PgSpotRepository();
+    const ticketRepository: TicketRepository = new PgTicketRepository();
+    const timeRepository: TimeRepository = new PgTimeRepository();
 
-    const spotDetailUsecase = new GetSpotDetailUsecase(
+    const spotInfoUsecase = new GetSpotInfoUsecase(
         spotRepository,
         ticketRepository,
         timeRepository
     );
 
-    const spotDetail = await spotDetailUsecase.execute(Number(spotId));
+    const spotInfo: SpotInfoDto | null = await spotInfoUsecase.execute(
+        Number(spotId)
+    );
 
-    if (!spotDetail) {
+    if (!spotInfo) {
         return NextResponse.json({ error: "Spot not found" }, { status: 404 });
     }
 
-    return NextResponse.json(spotDetail);
+    return NextResponse.json(spotInfo);
 }
