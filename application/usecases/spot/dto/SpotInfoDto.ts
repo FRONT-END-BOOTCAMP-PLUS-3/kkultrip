@@ -1,7 +1,7 @@
 import { TicketDetailDto } from "./TicketDetailDto";
 import { TimeDetailDto } from "./TimeDetailDto";
 
-export interface SpotDetailDto {
+export interface SpotInfoDto {
     id: number;
     name: string;
     address: string;

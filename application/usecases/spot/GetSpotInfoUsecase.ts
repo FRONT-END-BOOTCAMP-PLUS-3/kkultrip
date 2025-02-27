@@ -2,16 +2,16 @@ import SpotRepository from "@/domain/repositories/SpotRepository";
 import TicketRepository from "@/domain/repositories/TicketRepository";
 import TimeRepository from "@/domain/repositories/TimeRepository";
 import { Spot, Ticket, Time } from "@prisma/client";
-import { SpotDetailDto } from "./dto/SpotDetailDto";
+import { SpotInfoDto } from "./dto/SpotInfoDto";
 
-export class GetSpotDetailUsecase {
+export class GetSpotInfoUsecase {
     constructor(
         private spotRepository: SpotRepository,
         private ticketRepository: TicketRepository,
         private timeRepository: TimeRepository
     ) {}
 
-    async execute(id: number): Promise<SpotDetailDto | null> {
+    async execute(id: number): Promise<SpotInfoDto | null> {
         const spot: Spot | null = await this.spotRepository.getSpotById(id);
         if (!spot) return null;
 
