@@ -1,8 +1,8 @@
 import SpotNav from "./SpotNav";
 import Image from "next/image";
 import styles from "./spotHeader.module.scss";
-import { FaRegBookmark } from "react-icons/fa";
 import { SpotHeaderDto } from "@/application/usecases/spot/dto/SpotHeaderDto";
+import BookMark from "./BookMark";
 
 const SpotHeader = async ({ spotId }: { spotId: string }) => {
     const data = await fetch(`http://localhost:3000/api/spots/${spotId}`);
@@ -27,9 +27,7 @@ const SpotHeader = async ({ spotId }: { spotId: string }) => {
                         <h1>{spotHeaderData.name}</h1>
                         <p>{spotHeaderData.category}</p>
                     </div>
-                    <button className={styles.bookmarkButton}>
-                        <FaRegBookmark size={24} color="var(--primary-color)" />
-                    </button>
+                    <BookMark />
                 </div>
                 <SpotNav spotId={spotId} />
             </div>

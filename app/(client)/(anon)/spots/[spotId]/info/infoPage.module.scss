@@ -18,8 +18,20 @@
     padding: 1.25rem;
     background-color: rgba(253, 187, 9, 0.2);
     border-radius: 0.625rem;
-    font-size: 0.75rem;
-    color: black;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+  }
+
+  .subInfo {
+    border-top: 1px solid var(--grey-1-color);
+    font-size: 0.625rem;
+    color: var(--grey-2-color);
+    padding-top: 0.5rem;
+    list-style: disc;
+
+    li {
+      margin-bottom: 0.3rem;
+    }
   }
 
   .infoList {
@@ -27,6 +39,14 @@
     flex-direction: column;
     gap: 0.8rem;
     margin-top: 1rem;
+
+    .copyWrapper {
+      display: flex;
+    }
+
+    .link {
+      color: var(--blue-flower-color);
+    }
 
     p {
       display: flex;
