@@ -1,0 +1,45 @@
+.button {
+  width: 100%;
+  min-width: 6.8125rem;
+  font-size: 1rem;
+  font-weight: bold;
+  line-height: 1.25rem;
+  padding: 0.625rem;
+  transition: all 0.2s ease-in-out;
+  text-align: center;
+
+  &:hover {
+    opacity: 0.8;
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  &.long {
+    border-radius: 0.9375rem;
+    padding: 0.5rem;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  }
+
+  &.short {
+    border-radius: 0.625rem;
+  }
+
+  &.main {
+    background-color: var(--primary-color);
+    color: white;
+  }
+
+  &.white {
+    background-color: white;
+    color: var(--grey-2-color);
+    border: 1px solid var(--grey-2-color);
+  }
+
+  &.disabled {
+    background-color: var(--disabled-color);
+    color: white;
+    cursor: not-allowed;
+  }
+}
