@@ -119,6 +119,11 @@ const SearchFilter = ({
     setRecentSearches(updatedSearches);
     localStorage.setItem("recentSearches", JSON.stringify(updatedSearches));
   };
+  // 최근 검색어 전체 삭제
+  const removeAllRecentSearch = () => {
+    setRecentSearches([]);
+    localStorage.setItem("recentSearches", "");
+  };
 
   return (
     <div className={styles.filterContainer}>
@@ -140,7 +145,12 @@ const SearchFilter = ({
       {/*  최근 검색어 리스트 */}
       {isRecentVisible && (
         <div className={styles.recentSearchContainer}>
-          <div className={styles.title}>최근 검색어</div>
+          {recentSearches.length > 0 && (
+            <div className={styles.top}>
+              <span>최근 검색어</span>
+              <button onClick={() => removeAllRecentSearch()}>모두삭제</button>
+            </div>
+          )}
           {recentSearches.length > 0 ? (
             recentSearches.map((search, index) => (
               <div key={index} className={styles.recentSearchItem}>

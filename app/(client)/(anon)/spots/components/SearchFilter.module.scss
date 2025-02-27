@@ -47,10 +47,18 @@
     box-shadow: 0 0.125rem 0.3125rem rgba(0, 0, 0, 0.3);
     padding: 10px;
     z-index: 10;
-    .title {
+    .top {
+      display: flex;
+      justify-content: space-between;
       font-size: 12px;
       font-weight: bold;
       padding: 6px 10px;
+      button {
+        background: none;
+        border: none;
+        color: var(--grey-3-color);
+        cursor: pointer;
+      }
     }
     .recentSearchItem {
       display: flex;

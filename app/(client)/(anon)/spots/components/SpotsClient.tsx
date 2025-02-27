@@ -139,7 +139,7 @@ const SpotsClient = ({
       <SearchFilter
         updateFilters={updateFilters}
         tempQuery={tempQuery}
-        setTempQuery={setTempQuery} // 🔹 검색어 입력 중 상태 저장
+        setTempQuery={setTempQuery}
         initialCategory={searchParams.get("category") || ""}
         initialPrice={searchParams.get("price") || ""}
       />
