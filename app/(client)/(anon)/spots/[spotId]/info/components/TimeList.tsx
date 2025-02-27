@@ -22,7 +22,7 @@ const TimeList = ({
     return (
         <>
             <span className={styles.srOnly}>{name} 영업시간</span>
-            <p className={styles.timeListContainer}>
+            <section className={styles.timeListContainer}>
                 <FaRegClock
                     color="var(--grey-2-color)"
                     className={styles.icon}
@@ -49,7 +49,7 @@ const TimeList = ({
                         <IoIosArrowDown color="black" />
                     )}
                 </button>
-            </p>
+            </section>
         </>
     );
 };

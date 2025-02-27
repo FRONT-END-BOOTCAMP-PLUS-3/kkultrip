@@ -17,6 +17,7 @@
     .icon {
       flex-shrink: 0;
       align-self: flex-start;
+      margin-right: 0.5rem;
     }
 
     .ticketListWrapper {
@@ -44,7 +45,6 @@
 
         .bold {
           flex-shrink: 0;
-          font-weight: bold;
         }
       }
     }

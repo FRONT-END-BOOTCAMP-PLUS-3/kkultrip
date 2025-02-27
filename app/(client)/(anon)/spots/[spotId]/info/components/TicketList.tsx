@@ -23,7 +23,7 @@ const TicketList = ({
     return (
         <>
             <span className={styles.srOnly}>{name} 티켓 정보</span>
-            <p className={styles.ticketListContainer}>
+            <section className={styles.ticketListContainer}>
                 <FaWonSign
                     color="var(--grey-2-color)"
                     className={styles.icon}
@@ -52,7 +52,7 @@ const TicketList = ({
                         <IoIosArrowDown color="black" />
                     )}
                 </button>
-            </p>
+            </section>
         </>
     );
 };
