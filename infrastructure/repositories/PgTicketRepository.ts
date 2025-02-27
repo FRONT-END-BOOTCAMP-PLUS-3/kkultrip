@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import TicketRepository from "@/domain/repositories/TicketRepository";
+import { TicketRepository } from "@/domain/repositories/TicketRepository";
 import { Ticket } from "@prisma/client";
 
 export class PgTicketRepository implements TicketRepository {
@@ -17,6 +17,15 @@ export class PgTicketRepository implements TicketRepository {
       data: {
         ...ticket,
       },
+    });
+  }
+  async updateTicket(
+    id: number,
+    ticket: Partial<Ticket>
+  ): Promise<Ticket | null> {
+    return await prisma.ticket.update({
+      where: { id },
+      data: ticket,
     });
   }
 }

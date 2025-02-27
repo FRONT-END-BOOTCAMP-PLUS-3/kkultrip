@@ -40,15 +40,26 @@ export async function GET(
 
 export async function PATCH(req: Request) {
   try {
-    const { id, ...updateData } = await req.json();
+    const { id, tickets, ...updateData } = await req.json();
 
     if (!id) {
-      return NextResponse.json({ error: "ID is required" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Spot ID is required" },
+        { status: 400 }
+      );
     }
 
     const spotRepository = new PgSpotRepository();
-    const updateSpotUseCase = new UpdateSpotUseCase(spotRepository);
-    const updatedSpot = await updateSpotUseCase.execute(id, updateData);
+    const ticketRepository = new PgTicketRepository();
+    const updateSpotUseCase = new UpdateSpotUseCase(
+      spotRepository,
+      ticketRepository
+    );
+
+    const updatedSpot = await updateSpotUseCase.execute(id, {
+      ...updateData,
+      tickets,
+    });
 
     return NextResponse.json(updatedSpot, { status: 200 });
   } catch (error) {

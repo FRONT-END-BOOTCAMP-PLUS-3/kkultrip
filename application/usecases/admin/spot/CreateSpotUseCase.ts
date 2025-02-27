@@ -1,6 +1,6 @@
 import { Spot, Ticket } from "@prisma/client";
 import { SpotRepository } from "@/domain/repositories/SpotRepository";
-import TicketRepository from "@/domain/repositories/TicketRepository";
+import { TicketRepository } from "@/domain/repositories/TicketRepository";
 import { CreateSpotDto } from "./dto/CreateSpotDto";
 
 export class CreateSpotUseCase {
@@ -27,10 +27,8 @@ export class CreateSpotUseCase {
       avgWaitingTime: dto.avgWaitingTime ?? 0,
     };
 
-    // Spot 생성
     const createdSpot = await this.spotRepository.createSpot(newSpot);
 
-    // Ticket 생성 (Spot과 연결된 티켓이 있는 경우)
     const tickets: Ticket[] = [];
     if (dto.tickets && dto.tickets.length > 0) {
       for (const ticketDto of dto.tickets) {
