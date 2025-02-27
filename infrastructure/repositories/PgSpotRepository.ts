@@ -54,8 +54,8 @@ export class PgSpotRepository implements SpotRepository {
       where: {
         category: category ? category : undefined,
         avgPrice: maxPrice ? { lte: maxPrice } : undefined,
-        lat: { gte: lat - 0.01, lte: lat + 0.01 }, // 위도(lat), 경도(lon)를 ± 0.01 정도로 검색 => 대략 1.1km
-        lon: { gte: lng - 0.01, lte: lng + 0.01 },
+        lat: { gte: lat - 0.02, lte: lat + 0.02 }, // 위도(lat), 경도(lon)를 ± 0.02 정도로 검색 => 대략 2.2km
+        lon: { gte: lng - 0.02, lte: lng + 0.02 },
       },
     });
   }
@@ -64,7 +64,7 @@ export class PgSpotRepository implements SpotRepository {
     return prisma.spot.findFirst({
       where: {
         name: {
-          contains: name, // 부분 검색 가능 (예: "불국사" 입력 시 "경주 불국사"도 검색 가능)
+          contains: name, // 부분 검색 가능
           mode: "insensitive", // 대소문자 구분 없이 검색
         },
       },

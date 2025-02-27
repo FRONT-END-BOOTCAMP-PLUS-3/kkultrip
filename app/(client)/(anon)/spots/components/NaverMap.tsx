@@ -74,7 +74,7 @@ const NaverMap = ({
         map: mapRef.current!,
         icon: {
           url: `/images/flower-${getCategoryName(spot.category)}.svg`,
-          size: new window.naver.maps.Size(50, 50),
+          size: new window.naver.maps.Size(40, 40),
         },
       });
 
@@ -100,7 +100,7 @@ const NaverMap = ({
         ">
             ${spot.name}
           </div>`,
-          anchor: new window.naver.maps.Point(35, 0), // 마커 아래 위치 조정
+          anchor: new window.naver.maps.Point(33, -2), // 마커 아래 위치 조정
         },
       });
       markersRef.current.push(marker);
@@ -128,8 +128,8 @@ const NaverMap = ({
             position: new window.naver.maps.LatLng(userLat, userLon),
             map: mapRef.current!,
             icon: {
-              url: "/images/bee_50x58.png", // 내 위치 아이콘
-              size: new window.naver.maps.Size(50, 58),
+              url: "/images/bee_50x50.svg", // 내 위치 아이콘
+              size: new window.naver.maps.Size(50, 50),
             },
           });
 
