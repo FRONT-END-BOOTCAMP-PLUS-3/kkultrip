@@ -1,0 +1,33 @@
+.tabContainer {
+  position: sticky;
+  top: -1px;
+  z-index: 10;
+
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  min-height: 3.125rem;
+  background-color: white;
+  box-shadow: 0px 1px 0px 0px rgba(144, 144, 144, 0.2);
+
+  .tabLink {
+    display: block;
+    width: 100%;
+    text-decoration: none;
+    color: var(--grey-2-color);
+
+    div {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+    }
+
+    .active {
+      color: var(--primary-color);
+      border-bottom: 1px solid var(--primary-color);
+    }
+  }
+}

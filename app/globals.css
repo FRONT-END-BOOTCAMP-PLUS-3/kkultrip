@@ -186,7 +186,7 @@ button {
 }
 
 button {
-  padding: 0;
+  all: unset;
 }
 
 .container {
