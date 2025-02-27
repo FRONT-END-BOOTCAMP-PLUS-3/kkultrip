@@ -6,4 +6,5 @@ export interface TicketRepository {
     data: Omit<Ticket, "id" | "createdAt" | "updatedAt">
   ): Promise<Ticket>;
   updateTicket(id: number, data: Partial<Ticket>): Promise<Ticket | null>;
+  deleteTicket(id: number): Promise<Ticket | null>;
 }

@@ -9,7 +9,20 @@ const SpotsEditPage = () => {
   const params = useParams();
   const spotId = params.id as string | undefined;
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<{
+    name: string;
+    address: string;
+    lon: number | null;
+    lat: number | null;
+    phone1: string;
+    phone2: string;
+    phone3: string;
+    info: string;
+    category: string;
+    link: string;
+    img: string;
+    tickets: { id: number | null; name: string; price: string | number }[];
+  }>({
     name: "",
     address: "",
     lon: null,
@@ -21,9 +34,12 @@ const SpotsEditPage = () => {
     category: "",
     link: "",
     img: "",
-    tickets: [{ name: "", price: "" }],
+    tickets: [{ id: null, name: "", price: "" }],
   });
 
+  const [initialTickets, setInitialTickets] = useState<
+    { id: number | null; name: string; price: string | number }[]
+  >([]);
   const phoneRef1 = useRef<HTMLInputElement>(null);
   const phoneRef2 = useRef<HTMLInputElement>(null);
   const phoneRef3 = useRef<HTMLInputElement>(null);
@@ -45,6 +61,7 @@ const SpotsEditPage = () => {
             phone2,
             phone3,
           });
+          setInitialTickets(data.tickets || []);
         });
     }
   }, [spotId]);
@@ -100,6 +117,17 @@ const SpotsEditPage = () => {
     } else {
       alert("Spot 수정에 실패했습니다.");
     }
+
+    const deletedTickets = initialTickets.filter(
+      (initialTicket) =>
+        !formData.tickets.some((ticket) => ticket.id === initialTicket.id)
+    );
+
+    for (const ticket of deletedTickets) {
+      await fetch(`/api/admin/spots/${spotId}/${ticket.id}`, {
+        method: "DELETE",
+      });
+    }
   };
 
   const handleTicketChange = (
@@ -123,7 +151,7 @@ const SpotsEditPage = () => {
   const addTicket = () => {
     setFormData((prev) => ({
       ...prev,
-      tickets: [...prev.tickets, { name: "", price: "" }],
+      tickets: [...prev.tickets, { id: null, name: "", price: "" }],
     }));
   };
 

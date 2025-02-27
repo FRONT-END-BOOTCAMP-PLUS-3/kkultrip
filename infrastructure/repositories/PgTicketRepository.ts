@@ -28,4 +28,15 @@ export class PgTicketRepository implements TicketRepository {
       data: ticket,
     });
   }
+
+  async deleteTicket(id: number): Promise<Ticket | null> {
+    try {
+      return await prisma.ticket.delete({
+        where: { id },
+      });
+    } catch (error) {
+      console.error("Error deleting ticket:", error);
+      return null;
+    }
+  }
 }
