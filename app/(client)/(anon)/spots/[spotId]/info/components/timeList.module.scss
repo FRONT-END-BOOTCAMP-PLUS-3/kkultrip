@@ -31,11 +31,6 @@
         align-items: center;
         width: 100%;
 
-        .label {
-          flex-shrink: 0;
-          margin-right: 0.5rem;
-        }
-
         .line {
           flex-grow: 1;
           height: 1px;
@@ -44,7 +39,7 @@
         }
 
         .bold {
-          flex-shrink: 0;
+          font-weight: bold;
         }
       }
     }

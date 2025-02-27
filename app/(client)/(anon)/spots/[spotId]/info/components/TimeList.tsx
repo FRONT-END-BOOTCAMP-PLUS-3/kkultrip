@@ -19,6 +19,10 @@ const TimeList = ({
         setShowAllTimes((prevState) => !prevState);
     };
 
+    const today = new Intl.DateTimeFormat("ko-KR", { weekday: "short" }).format(
+        new Date()
+    );
+
     return (
         <>
             <span className={styles.srOnly}>{name} 영업시간</span>
@@ -33,9 +37,19 @@ const TimeList = ({
                         .slice(0, showAllTimes ? times.length : 1)
                         .map((time) => (
                             <li key={time.day}>
-                                <span className={styles.label}>{time.day}</span>
+                                <span
+                                    className={
+                                        time.day === today ? styles.bold : ""
+                                    }
+                                >
+                                    {time.day}요일
+                                </span>
                                 <div className={styles.line}></div>
-                                <span className={styles.bold}>
+                                <span
+                                    className={
+                                        time.day === today ? styles.bold : ""
+                                    }
+                                >
                                     {time.open} ~ {time.close}
                                 </span>
                             </li>
