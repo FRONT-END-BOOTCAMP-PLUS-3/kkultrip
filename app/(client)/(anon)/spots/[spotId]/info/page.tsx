@@ -6,6 +6,7 @@ import { IoLocation } from "react-icons/io5";
 import TicketList from "./components/TicketList";
 import TimeList from "./components/TimeList";
 import styles from "./infoPage.module.scss";
+import CopyButton from "./components/CopyButton";
 
 const InfoPage = async ({ params }: { params: { spotId: string } }) => {
     const data = await fetch(
@@ -20,15 +21,21 @@ const InfoPage = async ({ params }: { params: { spotId: string } }) => {
 
             <div className={styles.infoList}>
                 <span className={styles.srOnly}>{spotData.name} 주소</span>
-                <p>
-                    <IoLocation color="var(--grey-2-color)" size={18} />
-                    {spotData.address}
-                </p>
+                <div className={styles.copyWrapper}>
+                    <p>
+                        <IoLocation color="var(--grey-2-color)" size={18} />
+                        {spotData.address}
+                    </p>
+                    <CopyButton text={spotData.address} />
+                </div>
                 <span className={styles.srOnly}>{spotData.name} 전화번호</span>
-                <p>
-                    <BiPhoneCall color="var(--grey-2-color)" size={18} />
-                    {spotData.phone}
-                </p>
+                <div className={styles.copyWrapper}>
+                    <p>
+                        <BiPhoneCall color="var(--grey-2-color)" size={18} />
+                        {spotData.phone}
+                    </p>
+                    <CopyButton text={spotData.phone} />
+                </div>
 
                 <TimeList times={spotData.timeDetail} name={spotData.name} />
 
@@ -36,11 +43,18 @@ const InfoPage = async ({ params }: { params: { spotId: string } }) => {
                     tickets={spotData.ticketDetail}
                     name={spotData.name}
                 />
-                <span className={styles.srOnly}>{spotData.name} 링크</span>
-                <p>
-                    <IoIosLink color="var(--grey-2-color)" />
-                    <a href={spotData.link}>{spotData.link}</a>
-                </p>
+
+                {spotData.link && (
+                    <p>
+                        <span className={styles.srOnly}>
+                            {spotData.name} 링크
+                        </span>
+                        <IoIosLink color="var(--grey-2-color)" />
+                        <a href={spotData.link} className={styles.link}>
+                            {spotData.link}
+                        </a>
+                    </p>
+                )}
                 <span className={styles.srOnly}>
                     {spotData.name} 1인 평균 비용
                 </span>
@@ -48,7 +62,7 @@ const InfoPage = async ({ params }: { params: { spotId: string } }) => {
                     <IoMdPerson color="var(--grey-2-color)" size={18} />
                     <span className={styles.subText}>1인 평균 비용</span>
                     <span className={styles.primaryBold}>
-                        {spotData.avgPrice}원
+                        {spotData.avgPrice.toLocaleString()}원
                     </span>
                 </p>
                 <span className={styles.srOnly}>
@@ -58,9 +72,26 @@ const InfoPage = async ({ params }: { params: { spotId: string } }) => {
                     <FaClock color="var(--grey-2-color)" size={18} />
                     <span className={styles.subText}>평균 대기 시간</span>
                     <span className={styles.primaryBold}>
-                        {spotData.avgWaitingTime}시간
+                        {spotData.avgWaitingTime}분
                     </span>
                 </p>
+                <span className={styles.srOnly}>주의 사항</span>
+                <ul className={styles.subInfo}>
+                    <li>
+                        상단의 영업 시간 및 티켓 가격은 장소에서 제공된 정보를
+                        기준으로 작성되었으며 변동될 수 있습니다.
+                    </li>
+                    <li>
+                        1인 평균 비용과 평균 대기 시간은 평균 값으로
+                        계산되었으며 실제와 다를 수 있습니다.
+                    </li>
+                    <li>
+                        티켓 가격은 {spotData.ticketDetail[0].updatedAt} 기준입니다.
+                    </li>
+                    <li>
+                        영업 시간은 {spotData.timeDetail[0].updatedAt} 기준입니다.
+                    </li>
+                </ul>
             </div>
         </div>
     );

@@ -1,0 +1,27 @@
+.copyButton {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  width: 2rem;
+  height: 1.125rem;
+  color: var(--grey-2-color);
+  font-size: 0.75rem;
+}
+
+.copyButtonContainer {
+  position: relative;
+}
+
+.copyMessage {
+  position: fixed;
+  top: 95%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(255, 204, 0, 0.5);
+  color: black;
+  padding: 0.625rem 1.25rem;
+  border-radius: 1.25rem;
+  z-index: 1000;
+  width: 50%;
+  text-align: center;
+}
