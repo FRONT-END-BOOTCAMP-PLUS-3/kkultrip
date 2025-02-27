@@ -89,6 +89,8 @@ const NaverMap = ({
         icon: {
           content: `
           <div style="
+         position: absolute;
+          transform: translate(-50%, -120%);
           background: white;
           border-radius: 5px;
           padding: 5px 10px;
@@ -100,7 +102,7 @@ const NaverMap = ({
         ">
             ${spot.name}
           </div>`,
-          anchor: new window.naver.maps.Point(33, -2), // 마커 아래 위치 조정
+          anchor: new window.naver.maps.Point(0, -30), // 마커 아래 위치 조정
         },
       });
       markersRef.current.push(marker);
