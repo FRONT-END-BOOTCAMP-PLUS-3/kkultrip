@@ -1,4 +1,4 @@
-import { SpotRepository } from "@/domain/repositories/SpotRepository";
+import  SpotRepository  from "@/domain/repositories/SpotRepository";
 import { SpotHeaderDto } from "./dto/SpotHeaderDto";
 
 export class GetSpotHeaderUsecase {

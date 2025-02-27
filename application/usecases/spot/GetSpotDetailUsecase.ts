@@ -1,7 +1,7 @@
 import SpotRepository from "@/domain/repositories/SpotRepository";
 import TicketRepository from "@/domain/repositories/TicketRepository";
 import TimeRepository from "@/domain/repositories/TimeRepository";
-import { Ticket, Time } from "@prisma/client";
+import { Spot, Ticket, Time } from "@prisma/client";
 import { SpotDetailDto } from "./dto/SpotDetailDto";
 
 export class GetSpotDetailUsecase {
@@ -12,7 +12,7 @@ export class GetSpotDetailUsecase {
     ) {}
 
     async execute(id: number): Promise<SpotDetailDto | null> {
-        const spot = await this.spotRepository.getSpotById(id);
+        const spot: Spot | null = await this.spotRepository.getSpotById(id);
         if (!spot) return null;
 
         const tickets: Ticket[] | null =
@@ -38,11 +38,15 @@ export class GetSpotDetailUsecase {
                 id: ticket.id,
                 name: ticket.name,
                 price: ticket.price,
+                updatedAt: ticket.updatedAt.toLocaleDateString(),
             })),
             timeDetail: times.map((time) => ({
-                open: time.open,
-                close: time.close,
+                open: time.open || "",
+                close: time.close || "",
                 day: time.day,
+                closeDay: time.closeDay,
+                allHours: time.allHours,
+                updatedAt: time.updatedAt.toLocaleDateString(),
             })),
         };
     }

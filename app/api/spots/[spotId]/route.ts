@@ -1,6 +1,6 @@
 import { GetSpotHeaderUsecase } from "@/application/usecases/spot/GetSpotHeaderUsecase";
 import { SpotHeaderDto } from "@/application/usecases/spot/dto/SpotHeaderDto";
-import { SpotRepository } from "@/domain/repositories/SpotRepository";
+import SpotRepository from "@/domain/repositories/SpotRepository";
 import { PgSpotRepository } from "@/infrastructure/repositories/PgSpotRepository";
 import { NextResponse } from "next/server";
 
