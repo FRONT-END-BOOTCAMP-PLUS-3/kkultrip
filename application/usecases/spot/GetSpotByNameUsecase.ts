@@ -15,7 +15,7 @@ export class GetSpotByNameUsecase {
   async execute(name: string): Promise<GetSpotsDTO[]> {
     const spot = await this.spotRepo.getSpotByName(name);
 
-    // ✅ 검색된 명소가 없을 경우 빈 배열 반환 (에러 발생 X)
+    // 검색된 명소가 없을 경우 빈 배열 반환 (에러 발생 X)
     if (!spot) {
       return [];
     }

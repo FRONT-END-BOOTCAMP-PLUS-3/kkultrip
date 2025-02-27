@@ -44,12 +44,12 @@ export const GET = async (req: Request) => {
     let spots: GetSpotsDTO[] = [];
 
     if (query) {
-      // ✅ 특정 단어를 포함하는 명소 검색 (예: "서울" → "서울타워", "서울역")
+      // 특정 단어를 포함하는 명소 검색
       const spotByName: GetSpotsDTO[] = await getSpotByNameUsecase.execute(
         query
       );
 
-      // ✅ 지역 좌표 검색 (네이버 Geocode API 사용)
+      // 지역 좌표 검색 (네이버 Geocode API 사용)
       const apiBaseUrl =
         process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3000";
       const geoResponse = await fetch(
@@ -67,7 +67,7 @@ export const GET = async (req: Request) => {
         );
       }
 
-      // ✅ 중복 명소 제거 (ID 기준)
+      // 중복 명소 제거 (ID 기준)
       const mergedSpots = [...spotByName, ...locationBasedSpots].reduce(
         (acc, spot) => {
           if (!acc.some((s) => s.id === spot.id)) acc.push(spot);
@@ -83,7 +83,7 @@ export const GET = async (req: Request) => {
       });
     }
 
-    // ✅ 위치 기반 검색 (lat, lon이 있을 때)
+    // 위치 기반 검색 (lat, lon이 있을 때)
     if (lat !== undefined && lon !== undefined) {
       spots = await getSpotsUsecase.execute(lat, lon, category, maxPrice);
     }

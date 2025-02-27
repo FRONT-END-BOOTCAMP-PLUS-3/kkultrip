@@ -34,9 +34,8 @@
   .noSpots {
     text-align: center;
     padding: 20px;
-    font-size: 16px;
     font-weight: bold;
-    color: #777;
+    color: var(--grey-3-color);
   }
 
   .list {
@@ -67,6 +66,12 @@
             font-size: 1.25rem;
             font-weight: bold;
             margin-right: 0.625rem;
+            @media (max-width: 390px) {
+              font-size: 1.2rem;
+            }
+            @media (max-width: 375px) {
+              font-size: 1.1rem;
+            }
           }
 
           .category {
@@ -81,27 +86,46 @@
           .distance {
             color: var(--primary-color);
             margin-right: 0.625rem;
+            font-weight: bold;
+          }
+          .closed {
+            color: var(--red-1-color);
+            font-weight: bold;
           }
         }
 
         .details {
-          width: 90%;
+          width: 80%;
           display: flex;
           justify-content: space-between;
           align-items: center;
           font-size: 1rem;
+          @media (max-width: 430px) {
+            width: 100%;
+          }
 
           .icon {
             font-size: 1.5625rem;
             color: var(--primary-color);
           }
           .bookmark,
-          .visitors,
+          .tips,
           .price {
+            width: 40%;
             display: flex;
             align-items: center;
             gap: 0.3125rem;
             color: #444;
+            @media (max-width: 390px) {
+              font-size: 14px;
+            }
+            @media (max-width: 375px) {
+              font-size: 12px;
+            }
+          }
+          .bookmark,
+          .tips {
+            width: 30%;
           }
         }
       }

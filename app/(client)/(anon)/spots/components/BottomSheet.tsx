@@ -75,20 +75,24 @@ const BottomSheet = ({
                 </div>
                 <div className={styles["distance-time"]}>
                   <p className={styles.distance}>
-                    {calculateDistance(userLat, userLon, spot.lat, spot.lon)}m
+                    {calculateDistance(userLat, userLon, spot.lat, spot.lon)}
                   </p>
-                  <p className={styles.time}>
+                  <p
+                    className={`${styles.time} ${
+                      spot.time === "휴무" ? styles.closed : ""
+                    }`}
+                  >
                     {spot.time || "운영 시간 정보 없음"}
                   </p>
                 </div>
 
-                {/* 가격 & 북마크 & 방문자 수 */}
+                {/* 가격 & 북마크 & 꿀팁 수 */}
                 <div className={styles.details}>
                   <span className={styles.bookmark}>
                     <FaRegBookmark className={styles.icon} />{" "}
                     {spot.bookmarkCnt || 0}
                   </span>
-                  <span className={styles.visitors}>
+                  <span className={styles.tips}>
                     <GiClothJar className={styles.icon} /> {spot.tipCnt || 0}
                   </span>
                   <span className={styles.price}>
@@ -127,8 +131,10 @@ const calculateDistance = (
       Math.sin(dLon / 2);
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   const distanceKm = R * c; // 거리 (km 단위)
-
   const distanceM = Math.round(distanceKm * 1000); // km -> m 변환 후 반올림
 
-  return distanceM; // 결과 단위: m
+  // ✅ 1km 초과 시 km 단위 변환 (소수점 첫째 자리까지)
+  return distanceM >= 1000
+    ? `${(distanceM / 1000).toFixed(1)}km`
+    : `${distanceM}m`;
 };

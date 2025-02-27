@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { GetSpotsDTO } from "@/application/usecases/spot/dto/GetSpotsDto";
+import { useRouter } from "next/navigation";
 
 const NaverMap = ({
   lat,
@@ -12,12 +13,14 @@ const NaverMap = ({
   lon: number;
   spots: GetSpotsDTO[];
 }) => {
+  const router = useRouter();
+
   const mapRef = useRef<naver.maps.Map | null>(null);
   const markersRef = useRef<naver.maps.Marker[]>([]);
   const myLocationMarkerRef = useRef<naver.maps.Marker | null>(null);
   const [isMapLoaded, setIsMapLoaded] = useState(false);
 
-  // ✅ 네이버 지도 API 로드
+  // 네이버 지도 API 로드
   useEffect(() => {
     if (!window.naver) {
       const script = document.createElement("script");
@@ -30,7 +33,7 @@ const NaverMap = ({
     }
   }, []);
 
-  // ✅ 지도 초기화 (검색 시 이동)
+  // 지도 초기화 (검색 시 이동)
   useEffect(() => {
     if (!isMapLoaded || !window.naver) return;
 
@@ -41,6 +44,7 @@ const NaverMap = ({
       });
     } else {
       mapRef.current.setCenter(new window.naver.maps.LatLng(lat, lon));
+      mapRef.current.setZoom(13);
     }
   }, [isMapLoaded, lat, lon]);
 
@@ -55,7 +59,7 @@ const NaverMap = ({
     return categoryMap[category] || category;
   };
 
-  // ✅ 명소 마커 추가
+  // 명소 마커 추가
   useEffect(() => {
     if (!mapRef.current) return;
 
@@ -73,11 +77,38 @@ const NaverMap = ({
           size: new window.naver.maps.Size(50, 50),
         },
       });
+
+      window.naver.maps.Event.addListener(marker, "click", () => {
+        router.push(`/spots/${spot.id}`);
+      });
+
+      // 마커 아래 명소 이름 표시
+      const label = new window.naver.maps.Marker({
+        position: new window.naver.maps.LatLng(spot.lat, spot.lon),
+        map: mapRef.current!,
+        icon: {
+          content: `
+          <div style="
+          background: white;
+          border-radius: 5px;
+          padding: 5px 10px;
+          font-size: 13px;
+          font-weight: bold;
+          text-align: center;
+          white-space: nowrap;
+          box-shadow: 0px 0px 3px rgba(0,0,0,0.2);
+        ">
+            ${spot.name}
+          </div>`,
+          anchor: new window.naver.maps.Point(35, 0), // 마커 아래 위치 조정
+        },
+      });
       markersRef.current.push(marker);
+      markersRef.current.push(label);
     });
   }, [spots]);
 
-  // ✅ 내 위치 마커 추가 (내 위치가 있을 때만)
+  // 내 위치 마커 추가 (내 위치가 있을 때만)
   useEffect(() => {
     if (!mapRef.current) return;
 
@@ -108,7 +139,7 @@ const NaverMap = ({
           );
         },
         (error) => {
-          console.warn("❌ 내 위치를 가져올 수 없습니다:", error);
+          console.log("❌ 내 위치를 가져올 수 없습니다:", error);
         }
       );
     }

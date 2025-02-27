@@ -18,7 +18,7 @@ export class GetSpotsUsecase {
     category?: string,
     maxPrice?: number
   ): Promise<GetSpotsDTO[]> {
-    // ✅ 기본 명소 조회
+    // 명소테이블 조회
     const spots = await this.spotRepo.getNearbySpots(
       lat,
       lng,
@@ -26,7 +26,7 @@ export class GetSpotsUsecase {
       maxPrice
     );
 
-    // ✅ 명소가 없으면 빈 배열 반환 (에러 발생 X)
+    // 명소가 없으면 빈 배열 반환 (에러 발생 X)
     if (spots.length === 0) {
       return [];
     }

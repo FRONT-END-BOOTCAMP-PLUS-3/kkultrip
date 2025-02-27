@@ -27,7 +27,7 @@ const SpotsClient = ({
   const [isLocationUpdated, setIsLocationUpdated] = useState(false);
   const [tempQuery, setTempQuery] = useState(searchParams.get("query") || "");
 
-  // ✅ URL에 있는 lat, lon을 기반으로 지도 이동 & 데이터 요청
+  // URL에 있는 lat, lon을 기반으로 지도 이동 & 데이터 요청
   useEffect(() => {
     const params = new URLSearchParams(searchParams.toString());
     const queryLat = params.get("lat");
@@ -43,17 +43,16 @@ const SpotsClient = ({
       fetch(`/api/spots?${params.toString()}`)
         .then((res) => res.json())
         .then((data) => {
-          console.log("📌 API 응답 데이터 (명소 목록 SpotsClient.tsx):", data);
           setSpots(Array.isArray(data.spots) ? data.spots : []);
         })
         .catch((error) => {
-          console.error("❌ 명소 데이터를 불러올 수 없음:", error);
+          console.log("❌ 명소 데이터를 불러올 수 없음:", error);
           setSpots([]);
         });
     }
   }, [searchParams]);
 
-  // ✅ 내 위치 감지 (최초 1회)
+  // 내 위치 감지 (최초 1회)
   useEffect(() => {
     if (!isLocationUpdated && navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -74,14 +73,14 @@ const SpotsClient = ({
           router.replace(`/spots?${params.toString()}`);
         },
         (error) => {
-          console.warn("❌ 위치 정보를 가져올 수 없습니다:", error);
+          console.log("❌ 위치 정보를 가져올 수 없습니다:", error);
           setIsLocationUpdated(true);
         }
       );
     }
   }, [isLocationUpdated, searchParams, router]);
 
-  // ✅ 필터 업데이트 함수 (카테고리, 가격 변경 시 바로 반영)
+  // 필터 업데이트 함수 (카테고리, 가격 변경 시 바로 반영)
   const updateFilters = ({
     query,
     category,
@@ -93,7 +92,7 @@ const SpotsClient = ({
   }) => {
     const params = new URLSearchParams(searchParams.toString());
 
-    // ✅ query가 없거나 빈 문자열이면 삭제 (API 요청에서 제외)
+    // query가 없거나 빈 문자열이면 삭제 (API 요청에서 제외)
     if (!query || query.trim() === "" || query === "default") {
       params.delete("query");
     } else {
@@ -103,7 +102,7 @@ const SpotsClient = ({
     if (category !== undefined) params.set("category", category);
     if (price !== undefined) params.set("price", price);
 
-    // ✅ 검색어가 있는 경우 위치 검색 API 호출
+    // 검색어가 있는 경우 위치 검색 API 호출
     if (query && query.trim() !== "" && query !== "default") {
       fetch(`/api/spots?query=${query}`)
         .then((res) => res.json())
@@ -112,7 +111,7 @@ const SpotsClient = ({
             params.set("lat", data.lat.toString());
             params.set("lon", data.lon.toString());
 
-            // ✅ 특정 명소 검색 시, 해당 명소만 표시 (주변 명소 X)
+            // 특정 명소 검색 시, 해당 명소만 표시 (주변 명소 X)
             if (data.spots.length === 1) {
               setSpots(data.spots);
             } else {
@@ -126,11 +125,11 @@ const SpotsClient = ({
           router.push(`/spots?${params.toString()}`);
         })
         .catch((error) => {
-          console.error("❌ 위치 검색 실패:", error);
+          console.log("❌ 위치 검색 실패:", error);
           router.push(`/spots?${params.toString()}`);
         });
     } else {
-      // ✅ 검색어 없이 필터만 변경하는 경우
+      // 검색어 없이 필터만 변경하는 경우
       router.push(`/spots?${params.toString()}`);
     }
   };

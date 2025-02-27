@@ -19,15 +19,19 @@ declare global {
         );
 
         setCenter(center: LatLng): void;
+        setZoom(zoom: number): void;
       }
 
       class Marker {
         constructor(options: {
           position: LatLng;
           map: Map;
+          title?: string;
           icon?: {
-            url: string;
-            size: Size;
+            url?: string;
+            size?: Size;
+            content?: string;
+            anchor?: Point;
           };
         });
 
@@ -36,6 +40,17 @@ declare global {
 
       class Size {
         constructor(width: number, height: number);
+      }
+
+      class Point {
+        constructor(x: number, y: number);
+      }
+      class Event {
+        static addListener(
+          instance: Marker | Map,
+          eventName: string,
+          listener: (event) => void
+        ): void;
       }
     }
   }

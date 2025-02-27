@@ -54,8 +54,8 @@ export class PgSpotRepository implements SpotRepository {
       where: {
         category: category ? category : undefined,
         avgPrice: maxPrice ? { lte: maxPrice } : undefined,
-        lat: { gte: lat - 1, lte: lat + 1 }, // 위도(lat), 경도(lon)를 ± 0.01 정도로 검색 => 대략 1.1km
-        lon: { gte: lng - 1, lte: lng + 1 },
+        lat: { gte: lat - 0.01, lte: lat + 0.01 }, // 위도(lat), 경도(lon)를 ± 0.01 정도로 검색 => 대략 1.1km
+        lon: { gte: lng - 0.01, lte: lng + 0.01 },
       },
     });
   }

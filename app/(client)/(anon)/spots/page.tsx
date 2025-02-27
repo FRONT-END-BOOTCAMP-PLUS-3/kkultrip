@@ -2,6 +2,7 @@ import { GetSpotsDTO } from "@/application/usecases/spot/dto/GetSpotsDto";
 import SpotsClient from "./components/SpotsClient";
 import styles from "./Spots.module.scss";
 
+// ssr에서 명소정보를 불러오기 위한 기본 위치 설정
 const DEFAULT_LAT = 37.5665;
 const DEFAULT_LON = 126.978;
 
@@ -28,7 +29,7 @@ const getFilteredSpots = async ({
     queryString.push(`lat=${lat}`);
     queryString.push(`lon=${lon}`);
 
-    // ✅ query가 빈 값이면 아예 API 요청에서 제외 (query 없이 요청)
+    // query가 빈 값이면 아예 API 요청에서 제외 (query 없이 요청)
     if (query && query.trim() !== "" && query !== "default") {
       queryString.push(`query=${query}`);
     }
@@ -40,17 +41,14 @@ const getFilteredSpots = async ({
       url += `?${queryString.join("&")}`;
     }
 
-    console.log("📌 API 요청 URL:", url); // 디버깅
-
     const res = await fetch(url, { cache: "no-store" });
     if (!res.ok) throw new Error(await res.text());
 
     const data = await res.json();
-    console.log("📌 API 응답 데이터:!!!", data); // 디버깅
 
     return Array.isArray(data.spots) ? data.spots : [];
   } catch (error) {
-    console.error("❌ 명소 데이터를 불러올 수 없음:", error);
+    console.log("명소 데이터를 불러올 수 없음:", error);
     return [];
   }
 };
@@ -60,7 +58,6 @@ const Spots = async ({
 }: {
   searchParams: Promise<{ [key: string]: string | undefined }>;
 }) => {
-  // ✅ searchParams를 Promise에서 await으로 동기적 접근
   const params = await searchParams;
 
   const lat = params.lat ? parseFloat(params.lat) : DEFAULT_LAT;
@@ -69,13 +66,11 @@ const Spots = async ({
   const maxPrice = params.price ? parseInt(params.price, 10) : undefined;
   const query = params.query || "";
 
-  // ✅ 서버에서 명소 정보 불러오기 (SEO 최적화)
   const spots = await getFilteredSpots({ lat, lon, query, category, maxPrice });
 
-  console.log("📌 초기 spots 값:", spots);
   return (
     <>
-      {/* ✅ SEO 최적화를 위한 서버 사이드 렌더링 (Hidden SEO) */}
+      {/* SEO 최적화를 위한 서버 사이드 렌더링 (Hidden SEO) */}
       <div className={styles.hiddenSeo}>
         <h1>주변 명소 검색 결과</h1>
         <p>
@@ -109,7 +104,7 @@ const Spots = async ({
         </ul>
       </div>
 
-      {/* ✅ CSR(Client-Side Rendering)로 필터 변경 & 검색 동적 업데이트 */}
+      {/* CSR로 작동하는 컴포넌트 */}
       <SpotsClient initialLat={lat} initialLon={lon} initialSpots={spots} />
     </>
   );
