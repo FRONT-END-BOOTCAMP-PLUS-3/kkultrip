@@ -33,7 +33,7 @@
   }
   .noSpots {
     text-align: center;
-    padding: 20px;
+    padding: 1.25rem;
     font-weight: bold;
     color: var(--grey-3-color);
   }
@@ -117,10 +117,10 @@
             gap: 0.3125rem;
             color: #444;
             @media (max-width: 390px) {
-              font-size: 14px;
+              font-size: 0.875rem;
             }
             @media (max-width: 375px) {
-              font-size: 12px;
+              font-size: 0.75rem;
             }
           }
           .bookmark,
