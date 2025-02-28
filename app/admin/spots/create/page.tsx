@@ -1,8 +1,10 @@
 "use client";
 
 import { useState, useRef } from "react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import styles from "./SpotsCreatePage.module.scss";
+import { CreateSpotDto } from "@/application/usecases/admin/spot/dto/CreateSpotDto";
 
 const SpotsCreatePage = () => {
   const router = useRouter();
@@ -18,33 +20,30 @@ const SpotsCreatePage = () => {
     category: "",
     link: "",
     img: "",
+    tickets: [{ name: "", price: "" }],
   });
 
-  // 입력 필드 참조 (자동 포커스 이동을 위해)
   const phoneRef1 = useRef<HTMLInputElement>(null);
   const phoneRef2 = useRef<HTMLInputElement>(null);
   const phoneRef3 = useRef<HTMLInputElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // 전화번호 입력 핸들러
   const handlePhoneChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     part: "phone1" | "phone2" | "phone3"
   ) => {
-    let value = e.target.value.replace(/\D/g, ""); // 숫자만 입력받기
-
+    let value = e.target.value.replace(/\D/g, "");
     if (part === "phone1" && value.length > 3) value = value.slice(0, 3);
     if (part === "phone2" && value.length > 4) value = value.slice(0, 4);
     if (part === "phone3" && value.length > 4) value = value.slice(0, 4);
 
     setFormData((prev) => ({ ...prev, [part]: value }));
 
-    // 자동 포커스 이동
     if (part === "phone1" && value.length === 3) phoneRef2.current?.focus();
     if (part === "phone2" && (value.length === 4 || value.length === 4))
       phoneRef3.current?.focus();
   };
 
-  // 백스페이스로 이전 칸 이동
   const handleKeyDown = (
     e: React.KeyboardEvent<HTMLInputElement>,
     part: "phone1" | "phone2" | "phone3"
@@ -80,20 +79,38 @@ const SpotsCreatePage = () => {
 
     const phone = `${formData.phone1}-${formData.phone2}-${formData.phone3}`;
 
-    const data = {
-      ...formData,
-      phone, // 하나의 필드로 합쳐서 전송
-      createdAt: new Date(),
-      updatedAt: new Date(),
+    const data: CreateSpotDto = {
+      name: formData.name,
+      address: formData.address,
+      lon: formData.lon!,
+      lat: formData.lat!,
+      phone,
+      info: formData.info,
+      category: formData.category,
+      link: formData.link || null,
+      img: formData.img,
+      avgPrice: null,
+      avgWaitingTime: null,
+      tickets: formData.tickets.map((ticket) => ({
+        name: ticket.name,
+        price: Number(ticket.price),
+      })),
     };
+
+    const formDataToSend = new FormData();
+    formDataToSend.append("body", JSON.stringify(data));
+    if (fileInputRef.current?.files?.[0]) {
+      formDataToSend.append("file", fileInputRef.current.files[0]);
+    }
 
     const res = await fetch("/api/admin/spots", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
+      body: formDataToSend,
     });
 
     if (res.ok) {
+      const result = await res.json();
+      setFormData((prev) => ({ ...prev, img: result.spot.img }));
       alert("Spot이 성공적으로 생성되었습니다!");
       setFormData({
         name: "",
@@ -107,11 +124,44 @@ const SpotsCreatePage = () => {
         category: "",
         link: "",
         img: "",
+        tickets: [{ name: "", price: "" }],
       });
       router.push("/admin/spots");
     } else {
       alert("Spot 생성에 실패했습니다.");
     }
+  };
+
+  const handleTicketChange = (
+    index: number,
+    field: "name" | "price",
+    value: string
+  ) => {
+    setFormData((prev) => ({
+      ...prev,
+      tickets: prev.tickets.map((ticket, i) =>
+        i === index
+          ? {
+              ...ticket,
+              [field]: field === "price" ? Number(value) || 0 : value,
+            }
+          : ticket
+      ),
+    }));
+  };
+
+  const addTicket = () => {
+    setFormData((prev) => ({
+      ...prev,
+      tickets: [...prev.tickets, { name: "", price: "" }],
+    }));
+  };
+
+  const removeTicket = (index: number) => {
+    setFormData((prev) => ({
+      ...prev,
+      tickets: prev.tickets.filter((_, i) => i !== index),
+    }));
   };
 
   return (
@@ -236,18 +286,59 @@ const SpotsCreatePage = () => {
           accept="image/*"
           onChange={handleFileChange}
           className={styles.inputField}
+          ref={fileInputRef}
           required
         />
         {/* 이미지 미리보기 */}
         {formData.img && (
           <div className={styles.imagePreviewContainer}>
-            <img
+            <Image
               src={formData.img}
               alt="미리보기"
               className={styles.imagePreview}
+              width={300}
+              height={300}
             />
           </div>
         )}
+
+        <div className={styles.ticketsContainer}>
+          <h2>티켓 정보</h2>
+          {formData.tickets.map((ticket, index) => (
+            <div key={index} className={styles.ticketRow}>
+              <input
+                type="text"
+                placeholder="티켓 이름"
+                value={ticket.name}
+                className={styles.inputField}
+                onChange={(e) =>
+                  handleTicketChange(index, "name", e.target.value)
+                }
+                required
+              />
+              <input
+                type="number"
+                placeholder="티켓 가격"
+                value={ticket.price}
+                className={styles.inputField}
+                onChange={(e) =>
+                  handleTicketChange(index, "price", e.target.value)
+                }
+                required
+              />
+              <button type="button" onClick={() => removeTicket(index)}>
+                삭제
+              </button>
+            </div>
+          ))}
+          <button
+            type="button"
+            onClick={addTicket}
+            className={styles.addButton}
+          >
+            티켓 추가
+          </button>
+        </div>
 
         <button type="submit" className={styles.submitButton}>
           Spot 생성

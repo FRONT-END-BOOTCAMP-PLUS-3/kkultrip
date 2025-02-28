@@ -26,10 +26,10 @@ export class PgSpotRepository implements SpotRepository {
     });
   }
 
-  async updateSpot(id: number, data: Partial<Spot>): Promise<Spot | null> {
+  async updateSpot(id: number, spot: Partial<Spot>): Promise<Spot | null> {
     return await prisma.spot.update({
       where: { id },
-      data,
+      data: spot,
     });
   }
 
