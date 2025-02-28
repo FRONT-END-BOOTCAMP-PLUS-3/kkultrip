@@ -1,5 +1,5 @@
 export interface UpdateTicketDto {
-  id: number;
+  id: number | null;
   name: string;
   price: number;
 }

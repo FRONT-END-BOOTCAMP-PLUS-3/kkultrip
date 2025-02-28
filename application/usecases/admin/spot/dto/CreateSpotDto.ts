@@ -6,7 +6,7 @@ export interface CreateSpotDto {
   lon: number;
   lat: number;
   phone: string;
-  info?: string | null;
+  info: string;
   category: string;
   link?: string | null;
   img: string;

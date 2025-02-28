@@ -3,6 +3,8 @@
 import { useState, useRef, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
 import styles from "./SpotsEditPage.module.scss";
+import { UpdateSpotDto } from "@/application/usecases/admin/spot/dto/UpdateSpotDto";
+import { UpdateTicketDto } from "@/application/usecases/admin/spot/ticket/dto/UpdateTicketDto";
 
 const SpotsEditPage = () => {
   const router = useRouter();
@@ -12,8 +14,8 @@ const SpotsEditPage = () => {
   const [formData, setFormData] = useState<{
     name: string;
     address: string;
-    lon: number | null;
-    lat: number | null;
+    lon: number | undefined;
+    lat: number | undefined;
     phone1: string;
     phone2: string;
     phone3: string;
@@ -25,8 +27,8 @@ const SpotsEditPage = () => {
   }>({
     name: "",
     address: "",
-    lon: null,
-    lat: null,
+    lon: undefined,
+    lat: undefined,
     phone1: "",
     phone2: "",
     phone3: "",
@@ -103,7 +105,17 @@ const SpotsEditPage = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const phone = `${formData.phone1}-${formData.phone2}-${formData.phone3}`;
-    const data = { ...formData, phone, updatedAt: new Date() };
+    const tickets: UpdateTicketDto[] = formData.tickets.map((ticket) => ({
+      id: ticket.id,
+      name: ticket.name,
+      price: Number(ticket.price),
+    }));
+    const data: UpdateSpotDto = {
+      ...formData,
+      phone,
+      tickets,
+      updatedAt: new Date(),
+    };
 
     const res = await fetch(`/api/admin/spots/${spotId}`, {
       method: "PATCH",

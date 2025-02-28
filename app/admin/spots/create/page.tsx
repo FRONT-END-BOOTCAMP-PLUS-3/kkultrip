@@ -85,7 +85,7 @@ const SpotsCreatePage = () => {
       lon: formData.lon!,
       lat: formData.lat!,
       phone,
-      info: formData.info || null,
+      info: formData.info,
       category: formData.category,
       link: formData.link || null,
       img: formData.img,
@@ -298,8 +298,6 @@ const SpotsCreatePage = () => {
               className={styles.imagePreview}
               width={300}
               height={300}
-              style={{ objectFit: "cover" }}
-              objectFit="cover"
             />
           </div>
         )}

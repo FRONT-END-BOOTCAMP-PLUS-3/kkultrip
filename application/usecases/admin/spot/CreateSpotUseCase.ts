@@ -23,11 +23,11 @@ export class CreateSpotUseCase {
       category: dto.category,
       link: dto.link ?? null,
       img: dto.img,
-      avgPrice: dto.avgPrice ?? 0,
-      avgWaitingTime: dto.avgWaitingTime ?? 0,
+      avgPrice: 0,
+      avgWaitingTime: 0,
     };
 
-    const createdSpot = await this.spotRepository.createSpot(newSpot);
+    const createdSpot: Spot = await this.spotRepository.createSpot(newSpot);
 
     const tickets: Ticket[] = [];
     if (dto.tickets && dto.tickets.length > 0) {

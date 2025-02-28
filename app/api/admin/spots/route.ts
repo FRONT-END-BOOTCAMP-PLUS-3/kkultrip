@@ -7,10 +7,11 @@ import { PgSpotRepository } from "@/infrastructure/repositories/PgSpotRepository
 import { PgTicketRepository } from "@/infrastructure/repositories/PgTicketRepository"; // TicketRepository 추가
 import { promises as fs } from "fs";
 import path from "path";
+import { CreateSpotDto } from "@/application/usecases/admin/spot/dto/CreateSpotDto";
 
 export async function GET() {
   try {
-    const spotRepository = new PgSpotRepository();
+    const spotRepository: SpotRepository = new PgSpotRepository();
     const getSpotUseCase = new GetSpotsUseCase(spotRepository);
     const spots = await getSpotUseCase.execute();
 
@@ -28,7 +29,7 @@ export async function GET() {
 export async function POST(req: Request) {
   try {
     const formData = await req.formData();
-    const body = JSON.parse(formData.get("body") as string);
+    const body = JSON.parse(formData.get("body") as string) as CreateSpotDto;
     const file = formData.get("file") as File;
 
     const spotRepository: SpotRepository = new PgSpotRepository();

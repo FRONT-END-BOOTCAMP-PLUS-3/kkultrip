@@ -1,6 +1,7 @@
 import { SpotRepository } from "@/domain/repositories/SpotRepository";
-import TicketRepository from "@/domain/repositories/TicketRepository";
+import { TicketRepository } from "@/domain/repositories/TicketRepository";
 import { GetSpotDto } from "./dto/GetSpotDto";
+import { Spot } from "@prisma/client";
 
 export class GetSpotByIdUseCase {
   constructor(
@@ -9,7 +10,7 @@ export class GetSpotByIdUseCase {
   ) {}
 
   async execute(id: number): Promise<GetSpotDto | null> {
-    const spot = await this.spotRepository.getSpotById(id);
+    const spot: Spot | null = await this.spotRepository.getSpotById(id);
     if (!spot) return null;
 
     const tickets = await this.ticketRepository.getTicketBySpotId(id); // 해당 spotId의 티켓 조회
@@ -21,7 +22,7 @@ export class GetSpotByIdUseCase {
       lon: spot.lon,
       lat: spot.lat,
       phone: spot.phone,
-      info: spot.info ?? null,
+      info: spot.info,
       category: spot.category,
       link: spot.link ?? null,
       img: spot.img,
