@@ -46,7 +46,7 @@ const SpotsClient = ({
           setSpots(Array.isArray(data.spots) ? data.spots : []);
         })
         .catch((error) => {
-          console.log("❌ 명소 데이터를 불러올 수 없음:", error);
+          console.log("명소 데이터를 불러올 수 없음:", error);
           setSpots([]);
         });
     }
@@ -73,7 +73,7 @@ const SpotsClient = ({
           router.replace(`/spots?${params.toString()}`);
         },
         (error) => {
-          console.log("❌ 위치 정보를 가져올 수 없습니다:", error);
+          console.log("위치 정보를 가져올 수 없습니다:", error);
           setIsLocationUpdated(true);
         }
       );
@@ -125,7 +125,7 @@ const SpotsClient = ({
           router.push(`/spots?${params.toString()}`);
         })
         .catch((error) => {
-          console.log("❌ 위치 검색 실패:", error);
+          console.log(" 위치 검색 실패:", error);
           router.push(`/spots?${params.toString()}`);
         });
     } else {

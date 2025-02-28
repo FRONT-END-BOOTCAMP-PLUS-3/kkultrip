@@ -192,7 +192,7 @@ const SearchFilter = ({
         ))}
       </div>
 
-      {/* 가격 필터 (추가) */}
+      {/* 가격 필터 */}
       <div className={styles.priceFilter}>
         {prices.map((price) => (
           <button

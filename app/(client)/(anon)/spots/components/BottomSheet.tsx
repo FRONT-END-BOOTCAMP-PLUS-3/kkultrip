@@ -7,6 +7,7 @@ import { GiClothJar } from "react-icons/gi";
 import { FaWonSign } from "react-icons/fa6";
 import Link from "next/link";
 import { GetSpotsDTO } from "@/application/usecases/spot/dto/GetSpotsDto";
+import Image from "next/image";
 
 const BottomSheet = ({
   spots,
@@ -57,7 +58,6 @@ const BottomSheet = ({
         <div className={styles.handle}></div>
       </div>
 
-      {/* 🔹 명소 정보가 없을 경우 메시지 표시 */}
       {Array.isArray(spots) && spots.length === 0 ? (
         <div className={styles.noSpots}>
           <p>주변에 명소 정보가 없습니다.</p>
@@ -96,13 +96,19 @@ const BottomSheet = ({
                     <GiClothJar className={styles.icon} /> {spot.tipCnt || 0}
                   </span>
                   <span className={styles.price}>
-                    <FaWonSign />{" "}
+                    <FaWonSign />
                     {spot.avgPrice?.toLocaleString() || "정보 없음"}원
                   </span>
                 </div>
               </div>
               <Link href={`/spots/${spot.id}`} className={styles.image}>
-                <img src={spot.img} alt={spot.name} className={styles.image} />
+                <Image
+                  width={100}
+                  height={100}
+                  src={spot.img}
+                  alt={spot.name}
+                  className={styles.image}
+                />
               </Link>
             </div>
           ))}

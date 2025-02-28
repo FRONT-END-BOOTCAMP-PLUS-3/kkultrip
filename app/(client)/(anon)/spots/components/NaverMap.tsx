@@ -141,7 +141,7 @@ const NaverMap = ({
           );
         },
         (error) => {
-          console.log("❌ 내 위치를 가져올 수 없습니다:", error);
+          console.log(" 내 위치를 가져올 수 없습니다:", error);
         }
       );
     }
