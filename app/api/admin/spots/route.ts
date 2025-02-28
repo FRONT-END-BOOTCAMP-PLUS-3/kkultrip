@@ -1,11 +1,17 @@
 import { NextResponse } from "next/server";
 import { GetSpotsUseCase } from "@/application/usecases/admin/spot/GetSpotsUseCase";
+import { SpotRepository } from "@/domain/repositories/SpotRepository";
+import { TicketRepository } from "@/domain/repositories/TicketRepository";
 import { CreateSpotUseCase } from "@/application/usecases/admin/spot/CreateSpotUseCase";
 import { PgSpotRepository } from "@/infrastructure/repositories/PgSpotRepository";
+import { PgTicketRepository } from "@/infrastructure/repositories/PgTicketRepository"; // TicketRepository 추가
+import { promises as fs } from "fs";
+import path from "path";
+import { CreateSpotDto } from "@/application/usecases/admin/spot/dto/CreateSpotDto";
 
 export async function GET() {
   try {
-    const spotRepository = new PgSpotRepository();
+    const spotRepository: SpotRepository = new PgSpotRepository();
     const getSpotUseCase = new GetSpotsUseCase(spotRepository);
     const spots = await getSpotUseCase.execute();
 
@@ -22,12 +28,41 @@ export async function GET() {
 
 export async function POST(req: Request) {
   try {
-    const body = await req.json();
-    const spotRepository = new PgSpotRepository();
-    const createSpotUseCase = new CreateSpotUseCase(spotRepository);
-    const spot = await createSpotUseCase.execute(body);
+    const formData = await req.formData();
+    const body = JSON.parse(formData.get("body") as string) as CreateSpotDto;
+    const file = formData.get("file") as File;
 
-    return NextResponse.json(spot, { status: 201 });
+    const spotRepository: SpotRepository = new PgSpotRepository();
+    const ticketRepository: TicketRepository = new PgTicketRepository();
+    const createSpotUseCase = new CreateSpotUseCase(
+      spotRepository,
+      ticketRepository
+    );
+
+    if (file) {
+      const buffer = await file.arrayBuffer();
+      const uploadDir = path.join(process.cwd(), "public", "images", "spots");
+      let filePath = path.join(uploadDir, file.name);
+      let fileName = path.parse(file.name).name;
+      const fileExt = path.parse(file.name).ext;
+
+      const existingFiles = await fs.readdir(uploadDir);
+      const fileNames = existingFiles.map((f) => path.parse(f).name);
+
+      let counter = 1;
+      while (fileNames.includes(fileName)) {
+        fileName = `${fileName}_${counter}`;
+        filePath = path.join(uploadDir, `${fileName}${fileExt}`);
+        counter++;
+      }
+
+      await fs.writeFile(filePath, Buffer.from(buffer));
+      body.img = `/images/spots/${fileName}${fileExt}`;
+    }
+
+    const { spot, tickets } = await createSpotUseCase.execute(body);
+
+    return NextResponse.json({ spot, tickets }, { status: 201 });
   } catch (error) {
     console.error("Spot 생성 오류:", error);
     return NextResponse.json(

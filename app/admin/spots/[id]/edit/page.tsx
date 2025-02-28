@@ -3,17 +3,32 @@
 import { useState, useRef, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
 import styles from "./SpotsEditPage.module.scss";
+import { UpdateSpotDto } from "@/application/usecases/admin/spot/dto/UpdateSpotDto";
+import { UpdateTicketDto } from "@/application/usecases/admin/spot/ticket/dto/UpdateTicketDto";
 
 const SpotsEditPage = () => {
   const router = useRouter();
   const params = useParams();
   const spotId = params.id as string | undefined;
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<{
+    name: string;
+    address: string;
+    lon: number | undefined;
+    lat: number | undefined;
+    phone1: string;
+    phone2: string;
+    phone3: string;
+    info: string;
+    category: string;
+    link: string;
+    img: string;
+    tickets: { id: number | null; name: string; price: string | number }[];
+  }>({
     name: "",
     address: "",
-    lon: null,
-    lat: null,
+    lon: undefined,
+    lat: undefined,
     phone1: "",
     phone2: "",
     phone3: "",
@@ -21,8 +36,12 @@ const SpotsEditPage = () => {
     category: "",
     link: "",
     img: "",
+    tickets: [{ id: null, name: "", price: "" }],
   });
 
+  const [initialTickets, setInitialTickets] = useState<
+    { id: number | null; name: string; price: string | number }[]
+  >([]);
   const phoneRef1 = useRef<HTMLInputElement>(null);
   const phoneRef2 = useRef<HTMLInputElement>(null);
   const phoneRef3 = useRef<HTMLInputElement>(null);
@@ -32,6 +51,7 @@ const SpotsEditPage = () => {
       fetch(`/api/admin/spots/${spotId}`)
         .then((res) => res.json())
         .then((data) => {
+          console.log(data);
           const [phone1, phone2, phone3] = data.phone?.split("-") || [
             "",
             "",
@@ -43,6 +63,7 @@ const SpotsEditPage = () => {
             phone2,
             phone3,
           });
+          setInitialTickets(data.tickets || []);
         });
     }
   }, [spotId]);
@@ -84,7 +105,17 @@ const SpotsEditPage = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const phone = `${formData.phone1}-${formData.phone2}-${formData.phone3}`;
-    const data = { ...formData, phone, updatedAt: new Date() };
+    const tickets: UpdateTicketDto[] = formData.tickets.map((ticket) => ({
+      id: ticket.id,
+      name: ticket.name,
+      price: Number(ticket.price),
+    }));
+    const data: UpdateSpotDto = {
+      ...formData,
+      phone,
+      tickets,
+      updatedAt: new Date(),
+    };
 
     const res = await fetch(`/api/admin/spots/${spotId}`, {
       method: "PATCH",
@@ -98,6 +129,49 @@ const SpotsEditPage = () => {
     } else {
       alert("Spot 수정에 실패했습니다.");
     }
+
+    const deletedTickets = initialTickets.filter(
+      (initialTicket) =>
+        !formData.tickets.some((ticket) => ticket.id === initialTicket.id)
+    );
+
+    for (const ticket of deletedTickets) {
+      await fetch(`/api/admin/spots/${spotId}/${ticket.id}`, {
+        method: "DELETE",
+      });
+    }
+  };
+
+  const handleTicketChange = (
+    index: number,
+    field: "name" | "price",
+    value: string
+  ) => {
+    setFormData((prev) => ({
+      ...prev,
+      tickets: prev.tickets.map((ticket, i) =>
+        i === index
+          ? {
+              ...ticket,
+              [field]: field === "price" ? Number(value) || 0 : value,
+            }
+          : ticket
+      ),
+    }));
+  };
+
+  const addTicket = () => {
+    setFormData((prev) => ({
+      ...prev,
+      tickets: [...prev.tickets, { id: null, name: "", price: "" }],
+    }));
+  };
+
+  const removeTicket = (index: number) => {
+    setFormData((prev) => ({
+      ...prev,
+      tickets: prev.tickets.filter((_, i) => i !== index),
+    }));
   };
 
   return (
@@ -215,6 +289,44 @@ const SpotsEditPage = () => {
             />
           </div>
         )}
+
+        <div className={styles.ticketsContainer}>
+          <h2>티켓 정보</h2>
+          {formData.tickets.map((ticket, index) => (
+            <div key={index} className={styles.ticketRow}>
+              <input
+                type="text"
+                placeholder="티켓 이름"
+                value={ticket.name}
+                className={styles.inputField}
+                onChange={(e) =>
+                  handleTicketChange(index, "name", e.target.value)
+                }
+                required
+              />
+              <input
+                type="number"
+                placeholder="티켓 가격"
+                value={ticket.price}
+                className={styles.inputField}
+                onChange={(e) =>
+                  handleTicketChange(index, "price", e.target.value)
+                }
+                required
+              />
+              <button type="button" onClick={() => removeTicket(index)}>
+                삭제
+              </button>
+            </div>
+          ))}
+          <button
+            type="button"
+            onClick={addTicket}
+            className={styles.addButton}
+          >
+            티켓 추가
+          </button>
+        </div>
 
         <button type="submit" className={styles.submitButton}>
           Spot 수정
