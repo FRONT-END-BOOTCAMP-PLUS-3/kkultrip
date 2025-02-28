@@ -185,7 +185,8 @@ button {
   font-family: var(--font-main);
 }
 
-button {
+button,
+input {
   all: unset;
 }
 
