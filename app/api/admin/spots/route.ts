@@ -36,11 +36,9 @@ export async function POST(req: Request) {
       ticketRepository
     );
 
-    const { spot, tickets } = await createSpotUseCase.execute(body);
-
     if (file) {
       const buffer = await file.arrayBuffer();
-      const uploadDir = path.join(process.cwd(), "public", "images");
+      const uploadDir = path.join(process.cwd(), "public", "images", "spots");
       let filePath = path.join(uploadDir, file.name);
       let fileName = path.parse(file.name).name;
       const fileExt = path.parse(file.name).ext;
@@ -56,7 +54,10 @@ export async function POST(req: Request) {
       }
 
       await fs.writeFile(filePath, Buffer.from(buffer));
+      body.img = `/images/spots/${fileName}${fileExt}`;
     }
+
+    const { spot, tickets } = await createSpotUseCase.execute(body);
 
     return NextResponse.json({ spot, tickets }, { status: 201 });
   } catch (error) {

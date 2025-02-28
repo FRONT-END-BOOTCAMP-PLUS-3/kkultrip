@@ -32,7 +32,6 @@ const SpotsCreatePage = () => {
     part: "phone1" | "phone2" | "phone3"
   ) => {
     let value = e.target.value.replace(/\D/g, "");
-
     if (part === "phone1" && value.length > 3) value = value.slice(0, 3);
     if (part === "phone2" && value.length > 4) value = value.slice(0, 4);
     if (part === "phone3" && value.length > 4) value = value.slice(0, 4);
@@ -98,6 +97,8 @@ const SpotsCreatePage = () => {
     });
 
     if (res.ok) {
+      const result = await res.json();
+      setFormData((prev) => ({ ...prev, img: result.spot.img }));
       alert("Spot이 성공적으로 생성되었습니다!");
       setFormData({
         name: "",
