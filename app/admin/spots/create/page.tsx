@@ -4,6 +4,7 @@ import { useState, useRef } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import styles from "./SpotsCreatePage.module.scss";
+import { CreateSpotDto } from "@/application/usecases/admin/spot/dto/CreateSpotDto";
 
 const SpotsCreatePage = () => {
   const router = useRouter();
@@ -78,11 +79,22 @@ const SpotsCreatePage = () => {
 
     const phone = `${formData.phone1}-${formData.phone2}-${formData.phone3}`;
 
-    const data = {
-      ...formData,
+    const data: CreateSpotDto = {
+      name: formData.name,
+      address: formData.address,
+      lon: formData.lon!,
+      lat: formData.lat!,
       phone,
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      info: formData.info || null,
+      category: formData.category,
+      link: formData.link || null,
+      img: formData.img,
+      avgPrice: null,
+      avgWaitingTime: null,
+      tickets: formData.tickets.map((ticket) => ({
+        name: ticket.name,
+        price: Number(ticket.price),
+      })),
     };
 
     const formDataToSend = new FormData();

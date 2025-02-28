@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { PgTicketRepository } from "@/infrastructure/repositories/PgTicketRepository";
 import { DeleteTicketUseCase } from "@/application/usecases/ticket/DeleteTicketUseCase";
+import { TicketRepository } from "@/domain/repositories/TicketRepository";
 
 export async function DELETE(req: Request) {
   try {
@@ -14,7 +15,7 @@ export async function DELETE(req: Request) {
       );
     }
 
-    const ticketRepository = new PgTicketRepository();
+    const ticketRepository: TicketRepository = new PgTicketRepository();
     const deleteTicketUseCase = new DeleteTicketUseCase(ticketRepository);
 
     await deleteTicketUseCase.execute(Number(id));

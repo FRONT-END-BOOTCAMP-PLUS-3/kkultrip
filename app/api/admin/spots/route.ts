@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import { GetSpotsUseCase } from "@/application/usecases/admin/spot/GetSpotsUseCase";
+import { SpotRepository } from "@/domain/repositories/SpotRepository";
+import { TicketRepository } from "@/domain/repositories/TicketRepository";
 import { CreateSpotUseCase } from "@/application/usecases/admin/spot/CreateSpotUseCase";
 import { PgSpotRepository } from "@/infrastructure/repositories/PgSpotRepository";
 import { PgTicketRepository } from "@/infrastructure/repositories/PgTicketRepository"; // TicketRepository 추가
@@ -29,8 +31,8 @@ export async function POST(req: Request) {
     const body = JSON.parse(formData.get("body") as string);
     const file = formData.get("file") as File;
 
-    const spotRepository = new PgSpotRepository();
-    const ticketRepository = new PgTicketRepository();
+    const spotRepository: SpotRepository = new PgSpotRepository();
+    const ticketRepository: TicketRepository = new PgTicketRepository();
     const createSpotUseCase = new CreateSpotUseCase(
       spotRepository,
       ticketRepository

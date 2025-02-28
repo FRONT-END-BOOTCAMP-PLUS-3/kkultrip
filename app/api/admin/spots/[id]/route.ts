@@ -4,6 +4,8 @@ import { UpdateSpotUseCase } from "@/application/usecases/admin/spot/UpdateSpotU
 import { PgSpotRepository } from "@/infrastructure/repositories/PgSpotRepository";
 import { DeleteSpotUseCase } from "@/application/usecases/admin/spot/DeleteSpotUseCase";
 import { PgTicketRepository } from "@/infrastructure/repositories/PgTicketRepository";
+import { SpotRepository } from "@/domain/repositories/SpotRepository";
+import { TicketRepository } from "@/domain/repositories/TicketRepository";
 
 export async function GET(
   req: Request,
@@ -16,8 +18,8 @@ export async function GET(
       return NextResponse.json({ error: "ID is required" }, { status: 400 });
     }
 
-    const spotRepository = new PgSpotRepository();
-    const ticketRepository = new PgTicketRepository();
+    const spotRepository: SpotRepository = new PgSpotRepository();
+    const ticketRepository: TicketRepository = new PgTicketRepository();
     const getSpotUseCase = new GetSpotByIdUseCase(
       spotRepository,
       ticketRepository
@@ -49,8 +51,8 @@ export async function PATCH(req: Request) {
       );
     }
 
-    const spotRepository = new PgSpotRepository();
-    const ticketRepository = new PgTicketRepository();
+    const spotRepository: SpotRepository = new PgSpotRepository();
+    const ticketRepository: TicketRepository = new PgTicketRepository();
     const updateSpotUseCase = new UpdateSpotUseCase(
       spotRepository,
       ticketRepository
