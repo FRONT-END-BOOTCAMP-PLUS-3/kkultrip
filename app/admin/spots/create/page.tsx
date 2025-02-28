@@ -25,6 +25,7 @@ const SpotsCreatePage = () => {
   const phoneRef1 = useRef<HTMLInputElement>(null);
   const phoneRef2 = useRef<HTMLInputElement>(null);
   const phoneRef3 = useRef<HTMLInputElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handlePhoneChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -85,10 +86,15 @@ const SpotsCreatePage = () => {
       updatedAt: new Date(),
     };
 
+    const formDataToSend = new FormData();
+    formDataToSend.append("body", JSON.stringify(data));
+    if (fileInputRef.current?.files?.[0]) {
+      formDataToSend.append("file", fileInputRef.current.files[0]);
+    }
+
     const res = await fetch("/api/admin/spots", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
+      body: formDataToSend,
     });
 
     if (res.ok) {
@@ -267,6 +273,7 @@ const SpotsCreatePage = () => {
           accept="image/*"
           onChange={handleFileChange}
           className={styles.inputField}
+          ref={fileInputRef}
           required
         />
         {/* 이미지 미리보기 */}
