@@ -39,7 +39,6 @@ const Spottable = ({ spots }: { spots: Spot[] }) => {
     try {
       const response = await fetch(`/api/admin/spots/${id}`, {
         method: "DELETE",
-        headers: { "Content-Type": "application/json" },
       });
 
       if (!response.ok) throw new Error("삭제 실패");
@@ -51,6 +50,7 @@ const Spottable = ({ spots }: { spots: Spot[] }) => {
       alert("삭제 중 오류가 발생했습니다.");
     }
   };
+
 
   return (
     <table className={styles.table}>
