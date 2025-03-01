@@ -1,161 +1,112 @@
-import NaverMap from "./components/NaverMap";
-import BottomSheet from "./components/BottomSheet";
-import SearchFilter from "./components/SearchFilter";
+import { GetSpotsDTO } from "@/application/usecases/spot/dto/GetSpotsDto";
+import SpotsClient from "./components/SpotsClient";
+import styles from "./Spots.module.scss";
 
-interface Spot {
-  id: number;
-  name: string;
-  category: string;
-  avgPrice?: number;
+// ssr에서 명소정보를 불러오기 위한 기본 위치 설정
+const DEFAULT_LAT = 37.5665;
+const DEFAULT_LON = 126.978;
+
+const getFilteredSpots = async ({
+  lat,
+  lon,
+  query,
+  category,
+  maxPrice,
+}: {
   lat: number;
-  lng: number;
-  bookmarkCnt: number;
-  tipCnt: number;
-  time?: string;
-  img: string;
-}
+  lon: number;
+  query?: string;
+  category?: string;
+  maxPrice?: number;
+}): Promise<GetSpotsDTO[]> => {
+  const apiBaseUrl =
+    process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3000";
 
-const getFilteredSpots = async (
-  query?: string,
-  category?: string,
-  maxPrice?: number
-): Promise<Spot[]> => {
-  let spots: Spot[] = [];
+  try {
+    let url = `${apiBaseUrl}/api/spots`;
+    const queryString = [];
 
-  if (query) {
-    // 검색어가 명소 이름인지 지역인지 확인
-    const geoRes = await fetch(
-      `https://api.example.com/geocode?query=${query}`
-    );
-    const geoData = await geoRes.json();
+    queryString.push(`lat=${lat}`);
+    queryString.push(`lon=${lon}`);
 
-    if (geoData?.lat && geoData?.lng) {
-      // 지역 검색: 해당 지역을 중심으로 1km 이내 명소 가져오기
-      const res = await fetch(
-        `/api/spots?lat=${geoData.lat}&lng=${geoData.lng}&radius=1000`,
-        { cache: "no-store" }
-      );
-      spots = await res.json();
-    } else {
-      // 명소 검색: 해당 명소만 가져오기
-      const res = await fetch(`/api/spots?query=${query}`, {
-        cache: "no-store",
-      });
-      spots = await res.json();
+    // query가 빈 값이면 아예 API 요청에서 제외 (query 없이 요청)
+    if (query && query.trim() !== "" && query !== "default") {
+      queryString.push(`query=${query}`);
     }
-  } else {
-    // 기본 데이터: 내 위치 기준 1km 내 명소 가져오기
-    const userLat = 37.5665;
-    const userLng = 126.978;
-    const res = await fetch(
-      `/api/spots?lat=${userLat}&lng=${userLng}&radius=1000`,
-      { cache: "no-store" }
-    );
-    spots = await res.json();
-  }
 
-  // 카테고리 필터링
-  if (category) {
-    spots = spots.filter((spot) => spot.category === category);
-  }
+    if (category) queryString.push(`category=${category}`);
+    if (maxPrice !== undefined) queryString.push(`price=${maxPrice}`);
 
-  // 가격 필터링
-  if (maxPrice !== undefined) {
-    spots = spots.filter((spot) => (spot.avgPrice ?? 0) <= maxPrice);
-  }
+    if (queryString.length > 0) {
+      url += `?${queryString.join("&")}`;
+    }
 
-  return spots;
+    const res = await fetch(url, { cache: "no-store" });
+    if (!res.ok) throw new Error(await res.text());
+
+    const data = await res.json();
+
+    return Array.isArray(data.spots) ? data.spots : [];
+  } catch (error) {
+    console.log("명소 데이터를 불러올 수 없음:", error);
+    return [];
+  }
 };
 
 const Spots = async ({
   searchParams,
 }: {
-  searchParams: { query?: string; category?: string; price?: string };
+  searchParams: Promise<{ [key: string]: string | undefined }>;
 }) => {
-  const query = searchParams.query || undefined;
-  const category = searchParams.category || undefined;
-  const maxPrice = searchParams.price
-    ? parseInt(searchParams.price, 10)
-    : undefined;
+  const params = await searchParams;
 
-  // 필터링된 명소 리스트 가져오기
-  const spots = await getFilteredSpots(query, category, maxPrice);
+  const lat = params.lat ? parseFloat(params.lat) : DEFAULT_LAT;
+  const lon = params.lon ? parseFloat(params.lon) : DEFAULT_LON;
+  const category = params.category || "";
+  const maxPrice = params.price ? parseInt(params.price, 10) : undefined;
+  const query = params.query || "";
 
-  // 명소 리스트 mock data
-  // const spots: Spot[] = [
-  //   {
-  //     id: 1,
-  //     name: "불국사",
-  //     category: "landmark",
-  //     avgPrice: 10900,
-  //     lat: 37.5665,
-  //     lng: 126.978,
-  //     bookmarkCnt: 130,
-  //     tipCnt: 150,
-  //     time: "16:00~22:00",
-  //     img: "https://www.gyeongju.go.kr/upload/content/thumb/20191221/EE09467CAC7043D9969AD488AB8BC662.jpg",
-  //   },
-  //   {
-  //     id: 2,
-  //     name: "불국사",
-  //     category: "landmark",
-  //     avgPrice: 10900,
-  //     lat: 37.5665,
-  //     lng: 126.978,
-  //     bookmarkCnt: 130,
-  //     tipCnt: 150,
-  //     time: "16:00~22:00",
-  //     img: "https://www.gyeongju.go.kr/upload/content/thumb/20191221/EE09467CAC7043D9969AD488AB8BC662.jpg",
-  //   },
-  //   {
-  //     id: 3,
-  //     name: "불국사",
-  //     category: "landmark",
-  //     avgPrice: 10900,
-  //     lat: 37.5665,
-  //     lng: 126.978,
-  //     bookmarkCnt: 130,
-  //     tipCnt: 150,
-  //     time: "16:00~22:00",
-  //     img: "https://www.gyeongju.go.kr/upload/content/thumb/20191221/EE09467CAC7043D9969AD488AB8BC662.jpg",
-  //   },
-  //   {
-  //     id: 4,
-  //     name: "불국사",
-  //     category: "landmark",
-  //     avgPrice: 10900,
-  //     lat: 37.5665,
-  //     lng: 126.978,
-  //     bookmarkCnt: 130,
-  //     tipCnt: 150,
-  //     time: "16:00~22:00",
-  //     img: "https://www.gyeongju.go.kr/upload/content/thumb/20191221/EE09467CAC7043D9969AD488AB8BC662.jpg",
-  //   },
-  //   {
-  //     id: 5,
-  //     name: "불국사",
-  //     category: "landmark",
-  //     avgPrice: 10900,
-  //     lat: 37.5665,
-  //     lng: 126.978,
-  //     bookmarkCnt: 130,
-  //     tipCnt: 150,
-  //     time: "16:00~22:00",
-  //     img: "https://www.gyeongju.go.kr/upload/content/thumb/20191221/EE09467CAC7043D9969AD488AB8BC662.jpg",
-  //   },
-  // ];
+  const spots = await getFilteredSpots({ lat, lon, query, category, maxPrice });
 
   return (
-    <div>
-      {/* 검색 및 필터 UI */}
-      <SearchFilter />
+    <>
+      {/* SEO 최적화를 위한 서버 사이드 렌더링 (Hidden SEO) */}
+      <div className={styles.hiddenSeo}>
+        <h1>주변 명소 검색 결과</h1>
+        <p>
+          현재 위치: {lat}, {lon}
+        </p>
+        {query && <p>검색어: {query}</p>}
+        {category && <p>카테고리: {category}</p>}
+        {maxPrice !== undefined && (
+          <p>최대 가격: {maxPrice.toLocaleString()}원</p>
+        )}
+        <ul>
+          {Array.isArray(spots) && spots.length > 0 ? (
+            spots.map((spot) => (
+              <li key={spot.id}>
+                <h2>{spot.name}</h2>
+                <p>카테고리: {spot.category}</p>
+                <p>
+                  위치: {spot.lat}, {spot.lon}
+                </p>
+                <p>
+                  평균 가격:{" "}
+                  {spot.avgPrice
+                    ? `${spot.avgPrice.toLocaleString()}원`
+                    : "가격 정보 없음"}
+                </p>
+              </li>
+            ))
+          ) : (
+            <p>검색된 명소가 없습니다.</p>
+          )}
+        </ul>
+      </div>
 
-      {/* 네이버 지도 */}
-      <NaverMap initialSpots={spots} />
-
-      {/* 바텀시트 리스트 */}
-      <BottomSheet spots={spots} />
-    </div>
+      {/* CSR로 작동하는 컴포넌트 */}
+      <SpotsClient initialLat={lat} initialLon={lon} initialSpots={spots} />
+    </>
   );
 };
 
