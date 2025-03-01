@@ -5,7 +5,9 @@ import { SpotHeaderDto } from "@/application/usecases/spot/dto/SpotHeaderDto";
 import BookMark from "./BookMark";
 
 const SpotHeader = async ({ spotId }: { spotId: string }) => {
-    const data = await fetch(`http://localhost:3000/api/spots/${spotId}`);
+    const data = await fetch(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/spots/${spotId}`
+    );
     const spotHeaderData: SpotHeaderDto | null = await data.json();
 
     if (!spotHeaderData) {

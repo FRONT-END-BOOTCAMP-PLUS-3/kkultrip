@@ -3,10 +3,10 @@ import DocentContent from "./components/DocentContent";
 import { SpotDocentDto } from "@/application/usecases/spot/dto/SpotDocentDto";
 
 const DocentsPage = async ({ params }: { params: { spotId: string } }) => {
-    const data = await fetch(
-        `http://localhost:3000/api/spots/${params.spotId}/docent`
-    );
-    const docentData: SpotDocentDto[] = await data.json();
+  const data = await fetch(
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/spots/${params.spotId}/docent`
+  );
+  const docentData: SpotDocentDto[] = await data.json();
 
     console.log(docentData);
     return (

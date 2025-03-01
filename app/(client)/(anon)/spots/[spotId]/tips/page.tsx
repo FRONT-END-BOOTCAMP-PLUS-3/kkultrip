@@ -3,13 +3,6 @@ import Reaction from "./components/Reaction";
 import Tip from "./components/Tip";
 import styles from "./tipsPage.module.scss";
 
-/*
-DTO
-page - spotName
-Tip - userName, ProfileImage, price, description
-Reaction - type
-*/
-
 const TipsPage = ({
     params,
     searchParams,
