@@ -13,9 +13,7 @@ export class PgSpotRepository implements SpotRepository {
     });
   }
 
-  async createSpot(
-    spot: Omit<Spot, "id" | "createdAt" | "updatedAt">
-  ): Promise<Spot> {
+  async createSpot(spot: Spot): Promise<Spot> {
     return await prisma.spot.create({
       data: {
         ...spot,
@@ -26,7 +24,7 @@ export class PgSpotRepository implements SpotRepository {
     });
   }
 
-  async updateSpot(id: number, spot: Partial<Spot>): Promise<Spot | null> {
+  async updateSpot(id: number, spot: Spot): Promise<Spot | null> {
     return await prisma.spot.update({
       where: { id },
       data: spot,

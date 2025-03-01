@@ -5,9 +5,9 @@ export interface SpotRepository {
 
   getSpotById(id: number): Promise<Spot | null>; // 특정 Spot 조회
 
-  createSpot(spot: Omit<Spot, "id" | "createdAt" | "updatedAt">): Promise<Spot>;
+  createSpot(spot: Spot): Promise<Spot>;
 
-  updateSpot(id: number, spot: Partial<Spot>): Promise<Spot | null>; // 특정 Spot 수정
+  updateSpot(id: number, spot: Spot): Promise<Spot | null>; // 특정 Spot 수정
 
   deleteSpot(id: number): Promise<Spot | null>; // 특정 Spot 삭제
 

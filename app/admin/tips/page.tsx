@@ -5,7 +5,7 @@ import Header from "../components/header/Header";
 import styles from "./AdminTipsPage.module.scss";
 import { Tip } from "@prisma/client";
 import { useEffect, useState } from "react";
-import Tiptable from "../components/tiptable/Tiptable";
+import Tiptable from "../components/tiptable/TipTable";
 
 const AdminTipsPage = () => {
   const [tips, setTips] = useState<Tip[]>([]);

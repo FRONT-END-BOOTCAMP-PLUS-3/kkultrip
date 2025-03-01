@@ -10,19 +10,14 @@ export class PgTicketRepository implements TicketRepository {
       },
     });
   }
-  async createTicket(
-    ticket: Omit<Ticket, "id" | "createdAt" | "updatedAt">
-  ): Promise<Ticket> {
+  async createTicket(ticket: Ticket): Promise<Ticket> {
     return await prisma.ticket.create({
       data: {
         ...ticket,
       },
     });
   }
-  async updateTicket(
-    id: number,
-    ticket: Partial<Ticket>
-  ): Promise<Ticket | null> {
+  async updateTicket(id: number, ticket: Ticket): Promise<Ticket | null> {
     return await prisma.ticket.update({
       where: { id },
       data: ticket,

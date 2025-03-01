@@ -19,7 +19,8 @@ export class UpdateSpotUseCase {
     }
 
     // Spot 업데이트
-    const updatedSpot: Partial<Spot> = {
+    const updatedSpot = {
+      id: existingSpot.id,
       name: dto.name ?? existingSpot.name,
       address: dto.address ?? existingSpot.address,
       lon: dto.lon ?? existingSpot.lon,
@@ -32,6 +33,7 @@ export class UpdateSpotUseCase {
       avgPrice: dto.avgPrice ?? existingSpot.avgPrice,
       avgWaitingTime: dto.avgWaitingTime ?? existingSpot.avgWaitingTime,
       updatedAt: new Date(),
+      createdAt: existingSpot.createdAt,
     };
 
     const updatedSpotResult = await this.spotRepository.updateSpot(
@@ -50,6 +52,10 @@ export class UpdateSpotUseCase {
             {
               name: ticketDto.name,
               price: ticketDto.price,
+              id: ticketDto.id,
+              createdAt: existingSpot.createdAt,
+              updatedAt: new Date(),
+              spotId: id,
             }
           );
           if (existingTicket) {
@@ -58,9 +64,12 @@ export class UpdateSpotUseCase {
         } else {
           // 새로운 티켓 생성 (필요하면 추가 가능)
           const newTicket = await this.ticketRepository.createTicket({
+            id: 0,
             spotId: id,
             name: ticketDto.name,
             price: ticketDto.price,
+            createdAt: new Date(),
+            updatedAt: new Date(),
           });
           updatedTickets.push(newTicket);
         }
