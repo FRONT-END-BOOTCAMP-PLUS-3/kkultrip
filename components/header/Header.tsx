@@ -12,19 +12,24 @@ interface HeaderProps {
 
 const Header = ({ isLoggedIn }: HeaderProps) => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const router = useRouter();
 
-  // 현재 페이지 URL 가져오기
+  const router = useRouter();
   const pathname = usePathname();
 
   // 헤더 타입 결정
-  let type: "default" | "back" | "mypage" = "default";
+  let type: "default" | "back" | "mypage" | null = "default";
   if (pathname === "/spots") {
     type = "default"; // 로고헤더
   } else if (pathname === "/user") {
     type = "mypage"; // 마이페이지 헤더
+  } else if (pathname === "/") {
+    type = null;
   } else {
     type = "back"; // 기본 헤더
+  }
+
+  if (type === null) {
+    return null;
   }
 
   const handleLogout = () => {
