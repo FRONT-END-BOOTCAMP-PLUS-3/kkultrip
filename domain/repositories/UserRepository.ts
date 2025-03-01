@@ -1,3 +1,5 @@
+import { User } from "@prisma/client";
+
 export default interface UserRepository {
-  createUser(spotId: number): Promise<void>;
+  getUserById(id: string): Promise<User | null>;
 }

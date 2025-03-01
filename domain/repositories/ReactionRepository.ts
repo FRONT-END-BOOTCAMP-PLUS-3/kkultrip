@@ -1,3 +1,5 @@
+import { Reaction } from "@prisma/client";
+
 export default interface ReactionRepository {
-  createReaction(spotId: number, userId: string): Promise<void>;
+    getReactionByTipId(tipId: number): Promise<Reaction[]>;
 }
