@@ -5,10 +5,10 @@
 
 .srOnly {
   position: absolute;
-  width: 1px;
-  height: 1px;
+  width: 0.0625rem;
+  height: 0.0625rem;
   padding: 0;
-  margin: -1px;
+  margin: -0.0625rem;
   overflow: hidden;
   clip-path: inset(50%);
   border: 0;
@@ -41,6 +41,6 @@
 
 .tipContainer {
   margin-bottom: 1.25rem;
-  border-bottom: 1px solid var(--grey-1-color);
+  border-bottom: 0.0625rem solid var(--grey-1-color);
   padding-bottom: 1.25rem;
-}
+} 
