@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
 import styles from "./SpotsEditPage.module.scss";
+import Image from "next/image";
 import { UpdateSpotDto } from "@/application/usecases/admin/spot/dto/UpdateSpotDto";
 import { UpdateTicketDto } from "@/application/usecases/admin/spot/ticket/dto/UpdateTicketDto";
 
@@ -282,10 +283,12 @@ const SpotsEditPage = () => {
         {/* 이미지 미리보기 */}
         {formData.img && (
           <div className={styles.imagePreviewContainer}>
-            <img
+            <Image
               src={formData.img}
               alt="미리보기"
               className={styles.imagePreview}
+              width={300}
+              height={300}
             />
           </div>
         )}
