@@ -1,8 +1,15 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { GetSpotsDTO } from "@/application/usecases/spot/dto/GetSpotsDto";
 import { useRouter } from "next/navigation";
+
+const categoryMap: { [key: string]: string } = {
+  액티비티: "activity",
+  랜드마크: "landmark",
+  카페: "cafe",
+  레스토랑: "restaurant",
+};
 
 const NaverMap = ({
   lat,
@@ -48,16 +55,9 @@ const NaverMap = ({
     }
   }, [isMapLoaded, lat, lon]);
 
-  const categoryMap: { [key: string]: string } = {
-    액티비티: "activity",
-    랜드마크: "landmark",
-    카페: "cafe",
-    레스토랑: "restaurant",
-  };
-
-  const getCategoryName = (category: string) => {
+  const getCategoryName = useCallback((category: string) => {
     return categoryMap[category] || category;
-  };
+  }, []);
 
   // 명소 마커 추가
   useEffect(() => {
@@ -92,13 +92,13 @@ const NaverMap = ({
          position: absolute;
           transform: translate(-50%, -120%);
           background: white;
-          border-radius: 5px;
-          padding: 5px 10px;
-          font-size: 13px;
+          border-radius: 0.3125rem;
+          padding: 0.3125rem 0.625rem;
+          font-size: 0.8125rem;
           font-weight: bold;
           text-align: center;
           white-space: nowrap;
-          box-shadow: 0px 0px 3px rgba(0,0,0,0.2);
+          box-shadow: 0px 0px 0.1875rem rgba(0,0,0,0.2);
         ">
             ${spot.name}
           </div>`,
@@ -108,7 +108,7 @@ const NaverMap = ({
       markersRef.current.push(marker);
       markersRef.current.push(label);
     });
-  }, [spots]);
+  }, [spots, getCategoryName, router]);
 
   // 내 위치 마커 추가 (내 위치가 있을 때만)
   useEffect(() => {
@@ -130,7 +130,7 @@ const NaverMap = ({
             position: new window.naver.maps.LatLng(userLat, userLon),
             map: mapRef.current!,
             icon: {
-              url: "/images/bee_50x50.svg", // 내 위치 아이콘
+              url: "/images/bee_50x50.svg",
               size: new window.naver.maps.Size(50, 50),
             },
           });

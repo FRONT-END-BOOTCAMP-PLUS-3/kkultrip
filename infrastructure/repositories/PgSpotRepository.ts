@@ -53,7 +53,7 @@ export class PgSpotRepository implements SpotRepository {
     return prisma.spot.findMany({
       where: {
         category: category ? category : undefined,
-        avgPrice: maxPrice ? { lte: maxPrice } : undefined,
+        avgPrice: maxPrice !== undefined ? { lte: maxPrice } : undefined,
         lat: { gte: lat - 0.02, lte: lat + 0.02 }, // 위도(lat), 경도(lon)를 ± 0.02 정도로 검색 => 대략 2.2km
         lon: { gte: lng - 0.02, lte: lng + 0.02 },
       },

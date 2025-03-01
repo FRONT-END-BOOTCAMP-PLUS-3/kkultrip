@@ -44,7 +44,7 @@ const BottomSheet = ({
   return (
     <div
       ref={sheetRef}
-      className={`${styles.bottomSheet} ${isOpen ? styles.open : ""}`}
+      className={`${styles.bottomSheetContainer} ${isOpen ? styles.open : ""}`}
       style={{ transform: `translateY(${isOpen ? "0" : "80%"} )` }}
     >
       {/* 드래그 핸들 */}
