@@ -98,7 +98,7 @@ const NaverMap = ({
           font-weight: bold;
           text-align: center;
           white-space: nowrap;
-          box-shadow: 0px 0px 0.1875rem rgba(0,0,0,0.2);
+          box-shadow: 0rem 0rem 0.1875rem rgba(0,0,0,0.2);
         ">
             ${spot.name}
           </div>`,

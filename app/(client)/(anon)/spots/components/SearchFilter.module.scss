@@ -143,9 +143,8 @@
         }
       }
       &.selected {
-        border-color: var(--primary-color);
         font-weight: bold;
-        border-width: 2px;
+        border: 0.125rem solid var(--primary-color);
       }
     }
   }
