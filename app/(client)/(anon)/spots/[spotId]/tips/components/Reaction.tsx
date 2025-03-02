@@ -22,7 +22,7 @@ const Reaction = () => {
                 <Emotion count={5} />
                 <Emotion count={4} />
             </div>
-            <button className={styles.sirenButton}>
+            <button className={styles.reportButton}>
                 <PiSirenFill color="var(--red-1-color)" size={16} />
             </button>
         </div>

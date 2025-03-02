@@ -9,7 +9,7 @@ const TipsPage = async ({ params }: { params: { spotId: string } }) => {
     return (
         <div className={styles.tipsContainer}>
             <h2 className={styles.srOnly}>불국사 꿀팁</h2>
-            <ul className={styles.sortContainer}>
+            <ul className={styles.sortWrapper}>
                 <li>
                     <button>
                         <Link
@@ -31,32 +31,32 @@ const TipsPage = async ({ params }: { params: { spotId: string } }) => {
                     </button>
                 </li>
             </ul>
-            
-            <div className={styles.tipContainer}>
+
+            <div className={styles.tipWrapper}>
                 <Tip />
                 <Reaction />
             </div>
-            <div className={styles.tipContainer}>
+            <div className={styles.tipWrapper}>
                 <Tip />
                 <Reaction />
             </div>
-            <div className={styles.tipContainer}>
+            <div className={styles.tipWrapper}>
                 <Tip />
                 <Reaction />
             </div>
-            <div className={styles.tipContainer}>
+            <div className={styles.tipWrapper}>
                 <Tip />
                 <Reaction />
             </div>
-            <div className={styles.tipContainer}>
+            <div className={styles.tipWrapper}>
                 <Tip />
                 <Reaction />
             </div>
-            <div className={styles.tipContainer}>
+            <div className={styles.tipWrapper}>
                 <Tip />
                 <Reaction />
             </div>
-            <div className={styles.tipContainer}>
+            <div className={styles.tipWrapper}>
                 <Tip />
                 <Reaction />
             </div>

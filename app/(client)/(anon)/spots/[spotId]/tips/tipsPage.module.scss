@@ -1,46 +1,46 @@
 .tipsContainer {
   padding: 0.625rem 1.25rem;
   background-color: white;
-}
 
-.srOnly {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip-path: inset(50%);
-  border: 0;
-  clip: rect(0 0 0 0);
-}
-
-.sortContainer {
-  display: flex;
-  gap: 1.25rem;
-  justify-content: flex-end;
-
-  button {
-    background: none;
-    border: none;
-    cursor: pointer;
+  .srOnly {
+    position: absolute;
+    width: 0.0625rem;
+    height: 0.0625rem;
     padding: 0;
-    font-size: 0.75rem;
+    margin: -0.0625rem;
+    overflow: hidden;
+    clip-path: inset(50%);
+    border: 0;
+    clip: rect(0 0 0 0);
   }
-}
 
-.link {
-  color: var(--grey-2-color);
-  text-decoration: none;
-}
+  .sortWrapper {
+    display: flex;
+    gap: 1.25rem;
+    justify-content: flex-end;
 
-.activeLink {
-  color: var(--primary-color);
-  text-decoration: none;
-}
+    button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      font-size: 0.75rem;
+    }
 
-.tipContainer {
-  margin-bottom: 1.25rem;
-  border-bottom: 1px solid var(--grey-1-color);
-  padding-bottom: 1.25rem;
+    .link {
+      color: var(--grey-2-color);
+      text-decoration: none;
+    }
+
+    .activeLink {
+      color: var(--primary-color);
+      text-decoration: none;
+    }
+  }
+
+  .tipWrapper {
+    margin-bottom: 1.25rem;
+    border-bottom: 0.0625rem solid var(--grey-1-color);
+    padding-bottom: 1.25rem;
+  }
 }

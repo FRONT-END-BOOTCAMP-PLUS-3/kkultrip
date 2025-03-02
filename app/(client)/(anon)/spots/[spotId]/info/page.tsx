@@ -10,7 +10,7 @@ import styles from "./infoPage.module.scss";
 
 const InfoPage = async ({ params }: { params: { spotId: string } }) => {
     const data = await fetch(
-        `http://localhost:3000/api/spots/${params.spotId}/info`
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/spots/${params.spotId}/info`
     );
     const spotData = await data.json();
 
