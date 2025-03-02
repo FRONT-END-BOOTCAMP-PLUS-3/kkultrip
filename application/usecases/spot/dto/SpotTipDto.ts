@@ -1,9 +1,11 @@
+import { TipReactionDto } from "./TipReactionDto";
+
 export interface SpotTipDto {
     id: number;
     userName: string;
     spotName: string;
     profileImage: string;
-    price: number;
+    price: string;
     description: string;
-    reaction: number;
+    tipReaction: TipReactionDto[];
 }
