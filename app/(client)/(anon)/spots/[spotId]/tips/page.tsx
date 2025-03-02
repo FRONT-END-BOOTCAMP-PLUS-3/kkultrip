@@ -3,7 +3,7 @@ import Reaction from "./components/Reaction";
 import Tip from "./components/Tip";
 import styles from "./tipsPage.module.scss";
 
-const TipsPage = ({
+const TipsPage = async ({
     params,
     searchParams,
 }: {
@@ -12,7 +12,14 @@ const TipsPage = ({
 }) => {
     const { spotId } = params;
     const sort = searchParams.sort || "latest";
-    
+
+    const data = await fetch(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/spots/${spotId}/tip`
+    );
+    const tipData = await data.json();
+
+    console.log(tipData);
+  
     return (
         <div className={styles.tipsContainer}>
             <h2 className={styles.srOnly}>불국사 꿀팁</h2>
