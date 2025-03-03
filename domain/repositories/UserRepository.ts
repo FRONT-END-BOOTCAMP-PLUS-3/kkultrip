@@ -1,3 +1,6 @@
-export default interface UserRepository {
-  createUser(spotId: number): Promise<void>;
+import { User } from "@prisma/client";
+import { CreateUserDto } from "@/application/usecases/user/dto/CreateUserDto";
+
+export interface UserRepository {
+  createUser(user: CreateUserDto): Promise<User>;
 }
