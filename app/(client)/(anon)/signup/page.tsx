@@ -5,18 +5,20 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import styles from "./signup.module.scss";
 import Button from "@/components/button/Button";
+import ImageUpload from "@/components/imageUpload/ImageUpload";
 
 const SignUp = () => {
   const router = useRouter();
 
   const [formData, setFormData] = useState({
-    img: "/images/bee_50x58.png",
+    img: "",
     nickname: "",
     email: "",
     password: "",
     password1: "",
   });
 
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -28,12 +30,25 @@ const SignUp = () => {
     }));
   };
 
+  const handleImageChange = (file: File | null) => {
+    if (file) {
+      setImageFile(file);
+      setFormData((prev) => ({
+        ...prev,
+        img: URL.createObjectURL(file),
+      }));
+    } else {
+      setImageFile(null);
+      setFormData((prev) => ({ ...prev, img: "" }));
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
     setLoading(true);
 
-    const { img, nickname, email, password, password1 } = formData;
+    const { nickname, email, password, password1 } = formData;
 
     if (password !== password1) {
       setError("비밀번호가 일치하지 않습니다.");
@@ -41,13 +56,20 @@ const SignUp = () => {
       return;
     }
 
+    const formDataToSend = new FormData();
+
+    formDataToSend.append("nickname", nickname);
+    formDataToSend.append("email", email);
+    formDataToSend.append("password", password);
+
+    if (imageFile) {
+      formDataToSend.append("file", imageFile);
+    }
+
     try {
       const response = await fetch("/api/signup", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ img, nickname, email, password }),
+        body: formDataToSend,
       });
 
       if (!response.ok) {
@@ -58,13 +80,9 @@ const SignUp = () => {
       alert("회원가입 성공! 로그인 페이지로 이동합니다.");
       router.push("/login");
     } catch (err: unknown) {
-      if (err instanceof Error) {
-        console.error("회원가입 실패:", err.message);
-        setError(err.message);
-      } else {
-        console.error("회원가입 실패:", err);
-        setError("알 수 없는 오류가 발생했습니다.");
-      }
+      setError(
+        err instanceof Error ? err.message : "알 수 없는 오류가 발생했습니다."
+      );
     } finally {
       setLoading(false);
     }
@@ -76,7 +94,10 @@ const SignUp = () => {
         <h1>kkultrip 회원가입</h1>
         <form onSubmit={handleSubmit}>
           {/* 추후 프로필 이미지 추가 */}
-
+          <div className={styles.inputBox}>
+            <label>프로필 이미지</label>
+            <ImageUpload onImageChange={handleImageChange} />
+          </div>
           <div className={styles.inputBox}>
             <label>닉네임</label>
             <input
