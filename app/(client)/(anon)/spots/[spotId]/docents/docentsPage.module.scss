@@ -1,0 +1,20 @@
+.docentsContainer {
+  padding: 0.625rem 1.25rem;
+  background-color: white;
+
+  .srOnly {
+    position: absolute;
+    width: 0.0625rem;
+    height: 0.0625rem;
+    padding: 0;
+    margin: -0.0625rem;
+    overflow: hidden;
+    clip-path: inset(50%);
+    border: 0;
+    clip: rect(0 0 0 0);
+  }
+
+  .docentWrapper {
+    background-color: white;
+  }
+}
