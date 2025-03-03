@@ -14,8 +14,8 @@ export class GetSpotTipUsecase {
         private reactionRepository: ReactionRepository
     ) {}
 
-    async execute(spotId: number): Promise<SpotTipDto[]> {
-        const tips = await this.tipRepository.getTipsBySpotId(spotId);
+    async execute(spotId: number, orderBy: "createdAt" | "reactionCount"): Promise<SpotTipDto[]> {
+        const tips = await this.tipRepository.getTipsBySpotId(spotId, orderBy);
 
         const spotTipList: SpotTipDto[] = await Promise.all(
             tips.map(async (tip) => {
@@ -40,6 +40,7 @@ export class GetSpotTipUsecase {
                     (reaction) => {
                         return {
                             userId: reaction.userId,
+                            spotId: tip.spotId,
                             tipId: tip.id,
                             type: reaction.type,
                         };
@@ -53,6 +54,7 @@ export class GetSpotTipUsecase {
                     price: tip.price.toLocaleString(),
                     description: tip.description,
                     tipReaction: tipReactionList,
+                    createdAt: tip.createdAt.toLocaleDateString(),
                 };
             })
         );

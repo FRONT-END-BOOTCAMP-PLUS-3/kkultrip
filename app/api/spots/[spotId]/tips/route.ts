@@ -1,3 +1,5 @@
+import CreateReactionUsecase from "@/application/usecases/spot/CreateReactionUsecase";
+import { SpotTipDto } from "@/application/usecases/spot/dto/SpotTipDto";
 import { GetSpotTipUsecase } from "@/application/usecases/spot/GetSpotTipUsecase";
 import ReactionRepository from "@/domain/repositories/ReactionRepository";
 import SpotRepository from "@/domain/repositories/SpotRepository";
@@ -19,13 +21,36 @@ export async function GET(
     const spotRepository: SpotRepository = new PgSpotRepository();
     const reactionRepository: ReactionRepository = new PgReactionRepository();
 
-    const usecase = new GetSpotTipUsecase(
+    const url = new URL(request.url);
+    const sort = url.searchParams.get("sort") || "latest";
+    const orderBy = sort === "reaction" ? "reactionCount" : "createdAt";
+
+    const spotTipUsecase = new GetSpotTipUsecase(
         tipRepository,
         userRepository,
         spotRepository,
         reactionRepository
     );
-    const result = await usecase.execute(parseInt(spotId));
+    const spotTipList: SpotTipDto[] = await spotTipUsecase.execute(
+        Number(spotId),
+        orderBy
+    );
 
-    return NextResponse.json(result);
+    if (!spotTipList) {
+        return NextResponse.json({ error: "Spot not found" }, { status: 404 });
+    }
+
+    return NextResponse.json(spotTipList);
+}
+
+export async function POST(request: Request) {
+    const body = await request.json();
+    const { tipId, userId, type } = body;
+    const reactionRepository: ReactionRepository = new PgReactionRepository();
+
+    const createReactionUsecase = new CreateReactionUsecase(reactionRepository);
+
+    await createReactionUsecase.execute({ tipId, userId, type });
+
+    return NextResponse.json({ message: "Reaction created" }, { status: 200 });
 }

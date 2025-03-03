@@ -15,15 +15,17 @@ const TipsPage = async ({
     const sort = searchParams.sort || "latest";
 
     const data = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/spots/${spotId}/tips`
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/spots/${spotId}/tips?sort=${sort}`
     );
-    const tipData: SpotTipDto[] = await data.json();
+    const tipList: SpotTipDto[] = await data.json();
 
-    console.log(tipData);
+    if (!tipList) {
+        return <p>데이터를 불러오는 중 오류가 발생했습니다.</p>;
+    }
 
     return (
         <div className={styles.tipsContainer}>
-            <h2 className={styles.srOnly}>{tipData[0].spotName} 꿀팁</h2>
+            <h2 className={styles.srOnly}>{tipList[0].spotName} 꿀팁</h2>
             <ul className={styles.sortContainer}>
                 <li>
                     <button>
@@ -51,7 +53,7 @@ const TipsPage = async ({
                 </li>
             </ul>
 
-            {tipData.map((tip) => (
+            {tipList.map((tip) => (
                 <div className={styles.tipContainer} key={tip.id}>
                     <Tip tip={tip} />
                     <Reaction tipReaction={tip.tipReaction} />
