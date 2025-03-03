@@ -1,5 +1,6 @@
 "use client";
 
+import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { PiSirenFill } from "react-icons/pi";
 import Emotion from "./Emotion";
@@ -7,23 +8,132 @@ import styles from "./reaction.module.scss";
 import { TipReactionDto } from "@/application/usecases/spot/dto/TipReactionDto";
 
 const Reaction = ({ tipReaction }: { tipReaction: TipReactionDto[] }) => {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const modalRef = useRef<HTMLDivElement | null>(null);
+
+    const userId = "bf56f7ec-252c-4e27-80c2-460946715e32";
+
     console.log(tipReaction);
+
+    const handleButtonClick = () => {
+        setIsModalOpen(!isModalOpen);
+    };
+
+    const handleClickOutside = (event: MouseEvent) => {
+        if (
+            modalRef.current &&
+            !modalRef.current.contains(event.target as Node)
+        ) {
+            setIsModalOpen(false);
+        }
+    };
+
+    const handleReactionClick = async (type: number) => {
+        console.log("Clicked emoji type:", type);
+        const button = document.getElementById(`reaction-button-${type}`);
+        if (button) {
+            button.classList.add(styles.shake);
+            setTimeout(() => {
+                button.classList.remove(styles.shake);
+                setIsModalOpen(false);
+            }, 1000);
+        }
+
+        if (
+            !tipReaction.length ||
+            !tipReaction[0].tipId ||
+            !tipReaction[0].spotId
+        ) {
+            console.error("Invalid tipReaction data");
+            return;
+        }
+
+        try {
+            const response = await fetch(
+                `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/spots/${tipReaction[0].spotId}/tips`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        tipId: tipReaction[0].tipId,
+                        userId,
+                        type,
+                    }),
+                }
+            );
+
+            if (response.ok) {
+                console.log("반응 남기기 성공");
+            } else {
+                console.error("반응 남기기 실패");
+            }
+        } catch (error) {
+            console.error("Error while creating reaction:", error);
+        }
+    };
+
+    useEffect(() => {
+        if (isModalOpen) {
+            document.addEventListener("mousedown", handleClickOutside);
+        } else {
+            document.removeEventListener("mousedown", handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [isModalOpen]);
 
     const typeCounts = tipReaction.reduce((acc, { type }) => {
         acc[type] = (acc[type] || 0) + 1;
         return acc;
     }, {} as Record<number, number>);
+
+    const reactions: Record<number, { name: string; image: string }> = {
+        1: { name: "유익하네요", image: "/images/reaction-type1.png" },
+        2: { name: "가고싶어요", image: "/images/reaction-type2.png" },
+        3: { name: "실망이에요", image: "/images/reaction-type3.png" },
+        4: { name: "재미있어요", image: "/images/reaction-type4.png" },
+    };
+
     return (
         <div className={styles.reactionContainer}>
-            <button className={styles.reactionButton}>
+            <button
+                className={styles.reactionButton}
+                onClick={handleButtonClick}
+            >
                 <Image
                     src="/images/reaction.png"
                     alt="반응 남기기"
                     width={16}
                     height={16}
                 />
-                <p>반응 남기기</p>
+                반응 남기기
             </button>
+
+            {isModalOpen && (
+                <div ref={modalRef} className={styles.modal}>
+                    {[1, 2, 3, 4].map((type) => (
+                        <button
+                            key={type}
+                            className={styles.emotionOption}
+                            id={`reaction-button-${type}`}
+                            onClick={() => handleReactionClick(type)}
+                        >
+                            <Image
+                                src={reactions[type].image}
+                                alt={reactions[type].name}
+                                width={30}
+                                height={30}
+                            />
+                            <p>{reactions[type].name}</p>
+                        </button>
+                    ))}
+                </div>
+            )}
+
             <div className={styles.emotionWrapper}>
                 {typeCounts[1] > 0 && (
                     <Emotion count={typeCounts[1]} type={1} />
