@@ -8,4 +8,5 @@ export interface SpotTipDto {
     price: string;
     description: string;
     tipReaction: TipReactionDto[];
+    createdAt: string;
 }

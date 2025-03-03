@@ -3,7 +3,6 @@ import styles from "./tip.module.scss";
 import { SpotTipDto } from "@/application/usecases/spot/dto/SpotTipDto";
 
 const Tip = ({ tip }: { tip: SpotTipDto }) => {
-    console.log(tip);
     return (
         <div className={styles.tipContainer}>
             <h3 className={styles.srOnly}>{tip.userName}의 꿀팁</h3>
@@ -20,8 +19,11 @@ const Tip = ({ tip }: { tip: SpotTipDto }) => {
                 </figcaption>
             </figure>
             <div className={styles.costWrapper}>
-                <p className={styles.costTitle}>1인 평균 비용</p>
-                <p className={styles.cost}>{tip.price}원</p>
+                <div className={styles.costBox}>
+                  <p className={styles.costTitle}>1인 평균 비용</p>
+                  <p className={styles.cost}>{tip.price}원</p>
+                </div>
+                <p className={styles.createdAt}>{tip.createdAt}</p>
             </div>
             <p>{tip.description}</p>
         </div>
