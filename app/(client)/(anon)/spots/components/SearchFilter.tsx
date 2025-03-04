@@ -148,11 +148,13 @@ const SearchFilter = () => {
         updateFilters({ lat: location.lat, lon: location.lon, query: "" });
         setTempQuery("");
       } else {
-        alert("현재 위치를 가져올 수 없습니다.");
+        alert("현재 위치를 가져올 수 없습니다. 기본 위치로 이동합니다.");
+        updateFilters({ lat: 37.5665, lon: 126.978, query: "" });
       }
     } catch (error) {
       console.log("위치 정보를 가져올 수 없음:", error);
-      alert("위치 정보를 가져올 수 없습니다.");
+      alert("현재 위치를 가져올 수 없습니다. 기본 위치로 이동합니다.");
+      updateFilters({ lat: 37.5665, lon: 126.978, query: "" });
     }
   };
 

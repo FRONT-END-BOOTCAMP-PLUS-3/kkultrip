@@ -29,6 +29,9 @@ const BottomSheet = ({ spots }: { spots: GetSpotsDTO[] }) => {
       })
       .catch((error) => {
         console.log(error.message);
+        // 현재위치 가져오기 실패 시 디폴트값으로 설정
+        setUserLat(37.5665);
+        setUserLon(126.978);
       });
   }, []);
 

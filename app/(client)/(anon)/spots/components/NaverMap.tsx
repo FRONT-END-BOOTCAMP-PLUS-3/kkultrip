@@ -9,7 +9,7 @@ const categoryMap: { [key: string]: string } = {
   액티비티: "activity",
   랜드마크: "landmark",
   카페: "cafe",
-  레스토랑: "restaurant",
+  음식점: "restaurant",
 };
 
 const NaverMap = ({
@@ -35,6 +35,7 @@ const NaverMap = ({
       script.src = `https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=${process.env.NEXT_PUBLIC_NAVER_MAP_CLIENT_ID}`;
       script.async = true;
       script.onload = () => setIsMapLoaded(true);
+      script.onerror = () => console.error("네이버 지도 API 로드 실패");
       document.head.appendChild(script);
     } else {
       setIsMapLoaded(true);
