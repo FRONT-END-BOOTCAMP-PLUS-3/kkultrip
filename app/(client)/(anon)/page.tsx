@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import styles from "./IndexPage.module.scss";
-import { getMyLocation } from "@/utils/getMyLocation"; // 위치 정보 유틸
+import { getMyLocation } from "@/utils/getMyLocation";
 
 const DEFAULT_LAT = 37.5665;
 const DEFAULT_LON = 126.978;

@@ -48,7 +48,7 @@ const getFilteredSpots = async ({
     const data = await res.json();
     return Array.isArray(data.spots) ? data.spots : [];
   } catch (error) {
-    console.error("❌ 명소 데이터를 불러올 수 없음:", error);
+    console.log("❌ 명소 데이터를 불러올 수 없음:", error);
     return [];
   }
 };
@@ -63,16 +63,14 @@ const Spots = async ({
   }>;
 }) => {
   const params = await searchParams;
-  // ✅ URL에서 `lat, lon` 가져오기 (없으면 기본값)
+  // URL에서 `lat, lon` 가져오기 (없으면 기본값)
   const lat = params.lat ? parseFloat(params.lat) : DEFAULT_LAT;
   const lon = params.lon ? parseFloat(params.lon) : DEFAULT_LON;
-  // const lat = parseFloat(params.lat);
-  // const lon = parseFloat(params.lon);
   const category = params.category || "";
   const maxPrice = params.price ? parseInt(params.price, 10) : undefined;
   const query = params.query || "";
 
-  // ✅ 명소 데이터 SSR에서 무조건 가져오기
+  // 명소 데이터 SSR에서 무조건 가져오기
   const spots = await getFilteredSpots({ lat, lon, query, category, maxPrice });
 
   return (
@@ -111,7 +109,7 @@ const Spots = async ({
         </ul>
       </div>
 
-      {/* 🔹 검색 필터 / 네이버 지도 / 바텀시트 */}
+      {/* 검색 필터 / 네이버 지도 / 바텀시트 */}
       <SearchFilter />
       <NaverMap lat={lat} lon={lon} spots={spots} />
       <BottomSheet spots={spots} />

@@ -7,7 +7,7 @@ import { TbCurrentLocation } from "react-icons/tb";
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { getGeocode } from "@/utils/getGeocode";
-import { getMyLocation } from "@/utils/getMyLocation"; // ✅ 내 위치 가져오는 유틸 추가
+import { getMyLocation } from "@/utils/getMyLocation";
 
 const SearchFilter = () => {
   const searchParams = useSearchParams();
