@@ -119,7 +119,7 @@ const BottomSheet = ({ spots }: { spots: GetSpotsDTO[] }) => {
             <div key={spot.id} className={styles.spotItem}>
               <div className={styles.info}>
                 <div className={styles.top}>
-                  <Link href={`/spots/${spot.id}`} className={styles.name}>
+                  <Link href={`/spots/${spot.id}/info`} className={styles.name}>
                     {spot.name}
                   </Link>
                   <p className={styles.category}>{spot.category}</p>
@@ -154,7 +154,7 @@ const BottomSheet = ({ spots }: { spots: GetSpotsDTO[] }) => {
                   </span>
                 </div>
               </div>
-              <Link href={`/spots/${spot.id}`} className={styles.image}>
+              <Link href={`/spots/${spot.id}/info`} className={styles.image}>
                 <Image
                   width={100}
                   height={100}
