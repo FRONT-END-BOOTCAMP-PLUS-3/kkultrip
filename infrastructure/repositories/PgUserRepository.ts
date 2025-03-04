@@ -1,18 +1,21 @@
-import { PrismaClient, User } from "@prisma/client";
 import { UserRepository } from "@/domain/repositories/UserRepository";
-import { CreateUserDto } from "@/application/usecases/user/dto/CreateUserDto";
+import { PrismaClient, User } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
 export class PgUserRepository implements UserRepository {
-  async createUser(user: CreateUserDto): Promise<User> {
-    return await prisma.user.create({
-      data: {
-        img: user.img,
-        nickname: user.nickname,
-        email: user.email,
-        password: user.password,
-      },
-    });
+  async createUser(user: User): Promise<void> {
+    try {
+      await prisma.user.create({
+        data: {
+          img: user.img,
+          nickname: user.nickname,
+          email: user.email,
+          password: user.password,
+        },
+      });
+    } finally {
+      await prisma.$disconnect();
+    }
   }
 }

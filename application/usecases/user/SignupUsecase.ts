@@ -1,12 +1,11 @@
 import { UserRepository } from "@/domain/repositories/UserRepository";
-import { User } from "@prisma/client";
-import { CreateUserDto } from "./dto/CreateUserDto";
 import bcrypt from "bcrypt";
+import { CreateUserDto } from "./dto/CreateUserDto";
 
 export default class SignupUsecase {
   constructor(private repository: UserRepository) {}
 
-  async execute(data: CreateUserDto): Promise<User> {
+  async execute(data: CreateUserDto): Promise<void> {
     const { img, nickname, email, password } = data;
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -17,8 +16,13 @@ export default class SignupUsecase {
       password: hashedPassword,
     };
 
-    const newUser = await this.repository.createUser(user);
-
-    return newUser;
+    await this.repository.createUser({
+      ...user,
+      id: "",
+      is_admin: false,
+      kakao_id: 0,
+      created_at: new Date(),
+      updated_at: new Date(),
+    });
   }
 }

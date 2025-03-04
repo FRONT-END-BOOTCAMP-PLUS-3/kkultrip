@@ -39,7 +39,7 @@ export async function POST(req: NextRequest) {
 
     const userRepository: UserRepository = new PgUserRepository();
     const usecase = new SignupUsecase(userRepository);
-    const newUser = await usecase.execute({
+    await usecase.execute({
       nickname,
       email,
       password,
@@ -49,12 +49,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(
       {
         message: "회원가입 성공",
-        user: {
-          id: newUser.id,
-          img: newUser.img,
-          nickname: newUser.nickname,
-          email: newUser.email,
-        },
       },
       { status: 201 }
     );
