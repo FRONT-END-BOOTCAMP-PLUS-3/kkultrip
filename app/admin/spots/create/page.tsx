@@ -7,6 +7,14 @@ import styles from "./SpotsCreatePage.module.scss";
 import { CreateSpotDto } from "@/application/usecases/admin/spot/dto/CreateSpotDto";
 
 const SpotsCreatePage = () => {
+  const days = ["월", "화", "수", "목", "금", "토", "일"];
+  const defaultOperatingHours = Object.fromEntries(
+    days.map((day) => [
+      day,
+      { type: "시간 지정", start: "09:00", end: "18:00" },
+    ])
+  );
+
   const router = useRouter();
   const [formData, setFormData] = useState({
     name: "",
@@ -21,12 +29,37 @@ const SpotsCreatePage = () => {
     link: "",
     img: "",
     tickets: [{ name: "", price: "" }],
+    operatingHours: defaultOperatingHours,
   });
 
   const phoneRef1 = useRef<HTMLInputElement>(null);
   const phoneRef2 = useRef<HTMLInputElement>(null);
   const phoneRef3 = useRef<HTMLInputElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleOperatingHoursChange = (
+    day: keyof typeof defaultOperatingHours,
+    field: "type" | "start" | "end",
+    value: string
+  ) => {
+    setFormData((prev) => {
+      const updatedHours = { ...prev.operatingHours };
+
+      if (field === "type") {
+        if (value === "24시간") {
+          updatedHours[day] = { type: value, start: "", end: "" };
+        } else if (value === "휴무") {
+          updatedHours[day] = { type: value, start: "", end: "" };
+        } else {
+          updatedHours[day] = { type: value, start: "09:00", end: "18:00" };
+        }
+      } else {
+        updatedHours[day] = { ...updatedHours[day], [field]: value };
+      }
+
+      return { ...prev, operatingHours: updatedHours };
+    });
+  };
 
   const handlePhoneChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -125,6 +158,7 @@ const SpotsCreatePage = () => {
         link: "",
         img: "",
         tickets: [{ name: "", price: "" }],
+        operatingHours: defaultOperatingHours,
       });
       router.push("/admin/spots");
     } else {
@@ -333,6 +367,67 @@ const SpotsCreatePage = () => {
           >
             티켓 추가
           </button>
+        </div>
+
+        <div className={styles.operatingHoursContainer}>
+          <h2>운영 시간</h2>
+          {Object.entries(formData.operatingHours).map(([day, data]) => {
+            const isDisabled = data.type !== "시간 지정";
+
+            return (
+              <div key={day} className={styles.operatingHoursRow}>
+                <span className={styles.dayLabel}>{day}</span>
+
+                <input
+                  type="time"
+                  value={data.start}
+                  disabled={isDisabled}
+                  onChange={(e) =>
+                    handleOperatingHoursChange(
+                      day as keyof typeof defaultOperatingHours,
+                      "start",
+                      e.target.value
+                    )
+                  }
+                  className={`${styles.timeInput} ${
+                    isDisabled ? styles.disabledInput : ""
+                  }`}
+                />
+
+                <input
+                  type="time"
+                  value={data.end}
+                  disabled={isDisabled}
+                  onChange={(e) =>
+                    handleOperatingHoursChange(
+                      day as keyof typeof defaultOperatingHours,
+                      "end",
+                      e.target.value
+                    )
+                  }
+                  className={`${styles.timeInput} ${
+                    isDisabled ? styles.disabledInput : ""
+                  }`}
+                />
+
+                <select
+                  value={data.type}
+                  onChange={(e) =>
+                    handleOperatingHoursChange(
+                      day as keyof typeof defaultOperatingHours,
+                      "type",
+                      e.target.value
+                    )
+                  }
+                  className={styles.selectField}
+                >
+                  <option value="시간 지정">시간 지정</option>
+                  <option value="24시간">24시간</option>
+                  <option value="휴무">휴무</option>
+                </select>
+              </div>
+            );
+          })}
         </div>
 
         <button type="submit" className={styles.submitButton}>
