@@ -5,8 +5,9 @@ import { SpotHeaderDto } from "@/application/usecases/spot/dto/SpotHeaderDto";
 import BookMark from "./BookMark";
 
 const SpotHeader = async ({ spotId }: { spotId: string }) => {
+    const accessUserId = "de72be1d-a8ae-434a-a72c-610e49328f06";
     const data = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/spots/${spotId}`
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/spots/${spotId}?accessUserId=${accessUserId}`
     );
     const spotHeaderData: SpotHeaderDto | null = await data.json();
 
@@ -29,7 +30,10 @@ const SpotHeader = async ({ spotId }: { spotId: string }) => {
                         <h1>{spotHeaderData.name}</h1>
                         <p>{spotHeaderData.category}</p>
                     </div>
-                    <BookMark />
+                    <BookMark
+                        isBookMarked={spotHeaderData.isBookMarked}
+                        spotId={Number(spotId)}
+                    />
                 </div>
                 <SpotNav spotId={spotId} />
             </div>
