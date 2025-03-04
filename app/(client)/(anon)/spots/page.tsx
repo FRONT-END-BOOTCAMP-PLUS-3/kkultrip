@@ -1,8 +1,10 @@
 import { GetSpotsDTO } from "@/application/usecases/spot/dto/GetSpotsDto";
-import SpotsClient from "./components/SpotsClient";
+import SearchFilter from "./components/SearchFilter";
+import NaverMap from "./components/NaverMap";
+import BottomSheet from "./components/BottomSheet";
 import styles from "./Spots.module.scss";
 
-// ssr에서 명소정보를 불러오기 위한 기본 위치 설정
+// 기본 위치 설정 (서울)
 const DEFAULT_LAT = 37.5665;
 const DEFAULT_LON = 126.978;
 
@@ -29,7 +31,6 @@ const getFilteredSpots = async ({
     queryString.push(`lat=${lat}`);
     queryString.push(`lon=${lon}`);
 
-    // query가 빈 값이면 아예 API 요청에서 제외 (query 없이 요청)
     if (query && query.trim() !== "" && query !== "default") {
       queryString.push(`query=${query}`);
     }
@@ -45,10 +46,9 @@ const getFilteredSpots = async ({
     if (!res.ok) throw new Error(await res.text());
 
     const data = await res.json();
-
     return Array.isArray(data.spots) ? data.spots : [];
   } catch (error) {
-    console.log("명소 데이터를 불러올 수 없음:", error);
+    console.error("❌ 명소 데이터를 불러올 수 없음:", error);
     return [];
   }
 };
@@ -56,21 +56,28 @@ const getFilteredSpots = async ({
 const Spots = async ({
   searchParams,
 }: {
-  searchParams: Promise<{ [key: string]: string | undefined }>;
+  searchParams: Promise<{
+    [key: string]: string | undefined;
+    lat: string;
+    lon: string;
+  }>;
 }) => {
   const params = await searchParams;
-
+  // ✅ URL에서 `lat, lon` 가져오기 (없으면 기본값)
   const lat = params.lat ? parseFloat(params.lat) : DEFAULT_LAT;
   const lon = params.lon ? parseFloat(params.lon) : DEFAULT_LON;
+  // const lat = parseFloat(params.lat);
+  // const lon = parseFloat(params.lon);
   const category = params.category || "";
   const maxPrice = params.price ? parseInt(params.price, 10) : undefined;
   const query = params.query || "";
 
+  // ✅ 명소 데이터 SSR에서 무조건 가져오기
   const spots = await getFilteredSpots({ lat, lon, query, category, maxPrice });
 
   return (
     <>
-      {/* SEO 최적화를 위한 서버 사이드 렌더링 (Hidden SEO) */}
+      {/* SEO 최적화를 위한 숨겨진 검색 결과 */}
       <div className={styles.hiddenSeo}>
         <h1>주변 명소 검색 결과</h1>
         <p>
@@ -104,8 +111,10 @@ const Spots = async ({
         </ul>
       </div>
 
-      {/* CSR로 작동하는 컴포넌트 */}
-      <SpotsClient initialLat={lat} initialLon={lon} initialSpots={spots} />
+      {/* 🔹 검색 필터 / 네이버 지도 / 바텀시트 */}
+      <SearchFilter />
+      <NaverMap lat={lat} lon={lon} spots={spots} />
+      <BottomSheet spots={spots} />
     </>
   );
 };

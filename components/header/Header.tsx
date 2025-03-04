@@ -53,6 +53,7 @@ const Header = ({ isLoggedIn }: HeaderProps) => {
               height="54"
               src="/images/logo.svg"
               alt="KKULTRIP 로고"
+              priority
             />
           </div>
           {type === "default" ? (
