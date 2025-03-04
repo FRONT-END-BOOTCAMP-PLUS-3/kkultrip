@@ -221,36 +221,33 @@ const SpotsEditPage = () => {
           <input
             type="text"
             ref={phoneRef1}
-            value={formData.phone1}
+            value={formData.phone1 ?? ""}
             onChange={(e) => handlePhoneChange(e, "phone1")}
             className={styles.inputField}
             maxLength={3}
-            required
           />
           <span>-</span>
           <input
             type="text"
             ref={phoneRef2}
-            value={formData.phone2}
+            value={formData.phone2 ?? ""}
             onChange={(e) => handlePhoneChange(e, "phone2")}
             className={styles.inputField}
             maxLength={4}
-            required
           />
           <span>-</span>
           <input
             type="text"
             ref={phoneRef3}
-            value={formData.phone3}
+            value={formData.phone3 ?? ""}
             onChange={(e) => handlePhoneChange(e, "phone3")}
             className={styles.inputField}
             maxLength={4}
-            required
           />
         </div>
         <textarea
           name="info"
-          value={formData.info}
+          value={formData.info ?? ""}
           onChange={handleChange}
           className={styles.textareaField}
         />
@@ -270,7 +267,7 @@ const SpotsEditPage = () => {
         <input
           type="url"
           name="link"
-          value={formData.link}
+          value={formData.link ?? ""}
           onChange={handleChange}
           className={styles.inputField}
         />
@@ -305,7 +302,6 @@ const SpotsEditPage = () => {
                 onChange={(e) =>
                   handleTicketChange(index, "name", e.target.value)
                 }
-                required
               />
               <input
                 type="number"
@@ -315,7 +311,6 @@ const SpotsEditPage = () => {
                 onChange={(e) =>
                   handleTicketChange(index, "price", e.target.value)
                 }
-                required
               />
               <button type="button" onClick={() => removeTicket(index)}>
                 삭제

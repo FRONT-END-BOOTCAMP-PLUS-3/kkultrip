@@ -224,7 +224,6 @@ const SpotsCreatePage = () => {
             className={styles.inputField}
             placeholder="000"
             maxLength={3}
-            required
           />
           <span>-</span>
           <input
@@ -236,7 +235,6 @@ const SpotsCreatePage = () => {
             className={styles.inputField}
             placeholder="0000"
             maxLength={4}
-            required
           />
           <span>-</span>
           <input
@@ -248,7 +246,6 @@ const SpotsCreatePage = () => {
             className={styles.inputField}
             placeholder="0000"
             maxLength={4}
-            required
           />
         </div>
 
@@ -314,7 +311,6 @@ const SpotsCreatePage = () => {
                 onChange={(e) =>
                   handleTicketChange(index, "name", e.target.value)
                 }
-                required
               />
               <input
                 type="number"
@@ -324,7 +320,6 @@ const SpotsCreatePage = () => {
                 onChange={(e) =>
                   handleTicketChange(index, "price", e.target.value)
                 }
-                required
               />
               <button type="button" onClick={() => removeTicket(index)}>
                 삭제
