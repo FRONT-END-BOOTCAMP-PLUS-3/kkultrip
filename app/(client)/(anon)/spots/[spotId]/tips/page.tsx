@@ -19,10 +19,14 @@ const TipsPage = async ({
     );
     const tipList: SpotTipDto[] = await data.json();
 
-    if (!tipList) {
-        return <p>데이터를 불러오는 중 오류가 발생했습니다.</p>;
+    if (!tipList || tipList.length === 0) {
+        return (
+            <div className={styles.noData}>
+                <p>작성된 꿀팁이 없습니다.</p>
+                <p>첫 번째 꿀팁을 작성해볼까요?</p>
+            </div>
+        );
     }
-
 
     return (
         <div className={styles.tipsContainer}>
@@ -57,7 +61,10 @@ const TipsPage = async ({
             {tipList.map((tip) => (
                 <div className={styles.tipContainer} key={tip.id}>
                     <Tip tip={tip} />
-                    <Reaction tipReaction={tip.tipReaction} userId={tip.userId} />
+                    <Reaction
+                        tipReaction={tip.tipReaction}
+                        userId={tip.userId}
+                    />
                 </div>
             ))}
         </div>

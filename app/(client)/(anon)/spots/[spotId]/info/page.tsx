@@ -85,14 +85,18 @@ const InfoPage = async ({ params }: { params: { spotId: string } }) => {
                         1인 평균 비용과 평균 대기 시간은 평균 값으로
                         계산되었으며 실제와 다를 수 있습니다.
                     </li>
-                    <li>
-                        티켓 가격은 {spotData.ticketDetail[0].updatedAt}{" "}
-                        기준입니다.
-                    </li>
-                    <li>
-                        영업 시간은 {spotData.timeDetail[0].updatedAt}{" "}
-                        기준입니다.
-                    </li>
+                    {spotData.ticketDetail[0] && (
+                        <li>
+                            티켓 가격은 {spotData.ticketDetail[0].updatedAt}{" "}
+                            기준입니다.
+                        </li>
+                    )}
+                    {spotData.timeDetail[0] && (
+                        <li>
+                            영업 시간은 {spotData.timeDetail[0].updatedAt}{" "}
+                            기준입니다.
+                        </li>
+                    )}
                 </ul>
             </div>
         </div>
