@@ -19,10 +19,10 @@ export default class SignupUsecase {
     await this.repository.createUser({
       ...user,
       id: "",
-      is_admin: false,
-      kakao_id: 0,
-      created_at: new Date(),
-      updated_at: new Date(),
+      isAdmin: false,
+      kakaoId: 0,
+      createdAt: new Date(),
+      updatedAt: new Date(),
     });
   }
 }
