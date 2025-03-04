@@ -7,13 +7,20 @@ import Emotion from "./Emotion";
 import styles from "./reaction.module.scss";
 import { TipReactionDto } from "@/application/usecases/spot/dto/TipReactionDto";
 
-const Reaction = ({ tipReaction }: { tipReaction: TipReactionDto[] }) => {
+const Reaction = ({
+    tipReaction,
+    userId, // 팁 작성한 유저 아이디
+}: {
+    tipReaction: TipReactionDto[];
+    userId: string;
+}) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [showMessage, setShowMessage] = useState(false);
+
     const modalRef = useRef<HTMLDivElement | null>(null);
 
-    const userId = "bf56f7ec-252c-4e27-80c2-460946715e32";
-
-    console.log(tipReaction);
+    // 접속중인 유저 아이디
+    const accessUserId = "bf56f7ec-252c-4e27-80c2-460946715e32";
 
     const handleButtonClick = () => {
         setIsModalOpen(!isModalOpen);
@@ -29,7 +36,6 @@ const Reaction = ({ tipReaction }: { tipReaction: TipReactionDto[] }) => {
     };
 
     const handleReactionClick = async (type: number) => {
-        console.log("Clicked emoji type:", type);
         const button = document.getElementById(`reaction-button-${type}`);
         if (button) {
             button.classList.add(styles.shake);
@@ -37,6 +43,14 @@ const Reaction = ({ tipReaction }: { tipReaction: TipReactionDto[] }) => {
                 button.classList.remove(styles.shake);
                 setIsModalOpen(false);
             }, 1000);
+        }
+
+        if (userId === accessUserId) {
+            setShowMessage(true);
+            setTimeout(() => {
+                setShowMessage(false);
+            }, 1000);
+            return;
         }
 
         if (
@@ -131,6 +145,11 @@ const Reaction = ({ tipReaction }: { tipReaction: TipReactionDto[] }) => {
                             <p>{reactions[type].name}</p>
                         </button>
                     ))}
+                    {showMessage && (
+                        <div className={styles.reactionMessage}>
+                            자신의 반응은 남길 수 없습니다.
+                        </div>
+                    )}
                 </div>
             )}
 

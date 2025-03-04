@@ -6,9 +6,7 @@ export default class CreateReactionUsecase {
 
     async execute(reaction: CreateReactionDto): Promise<void> {
         await this.reactionRepository.createReaction({
-            tipId: reaction.tipId,
-            userId: reaction.userId,
-            type: reaction.type,
+            ...reaction,
             createdAt: new Date(),
             updatedAt: new Date(),
         });

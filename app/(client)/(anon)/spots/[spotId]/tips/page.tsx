@@ -23,6 +23,7 @@ const TipsPage = async ({
         return <p>데이터를 불러오는 중 오류가 발생했습니다.</p>;
     }
 
+
     return (
         <div className={styles.tipsContainer}>
             <h2 className={styles.srOnly}>{tipList[0].spotName} 꿀팁</h2>
@@ -56,7 +57,7 @@ const TipsPage = async ({
             {tipList.map((tip) => (
                 <div className={styles.tipContainer} key={tip.id}>
                     <Tip tip={tip} />
-                    <Reaction tipReaction={tip.tipReaction} />
+                    <Reaction tipReaction={tip.tipReaction} userId={tip.userId} />
                 </div>
             ))}
         </div>

@@ -48,6 +48,7 @@ export class GetSpotTipUsecase {
                 );
                 return {
                     id: tip.id,
+                    userId: user.id,
                     userName: user.nickname,
                     spotName: spot.name,
                     profileImage: user.img,
