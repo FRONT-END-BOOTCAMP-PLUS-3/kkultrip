@@ -8,6 +8,8 @@ import { PgTicketRepository } from "@/infrastructure/repositories/PgTicketReposi
 import { promises as fs } from "fs";
 import path from "path";
 import { CreateSpotDto } from "@/application/usecases/admin/spot/dto/CreateSpotDto";
+import { TimeRepository } from "@/domain/repositories/TimeRepository";
+import { PgTimeRepository } from "@/infrastructure/repositories/PgTimeRepository";
 
 export async function GET() {
   try {
@@ -34,9 +36,11 @@ export async function POST(req: Request) {
 
     const spotRepository: SpotRepository = new PgSpotRepository();
     const ticketRepository: TicketRepository = new PgTicketRepository();
+    const timeRepository: TimeRepository = new PgTimeRepository();
     const createSpotUseCase = new CreateSpotUseCase(
       spotRepository,
-      ticketRepository
+      ticketRepository,
+      timeRepository
     );
 
     if (file) {
@@ -60,9 +64,9 @@ export async function POST(req: Request) {
       body.img = `/images/spots/${fileName}${fileExt}`;
     }
 
-    const { spot, tickets } = await createSpotUseCase.execute(body);
+    const { spot, tickets, times } = await createSpotUseCase.execute(body);
 
-    return NextResponse.json({ spot, tickets }, { status: 201 });
+    return NextResponse.json({ spot, tickets, times }, { status: 201 });
   } catch (error) {
     console.error("Spot 생성 오류:", error);
     return NextResponse.json(

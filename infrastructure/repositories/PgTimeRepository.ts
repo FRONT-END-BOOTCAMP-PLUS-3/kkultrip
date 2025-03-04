@@ -1,5 +1,5 @@
-import TimeRepository from "@/domain/repositories/TimeRepository";
-import { PrismaClient } from "@prisma/client";
+import { TimeRepository } from "@/domain/repositories/TimeRepository";
+import { PrismaClient, Time } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
@@ -28,5 +28,18 @@ export class PgTimeRepository implements TimeRepository {
 
     // 영업시간 반환 (예: "09:00 ~ 18:00")
     return `${timeInfo.open} ~ ${timeInfo.close}`;
+  }
+
+  async createTime(time: Time): Promise<Time> {
+    return await prisma.time.create({
+      data: {
+        spotId: time.spotId,
+        open: time.open,
+        close: time.close,
+        day: time.day,
+        all_hours: time.all_hours,
+        closeDay: time.all_hours,
+      },
+    });
   }
 }

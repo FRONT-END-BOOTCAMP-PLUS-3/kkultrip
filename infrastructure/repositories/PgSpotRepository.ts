@@ -16,10 +16,17 @@ export class PgSpotRepository implements SpotRepository {
   async createSpot(spot: Spot): Promise<Spot> {
     return await prisma.spot.create({
       data: {
-        ...spot,
-        info: spot.info || "",
-        avgPrice: spot.avgPrice ?? 0,
-        avgWaitingTime: spot.avgWaitingTime ?? 0,
+        name: spot.name,
+        address: spot.address,
+        lon: spot.lon,
+        lat: spot.lat,
+        phone: spot.phone,
+        info: spot.info,
+        category: spot.category,
+        link: spot.link ?? null,
+        img: spot.img,
+        avgPrice: 0,
+        avgWaitingTime: 0,
       },
     });
   }
