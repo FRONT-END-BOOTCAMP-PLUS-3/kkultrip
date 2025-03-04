@@ -29,6 +29,7 @@ const DocentsPage = async ({ params }: { params: { spotId: string } }) => {
                         title={docent.title}
                         description={docent.description}
                         audioPath={docent.audioPath}
+                        docentId={docent.id}
                     />
                 ))}
             </div>
