@@ -16,6 +16,8 @@ const BottomSheet = ({ spots }: { spots: GetSpotsDTO[] }) => {
   const [translateY, setTranslateY] = useState(0);
   const [userLat, setUserLat] = useState<number | null>(null);
   const [userLon, setUserLon] = useState<number | null>(null);
+  const [sortedSpots, setSortedSpots] = useState<GetSpotsDTO[]>(spots);
+  const [selectedSort, setSelectedSort] = useState<string>("distance");
   const sheetRef = useRef<HTMLDivElement>(null);
 
   // 내 위치 가져오기 -> 거리계산 목적
@@ -26,9 +28,37 @@ const BottomSheet = ({ spots }: { spots: GetSpotsDTO[] }) => {
         setUserLon(lon);
       })
       .catch((error) => {
-        console.error(error.message);
+        console.log(error.message);
       });
   }, []);
+
+  useEffect(() => {
+    if (spots.length === 0) {
+      setSortedSpots([]);
+      return;
+    }
+    const sortedData = [...spots];
+
+    if (selectedSort === "distance" && userLat !== null && userLon !== null) {
+      sortedData.sort(
+        (a, b) =>
+          parseDistance(calculateDistance(userLat, userLon, a.lat, a.lon)) -
+          parseDistance(calculateDistance(userLat, userLon, b.lat, b.lon))
+      );
+    } else if (selectedSort === "bookmark") {
+      sortedData.sort((a, b) => (b.bookmarkCnt || 0) - (a.bookmarkCnt || 0));
+    } else if (selectedSort === "tip") {
+      sortedData.sort((a, b) => (b.tipCnt || 0) - (a.tipCnt || 0));
+    } else if (selectedSort === "price") {
+      sortedData.sort((a, b) => (a.avgPrice || 0) - (b.avgPrice || 0));
+    }
+
+    setSortedSpots(sortedData);
+  }, [selectedSort, spots, userLat, userLon]);
+
+  const handleSortChange = (sortType: string) => {
+    setSelectedSort(sortType);
+  };
 
   const handleTouchStart = (e: React.TouchEvent) => {
     setStartY(e.touches[0].clientY);
@@ -71,7 +101,21 @@ const BottomSheet = ({ spots }: { spots: GetSpotsDTO[] }) => {
         </div>
       ) : (
         <div className={styles.list}>
-          {spots.map((spot) => (
+          <div className={styles.sortContainer}>
+            <select
+              className={styles.sortSelect}
+              value={selectedSort}
+              onChange={(e) => handleSortChange(e.target.value)}
+            >
+              {SORT_OPTIONS.map((option) => (
+                <option key={option.id} value={option.id}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {sortedSpots.map((spot) => (
             <div key={spot.id} className={styles.spotItem}>
               <div className={styles.info}>
                 <div className={styles.top}>
@@ -153,3 +197,15 @@ const calculateDistance = (
     ? `${(distanceM / 1000).toFixed(1)}km`
     : `${distanceM}m`;
 };
+const parseDistance = (distanceStr: string): number => {
+  if (distanceStr.includes("km")) {
+    return parseFloat(distanceStr) * 1000; // km를 m로 변환
+  }
+  return parseInt(distanceStr, 10); // "329m" 같은 경우 숫자로 변환
+};
+const SORT_OPTIONS = [
+  { id: "distance", label: "거리순" },
+  { id: "bookmark", label: "북마크순" },
+  { id: "tips", label: "꿀팁순" },
+  { id: "price", label: "비용순" },
+];

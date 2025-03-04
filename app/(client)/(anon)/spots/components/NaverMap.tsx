@@ -142,7 +142,9 @@ const NaverMap = ({
       });
   }, [isMapLoaded]);
 
-  return <div id="map" style={{ height: "90vh", width: "100%" }} />;
+  return (
+    <div id="map" style={{ height: "calc(100vh - 5rem)", width: "100%" }} />
+  );
 };
 
 export default NaverMap;

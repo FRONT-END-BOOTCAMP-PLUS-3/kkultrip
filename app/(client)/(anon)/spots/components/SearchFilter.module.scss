@@ -156,13 +156,13 @@
   }
   .updateLocationBtn {
     position: absolute;
-    right: 1.875rem;
-    bottom: -35rem;
+    right: 0.625rem;
+    bottom: -5vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 3.125rem;
-    height: 3.125rem;
+    width: 2.5rem;
+    height: 2.5rem;
     color: var(--blue-flower-color);
     background: white;
     border-radius: 50%;
@@ -171,7 +171,7 @@
     cursor: pointer;
     z-index: 150;
     .icon {
-      font-size: 1.875rem;
+      font-size: 1.6rem;
     }
   }
 }

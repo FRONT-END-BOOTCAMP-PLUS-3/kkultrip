@@ -42,6 +42,27 @@
     padding: 0 1.25rem;
     overflow-y: auto;
     max-height: calc(69vh - 2.5rem);
+    .sortContainer {
+      display: flex;
+      justify-content: flex-end;
+      padding: 0.5rem;
+      margin-bottom: 0.5rem;
+      .sortSelect {
+        padding: 0.4rem 0.75rem;
+        font-size: 0.875rem;
+        border: 1px solid var(--grey-border-color);
+        border-radius: 0.5rem;
+        background: white;
+        color: black;
+        cursor: pointer;
+        transition: 0.2s;
+
+        &:focus {
+          outline: none;
+          border-color: var(--primary-color);
+        }
+      }
+    }
 
     .spotItem {
       width: 100%;
