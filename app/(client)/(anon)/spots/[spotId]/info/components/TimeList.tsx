@@ -4,7 +4,7 @@ import { TimeDetailDto } from "@/application/usecases/spot/dto/TimeDetailDto";
 import { useState } from "react";
 import { FaRegClock } from "react-icons/fa";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
-import styles from "./timeList.module.scss";
+import styles from "./TimeList.module.scss";
 
 const TimeList = ({
     times,

@@ -1,6 +1,6 @@
 "use client";
 
-import styles from "./emotion.module.scss";
+import styles from "./Emotion.module.scss";
 import Image from "next/image";
 
 const Emotion = ({ count, type }: { count: number; type: number }) => {

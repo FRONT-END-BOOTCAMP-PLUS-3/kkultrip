@@ -3,7 +3,7 @@
 import { useAudioStore } from "@/store/useAudioStore";
 import { useEffect, useRef, useState } from "react";
 import { PiSpeakerSimpleNoneBold } from "react-icons/pi";
-import styles from "./docentContent.module.scss";
+import styles from "./DocentContent.module.scss";
 import SpeakerAnimation from "./SpeakerAnimation";
 
 const DocentContent = ({

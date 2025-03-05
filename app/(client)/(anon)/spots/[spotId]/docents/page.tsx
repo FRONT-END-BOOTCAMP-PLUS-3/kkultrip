@@ -1,4 +1,4 @@
-import styles from "./docentsPage.module.scss";
+import styles from "./DocentsPage.module.scss";
 import DocentContent from "./components/DocentContent";
 import { SpotDocentDto } from "@/application/usecases/spot/dto/SpotDocentDto";
 

@@ -6,7 +6,7 @@ import { IoLocation } from "react-icons/io5";
 import CopyButton from "./components/CopyButton";
 import TicketList from "./components/TicketList";
 import TimeList from "./components/TimeList";
-import styles from "./infoPage.module.scss";
+import styles from "./InfoPage.module.scss";
 
 const InfoPage = async (props: { params: Promise<{ spotId: string }> }) => {
     const params = await props.params;

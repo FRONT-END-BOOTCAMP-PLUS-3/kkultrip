@@ -2,7 +2,7 @@
 
 import { FaBookmark, FaRegBookmark } from "react-icons/fa";
 import { useState } from "react";
-import styles from "./bookMark.module.scss";
+import styles from "./BookMark.module.scss";
 
 const BookMark = ({
     isBookMarked,

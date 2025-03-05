@@ -1,6 +1,6 @@
 "use client";
 
-import styles from "./copyButton.module.scss";
+import styles from "./CopyButton.module.scss";
 import { useState } from "react";
 
 const CopyButton = ({ text }: { text: string }) => {

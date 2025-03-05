@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Reaction from "./components/Reaction";
 import Tip from "./components/Tip";
-import styles from "./tipsPage.module.scss";
+import styles from "./TipsPage.module.scss";
 import { SpotTipDto } from "@/application/usecases/spot/dto/SpotTipDto";
 
 const TipsPage = async (props: {

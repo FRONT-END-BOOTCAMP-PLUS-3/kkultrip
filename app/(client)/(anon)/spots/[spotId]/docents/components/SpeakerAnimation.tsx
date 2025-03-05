@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { PiSpeakerSimpleNoneFill } from "react-icons/pi";
 
-import styles from "./speakerAnimation.module.scss";
+import styles from "./SpeakerAnimation.module.scss";
 
 export default function SpeakerAnimation({
     setIsPlaying,

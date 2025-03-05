@@ -4,7 +4,7 @@ import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { PiSirenFill } from "react-icons/pi";
 import Emotion from "./Emotion";
-import styles from "./reaction.module.scss";
+import styles from "./Reaction.module.scss";
 import { TipReactionDto } from "@/application/usecases/spot/dto/TipReactionDto";
 
 const Reaction = ({

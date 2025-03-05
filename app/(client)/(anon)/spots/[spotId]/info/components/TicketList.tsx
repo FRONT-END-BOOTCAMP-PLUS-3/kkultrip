@@ -5,7 +5,7 @@ import { FaWonSign } from "react-icons/fa6";
 import { IoIosArrowDown } from "react-icons/io";
 import { IoIosArrowUp } from "react-icons/io";
 import { TicketDetailDto } from "@/application/usecases/spot/dto/TicketDetailDto";
-import styles from "./ticketList.module.scss";
+import styles from "./TicketList.module.scss";
 
 const TicketList = ({
     tickets,

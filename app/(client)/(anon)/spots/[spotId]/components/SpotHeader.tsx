@@ -1,6 +1,6 @@
 import SpotNav from "./SpotNav";
 import Image from "next/image";
-import styles from "./spotHeader.module.scss";
+import styles from "./SpotHeader.module.scss";
 import { SpotHeaderDto } from "@/application/usecases/spot/dto/SpotHeaderDto";
 import BookMark from "./BookMark";
 

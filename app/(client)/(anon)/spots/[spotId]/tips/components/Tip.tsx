@@ -1,5 +1,5 @@
 import Image from "next/image";
-import styles from "./tip.module.scss";
+import styles from "./Tip.module.scss";
 import { SpotTipDto } from "@/application/usecases/spot/dto/SpotTipDto";
 
 const Tip = ({ tip }: { tip: SpotTipDto }) => {

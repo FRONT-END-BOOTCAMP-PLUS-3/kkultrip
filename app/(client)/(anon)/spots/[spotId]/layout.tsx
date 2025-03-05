@@ -1,5 +1,5 @@
 import SpotHeader from "./components/SpotHeader";
-import styles from "./spotsLayout.module.scss";
+import styles from "./SpotsLayout.module.scss";
 
 const SpotDetailLayout = async (
     props: {
