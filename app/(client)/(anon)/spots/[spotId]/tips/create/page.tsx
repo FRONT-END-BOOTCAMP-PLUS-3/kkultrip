@@ -1,5 +1,7 @@
+import TipForm from "../components/TipForm";
+
 const CreatePage = () => {
-  return <div>꿀팁CreatePage</div>;
+  return <TipForm isEdit={false} />;
 };
 
 export default CreatePage;

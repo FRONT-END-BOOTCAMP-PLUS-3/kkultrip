@@ -1,0 +1,126 @@
+.tipForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  h2 {
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+
+  .imageUpload {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    .imagePreview {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .imageContainer {
+      position: relative;
+      width: 60px;
+      height: 60px;
+
+      img {
+        border-radius: 0.5rem;
+        object-fit: cover;
+      }
+
+      .removeImage {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        background: red;
+        color: white;
+        border: none;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        font-size: 12px;
+        cursor: pointer;
+      }
+    }
+
+    .uploadBtn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 60px;
+      height: 60px;
+      border: 1px dashed gray;
+      border-radius: 0.5rem;
+      cursor: pointer;
+
+      .plus {
+        font-size: 2rem;
+        color: gray;
+      }
+
+      input {
+        display: none;
+      }
+    }
+  }
+
+  .formRow {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    input {
+      flex: 1;
+      padding: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 0.5rem;
+    }
+
+    span {
+      font-size: 0.9rem;
+    }
+
+    .checkbox {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+  }
+
+  .textareaContainer {
+    position: relative;
+
+    textarea {
+      width: 100%;
+      height: 100px;
+      padding: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 0.5rem;
+      resize: none;
+    }
+
+    .charCount {
+      position: absolute;
+      bottom: 5px;
+      right: 10px;
+      font-size: 0.8rem;
+      color: gray;
+    }
+  }
+
+  .submitBtn {
+    background: yellow;
+    border: none;
+    padding: 0.75rem;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 0.5rem;
+    cursor: pointer;
+
+    &:disabled {
+      background: lightgray;
+      cursor: not-allowed;
+    }
+  }
+}
