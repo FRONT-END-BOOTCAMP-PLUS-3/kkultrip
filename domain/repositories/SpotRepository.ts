@@ -7,7 +7,7 @@ export default interface SpotRepository {
 
   createSpot(spot: Omit<Spot, "id" | "createdAt" | "updatedAt">): Promise<Spot>;
 
-  updateSpot(id: number, data: Partial<Spot>): Promise<Spot | null>; // 특정 Spot 수정
+  updateSpot(id: number, spot: Partial<Spot>): Promise<Spot | null>; // 특정 Spot 수정
 
   deleteSpot(id: number): Promise<Spot | null>; // 특정 Spot 삭제
 
@@ -17,4 +17,6 @@ export default interface SpotRepository {
     category?: string,
     maxPrice?: number
   ): Promise<Spot[]>;
+
+  getSpotByName(name: string): Promise<Spot | null>;
 }

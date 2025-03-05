@@ -1,3 +1,5 @@
+import { UpdateTicketDto } from "../ticket/dto/UpdateTicketDto";
+
 export interface UpdateSpotDto {
   name?: string;
   address?: string;
@@ -10,4 +12,6 @@ export interface UpdateSpotDto {
   img?: string;
   avgPrice?: number;
   avgWaitingTime?: number;
+  tickets?: UpdateTicketDto[];
+  updatedAt?: Date;
 }

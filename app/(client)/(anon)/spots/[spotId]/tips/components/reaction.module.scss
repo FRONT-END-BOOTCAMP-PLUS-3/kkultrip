@@ -6,6 +6,7 @@
   .reactionButton {
     background: none;
     border: 0.0625rem solid var(--primary-color);
+    border: 0.0625rem solid var(--primary-color);
     border-radius: 0.4rem;
     padding: 0.25rem;
     display: flex;
@@ -78,6 +79,10 @@
   100% {
     transform: translateX(0);
   }
+}
+
+.shake {
+  animation: shake 1s;
 }
 
 .shake {

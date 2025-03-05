@@ -1,124 +1,150 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
+import { GetSpotsDTO } from "@/application/usecases/spot/dto/GetSpotsDto";
+import { useRouter } from "next/navigation";
+import { getMyLocation } from "@/utils/getMyLocation";
 
-declare global {
-  interface Window {
-    naver: typeof naver;
-  }
-}
+const categoryMap: { [key: string]: string } = {
+  액티비티: "activity",
+  랜드마크: "landmark",
+  카페: "cafe",
+  음식점: "restaurant",
+};
 
-interface Spot {
-  id: number;
-  name: string;
-  category: string;
-  avgPrice?: number;
+const NaverMap = ({
+  lat,
+  lon,
+  spots,
+}: {
   lat: number;
-  lng: number;
-  bookmark?: number;
-  phone?: number;
-  time?: string;
-  img: string;
-}
+  lon: number;
+  spots: GetSpotsDTO[];
+}) => {
+  const router = useRouter();
 
-const NaverMap = ({ initialSpots }: { initialSpots: Spot[] }) => {
-  const [mapLoaded, setMapLoaded] = useState(false);
-  const [map, setMap] = useState<naver.maps.Map | null>(null);
-  const [spots, setSpots] = useState<Spot[]>(initialSpots);
-  const [loading, setLoading] = useState(true);
+  const mapRef = useRef<naver.maps.Map | null>(null);
+  const markersRef = useRef<naver.maps.Marker[]>([]);
+  const myLocationMarkerRef = useRef<naver.maps.Marker | null>(null);
+  const [isMapLoaded, setIsMapLoaded] = useState(false);
 
-  const apiKey = process.env.NEXT_PUBLIC_NAVER_MAP_CLIENT_ID;
-
+  // 네이버 지도 API 로드
   useEffect(() => {
-    if (!apiKey) {
-      console.error("네이버 지도 API Client ID가 설정되지 않았습니다.");
-      return;
+    if (!window.naver) {
+      const script = document.createElement("script");
+      script.src = `https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=${process.env.NEXT_PUBLIC_NAVER_MAP_CLIENT_ID}`;
+      script.async = true;
+      script.onload = () => setIsMapLoaded(true);
+      script.onerror = () => console.error("네이버 지도 API 로드 실패");
+      document.head.appendChild(script);
+    } else {
+      setIsMapLoaded(true);
     }
-
-    if (document.getElementById("naver-map-script")) {
-      setMapLoaded(true);
-      return;
-    }
-
-    const script = document.createElement("script");
-    script.id = "naver-map-script";
-    script.src = `https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=${apiKey}`;
-    script.async = true;
-    script.onload = () => setMapLoaded(true);
-    document.head.appendChild(script);
   }, []);
 
+  // 지도 초기화 (검색 시 이동)
   useEffect(() => {
-    if (!mapLoaded || !window.naver) return;
+    if (!isMapLoaded || !window.naver) return;
 
-    const mapInstance = new window.naver.maps.Map("map", {
-      center: new window.naver.maps.LatLng(37.5665, 126.978),
-      zoom: 15,
+    if (!mapRef.current) {
+      mapRef.current = new window.naver.maps.Map("map", {
+        center: new window.naver.maps.LatLng(lat, lon),
+        zoom: 15,
+      });
+    } else {
+      mapRef.current.setCenter(new window.naver.maps.LatLng(lat, lon));
+      mapRef.current.setZoom(17);
+    }
+  }, [isMapLoaded, lat, lon]);
+
+  const getCategoryName = useCallback((category: string) => {
+    return categoryMap[category] || category;
+  }, []);
+
+  // 명소 마커 추가
+  useEffect(() => {
+    if (!mapRef.current) return;
+
+    // 기존 명소 마커 삭제
+    markersRef.current.forEach((marker) => marker.setMap(null));
+    markersRef.current = [];
+
+    // 새로운 명소 마커 추가
+    spots.forEach((spot) => {
+      const marker = new window.naver.maps.Marker({
+        position: new window.naver.maps.LatLng(spot.lat, spot.lon),
+        map: mapRef.current!,
+        icon: {
+          url: `/images/flower-${getCategoryName(spot.category)}.svg`,
+          size: new window.naver.maps.Size(40, 40),
+        },
+      });
+
+      window.naver.maps.Event.addListener(marker, "click", () => {
+        router.push(`/spots/${spot.id}/info`);
+      });
+
+      // 마커 아래 명소 이름 표시
+      const label = new window.naver.maps.Marker({
+        position: new window.naver.maps.LatLng(spot.lat, spot.lon),
+        map: mapRef.current!,
+        icon: {
+          content: `
+          <div style="
+         position: absolute;
+          transform: translate(-50%, -120%);
+          background: white;
+          border-radius: 0.3125rem;
+          padding: 0.3125rem 0.625rem;
+          font-size: 0.8125rem;
+          font-weight: bold;
+          text-align: center;
+          white-space: nowrap;
+          box-shadow: 0rem 0rem 0.1875rem rgba(0,0,0,0.2);
+        ">
+            ${spot.name}
+          </div>`,
+          anchor: new window.naver.maps.Point(0, -30), // 마커 아래 위치 조정
+        },
+      });
+      markersRef.current.push(marker);
+      markersRef.current.push(label);
     });
+  }, [spots, isMapLoaded, getCategoryName, router]);
 
-    setMap(mapInstance);
-  }, [mapLoaded]);
-
+  // 내 위치 마커 추가 (내 위치가 있을 때만)
   useEffect(() => {
-    if (!map) return;
+    if (!mapRef.current) return;
 
-    // 내 위치 가져오기 (비동기)
-    navigator.geolocation.getCurrentPosition(
-      async (position) => {
-        const userLocation = new window.naver.maps.LatLng(
-          position.coords.latitude,
-          position.coords.longitude
-        );
+    // 기존 내 위치 마커 삭제
+    if (myLocationMarkerRef.current) {
+      myLocationMarkerRef.current.setMap(null);
+    }
 
-        // 내 위치 마커 추가 (bee 아이콘)
-        new window.naver.maps.Marker({
-          position: userLocation,
-          map: map,
+    // 내 위치 가져오기
+    getMyLocation()
+      .then(({ lat: userLat, lon: userLon }) => {
+        myLocationMarkerRef.current = new window.naver.maps.Marker({
+          position: new window.naver.maps.LatLng(userLat, userLon),
+          map: mapRef.current!,
           icon: {
-            url: "/images/bee_50x58.png",
-            size: new window.naver.maps.Size(50, 58),
+            url: "/images/bee_50x50.svg",
+            size: new window.naver.maps.Size(50, 50),
           },
         });
 
         // 지도 중심을 내 위치로 이동
-        map.setCenter(userLocation);
-
-        // 내 위치를 기반으로 새로운 명소 리스트 불러오기
-        setLoading(true);
-        const res = await fetch(
-          `/api/spots?lat=${position.coords.latitude}&lng=${position.coords.longitude}`
+        mapRef.current?.setCenter(
+          new window.naver.maps.LatLng(userLat, userLon)
         );
-        const data = await res.json();
-        setSpots(data);
-        setLoading(false);
-      },
-      (error) => {
-        console.error("위치 정보를 가져올 수 없습니다:", error);
-        setLoading(false);
-      }
-    );
-  }, [map]);
-
-  useEffect(() => {
-    if (!map) return;
-
-    // 지도에 명소 마커 추가
-    spots.forEach((spot) => {
-      new window.naver.maps.Marker({
-        position: new window.naver.maps.LatLng(spot.lat, spot.lng),
-        map: map,
-        icon: {
-          url: `/images/flower-${spot.category}.svg`,
-          size: new window.naver.maps.Size(50, 50),
-        },
+      })
+      .catch((error) => {
+        console.log("내 위치를 가져올 수 없습니다:", error.message);
       });
-    });
-  }, [map, spots]);
+  }, [isMapLoaded]);
 
   return (
-    <div id="map" style={{ height: "90vh", width: "100%" }}>
-      {loading && <p> 내 위치 기반 명소 불러오는 중...</p>}
-    </div>
+    <div id="map" style={{ height: "calc(100vh - 5rem)", width: "100%" }} />
   );
 };
 

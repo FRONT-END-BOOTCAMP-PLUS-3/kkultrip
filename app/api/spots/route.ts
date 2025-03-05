@@ -1,42 +1,96 @@
-import { DfGetSpotsUsecase } from "@/application/usecases/spot/DfGetSpotsUsecase";
+import { GetSpotsDTO } from "@/application/usecases/spot/dto/GetSpotsDto";
+import { GetSpotByNameUsecase } from "@/application/usecases/spot/GetSpotByNameUsecase";
+import { GetSpotsUsecase } from "@/application/usecases/spot/GetSpotsUsecase";
 import { PgBookmarkRepository } from "@/infrastructure/repositories/PgBookmarkRepository";
 import { PgSpotRepository } from "@/infrastructure/repositories/PgSpotRepository";
 import { PgTimeRepository } from "@/infrastructure/repositories/PgTimeRepository";
 import { PgTipRepository } from "@/infrastructure/repositories/PgTipRepository";
 import { NextResponse } from "next/server";
 
-export async function GET(req: Request) {
+export const GET = async (req: Request) => {
   const { searchParams } = new URL(req.url);
+
+  const query = searchParams.get("query")?.trim() || undefined;
   const lat = searchParams.get("lat")
     ? parseFloat(searchParams.get("lat")!)
     : undefined;
-  const lng = searchParams.get("lng")
-    ? parseFloat(searchParams.get("lng")!)
+  const lon = searchParams.get("lon")
+    ? parseFloat(searchParams.get("lon")!)
     : undefined;
   const category = searchParams.get("category") || undefined;
   const maxPrice = searchParams.get("price")
     ? parseInt(searchParams.get("price")!, 10)
     : undefined;
 
-  if (!lat || !lng) {
-    return NextResponse.json(
-      { error: "위치 정보가 필요합니다." },
-      { status: 400 }
-    );
-  }
-
   const spotRepo = new PgSpotRepository();
   const bookmarkRepo = new PgBookmarkRepository();
   const tipRepo = new PgTipRepository();
   const timeRepo = new PgTimeRepository();
 
-  const usecase = new DfGetSpotsUsecase(
+  const getSpotsUsecase = new GetSpotsUsecase(
     spotRepo,
     bookmarkRepo,
     tipRepo,
     timeRepo
   );
-  const spots = await usecase.execute(lat, lng, category, maxPrice);
+  const getSpotByNameUsecase = new GetSpotByNameUsecase(
+    spotRepo,
+    bookmarkRepo,
+    tipRepo,
+    timeRepo
+  );
 
-  return NextResponse.json(spots);
-}
+  try {
+    let spots: GetSpotsDTO[] = [];
+
+    if (query) {
+      // 특정 단어를 포함하는 명소 검색
+      const spotByName: GetSpotsDTO[] = await getSpotByNameUsecase.execute(
+        query
+      );
+
+      // 지역 좌표 검색 (네이버 Geocode API 사용)
+      const apiBaseUrl =
+        process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3000";
+      const geoResponse = await fetch(
+        `${apiBaseUrl}/api/geocode?query=${query}`
+      );
+      const geoData = await geoResponse.json();
+
+      let locationBasedSpots: GetSpotsDTO[] = [];
+      if (geoData.lat && geoData.lon) {
+        locationBasedSpots = await getSpotsUsecase.execute(
+          geoData.lat,
+          geoData.lon,
+          category,
+          maxPrice
+        );
+      }
+
+      // 중복 명소 제거 (ID 기준)
+      const mergedSpots = [...spotByName, ...locationBasedSpots].reduce(
+        (acc, spot) => {
+          if (!acc.some((s) => s.id === spot.id)) acc.push(spot);
+          return acc;
+        },
+        [] as GetSpotsDTO[]
+      );
+
+      return NextResponse.json({
+        spots: mergedSpots,
+        lat: geoData.lat || (spotByName.length > 0 ? spotByName[0].lat : null),
+        lon: geoData.lon || (spotByName.length > 0 ? spotByName[0].lon : null),
+      });
+    }
+
+    // 위치 기반 검색 (lat, lon이 있을 때)
+    if (lat !== undefined && lon !== undefined) {
+      spots = await getSpotsUsecase.execute(lat, lon, category, maxPrice);
+    }
+
+    return NextResponse.json({ spots, lat, lon });
+  } catch (error) {
+    console.log("❌ API 오류 발생:", error);
+    return NextResponse.json({ error: "서버 오류 발생" }, { status: 500 });
+  }
+};
