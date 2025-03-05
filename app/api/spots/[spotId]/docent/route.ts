@@ -6,10 +6,8 @@ import { SpotDocentDto } from "@/application/usecases/spot/dto/SpotDocentDto";
 import SpotRepository from "@/domain/repositories/SpotRepository";
 import { PgSpotRepository } from "@/infrastructure/repositories/PgSpotRepository";
 
-export async function GET(
-    req: Request,
-    { params }: { params: { spotId: string } }
-) {
+export async function GET(req: Request, props: { params: Promise<{ spotId: string }> }) {
+    const params = await props.params;
     const { spotId } = params;
     const docentRepository: DocentRepository = new PgDocentRepository();
     const spotRepository: SpotRepository = new PgSpotRepository();

@@ -3,10 +3,8 @@ import ReactionRepository from "@/domain/repositories/ReactionRepository";
 import PgReactionRepository from "@/infrastructure/repositories/PgReactionRepository";
 import { NextResponse } from "next/server";
 
-export async function POST(
-    request: Request,
-    { params }: { params: { id: string } }
-) {
+export async function POST(request: Request, props: { params: Promise<{ id: string }> }) {
+    const params = await props.params;
     const body = await request.json();
     const { id } = params;
 

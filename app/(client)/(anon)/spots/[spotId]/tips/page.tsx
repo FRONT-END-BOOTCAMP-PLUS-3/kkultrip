@@ -4,13 +4,14 @@ import Tip from "./components/Tip";
 import styles from "./tipsPage.module.scss";
 import { SpotTipDto } from "@/application/usecases/spot/dto/SpotTipDto";
 
-const TipsPage = async ({
-    params,
-    searchParams,
-}: {
-    params: { spotId: string };
-    searchParams: { sort?: string };
-}) => {
+const TipsPage = async (
+    props: {
+        params: Promise<{ spotId: string }>;
+        searchParams: Promise<{ sort?: string }>;
+    }
+) => {
+    const searchParams = await props.searchParams;
+    const params = await props.params;
     const { spotId } = params;
     const sort = searchParams.sort || "latest";
 

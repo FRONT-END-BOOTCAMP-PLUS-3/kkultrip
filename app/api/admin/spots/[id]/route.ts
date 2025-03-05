@@ -4,10 +4,8 @@ import { UpdateSpotUseCase } from "@/application/usecases/admin/spot/UpdateSpotU
 import { PgSpotRepository } from "@/infrastructure/repositories/PgSpotRepository";
 import { DeleteSpotUseCase } from "@/application/usecases/admin/spot/DeleteSpotUseCase";
 
-export async function GET(
-  req: Request,
-  { params }: { params: { id: string } } // ✅ id 파라미터 추출
-) {
+export async function GET(req: Request, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   try {
     const id = params.id; // ✅ 동적 경로에서 id 가져오기
 

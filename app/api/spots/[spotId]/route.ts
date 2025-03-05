@@ -8,10 +8,8 @@ import { PgBookmarkRepository } from "@/infrastructure/repositories/PgBookmarkRe
 import { PgSpotRepository } from "@/infrastructure/repositories/PgSpotRepository";
 import { NextResponse } from "next/server";
 
-export async function GET(
-    req: Request,
-    { params }: { params: { spotId: string } }
-) {
+export async function GET(req: Request, props: { params: Promise<{ spotId: string }> }) {
+    const params = await props.params;
     const { spotId } = params;
     const url = new URL(req.url);
     const accessUserId = url.searchParams.get("accessUserId");
@@ -32,10 +30,8 @@ export async function GET(
     return NextResponse.json(spotHeader);
 }
 
-export async function POST(
-    req: Request,
-    { params }: { params: { spotId: string } }
-) {
+export async function POST(req: Request, props: { params: Promise<{ spotId: string }> }) {
+    const params = await props.params;
     const { spotId } = params;
     const { accessUserId } = await req.json();
 
@@ -45,10 +41,8 @@ export async function POST(
     return NextResponse.json({ message: "Bookmark created" }, { status: 200 });
 }
 
-export async function DELETE(
-    req: Request,
-    { params }: { params: { spotId: string } }
-) {
+export async function DELETE(req: Request, props: { params: Promise<{ spotId: string }> }) {
+    const params = await props.params;
     const { spotId } = params;
     const { accessUserId } = await req.json();
 

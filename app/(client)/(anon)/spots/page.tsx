@@ -67,11 +67,12 @@ const getFilteredSpots = async (
   return spots;
 };
 
-const Spots = async ({
-  searchParams,
-}: {
-  searchParams: { query?: string; category?: string; price?: string };
-}) => {
+const Spots = async (
+  props: {
+    searchParams: Promise<{ query?: string; category?: string; price?: string }>;
+  }
+) => {
+  const searchParams = await props.searchParams;
   const query = searchParams.query || undefined;
   const category = searchParams.category || undefined;
   const maxPrice = searchParams.price

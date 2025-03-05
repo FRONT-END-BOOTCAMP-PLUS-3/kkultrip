@@ -2,7 +2,8 @@ import styles from "./docentsPage.module.scss";
 import DocentContent from "./components/DocentContent";
 import { SpotDocentDto } from "@/application/usecases/spot/dto/SpotDocentDto";
 
-const DocentsPage = async ({ params }: { params: { spotId: string } }) => {
+const DocentsPage = async (props: { params: Promise<{ spotId: string }> }) => {
+    const params = await props.params;
     const data = await fetch(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/spots/${params.spotId}/docent`
     );

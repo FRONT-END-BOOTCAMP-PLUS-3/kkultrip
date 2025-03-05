@@ -10,10 +10,8 @@ import { PgTipRepository } from "@/infrastructure/repositories/PgTipRepository";
 import PgUserRepository from "@/infrastructure/repositories/PgUserRepository";
 import { NextResponse } from "next/server";
 
-export async function GET(
-    request: Request,
-    { params }: { params: { spotId: string } }
-) {
+export async function GET(request: Request, props: { params: Promise<{ spotId: string }> }) {
+    const params = await props.params;
     const { spotId } = params;
     const tipRepository: TipRepository = new PgTipRepository();
     const userRepository: UserRepository = new PgUserRepository();

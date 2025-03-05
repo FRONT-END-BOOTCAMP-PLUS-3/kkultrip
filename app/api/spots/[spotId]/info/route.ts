@@ -8,10 +8,8 @@ import PgTicketRepository from "@/infrastructure/repositories/PgTicketRepository
 import { PgTimeRepository } from "@/infrastructure/repositories/PgTimeRepository";
 import { NextResponse } from "next/server";
 
-export async function GET(
-    req: Request,
-    { params }: { params: { spotId: string } }
-) {
+export async function GET(req: Request, props: { params: Promise<{ spotId: string }> }) {
+    const params = await props.params;
     const { spotId } = params;
     const spotRepository: SpotRepository = new PgSpotRepository();
     const ticketRepository: TicketRepository = new PgTicketRepository();
