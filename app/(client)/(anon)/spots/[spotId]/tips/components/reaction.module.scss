@@ -55,16 +55,6 @@
   .emotionWrapper {
     display: flex;
     margin-left: auto;
-
-  }
-
-  .sirenButton {
-    background: none;
-    border: 0;
-    align-self: center;
-    width: 1rem;
-    height: 1rem;
-    margin-left: 1rem;
   }
 }
 
@@ -92,18 +82,4 @@
 
 .shake {
   animation: shake 1s;
-}
-
-.errorMessage {
-  position: fixed;
-  top: 95%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: rgba(235, 40, 40, 0.8);
-  color: black;
-  padding: 0.625rem 1.25rem;
-  border-radius: 1.25rem;
-  z-index: 1000;
-  width: 70%;
-  text-align: center;
 }

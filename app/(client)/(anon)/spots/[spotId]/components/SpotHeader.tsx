@@ -19,7 +19,7 @@ const SpotHeader = async ({ spotId }: { spotId: string }) => {
         <>
             <Image
                 src={spotHeaderData.img}
-                alt="불국사"
+                alt={spotHeaderData.name}
                 width={100}
                 height={100}
                 className={styles.spotImage}
