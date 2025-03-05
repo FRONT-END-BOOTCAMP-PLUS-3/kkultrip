@@ -3,14 +3,43 @@ import { Tip } from "@prisma/client";
 import TipRepository from "@/domain/repositories/TipRepository";
 
 export class PgTipRepository implements TipRepository {
-  async createTip(spotId: number): Promise<void> {
-    await prisma.tip.create({
+  async createTip(
+    spotId: number,
+    userId: string,
+    description: string,
+    price: number,
+    waitingTime: number
+  ) {
+    return await prisma.tip.create({
       data: {
         spotId,
-        userId: "1",
-        description: "example",
-        price: 0,
+        userId,
+        description,
+        price,
+        waitingTime,
         reportCnt: 0,
+      },
+    });
+  }
+  async getTipById(tipId: number) {
+    return await prisma.tip.findUnique({
+      where: { id: tipId },
+    });
+  }
+
+  async updateTip(
+    tipId: number,
+    description: string,
+    price: number,
+    waitingTime: number
+  ) {
+    return await prisma.tip.update({
+      where: { id: tipId },
+      data: {
+        description,
+        price,
+        waitingTime,
+        updatedAt: new Date(),
       },
     });
   }

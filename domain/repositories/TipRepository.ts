@@ -1,8 +1,20 @@
 import { Tip } from "@prisma/client";
 
 export default interface TipRepository {
-  countBySpot(spotId: number): Promise<number>;
-  createTip(spotId: number): Promise<void>;
-
+  createTip(
+    spotId: number,
+    userId: string,
+    description: string,
+    price: number,
+    waitingTime: number
+  ): Promise<Tip>;
+  getTipById(tipId: number): Promise<Tip | null>;
+  updateTip(
+    tipId: number,
+    description: string,
+    price: number,
+    waitingTime: number
+  ): Promise<Tip | null>;
   getAllTips(): Promise<Tip[]>;
+  countBySpot(spotId: number): Promise<number>;
 }
