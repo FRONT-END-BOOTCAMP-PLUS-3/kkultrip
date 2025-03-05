@@ -42,4 +42,26 @@ export class PgTimeRepository implements TimeRepository {
       },
     });
   }
+
+  async updateTime(id: number, time: Time): Promise<Time> {
+    return await prisma.time.update({
+      where: { id },
+      data: time,
+    });
+  }
+
+  async getTimesBySpotId(spotId: number): Promise<Time[]> {
+    const days = ["월", "화", "수", "목", "금", "토", "일"];
+    return await prisma.time.findMany({
+      where: {
+        spotId,
+        day: {
+          in: days,
+        },
+      },
+      orderBy: {
+        day: "asc",
+      },
+    });
+  }
 }

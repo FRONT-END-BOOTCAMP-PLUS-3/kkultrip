@@ -4,15 +4,17 @@ import { UpdateSpotUseCase } from "@/application/usecases/admin/spot/UpdateSpotU
 import { PgSpotRepository } from "@/infrastructure/repositories/PgSpotRepository";
 import { DeleteSpotUseCase } from "@/application/usecases/admin/spot/DeleteSpotUseCase";
 import { PgTicketRepository } from "@/infrastructure/repositories/PgTicketRepository";
+import { PgTimeRepository } from "@/infrastructure/repositories/PgTimeRepository";
 import { SpotRepository } from "@/domain/repositories/SpotRepository";
 import { TicketRepository } from "@/domain/repositories/TicketRepository";
+import { TimeRepository } from "@/domain/repositories/TimeRepository";
 
 export async function GET(
   req: Request,
-  { params }: { params: { id: string } } // ✅ id 파라미터 추출
+  { params }: { params: { id: string } }
 ) {
   try {
-    const id = params.id; // ✅ 동적 경로에서 id 가져오기
+    const id = params.id;
 
     if (!id) {
       return NextResponse.json({ error: "ID is required" }, { status: 400 });
@@ -20,9 +22,11 @@ export async function GET(
 
     const spotRepository: SpotRepository = new PgSpotRepository();
     const ticketRepository: TicketRepository = new PgTicketRepository();
+    const timeRepository: TimeRepository = new PgTimeRepository();
     const getSpotUseCase = new GetSpotByIdUseCase(
       spotRepository,
-      ticketRepository
+      ticketRepository,
+      timeRepository
     );
     const spot = await getSpotUseCase.execute(Number(id));
 
@@ -42,7 +46,7 @@ export async function GET(
 
 export async function PATCH(req: Request) {
   try {
-    const { id, tickets, ...updateData } = await req.json();
+    const { id, tickets, times, ...updateData } = await req.json();
 
     if (!id) {
       return NextResponse.json(
@@ -53,14 +57,17 @@ export async function PATCH(req: Request) {
 
     const spotRepository: SpotRepository = new PgSpotRepository();
     const ticketRepository: TicketRepository = new PgTicketRepository();
+    const timeRepository: TimeRepository = new PgTimeRepository();
     const updateSpotUseCase = new UpdateSpotUseCase(
       spotRepository,
-      ticketRepository
+      ticketRepository,
+      timeRepository
     );
 
     const updatedSpot = await updateSpotUseCase.execute(id, {
       ...updateData,
       tickets,
+      times,
     });
 
     return NextResponse.json(updatedSpot, { status: 200 });

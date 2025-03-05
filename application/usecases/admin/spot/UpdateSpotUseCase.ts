@@ -1,18 +1,20 @@
-import { Spot, Ticket } from "@prisma/client";
+import { Spot, Ticket, Time } from "@prisma/client";
 import { SpotRepository } from "@/domain/repositories/SpotRepository";
 import { TicketRepository } from "@/domain/repositories/TicketRepository";
+import { TimeRepository } from "@/domain/repositories/TimeRepository";
 import { UpdateSpotDto } from "./dto/UpdateSpotDto";
 
 export class UpdateSpotUseCase {
   constructor(
     private spotRepository: SpotRepository,
-    private ticketRepository: TicketRepository
+    private ticketRepository: TicketRepository,
+    private timeRepository: TimeRepository
   ) {}
 
   async execute(
     id: number,
     dto: UpdateSpotDto
-  ): Promise<{ spot: Spot | null; tickets: Ticket[] }> {
+  ): Promise<{ spot: Spot | null; tickets: Ticket[]; times: Time[] }> {
     const existingSpot = await this.spotRepository.getSpotById(id);
     if (!existingSpot) {
       throw new Error("Spot not found");
@@ -76,6 +78,37 @@ export class UpdateSpotUseCase {
       }
     }
 
-    return { spot: updatedSpotResult, tickets: updatedTickets };
+    // 타임 업데이트 로직
+    const updatedTimes: Time[] = [];
+    if (dto.times && dto.times.length > 0) {
+      for (const timeDto of dto.times) {
+        if (timeDto.id) {
+          // 기존 타임 업데이트
+          const existingTime = await this.timeRepository.updateTime(
+            timeDto.id,
+            {
+              spotId: existingSpot.id,
+              id: timeDto.id,
+              day: timeDto.day,
+              open: timeDto.open ?? null,
+              close: timeDto.close ?? null,
+              all_hours: timeDto.all_hours,
+              closeDay: timeDto.closeDay,
+              createdAt: existingSpot.createdAt,
+              updatedAt: new Date(),
+            }
+          );
+          if (existingTime) {
+            updatedTimes.push(existingTime);
+          }
+        }
+      }
+    }
+
+    return {
+      spot: updatedSpotResult,
+      tickets: updatedTickets,
+      times: updatedTimes,
+    };
   }
 }

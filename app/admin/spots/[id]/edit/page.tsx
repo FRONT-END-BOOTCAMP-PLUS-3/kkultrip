@@ -6,11 +6,20 @@ import styles from "./SpotsEditPage.module.scss";
 import Image from "next/image";
 import { UpdateSpotDto } from "@/application/usecases/admin/spot/dto/UpdateSpotDto";
 import { UpdateTicketDto } from "@/application/usecases/admin/spot/ticket/dto/UpdateTicketDto";
+import { Time } from "@prisma/client";
 
 const SpotsEditPage = () => {
   const router = useRouter();
   const params = useParams();
   const spotId = params.id as string | undefined;
+
+  const days = ["월", "화", "수", "목", "금", "토", "일"];
+  const defaultOperatingHours = Object.fromEntries(
+    days.map((day) => [
+      day,
+      { id: 0, type: "시간 지정", start: "09:00", end: "18:00" },
+    ])
+  );
 
   const [formData, setFormData] = useState<{
     name: string;
@@ -25,6 +34,7 @@ const SpotsEditPage = () => {
     link: string;
     img: string;
     tickets: { id: number | null; name: string; price: string | number }[];
+    operatingHours: typeof defaultOperatingHours;
   }>({
     name: "",
     address: "",
@@ -38,6 +48,7 @@ const SpotsEditPage = () => {
     link: "",
     img: "",
     tickets: [{ id: null, name: "", price: "" }],
+    operatingHours: defaultOperatingHours,
   });
 
   const [initialTickets, setInitialTickets] = useState<
@@ -46,6 +57,7 @@ const SpotsEditPage = () => {
   const phoneRef1 = useRef<HTMLInputElement>(null);
   const phoneRef2 = useRef<HTMLInputElement>(null);
   const phoneRef3 = useRef<HTMLInputElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (spotId) {
@@ -58,11 +70,33 @@ const SpotsEditPage = () => {
             "",
             "",
           ];
+
+          const operatingHours = days.reduce((acc, day) => {
+            const timeInfo = data.times?.find((time: Time) => time.day === day);
+            if (timeInfo) {
+              acc[day] = {
+                id: timeInfo.id,
+                type: timeInfo.all_hours
+                  ? "24시간"
+                  : timeInfo.closeDay
+                  ? "휴무"
+                  : "시간 지정",
+                start: timeInfo.open || "09:00",
+                end: timeInfo.close || "18:00",
+              };
+            } else {
+              acc[day] = { ...defaultOperatingHours[day], id: 0 };
+            }
+            return acc;
+          }, {} as typeof defaultOperatingHours);
+
           setFormData({
             ...data,
             phone1,
             phone2,
             phone3,
+            operatingHours,
+            tickets: data.tickets || [],
           });
           setInitialTickets(data.tickets || []);
         });
@@ -103,6 +137,45 @@ const SpotsEditPage = () => {
     }
   };
 
+  const handleOperatingHoursChange = (
+    day: keyof typeof defaultOperatingHours,
+    field: "type" | "start" | "end",
+    value: string
+  ) => {
+    setFormData((prev) => {
+      const updatedHours = { ...prev.operatingHours };
+
+      if (field === "type") {
+        if (value === "24시간") {
+          updatedHours[day] = {
+            ...updatedHours[day],
+            type: value,
+            start: "",
+            end: "",
+          };
+        } else if (value === "휴무") {
+          updatedHours[day] = {
+            ...updatedHours[day],
+            type: value,
+            start: "",
+            end: "",
+          };
+        } else {
+          updatedHours[day] = {
+            ...updatedHours[day],
+            type: value,
+            start: "09:00",
+            end: "18:00",
+          };
+        }
+      } else {
+        updatedHours[day] = { ...updatedHours[day], [field]: value };
+      }
+
+      return { ...prev, operatingHours: updatedHours };
+    });
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const phone = `${formData.phone1}-${formData.phone2}-${formData.phone3}`;
@@ -115,9 +188,18 @@ const SpotsEditPage = () => {
       ...formData,
       phone,
       tickets,
+      times: Object.entries(formData.operatingHours).map(([day, hours]) => ({
+        id: hours.id || 0,
+        spotId: Number(spotId),
+        day,
+        open: hours.start || null,
+        close: hours.end || null,
+        all_hours: hours.type === "24시간",
+        closeDay: hours.type === "휴무",
+      })),
       updatedAt: new Date(),
     };
-
+    console.log(data);
     const res = await fetch(`/api/admin/spots/${spotId}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
@@ -276,6 +358,7 @@ const SpotsEditPage = () => {
           accept="image/*"
           onChange={handleFileChange}
           className={styles.inputField}
+          ref={fileInputRef}
         />
         {/* 이미지 미리보기 */}
         {formData.img && (
@@ -292,31 +375,32 @@ const SpotsEditPage = () => {
 
         <div className={styles.ticketsContainer}>
           <h2>티켓 정보</h2>
-          {formData.tickets.map((ticket, index) => (
-            <div key={index} className={styles.ticketRow}>
-              <input
-                type="text"
-                placeholder="티켓 이름"
-                value={ticket.name}
-                className={styles.inputField}
-                onChange={(e) =>
-                  handleTicketChange(index, "name", e.target.value)
-                }
-              />
-              <input
-                type="number"
-                placeholder="티켓 가격"
-                value={ticket.price}
-                className={styles.inputField}
-                onChange={(e) =>
-                  handleTicketChange(index, "price", e.target.value)
-                }
-              />
-              <button type="button" onClick={() => removeTicket(index)}>
-                삭제
-              </button>
-            </div>
-          ))}
+          {formData.tickets &&
+            formData.tickets.map((ticket, index) => (
+              <div key={index} className={styles.ticketRow}>
+                <input
+                  type="text"
+                  placeholder="티켓 이름"
+                  value={ticket.name}
+                  className={styles.inputField}
+                  onChange={(e) =>
+                    handleTicketChange(index, "name", e.target.value)
+                  }
+                />
+                <input
+                  type="number"
+                  placeholder="티켓 가격"
+                  value={ticket.price}
+                  className={styles.inputField}
+                  onChange={(e) =>
+                    handleTicketChange(index, "price", e.target.value)
+                  }
+                />
+                <button type="button" onClick={() => removeTicket(index)}>
+                  삭제
+                </button>
+              </div>
+            ))}
           <button
             type="button"
             onClick={addTicket}
@@ -324,6 +408,67 @@ const SpotsEditPage = () => {
           >
             티켓 추가
           </button>
+        </div>
+
+        <div className={styles.operatingHoursContainer}>
+          <h2>운영 시간</h2>
+          {Object.entries(formData.operatingHours).map(([day, data]) => {
+            const isDisabled = data.type !== "시간 지정";
+
+            return (
+              <div key={day} className={styles.operatingHoursRow}>
+                <span className={styles.dayLabel}>{day}</span>
+
+                <input
+                  type="time"
+                  value={data.start}
+                  disabled={isDisabled}
+                  onChange={(e) =>
+                    handleOperatingHoursChange(
+                      day as keyof typeof defaultOperatingHours,
+                      "start",
+                      e.target.value
+                    )
+                  }
+                  className={`${styles.timeInput} ${
+                    isDisabled ? styles.disabledInput : ""
+                  }`}
+                />
+
+                <input
+                  type="time"
+                  value={data.end}
+                  disabled={isDisabled}
+                  onChange={(e) =>
+                    handleOperatingHoursChange(
+                      day as keyof typeof defaultOperatingHours,
+                      "end",
+                      e.target.value
+                    )
+                  }
+                  className={`${styles.timeInput} ${
+                    isDisabled ? styles.disabledInput : ""
+                  }`}
+                />
+
+                <select
+                  value={data.type}
+                  onChange={(e) =>
+                    handleOperatingHoursChange(
+                      day as keyof typeof defaultOperatingHours,
+                      "type",
+                      e.target.value
+                    )
+                  }
+                  className={styles.selectField}
+                >
+                  <option value="시간 지정">시간 지정</option>
+                  <option value="24시간">24시간</option>
+                  <option value="휴무">휴무</option>
+                </select>
+              </div>
+            );
+          })}
         </div>
 
         <button type="submit" className={styles.submitButton}>
