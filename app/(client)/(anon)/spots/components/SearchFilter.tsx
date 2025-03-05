@@ -4,7 +4,7 @@ import styles from "./SearchFilter.module.scss";
 import { useSearchParams, useRouter } from "next/navigation";
 import { IoSearch, IoClose } from "react-icons/io5";
 import { TbCurrentLocation } from "react-icons/tb";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { getGeocode } from "@/utils/getGeocode";
 import { getMyLocation } from "@/utils/getMyLocation";
@@ -19,6 +19,7 @@ const SearchFilter = () => {
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
   const [isRecentVisible, setIsRecentVisible] = useState(false);
   const [tempQuery, setTempQuery] = useState(query);
+  const inputRef = useRef<HTMLInputElement>(null); // 검색 input 요소 참조 추가
 
   // 로컬 스토리지에서 최근 검색어 불러오기
   useEffect(() => {
@@ -117,7 +118,10 @@ const SearchFilter = () => {
     e.preventDefault();
     saveRecentSearch(tempQuery);
     updateFilters({ query: tempQuery });
-    setIsRecentVisible(false);
+
+    if (inputRef.current) {
+      inputRef.current.blur(); // 검색 후 input 포커스 해제
+    }
   };
 
   // 최근 검색어 클릭 시 검색어 적용
@@ -163,6 +167,7 @@ const SearchFilter = () => {
       {/* 검색창 */}
       <form onSubmit={handleSearch} className={styles.searchBox}>
         <input
+          ref={inputRef}
           type="text"
           placeholder="명소, 주소 검색"
           value={tempQuery}

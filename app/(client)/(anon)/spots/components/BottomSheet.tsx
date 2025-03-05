@@ -145,7 +145,7 @@ const BottomSheet = ({ spots }: { spots: GetSpotsDTO[] }) => {
                 {/* 가격 & 북마크 & 꿀팁 수 */}
                 <div className={styles.details}>
                   <span className={styles.bookmark}>
-                    <FaRegBookmark className={styles.icon} />{" "}
+                    <FaRegBookmark className={styles.icon} />
                     {spot.bookmarkCnt || 0}
                   </span>
                   <span className={styles.tips}>
