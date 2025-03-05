@@ -7,10 +7,8 @@ import { PgTicketRepository } from "@/infrastructure/repositories/PgTicketReposi
 import { SpotRepository } from "@/domain/repositories/SpotRepository";
 import { TicketRepository } from "@/domain/repositories/TicketRepository";
 
-export async function GET(
-  req: Request,
-  { params }: { params: { id: string } } // ✅ id 파라미터 추출
-) {
+export async function GET(req: Request, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   try {
     const id = params.id; // ✅ 동적 경로에서 id 가져오기
 

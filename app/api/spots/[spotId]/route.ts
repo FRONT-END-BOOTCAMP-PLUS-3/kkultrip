@@ -4,10 +4,8 @@ import { SpotRepository } from "@/domain/repositories/SpotRepository";
 import { PgSpotRepository } from "@/infrastructure/repositories/PgSpotRepository";
 import { NextResponse } from "next/server";
 
-export async function GET(
-    req: Request,
-    { params }: { params: { spotId: string } }
-) {
+export async function GET(req: Request, props: { params: Promise<{ spotId: string }> }) {
+    const params = await props.params;
     const { spotId } = params;
     const spotRepository: SpotRepository = new PgSpotRepository();
     const spotHeaderUsecase = new GetSpotHeaderUsecase(spotRepository);

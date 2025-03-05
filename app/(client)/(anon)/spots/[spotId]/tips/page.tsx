@@ -3,7 +3,8 @@ import Tip from "./components/Tip";
 import styles from "./tipsPage.module.scss";
 import Reaction from "./components/Reaction";
 
-const TipsPage = async ({ params }: { params: { spotId: string } }) => {
+const TipsPage = async (props: { params: Promise<{ spotId: string }> }) => {
+    const params = await props.params;
     const { spotId } = params;
 
     return (

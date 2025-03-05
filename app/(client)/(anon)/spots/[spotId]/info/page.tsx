@@ -8,7 +8,8 @@ import { IoMdPerson } from "react-icons/io";
 import { FaClock } from "react-icons/fa";
 import styles from "./infoPage.module.scss";
 
-const InfoPage = async ({ params }: { params: { spotId: string } }) => {
+const InfoPage = async (props: { params: Promise<{ spotId: string }> }) => {
+    const params = await props.params;
     const data = await fetch(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/spots/${params.spotId}/info`
     );
