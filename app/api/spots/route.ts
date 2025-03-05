@@ -90,7 +90,7 @@ export const GET = async (req: Request) => {
 
     return NextResponse.json({ spots, lat, lon });
   } catch (error) {
-    console.error("❌ API 오류 발생:", error);
+    console.log("❌ API 오류 발생:", error);
     return NextResponse.json({ error: "서버 오류 발생" }, { status: 500 });
   }
 };

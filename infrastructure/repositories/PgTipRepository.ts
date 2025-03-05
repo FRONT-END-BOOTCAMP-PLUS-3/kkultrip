@@ -20,6 +20,13 @@ export class PgTipRepository implements TipRepository {
   }
 
   async countBySpot(spotId: number): Promise<number> {
-    return prisma.tip.count({ where: { spotId } });
+    try {
+      return await prisma.tip.count({ where: { spotId } });
+    } catch (error) {
+      console.log("❌ countBySpot 오류 발생:", error);
+      throw new Error("해당 명소의 꿀팁 개수를 가져오는 데 실패했습니다.");
+    } finally {
+      await prisma.$disconnect();
+    }
   }
 }
