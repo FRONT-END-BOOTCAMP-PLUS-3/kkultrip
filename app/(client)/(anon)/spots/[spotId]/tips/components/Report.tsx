@@ -4,6 +4,7 @@ import styles from "./Report.module.scss";
 
 const Report = ({ tipId, userId }: { tipId: number; userId: string }) => {
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
+    const accessUserId = "bf56f7ec-252c-4e27-80c2-460946715e32";
     const handleReportClick = async () => {
         const confirm = window.confirm("신고하시겠습니까?");
         if (!confirm) return;
@@ -30,6 +31,13 @@ const Report = ({ tipId, userId }: { tipId: number; userId: string }) => {
             setTimeout(() => {
                 setErrorMessage(null);
             }, 1000);
+        }
+        if (userId === accessUserId) {
+            setErrorMessage("자신의 팁은 신고할 수 없습니다.");
+            setTimeout(() => {
+                setErrorMessage(null);
+            }, 1000);
+            return;
         }
     };
     return (
