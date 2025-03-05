@@ -18,10 +18,26 @@ const Reaction = ({
 }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [showMessage, setShowMessage] = useState(false);
+    // const [reaction, setReaction] = useState<ReactionDto | null>(null);P
     const modalRef = useRef<HTMLDivElement | null>(null);
 
     // 접속중인 유저 아이디
     const accessUserId = "bf56f7ec-252c-4e27-80c2-460946715e32";
+
+    const userReactionType = tipReaction.find(
+        (reaction) => reaction.userId === accessUserId
+    )?.type;
+
+    // useEffect(() => {
+    //     const fetchReaction = async () => {
+    //         const data = await fetch(
+    //             `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/tips/${tipId}/reactions?accessUserId=${accessUserId}`
+    //         );
+    //         const reaction = await data.json();
+    //         setReaction(reaction);
+    //     };
+    //     fetchReaction();
+    // }, [tipId]);
 
     const handleButtonClick = () => {
         setIsModalOpen(!isModalOpen);
@@ -126,6 +142,12 @@ const Reaction = ({
                             className={styles.emotionOption}
                             id={`reaction-button-${type}`}
                             onClick={() => handleReactionClick(type)}
+                            style={{
+                                color:
+                                    userReactionType === type
+                                        ? "yellow"
+                                        : "inherit",
+                            }}
                         >
                             <Image
                                 src={reactions[type].image}

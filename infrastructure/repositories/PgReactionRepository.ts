@@ -12,6 +12,16 @@ export default class PgReactionRepository implements ReactionRepository {
         }
     }
 
+    async getReaction(tipId: number, userId: string): Promise<Reaction | null> {
+        try {
+            return prisma.reaction.findUnique({
+                where: { tipId_userId: { tipId, userId } },
+            });
+        } catch (error) {
+            console.error("Error fetching reaction:", error);
+            throw error;
+        }
+    }
     async createReaction(reaction: Reaction): Promise<void> {
         try {
             await prisma.reaction.create({
