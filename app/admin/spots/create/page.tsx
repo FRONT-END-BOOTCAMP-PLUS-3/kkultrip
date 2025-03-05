@@ -128,7 +128,16 @@ const SpotsCreatePage = () => {
         name: ticket.name,
         price: Number(ticket.price),
       })),
+      times: Object.entries(formData.operatingHours).map(([day, hours]) => ({
+        spotId: 0, // 생성 후 백엔드에서 채워질 값
+        day,
+        open: hours.start || null,
+        close: hours.end || null,
+        all_hours: hours.type === "24시간",
+        closeDay: hours.type === "휴무",
+      })),
     };
+    console.log(data);
 
     const formDataToSend = new FormData();
     formDataToSend.append("body", JSON.stringify(data));

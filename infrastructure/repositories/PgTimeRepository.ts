@@ -38,7 +38,7 @@ export class PgTimeRepository implements TimeRepository {
         close: time.close,
         day: time.day,
         all_hours: time.all_hours,
-        closeDay: time.all_hours,
+        closeDay: time.closeDay,
       },
     });
   }

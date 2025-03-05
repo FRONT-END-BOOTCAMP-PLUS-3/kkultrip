@@ -14,5 +14,5 @@ export interface CreateSpotDto {
   avgPrice?: number | null;
   avgWaitingTime?: number | null;
   tickets?: CreateTicketDto[];
-  times?: CreateTimeDto;
+  times?: CreateTimeDto[];
 }
