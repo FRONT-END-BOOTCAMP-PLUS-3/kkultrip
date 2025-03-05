@@ -35,10 +35,19 @@ export class PgTipRepository implements TipRepository {
             reactionCount: tip.reactions.length,
         }));
 
-        return tipsWithReactionCount.sort((a, b) => Number(b[orderBy]) - Number(a[orderBy]));
+        return tipsWithReactionCount.sort(
+            (a, b) => Number(b[orderBy]) - Number(a[orderBy])
+        );
     }
 
     async countBySpot(spotId: number): Promise<number> {
         return prisma.tip.count({ where: { spotId } });
+    }
+
+    async updateTipReportCount(tipId: number): Promise<void> {
+        await prisma.tip.update({
+            where: { id: tipId },
+            data: { reportCnt: { increment: 1 } },
+        });
     }
 }

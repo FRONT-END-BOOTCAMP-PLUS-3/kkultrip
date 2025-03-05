@@ -8,4 +8,5 @@ export default interface TipRepository {
         orderBy: "createdAt" | "reactionCount"
     ): Promise<Tip[]>;
     getAllTips(): Promise<Tip[]>;
+    updateTipReportCount(tipId: number): Promise<void>;
 }

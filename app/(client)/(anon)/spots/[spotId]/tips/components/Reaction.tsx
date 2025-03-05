@@ -18,7 +18,7 @@ const Reaction = ({
 }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [showMessage, setShowMessage] = useState(false);
-
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const modalRef = useRef<HTMLDivElement | null>(null);
 
     // 접속중인 유저 아이디
@@ -83,6 +83,7 @@ const Reaction = ({
     const handleReportClick = async () => {
         const confirm = window.confirm("신고하시겠습니까?");
         if (!confirm) return;
+
         const response = await fetch(
             `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/tips/${tipId}/report`,
             {
@@ -96,9 +97,15 @@ const Reaction = ({
             }
         );
         if (response.ok) {
-            console.log("신고 성공");
+            setErrorMessage("신고가 완료되었습니다.");
+            setTimeout(() => {
+                setErrorMessage(null);
+            }, 1000);
         } else {
-            console.error("신고 실패", Error);
+            setErrorMessage("이미 신고한 팁입니다.");
+            setTimeout(() => {
+                setErrorMessage(null);
+            }, 1000);
         }
     };
     useEffect(() => {
@@ -127,6 +134,9 @@ const Reaction = ({
 
     return (
         <div className={styles.reactionContainer}>
+            {errorMessage && (
+                <div className={styles.errorMessage}>{errorMessage}</div>
+            )}
             <button
                 className={styles.reactionButton}
                 onClick={handleButtonClick}
@@ -180,14 +190,11 @@ const Reaction = ({
                     <Emotion count={typeCounts[4]} type={4} />
                 )}
             </div>
-            <button
-                className={styles.sirenButton}
-                onClick={handleReportClick}
-            >
+            <button className={styles.sirenButton} onClick={handleReportClick}>
                 <PiSirenFill color="var(--red-1-color)" size={16} />
             </button>
         </div>
     );
 };
 
-export default Reaction;  
+export default Reaction;
