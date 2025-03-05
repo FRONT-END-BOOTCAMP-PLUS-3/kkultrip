@@ -80,6 +80,27 @@ const Reaction = ({
         }
     };
 
+    const handleReportClick = async () => {
+        const confirm = window.confirm("신고하시겠습니까?");
+        if (!confirm) return;
+        const response = await fetch(
+            `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/tips/${tipId}/report`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    userId,
+                }),
+            }
+        );
+        if (response.ok) {
+            console.log("신고 성공");
+        } else {
+            console.error("신고 실패", Error);
+        }
+    };
     useEffect(() => {
         if (isModalOpen) {
             document.addEventListener("mousedown", handleClickOutside);
@@ -159,11 +180,14 @@ const Reaction = ({
                     <Emotion count={typeCounts[4]} type={4} />
                 )}
             </div>
-            <button className={styles.sirenButton}>
+            <button
+                className={styles.sirenButton}
+                onClick={handleReportClick}
+            >
                 <PiSirenFill color="var(--red-1-color)" size={16} />
             </button>
         </div>
     );
 };
 
-export default Reaction;
+export default Reaction;  
