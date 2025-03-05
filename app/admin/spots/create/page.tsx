@@ -106,6 +106,27 @@ const SpotsCreatePage = () => {
       setFormData((prev) => ({ ...prev, img: imageUrl }));
     }
   };
+  const handleConvertAddress = async () => {
+    try {
+      const res = await fetch(
+        `/api/geocode?query=${encodeURIComponent(formData.address)}`
+      );
+      const data = await res.json();
+      if (data.lat && data.lon) {
+        setFormData((prev) => ({
+          ...prev,
+          lat: data.lat,
+          lon: data.lon,
+        }));
+        alert("주소가 성공적으로 변환되었습니다.");
+      } else {
+        alert("주소 변환에 실패했습니다.");
+      }
+    } catch (error) {
+      console.error("주소 변환 오류:", error);
+      alert("주소 변환 중 오류가 발생했습니다.");
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -226,15 +247,24 @@ const SpotsCreatePage = () => {
           className={styles.inputField}
           required
         />
-        <input
-          type="text"
-          name="address"
-          placeholder="주소"
-          value={formData.address}
-          onChange={handleChange}
-          className={styles.inputField}
-          required
-        />
+        <div className={styles.addressContainer}>
+          <input
+            type="text"
+            name="address"
+            placeholder="주소"
+            value={formData.address}
+            onChange={handleChange}
+            className={styles.inputField}
+            required
+          />
+          <button
+            type="button"
+            onClick={handleConvertAddress}
+            className={styles.convertButton}
+          >
+            변환
+          </button>
+        </div>
         <input
           type="number"
           name="lon"

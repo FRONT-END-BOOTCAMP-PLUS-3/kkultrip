@@ -17,6 +17,33 @@
     display: flex;
     flex-direction: column;
 
+    .addressContainer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .convertButton {
+        text-align: center;
+        width: 10%;
+        margin-bottom: 1rem;
+        background: var(--primary-color);
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 0.25rem;
+        cursor: pointer;
+      }
+
+      .inputField {
+        width: 80%;
+        margin-bottom: 1rem;
+        padding: 0.8rem;
+        border: 0.0625rem solid var(--grey-1-color);
+        border-radius: 0.25rem;
+        font-size: 1rem;
+      }
+    }
+
     .inputField {
       margin-bottom: 1rem;
       padding: 0.8rem;
