@@ -81,8 +81,8 @@ const SpotsEditPage = () => {
                   : timeInfo.closeDay
                   ? "휴무"
                   : "시간 지정",
-                start: timeInfo.open || "09:00",
-                end: timeInfo.close || "18:00",
+                start: timeInfo.open || "",
+                end: timeInfo.close || "",
               };
             } else {
               acc[day] = { ...defaultOperatingHours[day], id: 0 };
