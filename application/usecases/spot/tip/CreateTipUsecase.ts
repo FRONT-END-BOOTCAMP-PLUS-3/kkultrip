@@ -1,5 +1,5 @@
-import { ImageRepository } from "@/domain/repositories/ImageRepository";
 import TipRepository from "@/domain/repositories/TipRepository";
+import { ImageRepository } from "@/domain/repositories/ImageRepository";
 
 export class CreateTipUsecase {
   constructor(
@@ -13,10 +13,10 @@ export class CreateTipUsecase {
     description: string,
     price: number,
     waitingTime: number,
-    imagePaths: string[]
+    images: File[]
   ) {
-    // 1️. 팁 등록
-    const tip = await this.tipRepo.createTip(
+    // 1️. 팁 정보 저장
+    const newTip = await this.tipRepo.createTip(
       spotId,
       userId,
       description,
@@ -24,11 +24,9 @@ export class CreateTipUsecase {
       waitingTime
     );
 
-    // 2️. 이미지 업로드
-    if (imagePaths.length > 0) {
-      await this.imageRepo.uploadImages(tip.id, imagePaths);
-    }
+    // 2️. 이미지 저장 및 경로 반환
+    const imagePaths = await this.imageRepo.CreateImages(newTip.id, images);
 
-    return tip;
+    return { ...newTip, images: imagePaths };
   }
 }

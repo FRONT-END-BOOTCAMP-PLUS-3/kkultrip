@@ -12,9 +12,9 @@ export class UpdateTipUsecase {
     description: string,
     price: number,
     waitingTime: number,
-    newImagePaths: string[]
+    imageFiles: File[] // 파일 자체를 받음
   ) {
-    // 1️. 팁 정보 업데이트
+    // 1. 팁 정보 업데이트
     const updatedTip = await this.tipRepo.updateTip(
       tipId,
       description,
@@ -22,10 +22,10 @@ export class UpdateTipUsecase {
       waitingTime
     );
 
-    // 2️. 기존 이미지 삭제 후 새로운 이미지 등록
+    // 2. 기존 이미지 삭제 후 새로운 이미지 등록
     await this.imageRepo.deleteImagesByTipId(tipId);
-    if (newImagePaths.length > 0) {
-      await this.imageRepo.uploadImages(tipId, newImagePaths);
+    if (imageFiles.length > 0) {
+      await this.imageRepo.CreateImages(tipId, imageFiles);
     }
 
     return updatedTip;
