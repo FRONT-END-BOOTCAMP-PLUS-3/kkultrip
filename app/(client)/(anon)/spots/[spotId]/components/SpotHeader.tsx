@@ -23,6 +23,7 @@ const SpotHeader = async ({ spotId }: { spotId: string }) => {
                 width={100}
                 height={100}
                 className={styles.spotImage}
+                priority
             />
             <div className={styles.spotContainer}>
                 <div className={styles.spotHeader}>
