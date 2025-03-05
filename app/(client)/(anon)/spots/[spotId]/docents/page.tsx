@@ -9,8 +9,6 @@ const DocentsPage = async (props: { params: Promise<{ spotId: string }> }) => {
     );
     const docentData: SpotDocentDto[] = await data.json();
 
-    console.log(docentData);
-
     if (!docentData || docentData.length === 0) {
         return (
             <div className={styles.noData}>

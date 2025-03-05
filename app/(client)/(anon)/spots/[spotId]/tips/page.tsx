@@ -4,12 +4,10 @@ import Tip from "./components/Tip";
 import styles from "./tipsPage.module.scss";
 import { SpotTipDto } from "@/application/usecases/spot/dto/SpotTipDto";
 
-const TipsPage = async (
-    props: {
-        params: Promise<{ spotId: string }>;
-        searchParams: Promise<{ sort?: string }>;
-    }
-) => {
+const TipsPage = async (props: {
+    params: Promise<{ spotId: string }>;
+    searchParams: Promise<{ sort?: string }>;
+}) => {
     const searchParams = await props.searchParams;
     const params = await props.params;
     const { spotId } = params;
@@ -19,7 +17,7 @@ const TipsPage = async (
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/spots/${spotId}/tips?sort=${sort}`
     );
     const tipList: SpotTipDto[] = await data.json();
-    console.log(tipList);
+
     if (!tipList || tipList.length === 0) {
         return (
             <div className={styles.noData}>
