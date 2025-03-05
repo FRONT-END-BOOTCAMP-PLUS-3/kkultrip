@@ -3,4 +3,5 @@ export interface SpotHeaderDto {
   name: string;
   category: string;
   img: string;
+  isBookMarked: boolean;
 }

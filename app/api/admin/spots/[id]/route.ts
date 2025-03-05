@@ -7,10 +7,13 @@ import { PgTicketRepository } from "@/infrastructure/repositories/PgTicketReposi
 import { SpotRepository } from "@/domain/repositories/SpotRepository";
 import { TicketRepository } from "@/domain/repositories/TicketRepository";
 
-export async function GET(req: Request, props: { params: Promise<{ id: string }> }) {
+export async function GET(
+  req: Request,
+  props: { params: Promise<{ id: string }> }
+) {
   const params = await props.params;
   try {
-    const id = params.id; // ✅ 동적 경로에서 id 가져오기
+    const id = params.id;
 
     if (!id) {
       return NextResponse.json({ error: "ID is required" }, { status: 400 });

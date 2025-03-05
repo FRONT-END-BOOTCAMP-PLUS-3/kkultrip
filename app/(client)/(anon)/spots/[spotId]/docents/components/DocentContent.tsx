@@ -1,13 +1,28 @@
 "use client";
 
+import { useAudioStore } from "@/store/useAudioStore";
 import { useEffect, useRef, useState } from "react";
-import { HiSpeakerWave } from "react-icons/hi2";
-import styles from "./docentContent.module.scss";
+import { PiSpeakerSimpleNoneBold } from "react-icons/pi";
+import styles from "./DocentContent.module.scss";
+import SpeakerAnimation from "./SpeakerAnimation";
 
-const DocentContent = ({ content }: { content: string }) => {
+const DocentContent = ({
+    title,
+    description,
+    audioPath,
+    docentId,
+}: {
+    title: string;
+    description: string;
+    audioPath: string;
+    docentId: number;
+}) => {
+    const { currentAudioId, setCurrentAudioId } = useAudioStore();
     const [isExpanded, setIsExpanded] = useState(false);
     const [isOverflowing, setIsOverflowing] = useState(false);
+    const [isPlaying, setIsPlaying] = useState(false);
     const contentRef = useRef<HTMLParagraphElement>(null);
+    const audioRef = useRef<HTMLAudioElement | null>(null);
 
     const handleToggleText = () => {
         setIsExpanded(!isExpanded);
@@ -21,13 +36,62 @@ const DocentContent = ({ content }: { content: string }) => {
             const maxHeight = lineHeight * 5;
             setIsOverflowing(contentRef.current.scrollHeight > maxHeight);
         }
-    }, [content]);
+    }, [description]);
+
+    useEffect(() => {
+        if (audioRef.current) {
+            audioRef.current.pause();
+        }
+        audioRef.current = new Audio(audioPath);
+
+        return () => {
+            audioRef.current?.pause();
+        };
+    }, [audioPath]);
+
+    useEffect(() => {
+        if (!audioRef.current) return;
+
+        if (isPlaying) {
+            audioRef.current.play().catch((error) => {
+                if (error.name !== "AbortError") {
+                    console.error("Audio play error:", error);
+                }
+            });
+            setCurrentAudioId(docentId);
+        } else {
+            audioRef.current.pause();
+        }
+    }, [isPlaying, docentId, setCurrentAudioId]);
+
+    useEffect(() => {
+        if (currentAudioId !== docentId && isPlaying) {
+            setIsPlaying(false);
+        }
+    }, [currentAudioId, docentId, isPlaying]);
+
+    const handlePlayClick = () => {
+        if (currentAudioId !== docentId) {
+            setCurrentAudioId(docentId);
+            setIsPlaying(true);
+        } else {
+            setIsPlaying(!isPlaying);
+        }
+    };
 
     return (
         <div className={styles.docentContainer}>
             <div className={styles.docentWrapper}>
-                <h3>불국사의 역사</h3>
-                <HiSpeakerWave size={16} color="var(--primary-color)" />
+                <h3>{title}</h3>
+                {isPlaying ? (
+                    <SpeakerAnimation setIsPlaying={setIsPlaying} />
+                ) : (
+                    <PiSpeakerSimpleNoneBold
+                        size={24}
+                        color="var(--primary-color)"
+                        onClick={handlePlayClick}
+                    />
+                )}
             </div>
             <div className={styles.contentWrapper}>
                 <p
@@ -36,7 +100,7 @@ const DocentContent = ({ content }: { content: string }) => {
                         isExpanded ? styles.expandedText : styles.clampedText
                     }
                 >
-                    {content}
+                    {description}
                 </p>
                 {isOverflowing && (
                     <button

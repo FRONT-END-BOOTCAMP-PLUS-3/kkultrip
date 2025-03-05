@@ -1,5 +1,5 @@
 import TimeRepository from "@/domain/repositories/TimeRepository";
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, Time } from "@prisma/client";
 
 const prisma = new PrismaClient();
 

@@ -1,6 +1,6 @@
 import { Spot } from "@prisma/client";
 
-export interface SpotRepository {
+export default interface SpotRepository {
   getAllSpots(): Promise<Spot[]>;
 
   getSpotById(id: number): Promise<Spot | null>; // 특정 Spot 조회

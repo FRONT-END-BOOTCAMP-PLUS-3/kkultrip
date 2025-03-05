@@ -17,4 +17,12 @@ export default interface TipRepository {
   ): Promise<Tip | null>;
   getAllTips(): Promise<Tip[]>;
   countBySpot(spotId: number): Promise<number>;
+  countBySpot(spotId: number): Promise<number>;
+  createTip(spotId: number): Promise<void>;
+  getTipsBySpotId(
+    spotId: number,
+    orderBy: "createdAt" | "reactionCount"
+  ): Promise<Tip[]>;
+  getAllTips(): Promise<Tip[]>;
+  updateTipReportCount(tipId: number): Promise<void>;
 }
