@@ -20,11 +20,11 @@ const Reaction = ({
     const [showMessage, setShowMessage] = useState(false);
     const modalRef = useRef<HTMLDivElement | null>(null);
 
-    console.log("userId", userId);
-    console.log("tipId", tipId);
-
     // 접속중인 유저 아이디
-    const accessUserId = "d9b78231-1d27-479c-9a28-903bd67433e6";
+    const accessUserId = "7379a017-90cb-40da-9635-eb7eff4d8e83";
+
+    console.log("Access User Id", accessUserId);
+    console.log("userId", userId);
 
     const userReactionType = tipReaction.find(
         (reaction) => reaction.userId === accessUserId
@@ -61,28 +61,54 @@ const Reaction = ({
             return;
         }
 
-        try {
-            const response = await fetch(
-                `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/tips/${tipId}/reactions`,
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                        userId,
-                        type,
-                    }),
-                }
-            );
+        if (userReactionType !== type) {
+            try {
+                const response = await fetch(
+                    `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/tips/${tipId}/reactions`,
+                    {
+                        method: "PUT",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                            userId: accessUserId,
+                            type,
+                        }),
+                    }
+                );
 
-            if (response.ok) {
-                console.log("반응 남기기 성공");
-            } else {
-                console.error("반응 남기기 실패", Error);
+                if (response.ok) {
+                    console.log("반응 수정 성공");
+                } else {
+                    console.error("반응 수정 실패", Error);
+                }
+            } catch (error) {
+                console.error("Error while updating reaction:", error);
             }
-        } catch (error) {
-            console.error("Error while creating reaction:", error);
+        } else {
+            try {
+                const response = await fetch(
+                    `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/tips/${tipId}/reactions`,
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                            userId: accessUserId,
+                            type,
+                        }),
+                    }
+                );
+
+                if (response.ok) {
+                    console.log("반응 남기기 성공");
+                } else {
+                    console.error("반응 남기기 실패", Error);
+                }
+            } catch (error) {
+                console.error("Error while creating reaction:", error);
+            }
         }
     };
 

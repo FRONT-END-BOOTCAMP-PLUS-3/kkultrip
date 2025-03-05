@@ -36,4 +36,23 @@ export default class PgReactionRepository implements ReactionRepository {
             throw error;
         }
     }
+
+    async updateReaction(reaction: Reaction): Promise<void> {
+        try {
+            await prisma.reaction.update({
+                where: {
+                    tipId_userId: {
+                        tipId: reaction.tipId,
+                        userId: reaction.userId,
+                    },
+                },
+                data: {
+                    type: reaction.type,
+                },
+            });
+        } catch (error) {
+            console.error("Error updating reaction:", error);
+            throw error;
+        }
+    }
 }

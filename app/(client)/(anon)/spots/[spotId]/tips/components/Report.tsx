@@ -4,7 +4,7 @@ import styles from "./Report.module.scss";
 
 const Report = ({ tipId, userId }: { tipId: number; userId: string }) => {
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
-    const accessUserId = "d9b78231-1d27-479c-9a28-903bd67433e6";
+    const accessUserId = "7379a017-90cb-40da-9635-eb7eff4d8e83";
     const handleReportClick = async () => {
         const confirm = window.confirm("신고하시겠습니까?");
         if (!confirm) return;
