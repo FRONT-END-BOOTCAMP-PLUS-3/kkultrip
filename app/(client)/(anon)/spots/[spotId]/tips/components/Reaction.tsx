@@ -22,22 +22,11 @@ const Reaction = ({
     const modalRef = useRef<HTMLDivElement | null>(null);
 
     // 접속중인 유저 아이디
-    const accessUserId = "bf56f7ec-252c-4e27-80c2-460946715e32";
+    const accessUserId = "d9b78231-1d27-479c-9a28-903bd67433e6";
 
     const userReactionType = tipReaction.find(
         (reaction) => reaction.userId === accessUserId
     )?.type;
-
-    // useEffect(() => {
-    //     const fetchReaction = async () => {
-    //         const data = await fetch(
-    //             `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/tips/${tipId}/reactions?accessUserId=${accessUserId}`
-    //         );
-    //         const reaction = await data.json();
-    //         setReaction(reaction);
-    //     };
-    //     fetchReaction();
-    // }, [tipId]);
 
     const handleButtonClick = () => {
         setIsModalOpen(!isModalOpen);
@@ -139,15 +128,19 @@ const Reaction = ({
                     {[1, 2, 3, 4].map((type) => (
                         <button
                             key={type}
-                            className={styles.emotionOption}
+                            className={`${styles.emotionOption} ${
+                                userReactionType === type
+                                    ? styles.emotionOptionYellow
+                                    : ""
+                            }`}
                             id={`reaction-button-${type}`}
                             onClick={() => handleReactionClick(type)}
-                            style={{
-                                color:
-                                    userReactionType === type
-                                        ? "yellow"
-                                        : "inherit",
-                            }}
+                            // style={{
+                            //     color:
+                            //         userReactionType === type
+                            //             ? "yellow"
+                            //             : "inherit",
+                            // }}
                         >
                             <Image
                                 src={reactions[type].image}

@@ -4,7 +4,7 @@ import { UpdateSpotUseCase } from "@/application/usecases/admin/spot/UpdateSpotU
 import { PgSpotRepository } from "@/infrastructure/repositories/PgSpotRepository";
 import { DeleteSpotUseCase } from "@/application/usecases/admin/spot/DeleteSpotUseCase";
 import { PgTicketRepository } from "@/infrastructure/repositories/PgTicketRepository";
-import { SpotRepository } from "@/domain/repositories/SpotRepository";
+import  SpotRepository  from "@/domain/repositories/SpotRepository";
 import { TicketRepository } from "@/domain/repositories/TicketRepository";
 
 export async function GET(
