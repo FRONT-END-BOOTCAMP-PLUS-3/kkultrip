@@ -10,9 +10,11 @@ import { TipReactionDto } from "@/application/usecases/spot/dto/TipReactionDto";
 const Reaction = ({
     tipReaction,
     userId, // 팁 작성한 유저 아이디
+    tipId,
 }: {
     tipReaction: TipReactionDto[];
     userId: string;
+    tipId: number;
 }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [showMessage, setShowMessage] = useState(false);
@@ -53,25 +55,15 @@ const Reaction = ({
             return;
         }
 
-        if (
-            !tipReaction.length ||
-            !tipReaction[0].tipId ||
-            !tipReaction[0].spotId
-        ) {
-            console.error("Invalid tipReaction data");
-            return;
-        }
-
         try {
             const response = await fetch(
-                `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/spots/${tipReaction[0].spotId}/tips`,
+                `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/tips/${tipId}/reactions`,
                 {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
                     },
                     body: JSON.stringify({
-                        tipId: tipReaction[0].tipId,
                         userId,
                         type,
                     }),
@@ -81,7 +73,7 @@ const Reaction = ({
             if (response.ok) {
                 console.log("반응 남기기 성공");
             } else {
-                console.error("반응 남기기 실패");
+                console.error("반응 남기기 실패", Error);
             }
         } catch (error) {
             console.error("Error while creating reaction:", error);

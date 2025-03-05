@@ -1,4 +1,3 @@
-import CreateReactionUsecase from "@/application/usecases/spot/CreateReactionUsecase";
 import { SpotTipDto } from "@/application/usecases/spot/dto/SpotTipDto";
 import { GetSpotTipUsecase } from "@/application/usecases/spot/GetSpotTipUsecase";
 import ReactionRepository from "@/domain/repositories/ReactionRepository";
@@ -41,16 +40,4 @@ export async function GET(
     }
 
     return NextResponse.json(spotTipList);
-}
-
-export async function POST(request: Request) {
-    const body = await request.json();
-    const { tipId, userId, type } = body;
-    const reactionRepository: ReactionRepository = new PgReactionRepository();
-
-    const createReactionUsecase = new CreateReactionUsecase(reactionRepository);
-
-    await createReactionUsecase.execute({ tipId, userId, type });
-
-    return NextResponse.json({ message: "Reaction created" }, { status: 200 });
 }

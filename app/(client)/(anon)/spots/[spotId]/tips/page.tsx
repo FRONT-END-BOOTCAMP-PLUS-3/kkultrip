@@ -18,7 +18,7 @@ const TipsPage = async ({
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/spots/${spotId}/tips?sort=${sort}`
     );
     const tipList: SpotTipDto[] = await data.json();
-
+    console.log(tipList);
     if (!tipList || tipList.length === 0) {
         return (
             <div className={styles.noData}>
@@ -64,6 +64,7 @@ const TipsPage = async ({
                     <Reaction
                         tipReaction={tip.tipReaction}
                         userId={tip.userId}
+                        tipId={tip.id}
                     />
                 </div>
             ))}

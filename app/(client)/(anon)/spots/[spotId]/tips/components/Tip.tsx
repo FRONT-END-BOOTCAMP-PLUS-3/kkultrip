@@ -20,8 +20,8 @@ const Tip = ({ tip }: { tip: SpotTipDto }) => {
             </figure>
             <div className={styles.costWrapper}>
                 <div className={styles.costBox}>
-                  <p className={styles.costTitle}>1인 평균 비용</p>
-                  <p className={styles.cost}>{tip.price}원</p>
+                    <p className={styles.costTitle}>1인 평균 비용</p>
+                    <p className={styles.cost}>{tip.price}원</p>
                 </div>
                 <p className={styles.createdAt}>{tip.createdAt}</p>
             </div>
