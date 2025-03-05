@@ -17,8 +17,12 @@ const InfoPage = async (props: { params: Promise<{ spotId: string }> }) => {
 
     return (
         <div className={styles.infoContainer}>
-            <h2 className={styles.srOnly}>{spotData.name} 상세 정보</h2>
-            <p className={styles.info}>{spotData.info}</p>
+            {spotData.info && (
+                <>
+                    <h2 className={styles.srOnly}>{spotData.name} 상세 정보</h2>
+                    <p className={styles.info}>{spotData.info}</p>
+                </>
+            )}
 
             <div className={styles.infoList}>
                 <span className={styles.srOnly}>{spotData.name} 주소</span>
@@ -29,15 +33,23 @@ const InfoPage = async (props: { params: Promise<{ spotId: string }> }) => {
                     </p>
                     <CopyButton text={spotData.address} />
                 </div>
-                <span className={styles.srOnly}>{spotData.name} 전화번호</span>
-                <div className={styles.copyWrapper}>
-                    <p>
-                        <BiPhoneCall color="var(--grey-2-color)" size={18} />
-                        {spotData.phone}
-                    </p>
-                    <CopyButton text={spotData.phone} />
-                </div>
-
+                {spotData.phone && (
+                    <>
+                        <span className={styles.srOnly}>
+                            {spotData.name} 전화번호
+                        </span>
+                        <div className={styles.copyWrapper}>
+                            <p>
+                                <BiPhoneCall
+                                    color="var(--grey-2-color)"
+                                    size={18}
+                                />
+                                {spotData.phone}
+                            </p>
+                            <CopyButton text={spotData.phone} />
+                        </div>
+                    </>
+                )}
                 <TimeList times={spotData.timeDetail} name={spotData.name} />
 
                 <TicketList
