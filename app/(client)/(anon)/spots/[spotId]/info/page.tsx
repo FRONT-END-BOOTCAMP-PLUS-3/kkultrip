@@ -3,10 +3,10 @@ import { BiPhoneCall } from "react-icons/bi";
 import { FaClock } from "react-icons/fa";
 import { IoIosLink, IoMdPerson } from "react-icons/io";
 import { IoLocation } from "react-icons/io5";
+import CopyButton from "./components/CopyButton";
 import TicketList from "./components/TicketList";
 import TimeList from "./components/TimeList";
 import styles from "./infoPage.module.scss";
-import CopyButton from "./components/CopyButton";
 
 const InfoPage = async (props: { params: Promise<{ spotId: string }> }) => {
     const params = await props.params;
@@ -14,6 +14,7 @@ const InfoPage = async (props: { params: Promise<{ spotId: string }> }) => {
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/spots/${params.spotId}/info`
     );
     const spotData: SpotInfoDto = await data.json();
+    console.log(spotData);
 
     return (
         <div className={styles.infoContainer}>
@@ -33,6 +34,7 @@ const InfoPage = async (props: { params: Promise<{ spotId: string }> }) => {
                     </p>
                     <CopyButton text={spotData.address} />
                 </div>
+
                 {spotData.phone && (
                     <>
                         <span className={styles.srOnly}>
@@ -50,12 +52,20 @@ const InfoPage = async (props: { params: Promise<{ spotId: string }> }) => {
                         </div>
                     </>
                 )}
-                <TimeList times={spotData.timeDetail} name={spotData.name} />
 
-                <TicketList
-                    tickets={spotData.ticketDetail}
-                    name={spotData.name}
-                />
+                {spotData.timeDetail.length > 0 && (
+                    <TimeList
+                        times={spotData.timeDetail}
+                        name={spotData.name}
+                    />
+                )}
+
+                {spotData.ticketDetail.length > 0 && (
+                    <TicketList
+                        tickets={spotData.ticketDetail}
+                        name={spotData.name}
+                    />
+                )}
 
                 {spotData.link && (
                     <p>
@@ -68,26 +78,45 @@ const InfoPage = async (props: { params: Promise<{ spotId: string }> }) => {
                         </a>
                     </p>
                 )}
+
                 <span className={styles.srOnly}>
                     {spotData.name} 1인 평균 비용
                 </span>
-                <p>
-                    <IoMdPerson color="var(--grey-2-color)" size={18} />
-                    <span className={styles.subText}>1인 평균 비용</span>
-                    <span className={styles.primaryBold}>
-                        {spotData.avgPrice.toLocaleString()}원
-                    </span>
-                </p>
+                {spotData.avgPrice === 0 ? (
+                    <p>
+                        <IoMdPerson color="var(--grey-2-color)" size={18} />
+                        <span className={styles.subText}>1인 평균 비용</span>
+                        <span className={styles.primaryBold}>정보 없음</span>
+                    </p>
+                ) : (
+                    <p>
+                        <IoMdPerson color="var(--grey-2-color)" size={18} />
+                        <span className={styles.subText}>1인 평균 비용</span>
+                        <span className={styles.primaryBold}>
+                            {spotData.avgPrice.toLocaleString()}원
+                        </span>
+                    </p>
+                )}
+
                 <span className={styles.srOnly}>
                     {spotData.name} 평균 대기 시간
                 </span>
-                <p>
-                    <FaClock color="var(--grey-2-color)" size={18} />
-                    <span className={styles.subText}>평균 대기 시간</span>
-                    <span className={styles.primaryBold}>
-                        {spotData.avgWaitingTime}분
-                    </span>
-                </p>
+                {spotData.avgWaitingTime === 0 ? (
+                    <p>
+                        <FaClock color="var(--grey-2-color)" size={18} />
+                        <span className={styles.subText}>평균 대기 시간</span>
+                        <span className={styles.primaryBold}>정보 없음</span>
+                    </p>
+                ) : (
+                    <p>
+                        <FaClock color="var(--grey-2-color)" size={18} />
+                        <span className={styles.subText}>평균 대기 시간</span>
+                        <span className={styles.primaryBold}>
+                            {spotData.avgWaitingTime}분
+                        </span>
+                    </p>
+                )}
+
                 <span className={styles.srOnly}>주의 사항</span>
                 <ul className={styles.subInfo}>
                     <li>
