@@ -18,8 +18,10 @@ const Reaction = ({
 }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [showMessage, setShowMessage] = useState(false);
-    // const [reaction, setReaction] = useState<ReactionDto | null>(null);P
     const modalRef = useRef<HTMLDivElement | null>(null);
+
+    console.log("userId", userId);
+    console.log("tipId", tipId);
 
     // 접속중인 유저 아이디
     const accessUserId = "d9b78231-1d27-479c-9a28-903bd67433e6";
