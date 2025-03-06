@@ -13,4 +13,10 @@ export class PgDocentRepository implements DocentRepository {
       },
     });
   }
+  async updateDocent(id: number, docent: Docent): Promise<Docent> {
+    return await prisma.docent.update({
+      where: { id },
+      data: docent,
+    });
+  }
 }

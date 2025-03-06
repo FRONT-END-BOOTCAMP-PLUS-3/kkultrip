@@ -169,8 +169,8 @@ const SpotsCreatePage = () => {
 
     const validDocents = formData.docents.filter(
       (docent) =>
-        docent.title.trim() !== "" ||
-        docent.description.trim() !== "" ||
+        docent.title.trim() !== "" &&
+        docent.description.trim() !== "" &&
         docent.audioPath !== ""
     );
 
