@@ -14,8 +14,8 @@ export interface GetSpotDto {
   img: string;
   avgPrice: number | null;
   avgWaitingTime: number | null;
-  tickets: GetTicketDto[];
-  times: GetTimeDto[];
+  tickets: GetTicketDto[] | null;
+  times: GetTimeDto[] | null;
   createdAt: string;
   updatedAt: string;
 }

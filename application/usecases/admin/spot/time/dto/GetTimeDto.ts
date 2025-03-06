@@ -3,6 +3,6 @@ export interface GetTimeDto {
   day: string;
   open?: string | null;
   close?: string | null;
-  all_hours: boolean;
+  allHours: boolean;
   closeDay: boolean;
 }

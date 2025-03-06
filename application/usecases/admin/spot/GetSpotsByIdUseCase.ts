@@ -1,4 +1,4 @@
-import { SpotRepository } from "@/domain/repositories/SpotRepository";
+import SpotRepository from "@/domain/repositories/SpotRepository";
 import { TicketRepository } from "@/domain/repositories/TicketRepository";
 import { TimeRepository } from "@/domain/repositories/TimeRepository";
 import { GetSpotDto } from "./dto/GetSpotDto";
@@ -30,8 +30,8 @@ export class GetSpotByIdUseCase {
       img: spot.img,
       avgPrice: spot.avgPrice ?? null,
       avgWaitingTime: spot.avgWaitingTime ?? null,
-      tickets,
-      times, // 추가
+      tickets: tickets ?? null,
+      times: times ?? null,
       createdAt: spot.createdAt.toISOString(),
       updatedAt: spot.updatedAt.toISOString(),
     };
