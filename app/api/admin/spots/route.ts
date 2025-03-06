@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { GetSpotsUseCase } from "@/application/usecases/admin/spot/GetSpotsUseCase";
+import { GetSpotListUseCase } from "@/application/usecases/admin/spot/GetSpotListUseCase";
 import { TicketRepository } from "@/domain/repositories/TicketRepository";
 import { CreateSpotUseCase } from "@/application/usecases/admin/spot/CreateSpotUseCase";
 import PgSpotRepository from "@/infrastructure/repositories/PgSpotRepository";
@@ -16,8 +16,8 @@ import { PgDocentRepository } from "@/infrastructure/repositories/PgDocentReposi
 export async function GET() {
   try {
     const spotRepository: SpotRepository = new PgSpotRepository();
-    const getSpotUseCase = new GetSpotsUseCase(spotRepository);
-    const spots = await getSpotUseCase.execute();
+    const getSpotListUseCase = new GetSpotListUseCase(spotRepository);
+    const spots = await getSpotListUseCase.execute();
 
     return NextResponse.json(spots, { status: 200 });
   } catch (error) {
