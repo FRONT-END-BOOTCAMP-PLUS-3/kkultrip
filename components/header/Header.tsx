@@ -6,9 +6,9 @@ import Image from "next/image";
 import { FaArrowLeft } from "react-icons/fa6";
 import { IoMenu } from "react-icons/io5";
 
-interface HeaderProps {
+type HeaderProps = {
   isLoggedIn: boolean;
-}
+};
 
 const Header = ({ isLoggedIn }: HeaderProps) => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -20,7 +20,7 @@ const Header = ({ isLoggedIn }: HeaderProps) => {
   let type: "default" | "back" | "mypage" | null = "default";
   if (pathname === "/spots") {
     type = "default"; // 로고헤더
-  } else if (pathname === "/user") {
+  } else if (pathname === "/user/my-tips") {
     type = "mypage"; // 마이페이지 헤더
   } else if (pathname === "/") {
     type = null;
@@ -56,7 +56,10 @@ const Header = ({ isLoggedIn }: HeaderProps) => {
             />
           </div>
           {type === "default" ? (
-            <div className={styles.menu} onClick={() => router.push("/user")}>
+            <div
+              className={styles.menu}
+              onClick={() => router.push("/user/my-tips")}
+            >
               {isLoggedIn ? "마이페이지" : "로그인"}
             </div>
           ) : (
@@ -76,7 +79,10 @@ const Header = ({ isLoggedIn }: HeaderProps) => {
           <div className={styles.back} onClick={() => router.back()}>
             <FaArrowLeft />
           </div>
-          <div className={styles.menu} onClick={() => router.push("/user")}>
+          <div
+            className={styles.menu}
+            onClick={() => router.push("/user/my-tips")}
+          >
             {isLoggedIn ? "마이페이지" : "로그인"}
           </div>
         </div>
