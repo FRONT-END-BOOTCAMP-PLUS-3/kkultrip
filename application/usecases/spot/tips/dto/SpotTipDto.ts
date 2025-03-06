@@ -11,4 +11,5 @@ export interface SpotTipDto {
     tipReaction: TipReactionDto[];
     createdAt: string;
     tipImages: TipImageDto[];
+    waitingTime: number;
 }

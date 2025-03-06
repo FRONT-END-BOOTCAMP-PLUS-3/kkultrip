@@ -79,6 +79,7 @@ export class GetSpotTipUsecase {
                     tipReaction: tipReactionList,
                     tipImages: tipImageList,
                     createdAt: tip.createdAt.toLocaleDateString(),
+                    waitingTime: tip.waitingTime,
                 };
             })
         );
