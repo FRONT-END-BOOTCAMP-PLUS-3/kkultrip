@@ -1,3 +1,4 @@
+import { CreateDocentDto } from "../../docent/dto/CreateDocentDto";
 import { CreateTicketDto } from "../ticket/dto/CreateTicketDto";
 import { CreateTimeDto } from "../time/dto/CreateTimeDto";
 
@@ -15,4 +16,5 @@ export interface CreateSpotDto {
   avgWaitingTime?: number | null;
   tickets?: CreateTicketDto[];
   times?: CreateTimeDto[];
+  docents?: CreateDocentDto[];
 }

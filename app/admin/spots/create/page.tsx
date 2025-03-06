@@ -30,6 +30,7 @@ const SpotsCreatePage = () => {
     img: "",
     tickets: [{ name: "", price: "" }],
     operatingHours: defaultOperatingHours,
+    docents: [{ title: "", description: "", audioPath: "" }],
   });
 
   const phoneRef1 = useRef<HTMLInputElement>(null);
@@ -99,13 +100,42 @@ const SpotsCreatePage = () => {
     }));
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  // 이미지 파일 변경 핸들러
+  const handleImageFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       const imageUrl = URL.createObjectURL(file);
       setFormData((prev) => ({ ...prev, img: imageUrl }));
     }
   };
+
+  const handleDocentChange = (
+    index: number,
+    field: "title" | "description" | "audioPath",
+    value: string | File | null
+  ) => {
+    setFormData((prev) => ({
+      ...prev,
+      docents: prev.docents.map((docent, i) =>
+        i === index ? { ...docent, [field]: value } : docent
+      ),
+    }));
+  };
+
+  const addDocent = () => {
+    setFormData((prev) => ({
+      ...prev,
+      docents: [...prev.docents, { title: "", description: "", audioPath: "" }],
+    }));
+  };
+
+  const removeDocent = (index: number) => {
+    setFormData((prev) => ({
+      ...prev,
+      docents: prev.docents.filter((_, i) => i !== index),
+    }));
+  };
+
   const handleConvertAddress = async () => {
     try {
       const res = await fetch(
@@ -150,21 +180,29 @@ const SpotsCreatePage = () => {
         price: Number(ticket.price),
       })),
       times: Object.entries(formData.operatingHours).map(([day, hours]) => ({
-        spotId: 0, // 생성 후 백엔드에서 채워질 값
         day,
         open: hours.start || null,
         close: hours.end || null,
         all_hours: hours.type === "24시간",
         closeDay: hours.type === "휴무",
       })),
+      docents: formData.docents.map((docent) => ({
+        title: docent.title,
+        description: docent.description,
+        audioPath: docent.audioPath,
+      })),
     };
-    console.log(data);
 
     const formDataToSend = new FormData();
     formDataToSend.append("body", JSON.stringify(data));
     if (fileInputRef.current?.files?.[0]) {
       formDataToSend.append("file", fileInputRef.current.files[0]);
     }
+    formData.docents.forEach((docent, index) => {
+      if (docent.audioPath) {
+        formDataToSend.append(`docentAudio${index}`, docent.audioPath);
+      }
+    });
 
     const res = await fetch("/api/admin/spots", {
       method: "POST",
@@ -189,6 +227,7 @@ const SpotsCreatePage = () => {
         img: "",
         tickets: [{ name: "", price: "" }],
         operatingHours: defaultOperatingHours,
+        docents: [{ title: "", description: "", audioPath: "" }],
       });
       router.push("/admin/spots");
     } else {
@@ -354,7 +393,7 @@ const SpotsCreatePage = () => {
         <input
           type="file"
           accept="image/*"
-          onChange={handleFileChange}
+          onChange={handleImageFileChange}
           className={styles.inputField}
           ref={fileInputRef}
           required
@@ -467,6 +506,57 @@ const SpotsCreatePage = () => {
               </div>
             );
           })}
+        </div>
+
+        <div className={styles.docentsContainer}>
+          <h2>도슨트 정보</h2>
+          {formData.docents.map((docent, index) => (
+            <div key={index} className={styles.docentItem}>
+              <div className={styles.docentRow}>
+                <input
+                  type="text"
+                  placeholder="도슨트 제목"
+                  value={docent.title}
+                  className={styles.inputField}
+                  onChange={(e) =>
+                    handleDocentChange(index, "title", e.target.value)
+                  }
+                />
+                <textarea
+                  placeholder="도슨트 설명"
+                  value={docent.description}
+                  className={styles.textareaField}
+                  onChange={(e) =>
+                    handleDocentChange(index, "description", e.target.value)
+                  }
+                />
+                <button type="button" onClick={() => removeDocent(index)}>
+                  삭제
+                </button>
+              </div>
+              <div className={styles.docentRow}>
+                <input
+                  type="file"
+                  accept="audio/*"
+                  className={styles.inputField}
+                  onChange={(e) =>
+                    handleDocentChange(
+                      index,
+                      "audioPath",
+                      e.target.files?.[0] || null
+                    )
+                  }
+                />
+              </div>
+            </div>
+          ))}
+          <button
+            type="button"
+            onClick={addDocent}
+            className={styles.addButton}
+          >
+            도슨트 추가
+          </button>
         </div>
 
         <button type="submit" className={styles.submitButton}>

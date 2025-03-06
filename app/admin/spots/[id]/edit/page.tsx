@@ -64,7 +64,6 @@ const SpotsEditPage = () => {
       fetch(`/api/admin/spots/${spotId}`)
         .then((res) => res.json())
         .then((data) => {
-          console.log(data);
           const [phone1, phone2, phone3] = data.phone?.split("-") || [
             "",
             "",
@@ -221,7 +220,6 @@ const SpotsEditPage = () => {
       })),
       updatedAt: new Date(),
     };
-    console.log(data);
     const res = await fetch(`/api/admin/spots/${spotId}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },

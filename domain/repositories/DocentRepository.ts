@@ -1,3 +1,5 @@
-export default interface DocentRepository {
-  createDocent(spotId: number, description: string): Promise<void>;
+import { Docent } from "@prisma/client";
+
+export interface DocentRepository {
+  createDocent(data: Docent): Promise<Docent>;
 }
