@@ -80,6 +80,7 @@ export class GetSpotTipUsecase {
                     tipImages: tipImageList,
                     createdAt: tip.createdAt.toLocaleDateString(),
                     waitingTime: tip.waitingTime,
+                    spotId: tip.spotId,
                 };
             })
         );

@@ -1,4 +1,3 @@
-
 import { SpotTipDto } from "@/application/usecases/spot/tips/dto/SpotTipDto";
 import { GetSpotTipUsecase } from "@/application/usecases/spot/tips/GetSpotTipUsecase";
 import ImageRepository from "@/domain/repositories/ImageRepository";
@@ -47,3 +46,4 @@ export async function GET(
 
     return NextResponse.json(spotTipList);
 }
+

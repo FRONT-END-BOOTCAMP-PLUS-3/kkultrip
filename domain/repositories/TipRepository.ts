@@ -9,4 +9,5 @@ export default interface TipRepository {
     ): Promise<Tip[]>;
     getAllTips(): Promise<Tip[]>;
     updateTipReportCount(tipId: number): Promise<void>;
+    deleteTip(tipId: number): Promise<void>;
 }

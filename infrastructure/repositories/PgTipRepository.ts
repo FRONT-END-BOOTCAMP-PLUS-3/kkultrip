@@ -50,4 +50,8 @@ export class PgTipRepository implements TipRepository {
             data: { reportCnt: { increment: 1 } },
         });
     }
+
+    async deleteTip(tipId: number): Promise<void> {
+        await prisma.tip.delete({ where: { id: tipId } });
+    }
 }

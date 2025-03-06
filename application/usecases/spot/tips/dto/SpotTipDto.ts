@@ -12,4 +12,5 @@ export interface SpotTipDto {
     createdAt: string;
     tipImages: TipImageDto[];
     waitingTime: number;
+    spotId: number;
 }
