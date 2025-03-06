@@ -163,6 +163,17 @@ const SpotsCreatePage = () => {
 
     const phone = `${formData.phone1}-${formData.phone2}-${formData.phone3}`;
 
+    const validTickets = formData.tickets.filter(
+      (ticket) => ticket.name.trim() !== "" && ticket.price !== ""
+    );
+
+    const validDocents = formData.docents.filter(
+      (docent) =>
+        docent.title.trim() !== "" ||
+        docent.description.trim() !== "" ||
+        docent.audioPath !== ""
+    );
+
     const data: CreateSpotDto = {
       name: formData.name,
       address: formData.address,
@@ -175,7 +186,7 @@ const SpotsCreatePage = () => {
       img: formData.img,
       avgPrice: null,
       avgWaitingTime: null,
-      tickets: formData.tickets.map((ticket) => ({
+      tickets: validTickets.map((ticket) => ({
         name: ticket.name,
         price: Number(ticket.price),
       })),
@@ -186,7 +197,7 @@ const SpotsCreatePage = () => {
         all_hours: hours.type === "24시간",
         closeDay: hours.type === "휴무",
       })),
-      docents: formData.docents.map((docent) => ({
+      docents: validDocents.map((docent) => ({
         title: docent.title,
         description: docent.description,
         audioPath: docent.audioPath,
@@ -198,7 +209,7 @@ const SpotsCreatePage = () => {
     if (fileInputRef.current?.files?.[0]) {
       formDataToSend.append("file", fileInputRef.current.files[0]);
     }
-    formData.docents.forEach((docent, index) => {
+    validDocents.forEach((docent, index) => {
       if (docent.audioPath) {
         formDataToSend.append(`docentAudio${index}`, docent.audioPath);
       }
