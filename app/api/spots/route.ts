@@ -2,7 +2,7 @@ import { GetSpotsDTO } from "@/application/usecases/spot/dto/GetSpotsDto";
 import { GetSpotByNameUsecase } from "@/application/usecases/spot/GetSpotByNameUsecase";
 import { GetSpotsUsecase } from "@/application/usecases/spot/GetSpotsUsecase";
 import { PgBookmarkRepository } from "@/infrastructure/repositories/PgBookmarkRepository";
-import { PgSpotRepository } from "@/infrastructure/repositories/PgSpotRepository";
+import PgSpotRepository from "@/infrastructure/repositories/PgSpotRepository";
 import { PgTimeRepository } from "@/infrastructure/repositories/PgTimeRepository";
 import { PgTipRepository } from "@/infrastructure/repositories/PgTipRepository";
 import { NextResponse } from "next/server";
@@ -90,7 +90,7 @@ export const GET = async (req: Request) => {
 
     return NextResponse.json({ spots, lat, lon });
   } catch (error) {
-    console.error("❌ API 오류 발생:", error);
+    console.log("❌ API 오류 발생:", error);
     return NextResponse.json({ error: "서버 오류 발생" }, { status: 500 });
   }
 };

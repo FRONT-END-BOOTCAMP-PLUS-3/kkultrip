@@ -1,18 +1,19 @@
 import { NextResponse } from "next/server";
 import { GetSpotByIdUseCase } from "@/application/usecases/admin/spot/GetSpotsByIdUseCase";
 import { UpdateSpotUseCase } from "@/application/usecases/admin/spot/UpdateSpotUseCase";
-import { PgSpotRepository } from "@/infrastructure/repositories/PgSpotRepository";
 import { DeleteSpotUseCase } from "@/application/usecases/admin/spot/DeleteSpotUseCase";
 import { PgTicketRepository } from "@/infrastructure/repositories/PgTicketRepository";
-import { PgTimeRepository } from "@/infrastructure/repositories/PgTimeRepository";
-import { SpotRepository } from "@/domain/repositories/SpotRepository";
 import { TicketRepository } from "@/domain/repositories/TicketRepository";
+import PgSpotRepository from "@/infrastructure/repositories/PgSpotRepository";
+import SpotRepository from "@/domain/repositories/SpotRepository";
+import { PgTimeRepository } from "@/infrastructure/repositories/PgTimeRepository";
 import { TimeRepository } from "@/domain/repositories/TimeRepository";
 
 export async function GET(
   req: Request,
-  { params }: { params: { id: string } }
+  props: { params: Promise<{ id: string }> }
 ) {
+  const params = await props.params;
   try {
     const id = params.id;
 

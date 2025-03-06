@@ -1,6 +1,6 @@
 import { Spot } from "@prisma/client";
 
-export interface SpotRepository {
+export default interface SpotRepository {
   getAllSpots(): Promise<Spot[]>;
 
   getSpotById(id: number): Promise<Spot | null>; // 특정 Spot 조회
@@ -19,4 +19,13 @@ export interface SpotRepository {
   ): Promise<Spot[]>;
 
   getSpotByName(name: string): Promise<Spot | null>;
+
+  getSpotAvg(
+    spotId: number
+  ): Promise<{ avgPrice: number; avgWaitingTime: number } | null>;
+  updateSpotAvg(
+    spotId: number,
+    avgPrice: number | null,
+    avgWaitingTime: number | null
+  ): Promise<void>;
 }

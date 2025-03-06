@@ -19,4 +19,11 @@ export class PgDocentRepository implements DocentRepository {
       data: docent,
     });
   }
+  async getDocentBySpotId(spotId: number): Promise<Docent[] | null> {
+    return prisma.docent.findMany({
+      where: {
+        spotId,
+      },
+    });
+  }
 }

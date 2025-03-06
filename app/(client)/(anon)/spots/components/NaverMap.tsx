@@ -3,12 +3,13 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { GetSpotsDTO } from "@/application/usecases/spot/dto/GetSpotsDto";
 import { useRouter } from "next/navigation";
+import { getMyLocation } from "@/utils/getMyLocation";
 
 const categoryMap: { [key: string]: string } = {
   액티비티: "activity",
   랜드마크: "landmark",
   카페: "cafe",
-  레스토랑: "restaurant",
+  음식점: "restaurant",
 };
 
 const NaverMap = ({
@@ -34,6 +35,7 @@ const NaverMap = ({
       script.src = `https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=${process.env.NEXT_PUBLIC_NAVER_MAP_CLIENT_ID}`;
       script.async = true;
       script.onload = () => setIsMapLoaded(true);
+      script.onerror = () => console.error("네이버 지도 API 로드 실패");
       document.head.appendChild(script);
     } else {
       setIsMapLoaded(true);
@@ -108,7 +110,7 @@ const NaverMap = ({
       markersRef.current.push(marker);
       markersRef.current.push(label);
     });
-  }, [spots, getCategoryName, router]);
+  }, [spots, isMapLoaded, getCategoryName, router]);
 
   // 내 위치 마커 추가 (내 위치가 있을 때만)
   useEffect(() => {
@@ -119,35 +121,31 @@ const NaverMap = ({
       myLocationMarkerRef.current.setMap(null);
     }
 
-    // 내 위치 마커 추가 (사용자의 현재 위치 기준)
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const userLat = position.coords.latitude;
-          const userLon = position.coords.longitude;
+    // 내 위치 가져오기
+    getMyLocation()
+      .then(({ lat: userLat, lon: userLon }) => {
+        myLocationMarkerRef.current = new window.naver.maps.Marker({
+          position: new window.naver.maps.LatLng(userLat, userLon),
+          map: mapRef.current!,
+          icon: {
+            url: "/images/bee_50x50.svg",
+            size: new window.naver.maps.Size(50, 50),
+          },
+        });
 
-          myLocationMarkerRef.current = new window.naver.maps.Marker({
-            position: new window.naver.maps.LatLng(userLat, userLon),
-            map: mapRef.current!,
-            icon: {
-              url: "/images/bee_50x50.svg",
-              size: new window.naver.maps.Size(50, 50),
-            },
-          });
-
-          // 지도 중심을 내 위치로 이동
-          mapRef.current?.setCenter(
-            new window.naver.maps.LatLng(userLat, userLon)
-          );
-        },
-        (error) => {
-          console.log(" 내 위치를 가져올 수 없습니다:", error);
-        }
-      );
-    }
+        // 지도 중심을 내 위치로 이동
+        mapRef.current?.setCenter(
+          new window.naver.maps.LatLng(userLat, userLon)
+        );
+      })
+      .catch((error) => {
+        console.log("내 위치를 가져올 수 없습니다:", error.message);
+      });
   }, [isMapLoaded]);
 
-  return <div id="map" style={{ height: "90vh", width: "100%" }} />;
+  return (
+    <div id="map" style={{ height: "calc(100vh - 5rem)", width: "100%" }} />
+  );
 };
 
 export default NaverMap;
