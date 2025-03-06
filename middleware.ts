@@ -8,8 +8,15 @@ export function middleware(req: NextRequest) {
     !token &&
     protectedRoutes.some((route) => req.nextUrl.pathname.startsWith(route))
   ) {
-    return NextResponse.redirect(new URL("/login", req.url));
+    const returnUrl = req.nextUrl.pathname;
+    const response = NextResponse.redirect(new URL("/login", req.url));
+    response.cookies.set("returnUrl", returnUrl);
+    return response;
   }
 
   return NextResponse.next();
 }
+
+export const config = {
+  matcher: ["/user/:path*", "/admin/:path*"],
+};

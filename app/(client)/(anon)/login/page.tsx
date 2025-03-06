@@ -46,8 +46,24 @@ const LoginPage = () => {
         throw new Error(message || "로그인 실패");
       }
 
-      alert("로그인 성공! 마이 페이지로 이동합니다.");
-      router.push("/user/my-tips");
+      alert("로그인 성공!");
+      const responseData = await response.json();
+      console.log("response", responseData);
+
+      // 로그인을 했을 때 관리자면 관리자페이지로, 아니면 로그인 진입 전 페이지로 이동
+      if (responseData.isAdmin) {
+        router.push("/admin/spots");
+      } else {
+        const returnUrl = document.cookie
+          .split("; ")
+          .find((row) => row.startsWith("returnUrl="))
+          ?.split("=")[1];
+        if (returnUrl) {
+          router.push(decodeURIComponent(returnUrl));
+        } else {
+          router.push("/user/my-tips");
+        }
+      }
     } catch (err: unknown) {
       setError(
         err instanceof Error ? err.message : "알 수 없는 오류가 발생했습니다."
