@@ -3,6 +3,7 @@ import Reaction from "./components/Reaction";
 import Tip from "./components/Tip";
 import styles from "./TipsPage.module.scss";
 import { SpotTipDto } from "@/application/usecases/spot/dto/SpotTipDto";
+import CreateTip from "./components/CreateTip";
 
 const TipsPage = async (props: {
     params: Promise<{ spotId: string }>;
@@ -67,6 +68,8 @@ const TipsPage = async (props: {
                     />
                 </div>
             ))}
+
+            <CreateTip spotId={spotId} />
         </div>
     );
 };
