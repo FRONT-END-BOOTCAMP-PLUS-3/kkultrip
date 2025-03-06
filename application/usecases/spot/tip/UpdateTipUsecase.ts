@@ -17,10 +17,21 @@ export class UpdateTipUsecase {
       dto.waitingTime
     );
 
-    // 2. 기존 이미지 삭제 후 새로운 이미지 등록
-    await this.imageRepo.deleteImagesByTipId(dto.tipId);
-    if (dto.images.length > 0) {
-      await this.imageRepo.CreateImages(dto.tipId, dto.images);
+    // 2. 기존 이미지 중 유지할 것들 제외하고 삭제
+    const currentImagePaths = await this.imageRepo.getImagesByTipId(dto.tipId);
+
+    // 기존 이미지 중 유지하지 않는 것들만 삭제
+    const imagesToDelete = currentImagePaths.filter(
+      (imgPath) => !dto.existingImagePaths.includes(imgPath)
+    );
+
+    if (imagesToDelete.length > 0) {
+      await this.imageRepo.deleteImagesByPaths(imagesToDelete);
+    }
+
+    // 3. 새 이미지 업로드 (있다면 추가)
+    if (dto.newImageFiles.length > 0) {
+      await this.imageRepo.createImages(dto.tipId, dto.newImageFiles);
     }
 
     return updatedTip;

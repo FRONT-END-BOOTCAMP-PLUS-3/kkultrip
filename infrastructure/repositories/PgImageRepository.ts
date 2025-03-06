@@ -4,7 +4,7 @@ import path from "path";
 import fs from "fs";
 
 export class PgImageRepository implements ImageRepository {
-  async CreateImages(tipId: number, imageFiles: File[]): Promise<void> {
+  async createImages(tipId: number, imageFiles: File[]): Promise<void> {
     const uploadDir = path.join(process.cwd(), "public/images/tips");
 
     // 저장 폴더가 없으면 생성
@@ -32,26 +32,24 @@ export class PgImageRepository implements ImageRepository {
   }
 
   async getImagesByTipId(tipId: number): Promise<string[]> {
-    const images = await prisma.image.findMany({ where: { tipId } });
+    const images = await prisma.image.findMany({
+      where: { tipId },
+      select: { path: true },
+    });
     return images.map((img) => img.path || "");
   }
 
-  async deleteImagesByTipId(tipId: number): Promise<void> {
-    const images = await prisma.image.findMany({ where: { tipId } });
-
-    // 실제 파일 삭제
-    images.forEach((img) => {
-      if (img.path) {
-        const filePath = path.join(process.cwd(), "public", img.path);
-        if (fs.existsSync(filePath)) {
-          fs.unlinkSync(filePath);
-        }
-      }
+  async deleteImagesByPaths(imagePaths: string[]) {
+    await prisma.image.deleteMany({
+      where: { path: { in: imagePaths } },
     });
 
-    // DB에서 이미지 삭제
-    await prisma.image.deleteMany({
-      where: { tipId },
+    // 로컬 파일 삭제
+    imagePaths.forEach((imagePath) => {
+      const filePath = path.join(process.cwd(), "public", imagePath);
+      if (fs.existsSync(filePath)) {
+        fs.unlinkSync(filePath);
+      }
     });
   }
 }

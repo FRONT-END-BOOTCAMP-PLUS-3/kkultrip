@@ -1,5 +1,5 @@
 export interface ImageRepository {
-  CreateImages(tipId: number, imageFiles: File[]): Promise<void>;
+  createImages(tipId: number, imageFiles: File[]): Promise<void>;
   getImagesByTipId(tipId: number): Promise<string[]>;
-  deleteImagesByTipId(tipId: number): Promise<void>;
+  deleteImagesByPaths(imagePaths: string[]): Promise<void>;
 }

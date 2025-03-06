@@ -3,5 +3,6 @@ export interface UpdateTipDto {
   description: string;
   price: number;
   waitingTime: number;
-  images: File[];
+  newImageFiles: File[];
+  existingImagePaths: string[];
 }

@@ -6,9 +6,10 @@ import { GetTipUsecase } from "@/application/usecases/spot/tip/GetTipUsecase";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { tipId: string } }
+  props: { params: Promise<{ tipId: string }> }
 ) {
   try {
+    const params = await props.params;
     const tipRepo = new PgTipRepository();
     const imageRepo = new PgImageRepository();
     const getTipWithImagesUsecase = new GetTipUsecase(tipRepo, imageRepo);
@@ -41,7 +42,7 @@ export async function GET(
       );
     }
 
-    return NextResponse.json({ tip }, { status: 200 });
+    return NextResponse.json(tip, { status: 200 });
   } catch (error) {
     console.log("❌ 팁 불러오기에 실패했습니다 :", error);
     return NextResponse.json({ error: "서버 오류 발생" }, { status: 500 });
@@ -53,9 +54,12 @@ export const PUT = async (
   { params }: { params: { tipId: string } }
 ) => {
   try {
-    const { description, price, waitingTime } = await req.json();
     const formData = await req.formData();
-    const imageFiles = formData.getAll("images") as File[];
+    const description = formData.get("description") as string;
+    const price = Number(formData.get("price"));
+    const waitingTime = Number(formData.get("waitingTime"));
+    const newImageFiles = formData.getAll("images") as File[];
+    const existingImagePaths = formData.getAll("existingImages") as string[]; // 기존 이미지 목록
 
     const tipRepo = new PgTipRepository();
     const imageRepo = new PgImageRepository();
@@ -64,9 +68,10 @@ export const PUT = async (
     const updatedTip = await updateTipUsecase.execute({
       tipId: parseInt(params.tipId),
       description,
-      price: parseInt(price),
-      waitingTime: parseInt(waitingTime),
-      images: imageFiles,
+      price,
+      waitingTime,
+      newImageFiles,
+      existingImagePaths,
     });
 
     return NextResponse.json(updatedTip);

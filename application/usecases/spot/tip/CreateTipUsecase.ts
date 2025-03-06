@@ -19,6 +19,6 @@ export class CreateTipUsecase {
     );
 
     // 2️. 이미지 저장 및 경로 반환
-    await this.imageRepo.CreateImages(newTip.id, dto.images);
+    await this.imageRepo.createImages(newTip.id, dto.images);
   }
 }

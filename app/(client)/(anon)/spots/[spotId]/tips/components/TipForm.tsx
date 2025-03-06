@@ -105,10 +105,11 @@ const TipForm = ({
     formData.append("price", cost.replace(/,/g, ""));
     formData.append("waitingTime", waitingTime);
     images.forEach((img) => formData.append("images", img));
+    imageUrls.forEach((url) => formData.append("existingImages", url));
 
     const url = isEdit
       ? `/api/spots/${spotId}/tips/${tipId}`
-      : `/api/spots/${spotId}/tips/create`;
+      : `/api/spots/${spotId}/tips`;
 
     const method = isEdit ? "PUT" : "POST";
 
@@ -142,7 +143,9 @@ const TipForm = ({
       <h3>장소 사진 (최대 2개)</h3>
       <div
         className={
-          images.length >= 1 ? styles.imagePreviewFull : styles.imagePreview
+          images.length + imageUrls.length >= 1
+            ? styles.imagePreviewFull
+            : styles.imagePreview
         }
       >
         {imageUrls.map((img, index) => (
@@ -255,13 +258,15 @@ const TipForm = ({
       </div>
 
       {/* 등록 / 수정 버튼 */}
-      <button
-        className={styles.submitBtn}
-        disabled={!isFormValid}
-        onClick={handleSubmit}
-      >
-        {isEdit ? "수정" : "등록"}
-      </button>
+      <div className={styles.wrapBtn}>
+        <button
+          className={styles.submitBtn}
+          disabled={!isFormValid}
+          onClick={handleSubmit}
+        >
+          {isEdit ? "수정" : "등록"}
+        </button>
+      </div>
     </div>
   );
 };
