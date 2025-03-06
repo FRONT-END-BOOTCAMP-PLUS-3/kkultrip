@@ -42,7 +42,7 @@ const getFilteredSpots = async ({
       url += `?${queryString.join("&")}`;
     }
 
-    const res = await fetch(url, { cache: "no-store" });
+    const res = await fetch(url, { cache: "no-cache" }); // 캐시 확인 후 변경 시 새 요청
     if (!res.ok) throw new Error(await res.text());
 
     const data = await res.json();

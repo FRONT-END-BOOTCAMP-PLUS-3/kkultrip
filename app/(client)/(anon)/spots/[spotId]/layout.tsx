@@ -1,25 +1,28 @@
 import SpotHeader from "./components/SpotHeader";
 import styles from "./SpotsLayout.module.scss";
+import { headers } from "next/headers";
 
-const SpotDetailLayout = async (
-    props: {
-        children: React.ReactNode;
-        params: Promise<{ spotId: string }>;
-    }
-) => {
-    const params = await props.params;
+const SpotDetailLayout = async ({
+  children,
+  params,
+}: {
+  children: React.ReactNode;
+  params: { spotId: string };
+}) => {
+  const { spotId } = await params;
+  const headersList = await headers();
+  const headerPathname = headersList.get("x-pathname") || "";
 
-    const {
-        children
-    } = props;
-
-    const { spotId } = params;
+  if (headerPathname.includes("edit") || headerPathname.includes("create")) {
+    return <div className={styles.layout}>{children}</div>;
+  } else {
     return (
-        <div className={styles.layout}>
-            <SpotHeader spotId={spotId} />
-            {children}
-        </div>
+      <div className={styles.layout}>
+        <SpotHeader spotId={spotId} />
+        {children}
+      </div>
     );
+  }
 };
 
 export default SpotDetailLayout;

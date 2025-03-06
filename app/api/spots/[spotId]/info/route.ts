@@ -3,7 +3,7 @@ import { GetSpotInfoUsecase } from "@/application/usecases/spot/info/GetSpotInfo
 import SpotRepository from "@/domain/repositories/SpotRepository";
 import { TicketRepository } from "@/domain/repositories/TicketRepository";
 import TimeRepository from "@/domain/repositories/TimeRepository";
-import { PgSpotRepository } from "@/infrastructure/repositories/PgSpotRepository";
+import  PgSpotRepository  from "@/infrastructure/repositories/PgSpotRepository";
 import { PgTicketRepository } from "@/infrastructure/repositories/PgTicketRepository";
 import { PgTimeRepository } from "@/infrastructure/repositories/PgTimeRepository";
 import { NextResponse } from "next/server";
@@ -18,19 +18,19 @@ export async function GET(
     const ticketRepository: TicketRepository = new PgTicketRepository();
     const timeRepository: TimeRepository = new PgTimeRepository();
 
-    const spotInfoUsecase = new GetSpotInfoUsecase(
-        spotRepository,
-        ticketRepository,
-        timeRepository
-    );
+  const spotInfoUsecase = new GetSpotInfoUsecase(
+    spotRepository,
+    ticketRepository,
+    timeRepository
+  );
 
-    const spotInfo: SpotInfoDto | null = await spotInfoUsecase.execute(
-        Number(spotId)
-    );
+  const spotInfo: SpotInfoDto | null = await spotInfoUsecase.execute(
+    Number(spotId)
+  );
 
-    if (!spotInfo) {
-        return NextResponse.json({ error: "Spot not found" }, { status: 404 });
-    }
+  if (!spotInfo) {
+    return NextResponse.json({ error: "Spot not found" }, { status: 404 });
+  }
 
-    return NextResponse.json(spotInfo);
+  return NextResponse.json(spotInfo);
 }

@@ -1,108 +1,102 @@
 import { NextResponse } from "next/server";
 import { GetSpotByIdUseCase } from "@/application/usecases/admin/spot/GetSpotsByIdUseCase";
 import { UpdateSpotUseCase } from "@/application/usecases/admin/spot/UpdateSpotUseCase";
-import { PgSpotRepository } from "@/infrastructure/repositories/PgSpotRepository";
 import { DeleteSpotUseCase } from "@/application/usecases/admin/spot/DeleteSpotUseCase";
 import { PgTicketRepository } from "@/infrastructure/repositories/PgTicketRepository";
 import  SpotRepository  from "@/domain/repositories/SpotRepository";
 import { TicketRepository } from "@/domain/repositories/TicketRepository";
+import PgSpotRepository from "@/infrastructure/repositories/PgSpotRepository";
 
 export async function GET(
-    req: Request,
-    props: { params: Promise<{ id: string }> }
+  req: Request,
+  props: { params: Promise<{ id: string }> }
 ) {
-    const params = await props.params;
-    try {
-        const id = params.id;
+  const params = await props.params;
+  try {
+    const id = params.id;
 
-        if (!id) {
-            return NextResponse.json(
-                { error: "ID is required" },
-                { status: 400 }
-            );
-        }
-
-        const spotRepository: SpotRepository = new PgSpotRepository();
-        const ticketRepository: TicketRepository = new PgTicketRepository();
-        const getSpotUseCase = new GetSpotByIdUseCase(
-            spotRepository,
-            ticketRepository
-        );
-        const spot = await getSpotUseCase.execute(Number(id));
-
-        if (!spot) {
-            return NextResponse.json(
-                { error: "Spot not found" },
-                { status: 404 }
-            );
-        }
-
-        return NextResponse.json(spot, { status: 200 });
-    } catch (error) {
-        console.error("Error fetching spot:", error);
-        return NextResponse.json(
-            { error: "Failed to fetch spot" },
-            { status: 500 }
-        );
+    if (!id) {
+      return NextResponse.json({ error: "ID is required" }, { status: 400 });
     }
+
+    const spotRepository: SpotRepository = new PgSpotRepository();
+    const ticketRepository: TicketRepository = new PgTicketRepository();
+    const getSpotUseCase = new GetSpotByIdUseCase(
+      spotRepository,
+      ticketRepository
+    );
+    const spot = await getSpotUseCase.execute(Number(id));
+
+    if (!spot) {
+      return NextResponse.json({ error: "Spot not found" }, { status: 404 });
+    }
+
+    return NextResponse.json(spot, { status: 200 });
+  } catch (error) {
+    console.error("Error fetching spot:", error);
+    return NextResponse.json(
+      { error: "Failed to fetch spot" },
+      { status: 500 }
+    );
+  }
 }
 
 export async function PATCH(req: Request) {
-    try {
-        const { id, tickets, ...updateData } = await req.json();
+  try {
+    const { id, tickets, ...updateData } = await req.json();
 
-        if (!id) {
-            return NextResponse.json(
-                { error: "Spot ID is required" },
-                { status: 400 }
-            );
-        }
-
-        const spotRepository: SpotRepository = new PgSpotRepository();
-        const ticketRepository: TicketRepository = new PgTicketRepository();
-        const updateSpotUseCase = new UpdateSpotUseCase(
-            spotRepository,
-            ticketRepository
-        );
-
-        const updatedSpot = await updateSpotUseCase.execute(id, {
-            ...updateData,
-            tickets,
-        });
-
-        return NextResponse.json(updatedSpot, { status: 200 });
-    } catch (error) {
-        console.error("Error updating spot:", error);
-        return NextResponse.json(
-            { error: "Failed to update spot" },
-            { status: 500 }
-        );
+    if (!id) {
+      return NextResponse.json(
+        { error: "Spot ID is required" },
+        { status: 400 }
+      );
     }
+
+    const spotRepository: SpotRepository = new PgSpotRepository();
+    const ticketRepository: TicketRepository = new PgTicketRepository();
+    const updateSpotUseCase = new UpdateSpotUseCase(
+      spotRepository,
+      ticketRepository
+    );
+
+    const updatedSpot = await updateSpotUseCase.execute(id, {
+      ...updateData,
+      tickets,
+    });
+
+    return NextResponse.json(updatedSpot, { status: 200 });
+  } catch (error) {
+    console.error("Error updating spot:", error);
+    return NextResponse.json(
+      { error: "Failed to update spot" },
+      { status: 500 }
+    );
+  }
 }
 
 export async function DELETE(req: Request) {
-    try {
-        const url = new URL(req.url);
-        const id = url.pathname.split("/").pop();
+  try {
+    const url = new URL(req.url);
+    const id = url.pathname.split("/").pop();
 
-        if (!id) {
-            return NextResponse.json(
-                { error: "Spot ID is required" },
-                { status: 400 }
-            );
-        }
-
-        const spotRepository = new PgSpotRepository();
-        const deleteSpotUseCase = new DeleteSpotUseCase(spotRepository);
-        const deletedSpot = await deleteSpotUseCase.execute(Number(id));
-
-        return NextResponse.json(deletedSpot, { status: 200 });
-    } catch (error) {
-        console.error("Error deleting spot:", error);
-
-        return NextResponse.json(
-            { error: "Failed to delete spot" },
-            { status: 500 }
-        );
+    if (!id) {
+      return NextResponse.json(
+        { error: "Spot ID is required" },
+        { status: 400 }
+      );
     }
+
+    const spotRepository = new PgSpotRepository();
+    const deleteSpotUseCase = new DeleteSpotUseCase(spotRepository);
+    const deletedSpot = await deleteSpotUseCase.execute(Number(id));
+
+    return NextResponse.json(deletedSpot, { status: 200 });
+  } catch (error) {
+    console.error("Error deleting spot:", error);
+
+    return NextResponse.json(
+      { error: "Failed to delete spot" },
+      { status: 500 }
+    );
+  }
 }
