@@ -37,11 +37,11 @@ const TipForm = ({
             return null;
           } else if (res.status === 403) {
             alert("본인이 작성한 팁만 수정할 수 있습니다.");
-            router.back(); // 뒤로 가기
+            window.location.href = `/spots/${spotId}/tips?sort=latest`;
             return null;
           } else if (res.status === 404) {
             alert("해당 팁을 찾을 수 없습니다.");
-            router.back(); // 뒤로 가기
+            window.location.href = `/spots/${spotId}/tips?sort=latest`;
             return null;
           }
           return res.json();
@@ -121,7 +121,7 @@ const TipForm = ({
 
       if (response.ok) {
         alert(isEdit ? "팁이 수정되었습니다." : "팁이 등록되었습니다.");
-        router.push(`/spots/${spotId}/tips`);
+        window.location.href = `/spots/${spotId}/tips?sort=latest`;
       } else {
         throw new Error("서버 오류");
       }

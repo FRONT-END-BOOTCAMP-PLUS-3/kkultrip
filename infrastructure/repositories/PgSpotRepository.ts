@@ -1,6 +1,6 @@
 import SpotRepository from "@/domain/repositories/SpotRepository";
 import { prisma } from "@/lib/prisma";
-import { Spot } from "@prisma/client"; // Prisma의 Spot 타입 사용
+import { Spot } from "@prisma/client";
 
 export default class PgSpotRepository implements SpotRepository {
   async getAllSpots(): Promise<Spot[]> {
@@ -87,5 +87,33 @@ export default class PgSpotRepository implements SpotRepository {
     } finally {
       await prisma.$disconnect();
     }
+  }
+
+  async getSpotAvg(spotId: number) {
+    const spot = await prisma.spot.findUnique({
+      where: { id: spotId },
+      select: { avgPrice: true, avgWaitingTime: true },
+    });
+
+    return spot
+      ? {
+          avgPrice: spot.avgPrice ?? 0,
+          avgWaitingTime: spot.avgWaitingTime ?? 0,
+        }
+      : null;
+  }
+
+  async updateSpotAvg(
+    spotId: number,
+    avgPrice: number,
+    avgWaitingTime: number
+  ) {
+    await prisma.spot.update({
+      where: { id: spotId },
+      data: {
+        avgPrice: Math.round(avgPrice), // 반올림 처리
+        avgWaitingTime: Math.round(avgWaitingTime),
+      },
+    });
   }
 }

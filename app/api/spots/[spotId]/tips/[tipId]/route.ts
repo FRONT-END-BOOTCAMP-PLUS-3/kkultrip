@@ -3,6 +3,7 @@ import { PgTipRepository } from "@/infrastructure/repositories/PgTipRepository";
 import { PgImageRepository } from "@/infrastructure/repositories/PgImageRepository";
 import { UpdateTipUsecase } from "@/application/usecases/spot/tip/UpdateTipUsecase";
 import { GetTipUsecase } from "@/application/usecases/spot/tip/GetTipUsecase";
+import PgSpotRepository from "@/infrastructure/repositories/PgSpotRepository";
 
 export async function GET(
   req: NextRequest,
@@ -63,9 +64,10 @@ export const PUT = async (
 
     const tipRepo = new PgTipRepository();
     const imageRepo = new PgImageRepository();
-    const updateTipUsecase = new UpdateTipUsecase(tipRepo, imageRepo);
+    const spotRepo = new PgSpotRepository();
+    const updateTipUsecase = new UpdateTipUsecase(tipRepo, imageRepo, spotRepo);
 
-    const updatedTip = await updateTipUsecase.execute({
+    await updateTipUsecase.execute({
       tipId: parseInt(params.tipId),
       description,
       price,
@@ -74,7 +76,7 @@ export const PUT = async (
       existingImagePaths,
     });
 
-    return NextResponse.json(updatedTip);
+    return NextResponse.json({ status: 201 });
   } catch (error) {
     console.log("❌ 팁 업데이트 오류:", error);
     return NextResponse.json({ error: "서버 오류 발생" }, { status: 500 });

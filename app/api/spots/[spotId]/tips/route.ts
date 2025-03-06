@@ -60,7 +60,8 @@ export async function POST(
 
     const tipRepo = new PgTipRepository();
     const imageRepo = new PgImageRepository();
-    const createTipUsecase = new CreateTipUsecase(tipRepo, imageRepo);
+    const spotRepo = new PgSpotRepository();
+    const createTipUsecase = new CreateTipUsecase(tipRepo, imageRepo, spotRepo);
 
     await createTipUsecase.execute({
       spotId: Number(params.spotId),

@@ -19,4 +19,13 @@ export default interface SpotRepository {
   ): Promise<Spot[]>;
 
   getSpotByName(name: string): Promise<Spot | null>;
+
+  getSpotAvg(
+    spotId: number
+  ): Promise<{ avgPrice: number; avgWaitingTime: number } | null>;
+  updateSpotAvg(
+    spotId: number,
+    avgPrice: number | null,
+    avgWaitingTime: number | null
+  ): Promise<void>;
 }
