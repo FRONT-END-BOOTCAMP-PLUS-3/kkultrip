@@ -47,9 +47,10 @@ export async function GET(
 
 export async function POST(
   req: Request,
-  { params }: { params: { spotId: string } }
+  props: { params: Promise<{ spotId: string }> }
 ) {
   try {
+    const params = await props.params;
     const formData = await req.formData();
     const userId = formData.get("userId") as string;
     const description = formData.get("description") as string;
@@ -61,16 +62,16 @@ export async function POST(
     const imageRepo = new PgImageRepository();
     const createTipUsecase = new CreateTipUsecase(tipRepo, imageRepo);
 
-    const newTip = await createTipUsecase.execute(
-      Number(params.spotId),
+    await createTipUsecase.execute({
+      spotId: Number(params.spotId),
       userId,
       description,
       price,
       waitingTime,
-      images
-    );
+      images,
+    });
 
-    return NextResponse.json({ tip: newTip }, { status: 201 });
+    return NextResponse.json({ status: 201 });
   } catch (error) {
     console.error("Error creating tip:", error);
     return NextResponse.json({ error: "서버 오류 발생" }, { status: 500 });

@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import styles from "./TipForm.module.scss";
 import { GoPlus } from "react-icons/go";
+import { GetTipDto } from "@/application/usecases/spot/tip/dto/GetTipDto";
 
 const TipForm = ({
   isEdit = false,
@@ -12,8 +13,8 @@ const TipForm = ({
   tipId,
 }: {
   isEdit?: boolean;
-  spotId: number;
-  tipId?: number;
+  spotId: string;
+  tipId?: string;
 }) => {
   const [images, setImages] = useState<File[]>([]);
   const [imageUrls, setImageUrls] = useState<string[]>([]);
@@ -30,7 +31,7 @@ const TipForm = ({
     if (isEdit && tipId) {
       fetch(`/api/spots/${spotId}/tips/${tipId}`)
         .then((res) => res.json())
-        .then((data) => {
+        .then((data: GetTipDto) => {
           setCost(data.price.toLocaleString());
           setWaitingTime(data.waitingTime.toString());
           setTipContent(data.description);

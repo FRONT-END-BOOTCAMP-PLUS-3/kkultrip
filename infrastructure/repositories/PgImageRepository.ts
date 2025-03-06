@@ -4,15 +4,13 @@ import path from "path";
 import fs from "fs";
 
 export class PgImageRepository implements ImageRepository {
-  async CreateImages(tipId: number, imageFiles: File[]): Promise<string[]> {
+  async CreateImages(tipId: number, imageFiles: File[]): Promise<void> {
     const uploadDir = path.join(process.cwd(), "public/images/tips");
 
     // 저장 폴더가 없으면 생성
     if (!fs.existsSync(uploadDir)) {
       fs.mkdirSync(uploadDir, { recursive: true });
     }
-
-    const savedPaths: string[] = [];
 
     for (const file of imageFiles) {
       const fileName = `${tipId}_${Date.now()}_${file.name}`;
@@ -30,11 +28,7 @@ export class PgImageRepository implements ImageRepository {
           path: fileUrl,
         },
       });
-
-      savedPaths.push(fileUrl);
     }
-
-    return savedPaths;
   }
 
   async getImagesByTipId(tipId: number): Promise<string[]> {

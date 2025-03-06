@@ -1,13 +1,13 @@
 import { NextResponse } from "next/server";
 import { GetSpotsUseCase } from "@/application/usecases/admin/spot/GetSpotsUseCase";
-import { SpotRepository } from "@/domain/repositories/SpotRepository";
 import { TicketRepository } from "@/domain/repositories/TicketRepository";
 import { CreateSpotUseCase } from "@/application/usecases/admin/spot/CreateSpotUseCase";
-import { PgSpotRepository } from "@/infrastructure/repositories/PgSpotRepository";
+import PgSpotRepository from "@/infrastructure/repositories/PgSpotRepository";
 import { PgTicketRepository } from "@/infrastructure/repositories/PgTicketRepository"; // TicketRepository 추가
 import { promises as fs } from "fs";
 import path from "path";
 import { CreateSpotDto } from "@/application/usecases/admin/spot/dto/CreateSpotDto";
+import SpotRepository from "@/domain/repositories/SpotRepository";
 
 export async function GET() {
   try {

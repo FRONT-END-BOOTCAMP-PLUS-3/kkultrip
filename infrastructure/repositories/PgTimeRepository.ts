@@ -36,4 +36,12 @@ export class PgTimeRepository implements TimeRepository {
       await prisma.$disconnect();
     }
   }
+
+  async getTimeBySpotId(spotId: number): Promise<Time[] | null> {
+    return prisma.time.findMany({
+      where: {
+        spotId,
+      },
+    });
+  }
 }

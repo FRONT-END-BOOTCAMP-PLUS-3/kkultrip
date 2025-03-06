@@ -1,5 +1,6 @@
 import TipRepository from "@/domain/repositories/TipRepository";
 import { ImageRepository } from "@/domain/repositories/ImageRepository";
+import { CreateTipDto } from "./dto/CreateTipDto";
 
 export class CreateTipUsecase {
   constructor(
@@ -7,26 +8,17 @@ export class CreateTipUsecase {
     private imageRepo: ImageRepository
   ) {}
 
-  async execute(
-    spotId: number,
-    userId: string,
-    description: string,
-    price: number,
-    waitingTime: number,
-    images: File[]
-  ) {
+  async execute(dto: CreateTipDto) {
     // 1️. 팁 정보 저장
     const newTip = await this.tipRepo.createTip(
-      spotId,
-      userId,
-      description,
-      price,
-      waitingTime
+      dto.spotId,
+      dto.userId,
+      dto.description,
+      dto.price,
+      dto.waitingTime
     );
 
     // 2️. 이미지 저장 및 경로 반환
-    const imagePaths = await this.imageRepo.CreateImages(newTip.id, images);
-
-    return { ...newTip, images: imagePaths };
+    await this.imageRepo.CreateImages(newTip.id, dto.images);
   }
 }

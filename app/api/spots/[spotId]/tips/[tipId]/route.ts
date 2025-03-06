@@ -24,7 +24,7 @@ export async function GET(
 
     return NextResponse.json({ tip }, { status: 200 });
   } catch (error) {
-    console.error("Error fetching tip details:", error);
+    console.log("팁 불러오기에 실패했습니다 :", error);
     return NextResponse.json({ error: "서버 오류 발생" }, { status: 500 });
   }
 }
@@ -42,13 +42,13 @@ export const PUT = async (
     const imageRepo = new PgImageRepository();
     const updateTipUsecase = new UpdateTipUsecase(tipRepo, imageRepo);
 
-    const updatedTip = await updateTipUsecase.execute(
-      parseInt(params.tipId),
+    const updatedTip = await updateTipUsecase.execute({
+      tipId: parseInt(params.tipId),
       description,
-      parseInt(price),
-      parseInt(waitingTime),
-      imageFiles
-    );
+      price: parseInt(price),
+      waitingTime: parseInt(waitingTime),
+      images: imageFiles,
+    });
 
     return NextResponse.json(updatedTip);
   } catch (error) {

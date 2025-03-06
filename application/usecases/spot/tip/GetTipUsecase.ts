@@ -1,5 +1,6 @@
 import { ImageRepository } from "@/domain/repositories/ImageRepository";
 import TipRepository from "@/domain/repositories/TipRepository";
+import { GetTipDto } from "./dto/GetTipDto";
 
 export class GetTipUsecase {
   constructor(
@@ -15,6 +16,8 @@ export class GetTipUsecase {
     // 2️. 해당 팁의 이미지 가져오기
     const images = await this.imageRepo.getImagesByTipId(tipId);
 
-    return { ...tip, images };
+    const tipWithImg: GetTipDto = { ...tip, images };
+
+    return tipWithImg;
   }
 }
