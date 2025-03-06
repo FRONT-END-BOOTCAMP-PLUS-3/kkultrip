@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
-import styles from "./spotNav.module.scss";
+import styles from "./SpotNav.module.scss";
 
 const SpotNav = ({ spotId }: { spotId: string }) => {
     const pathname = usePathname();

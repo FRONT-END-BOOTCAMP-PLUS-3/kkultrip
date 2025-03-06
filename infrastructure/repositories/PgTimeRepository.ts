@@ -1,5 +1,5 @@
 import TimeRepository from "@/domain/repositories/TimeRepository";
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, Time } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
@@ -35,5 +35,13 @@ export class PgTimeRepository implements TimeRepository {
     } finally {
       await prisma.$disconnect();
     }
+  }
+
+  async getTimeBySpotId(spotId: number): Promise<Time[] | null> {
+    return prisma.time.findMany({
+      where: {
+        spotId,
+      },
+    });
   }
 }

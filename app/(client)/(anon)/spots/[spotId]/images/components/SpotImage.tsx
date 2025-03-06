@@ -1,5 +1,5 @@
 import Image from "next/image";
-import styles from "./spotImage.module.scss";
+import styles from "./SpotImage.module.scss";
 const SpotImage = () => {
     return (
         <Image

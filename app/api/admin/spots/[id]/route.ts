@@ -1,18 +1,19 @@
 import { NextResponse } from "next/server";
 import { GetSpotByIdUseCase } from "@/application/usecases/admin/spot/GetSpotsByIdUseCase";
 import { UpdateSpotUseCase } from "@/application/usecases/admin/spot/UpdateSpotUseCase";
-import { PgSpotRepository } from "@/infrastructure/repositories/PgSpotRepository";
 import { DeleteSpotUseCase } from "@/application/usecases/admin/spot/DeleteSpotUseCase";
 import { PgTicketRepository } from "@/infrastructure/repositories/PgTicketRepository";
-import { SpotRepository } from "@/domain/repositories/SpotRepository";
 import { TicketRepository } from "@/domain/repositories/TicketRepository";
+import PgSpotRepository from "@/infrastructure/repositories/PgSpotRepository";
+import SpotRepository from "@/domain/repositories/SpotRepository";
 
 export async function GET(
   req: Request,
-  { params }: { params: { id: string } } // ✅ id 파라미터 추출
+  props: { params: Promise<{ id: string }> }
 ) {
+  const params = await props.params;
   try {
-    const id = params.id; // ✅ 동적 경로에서 id 가져오기
+    const id = params.id;
 
     if (!id) {
       return NextResponse.json({ error: "ID is required" }, { status: 400 });
