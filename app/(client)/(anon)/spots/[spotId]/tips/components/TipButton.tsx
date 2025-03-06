@@ -1,9 +1,8 @@
 "use client";
 
-import Link from "next/link";
 import styles from "./TipButton.module.scss";
 
-const TipButton = ({ tipId, spotId }: { tipId: number, spotId: number }) => {
+const TipButton = ({ tipId, spotId }: { tipId: number; spotId: number }) => {
     const handleDelete = async () => {
         const response = await fetch(`/api/tips/${tipId}`, {
             method: "DELETE",
@@ -17,7 +16,12 @@ const TipButton = ({ tipId, spotId }: { tipId: number, spotId: number }) => {
     };
     return (
         <div className={styles.buttonContainer}>
-            <Link className={styles.editButton} href={`/spots/${spotId}/tips/${tipId}/edit`}>수정</Link>
+            <a
+                className={styles.editButton}
+                href={`/spots/${spotId}/tips/${tipId}/edit`}
+            >
+                수정
+            </a>
             <button className={styles.deleteButton} onClick={handleDelete}>
                 삭제
             </button>

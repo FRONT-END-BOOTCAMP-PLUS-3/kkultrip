@@ -4,14 +4,12 @@ import { SpotTipDto } from "@/application/usecases/spot/tips/dto/SpotTipDto";
 import TipImage from "./TipImage";
 import TipButton from "./TipButton";
 
+//
 const Tip = ({ tip }: { tip: SpotTipDto }) => {
-    console.log(tip);
-
     const accessUserId = "7379a017-90cb-40da-9635-eb7eff4d8e83";
 
-
     return (
-        <div className={styles.tipContainer}>
+        <div id={tip.id.toString()} className={styles.tipContainer}>
             <h3 className={styles.srOnly}>{tip.userName}의 꿀팁</h3>
             <div className={styles.profileWrapper}>
                 <figure className={styles.profileWrapper}>
@@ -31,10 +29,6 @@ const Tip = ({ tip }: { tip: SpotTipDto }) => {
                 )}
             </div>
 
-            {tip.tipImages.length > 0 && (
-                <TipImage image={tip.tipImages} name={tip.spotName} />
-            )}
-
             <div className={styles.costWrapper}>
                 <div className={styles.costBox}>
                     <p className={styles.costTitle}>1인 평균 비용</p>
@@ -52,6 +46,11 @@ const Tip = ({ tip }: { tip: SpotTipDto }) => {
                 </div>
                 <p className={styles.createdAt}>{tip.createdAt}</p>
             </div>
+
+            {tip.tipImages.length > 0 && (
+                <TipImage image={tip.tipImages} name={tip.spotName} />
+            )}
+
             <p>{tip.description}</p>
         </div>
     );

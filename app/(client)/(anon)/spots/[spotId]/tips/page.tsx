@@ -19,12 +19,12 @@ const TipsPage = async (props: {
     );
     const tipList: SpotTipDto[] = await data.json();
 
-
     if (!tipList || tipList.length === 0) {
         return (
             <div className={styles.noData}>
                 <p>작성된 꿀팁이 없습니다.</p>
                 <p>첫 번째 꿀팁을 작성해볼까요?</p>
+                <CreateTip spotId={spotId} />
             </div>
         );
     }
