@@ -1,0 +1,11 @@
+.imageContainer {
+  display: flex;
+  justify-content: space-between;
+  margin: 1rem 0;
+
+  .image {
+    width: 9.375rem;
+    height: 9.375rem;
+    border-radius: 1rem;
+  }
+}

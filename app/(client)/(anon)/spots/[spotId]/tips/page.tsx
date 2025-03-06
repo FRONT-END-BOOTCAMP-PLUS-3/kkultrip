@@ -2,8 +2,9 @@ import Link from "next/link";
 import Reaction from "./components/Reaction";
 import Tip from "./components/Tip";
 import styles from "./TipsPage.module.scss";
-import { SpotTipDto } from "@/application/usecases/spot/dto/SpotTipDto";
+import { SpotTipDto } from "@/application/usecases/spot/tips/dto/SpotTipDto";
 import CreateTip from "./components/CreateTip";
+import TipImage from "./components/TipImage";
 
 const TipsPage = async (props: {
     params: Promise<{ spotId: string }>;
@@ -18,6 +19,8 @@ const TipsPage = async (props: {
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/spots/${spotId}/tips?sort=${sort}`
     );
     const tipList: SpotTipDto[] = await data.json();
+
+    console.log(tipList);
 
     if (!tipList || tipList.length === 0) {
         return (
@@ -61,6 +64,10 @@ const TipsPage = async (props: {
             {tipList.map((tip) => (
                 <div className={styles.tipContainer} key={tip.id}>
                     <Tip tip={tip} />
+                    <TipImage
+                        image={tip.tipImages}
+                        name={tipList[0].spotName}
+                    />
                     <Reaction
                         tipReaction={tip.tipReaction}
                         userId={tip.userId}
