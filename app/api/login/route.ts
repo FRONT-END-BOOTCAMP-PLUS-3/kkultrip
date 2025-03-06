@@ -16,8 +16,7 @@ export async function POST(req: NextRequest) {
 
     const userRepository: UserRepository = new PgUserRepository();
     const usecase = new LoginUsecase(userRepository);
-
-    const token = await usecase.execute({ email, password });
+    const { token, isAdmin } = await usecase.execute({ email, password });
     if (!token) {
       return NextResponse.json(
         { message: "이메일 또는 비밀번호를 확인하세요." },
@@ -26,7 +25,7 @@ export async function POST(req: NextRequest) {
     }
 
     const response = NextResponse.json(
-      { message: "로그인 성공" },
+      { message: "로그인 성공", isAdmin },
       { status: 200 }
     );
 

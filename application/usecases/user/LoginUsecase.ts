@@ -6,7 +6,10 @@ import { createJWT } from "@/lib/jwt";
 export class LoginUsecase {
   constructor(private userRepository: UserRepository) {}
 
-  async execute({ email, password }: LoginUserDto): Promise<string> {
+  async execute({
+    email,
+    password,
+  }: LoginUserDto): Promise<{ token: string; isAdmin: boolean }> {
     const user = await this.userRepository.findByEmail(email);
     if (!user) throw new Error("User not found");
 
@@ -14,9 +17,12 @@ export class LoginUsecase {
     if (!isComparePassword) throw new Error("isNotComparePassword");
 
     const userId = user.id;
+    const isAdmin = user.isAdmin;
+    const response = {
+      token: createJWT(userId, isAdmin),
+      isAdmin: isAdmin,
+    };
 
-    const token = createJWT(userId);
-
-    return token;
+    return response;
   }
 }
