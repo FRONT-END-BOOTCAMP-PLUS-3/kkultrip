@@ -1,6 +1,6 @@
-import CreateReactionUsecase from "@/application/usecases/spot/CreateReactionUsecase";
-import GetReactionUsecase from "@/application/usecases/spot/GetReactionUsecase";
-import { UpdateReactionUsecase } from "@/application/usecases/spot/UpdateReactionUsecase";
+import CreateReactionUsecase from "@/application/usecases/spot/tips/CreateReactionUsecase";
+import GetReactionUsecase from "@/application/usecases/spot/tips/GetReactionUsecase";
+import { UpdateReactionUsecase } from "@/application/usecases/spot/tips/UpdateReactionUsecase";
 import ReactionRepository from "@/domain/repositories/ReactionRepository";
 import PgReactionRepository from "@/infrastructure/repositories/PgReactionRepository";
 import { NextResponse } from "next/server";

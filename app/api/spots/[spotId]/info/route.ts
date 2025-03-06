@@ -1,5 +1,5 @@
-import { SpotInfoDto } from "@/application/usecases/spot/dto/SpotInfoDto";
-import { GetSpotInfoUsecase } from "@/application/usecases/spot/GetSpotInfoUsecase";
+import { SpotInfoDto } from "@/application/usecases/spot/info/dto/SpotInfoDto";
+import { GetSpotInfoUsecase } from "@/application/usecases/spot/info/GetSpotInfoUsecase";
 import SpotRepository from "@/domain/repositories/SpotRepository";
 import { TicketRepository } from "@/domain/repositories/TicketRepository";
 import TimeRepository from "@/domain/repositories/TimeRepository";

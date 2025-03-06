@@ -1,3 +1,5 @@
+import { Image } from "@prisma/client";
+
 export default interface ImageRepository {
-  createImage(spotId: number, userId: string, imageUrl: string): Promise<void>;
+    getImageByTipId(tipId: number): Promise<Image[]>;
 }

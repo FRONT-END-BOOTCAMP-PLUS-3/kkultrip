@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
-import { GetSpotDocentUsecase } from "@/application/usecases/spot/GetSpotDocentUsecase";
+import { GetSpotDocentUsecase } from "@/application/usecases/spot/docent/GetSpotDocentUsecase";
 import PgDocentRepository from "@/infrastructure/repositories/PgDocentRepository";
 import DocentRepository from "@/domain/repositories/DocentRepository";
-import { SpotDocentDto } from "@/application/usecases/spot/dto/SpotDocentDto";
+import { SpotDocentDto } from "@/application/usecases/spot/docent/dto/SpotDocentDto";
 import SpotRepository from "@/domain/repositories/SpotRepository";
 import { PgSpotRepository } from "@/infrastructure/repositories/PgSpotRepository";
 

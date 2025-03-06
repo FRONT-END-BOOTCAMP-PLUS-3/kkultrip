@@ -1,6 +1,6 @@
 "use client";
 
-import { TipReactionDto } from "@/application/usecases/spot/dto/TipReactionDto";
+import { TipReactionDto } from "@/application/usecases/spot/tips/dto/TipReactionDto";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import Emotion from "./Emotion";
@@ -23,8 +23,7 @@ const Reaction = ({
     // 접속중인 유저 아이디
     const accessUserId = "7379a017-90cb-40da-9635-eb7eff4d8e83";
 
-    console.log("Access User Id", accessUserId);
-    console.log("userId", userId);
+    
 
     const userReactionType = tipReaction.find(
         (reaction) => reaction.userId === accessUserId
