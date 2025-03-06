@@ -5,5 +5,5 @@ export interface TimeRepository {
 
   createTime(time: Time): Promise<Time>;
   updateTime(id: number, time: Time): Promise<Time>;
-  getTimesBySpotId(spotId: number): Promise<Time[]>;
+  getTimeBySpotId(spotId: number): Promise<Time[]>;
 }

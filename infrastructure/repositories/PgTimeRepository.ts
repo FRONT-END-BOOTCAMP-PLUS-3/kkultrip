@@ -50,17 +50,10 @@ export class PgTimeRepository implements TimeRepository {
     });
   }
 
-  async getTimesBySpotId(spotId: number): Promise<Time[]> {
-    const days = ["월", "화", "수", "목", "금", "토", "일"];
-    return await prisma.time.findMany({
+  async getTimeBySpotId(spotId: number): Promise<Time[]> {
+    return prisma.time.findMany({
       where: {
         spotId,
-        day: {
-          in: days,
-        },
-      },
-      orderBy: {
-        day: "asc",
       },
     });
   }

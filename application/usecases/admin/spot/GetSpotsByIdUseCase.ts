@@ -15,7 +15,7 @@ export class GetSpotByIdUseCase {
     if (!spot) return null;
 
     const tickets = await this.ticketRepository.getTicketBySpotId(id);
-    const times = await this.timeRepository.getTimesBySpotId(id); // 추가
+    const times = await this.timeRepository.getTimeBySpotId(id);
 
     return {
       id: spot.id,
