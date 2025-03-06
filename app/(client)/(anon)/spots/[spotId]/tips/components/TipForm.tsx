@@ -30,18 +30,35 @@ const TipForm = ({
   useEffect(() => {
     if (isEdit && tipId) {
       fetch(`/api/spots/${spotId}/tips/${tipId}`)
-        .then((res) => res.json())
-        .then((data: GetTipDto) => {
+        .then((res) => {
+          if (res.status === 401) {
+            alert("로그인이 필요합니다.");
+            router.push("/login");
+            return null;
+          } else if (res.status === 403) {
+            alert("본인이 작성한 팁만 수정할 수 있습니다.");
+            router.back(); // 뒤로 가기
+            return null;
+          } else if (res.status === 404) {
+            alert("해당 팁을 찾을 수 없습니다.");
+            router.back(); // 뒤로 가기
+            return null;
+          }
+          return res.json();
+        })
+        .then((data: GetTipDto | null) => {
+          if (!data) return;
+
           setCost(data.price.toLocaleString());
           setWaitingTime(data.waitingTime.toString());
           setTipContent(data.description);
-          setImageUrls(data.images || []); // 기존 이미지 경로
+          setImageUrls(data.images || []);
           setIsFree(data.price === 0);
           setIsInstant(data.waitingTime === 0);
         })
         .catch((error) => console.log("❌ 팁 정보 불러오기 실패:", error));
     }
-  }, [isEdit, spotId, tipId]);
+  }, [isEdit, spotId, tipId, router]);
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
@@ -83,6 +100,7 @@ const TipForm = ({
   // 팁 등록 또는 수정 요청
   const handleSubmit = async () => {
     const formData = new FormData();
+    formData.append("userId", "7379a017-90cb-40da-9635-eb7eff4d8e83");
     formData.append("description", tipContent);
     formData.append("price", cost.replace(/,/g, ""));
     formData.append("waitingTime", waitingTime);
