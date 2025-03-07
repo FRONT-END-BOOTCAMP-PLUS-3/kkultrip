@@ -1,13 +1,13 @@
+import ReactionRepository from "@/domain/repositories/ReactionRepository";
 import SpotRepository from "@/domain/repositories/SpotRepository";
 import TipRepository from "@/domain/repositories/TipRepository";
 import UserRepository from "@/domain/repositories/UserRepository";
 import { Reaction, Spot, User } from "@prisma/client";
 import { SpotTipDto } from "./dto/SpotTipDto";
-import ReactionRepository from "@/domain/repositories/ReactionRepository";
 import { TipReactionDto } from "./dto/TipReactionDto";
-import ImageRepository from "@/domain/repositories/ImageRepository";
-import { TipImageDto } from "./dto/TipImageDto";
+import { ImageRepository } from "@/domain/repositories/ImageRepository";
 import { Image } from "@prisma/client";
+import { TipImageDto } from "./dto/TipImageDto";
 export class GetSpotTipUsecase {
     constructor(
         private tipRepository: TipRepository,
@@ -54,8 +54,8 @@ export class GetSpotTipUsecase {
                 );
 
                 const tipImages: Image[] | null =
-                  await this.imageRepository.getImageByTipId(tip.id);
-              
+                    await this.imageRepository.getImageByTipId(tip.id);
+
                 if (!tipImages) {
                     throw new Error("이미지 정보를 찾을 수 없습니다.");
                 }
