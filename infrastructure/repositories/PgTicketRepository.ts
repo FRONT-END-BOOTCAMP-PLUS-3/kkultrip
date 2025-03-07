@@ -18,13 +18,13 @@ export class PgTicketRepository implements TicketRepository {
     }
   }
 
-  async createTicket(
-    ticket: Omit<Ticket, "id" | "createdAt" | "updatedAt">
-  ): Promise<Ticket> {
+  async createTicket(ticket: Ticket): Promise<Ticket> {
     try {
       return await prisma.ticket.create({
         data: {
-          ...ticket,
+          name: ticket.name,
+          price: ticket.price,
+          spotId: ticket.spotId,
         },
       });
     } catch (error) {
