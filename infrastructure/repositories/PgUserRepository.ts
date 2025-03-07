@@ -1,4 +1,4 @@
-import { UserRepository } from "@/domain/repositories/UserRepository";
+import UserRepository from "@/domain/repositories/UserRepository";
 import { PrismaClient, User } from "@prisma/client";
 
 const prisma = new PrismaClient();

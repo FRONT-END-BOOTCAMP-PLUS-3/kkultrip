@@ -1,4 +1,4 @@
-import { UserRepository } from "@/domain/repositories/UserRepository";
+import UserRepository from "@/domain/repositories/UserRepository";
 import bcrypt from "bcrypt";
 import { CreateUserDto } from "./dto/CreateUserDto";
 

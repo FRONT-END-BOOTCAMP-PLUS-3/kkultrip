@@ -1,0 +1,94 @@
+.reactionContainer {
+  margin-top: 0.75rem;
+  display: flex;
+  gap: 0.625rem;
+
+  .reactionButton {
+    background: none;
+    border: 0.0625rem solid var(--primary-color);
+    border: 0.0625rem solid var(--primary-color);
+    border-radius: 0.4rem;
+    padding: 0.25rem;
+    display: flex;
+    gap: 0.25rem;
+  }
+
+  .modal {
+    position: absolute;
+    background-color: white;
+    border: 0.0625rem solid var(--primary-color);
+    border-radius: 0.5rem;
+    padding: 0.625rem;
+    box-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 1000;
+    width: 90%;
+    gap: 1rem;
+
+    .emotionOption {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 5px 0;
+      font-size: 0.875rem;
+      gap: 0.25rem;
+    }
+
+    .emotionOptionYellow {
+      color: var(--primary-color);
+    }
+
+    .reactionMessage {
+      position: fixed;
+      top: 95%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: rgba(235, 40, 40, 0.8);
+      color: black;
+      padding: 0.625rem 1.25rem;
+      border-radius: 1.25rem;
+      z-index: 1000;
+      width: 80%;
+      text-align: center;
+    }
+  }
+
+
+
+  .emotionWrapper {
+    display: flex;
+    margin-left: auto;
+  }
+}
+
+@keyframes shake {
+  0% {
+    transform: translateX(0);
+  }
+
+  25% {
+    transform: translateX(-5px);
+  }
+
+  50% {
+    transform: translateX(5px);
+  }
+
+  75% {
+    transform: translateX(-5px);
+  }
+
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.shake {
+  animation: shake 1s;
+}
+
+.shake {
+  animation: shake 1s;
+}

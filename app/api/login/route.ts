@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { LoginUsecase } from "@/application/usecases/user/LoginUsecase";
 import { PgUserRepository } from "@/infrastructure/repositories/PgUserRepository";
-import { UserRepository } from "@/domain/repositories/UserRepository";
+import UserRepository from "@/domain/repositories/UserRepository";
 
 export async function POST(req: NextRequest) {
   try {

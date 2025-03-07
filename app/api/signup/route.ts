@@ -1,5 +1,5 @@
 import SignupUsecase from "@/application/usecases/user/SignupUsecase";
-import { UserRepository } from "@/domain/repositories/UserRepository";
+import UserRepository from "@/domain/repositories/UserRepository";
 import { PgUserRepository } from "@/infrastructure/repositories/PgUserRepository";
 import { promises as fs } from "fs";
 import { writeFile } from "fs/promises";
