@@ -2,7 +2,7 @@
 
 import { Tip } from "@prisma/client";
 import { useState } from "react";
-import styles from "./Tiptable.module.scss";
+import styles from "./TipTable.module.scss";
 
 interface TipTableProps {
   tips: Tip[];
@@ -18,7 +18,7 @@ type SortKey =
   | "createdAt";
 type SortOrder = "asc" | "desc";
 
-const Tiptable = ({ tips }: TipTableProps) => {
+const TipTable = ({ tips }: TipTableProps) => {
   // const router = useRouter();
   const [sortKey, setSortKey] = useState<SortKey>("id");
   const [sortOrder, setSortOrder] = useState<SortOrder>("asc");
@@ -134,4 +134,4 @@ const Tiptable = ({ tips }: TipTableProps) => {
   );
 };
 
-export default Tiptable;
+export default TipTable;

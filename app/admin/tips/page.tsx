@@ -1,11 +1,11 @@
 "use client";
 
-import Sidebar from "../components/sidebar/Sidebar";
+import SideBar from "../components/sidebar/SideBar";
 import Header from "../components/header/Header";
 import styles from "./AdminTipsPage.module.scss";
 import { Tip } from "@prisma/client";
 import { useEffect, useState } from "react";
-import Tiptable from "../components/tiptable/Tiptable";
+import TipTable from "../components/tiptable/TipTable";
 
 const AdminTipsPage = () => {
   const [tips, setTips] = useState<Tip[]>([]);
@@ -29,10 +29,10 @@ const AdminTipsPage = () => {
 
   return (
     <div className={styles.container}>
-      <Sidebar />
+      <SideBar />
       <main className={styles.main}>
         <Header title="꿀팁 관리" />
-        <Tiptable tips={tips} />
+        <TipTable tips={tips} />
       </main>
     </div>
   );

@@ -2,12 +2,11 @@
 
 import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
-import styles from "./Sidebar.module.scss";
+import styles from "./SideBar.module.scss";
 
-const Sidebar = () => {
+const SideBar = () => {
   const router = useRouter();
   const pathname = usePathname(); // 현재 경로 가져오기
-
   const handleNavigation = (path: string) => {
     router.push(`/admin/${path}`);
   };
@@ -47,4 +46,4 @@ const Sidebar = () => {
   );
 };
 
-export default Sidebar;
+export default SideBar;

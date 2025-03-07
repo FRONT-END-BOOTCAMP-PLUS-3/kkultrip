@@ -8,12 +8,13 @@ import { UpdateSpotDto } from "@/application/usecases/admin/spot/dto/UpdateSpotD
 import { UpdateTicketDto } from "@/application/usecases/admin/spot/ticket/dto/UpdateTicketDto";
 import { Time } from "@prisma/client";
 
+const days = ["월", "화", "수", "목", "금", "토", "일"];
+
 const SpotsEditPage = () => {
   const router = useRouter();
   const params = useParams();
   const spotId = params.id as string | undefined;
 
-  const days = ["월", "화", "수", "목", "금", "토", "일"];
   const defaultOperatingHours = Object.fromEntries(
     days.map((day) => [
       day,
@@ -120,7 +121,7 @@ const SpotsEditPage = () => {
           setInitialDocents(data.docents || []);
         });
     }
-  }, [spotId]);
+  }, [spotId, defaultOperatingHours]);
 
   const handlePhoneChange = (
     e: React.ChangeEvent<HTMLInputElement>,
