@@ -1,28 +1,11 @@
-import GetImageBySpotIdUsecase from "@/application/usecases/spot/images/GetImageBySpotIdUsecase";
-import { ImageRepository } from "@/domain/repositories/ImageRepository";
-import TipRepository from "@/domain/repositories/TipRepository";
+import { GetTipUsecase } from "@/application/usecases/spot/tip/GetTipUsecase";
+import { UpdateTipUsecase } from "@/application/usecases/spot/tip/UpdateTipUsecase";
 import { PgImageRepository } from "@/infrastructure/repositories/PgImageRepository";
+import PgSpotRepository from "@/infrastructure/repositories/PgSpotRepository";
 import { PgTipRepository } from "@/infrastructure/repositories/PgTipRepository";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
-<<<<<<< HEAD
-    request: NextRequest,
-    props: { params: Promise<{ spotId: string }> }
-) {
-    const params = await props.params;
-    const { spotId } = params;
-    const pgTipRepository: TipRepository = new PgTipRepository();
-    const pgImageRepository: ImageRepository = new PgImageRepository();
-    const usecase = new GetImageBySpotIdUsecase(
-        pgTipRepository,
-        pgImageRepository
-    );
-
-    const images = await usecase.execute(Number(spotId), "createdAt");
-    return NextResponse.json(images);
-}
-=======
   req: NextRequest,
   props: { params: Promise<{ tipId: string }> }
 ) {
@@ -107,4 +90,3 @@ export async function PUT(
     return NextResponse.json({ error: "서버 오류 발생" }, { status: 500 });
   }
 }
->>>>>>> 8235c63d0d3ed0c440fe4b44bfa914ed0043b28a
