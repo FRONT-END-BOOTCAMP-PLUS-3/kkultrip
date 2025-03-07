@@ -2,7 +2,7 @@ import { GetSpotsDTO } from "@/application/usecases/spot/dto/GetSpotsDto";
 import SearchFilter from "./components/SearchFilter";
 import NaverMap from "./components/NaverMap";
 import BottomSheet from "./components/BottomSheet";
-import styles from "./Spots.module.scss";
+import styles from "./SpotsPage.module.scss";
 
 // 기본 위치 설정 (서울)
 const DEFAULT_LAT = 37.5665;
