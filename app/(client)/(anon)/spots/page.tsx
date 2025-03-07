@@ -43,7 +43,20 @@ const getFilteredSpots = async ({
     }
 
     const res = await fetch(url, { cache: "no-cache" }); // 캐시 확인 후 변경 시 새 요청
-    if (!res.ok) throw new Error(await res.text());
+    if (!res.ok) {
+      try {
+        const errorData = await res.json();
+        console.log("❌ 명소 데이터를 불러올 수 없음:", errorData);
+        throw new Error(errorData.error || "서버 오류 발생");
+      } catch {
+        const errorText = await res.text();
+        console.log(
+          "❌ 명소 데이터를 불러올 수 없음 (텍스트 오류):",
+          errorText
+        );
+        throw new Error(errorText);
+      }
+    }
 
     const data = await res.json();
     return Array.isArray(data.spots) ? data.spots : [];

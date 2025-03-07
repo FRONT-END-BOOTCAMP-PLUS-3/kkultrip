@@ -11,7 +11,7 @@ const BookMark = ({
     isBookMarked: boolean;
     spotId: number;
 }) => {
-    const accessUserId = "de72be1d-a8ae-434a-a72c-610e49328f06";
+    const accessUserId = "7379a017-90cb-40da-9635-eb7eff4d8e83";
 
     const [isBookMark, setIsBookMark] = useState(isBookMarked);
 

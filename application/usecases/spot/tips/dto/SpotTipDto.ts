@@ -1,5 +1,5 @@
 import { TipReactionDto } from "./TipReactionDto";
-
+import { TipImageDto } from "./TipImageDto";
 export interface SpotTipDto {
     id: number;
     userId: string;
@@ -10,4 +10,7 @@ export interface SpotTipDto {
     description: string;
     tipReaction: TipReactionDto[];
     createdAt: string;
+    tipImages: TipImageDto[];
+    waitingTime: number;
+    spotId: number;
 }

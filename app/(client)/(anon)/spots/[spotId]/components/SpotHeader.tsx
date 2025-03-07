@@ -5,7 +5,7 @@ import { SpotHeaderDto } from "@/application/usecases/spot/dto/SpotHeaderDto";
 import BookMark from "./BookMark";
 
 const SpotHeader = async ({ spotId }: { spotId: string }) => {
-    const accessUserId = "de72be1d-a8ae-434a-a72c-610e49328f06";
+    const accessUserId = "7379a017-90cb-40da-9635-eb7eff4d8e83";
     const data = await fetch(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/spots/${spotId}?accessUserId=${accessUserId}`
     );

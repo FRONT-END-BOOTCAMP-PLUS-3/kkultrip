@@ -1,4 +1,4 @@
-import { CreateReportUsecase } from "@/application/usecases/spot/CreateReportUsecase";
+import { CreateReportUsecase } from "@/application/usecases/spot/tips/CreateReportUsecase";
 import ReportRepository from "@/domain/repositories/ReportRepository";
 import TipRepository from "@/domain/repositories/TipRepository";
 import { PgReportRepository } from "@/infrastructure/repositories/PgReportRepository";

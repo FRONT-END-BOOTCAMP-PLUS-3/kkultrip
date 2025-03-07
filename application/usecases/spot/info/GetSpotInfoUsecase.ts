@@ -1,5 +1,5 @@
 import SpotRepository from "@/domain/repositories/SpotRepository";
-import TicketRepository from "@/domain/repositories/TicketRepository";
+import { TicketRepository } from "@/domain/repositories/TicketRepository";
 import TimeRepository from "@/domain/repositories/TimeRepository";
 import { Spot, Ticket, Time } from "@prisma/client";
 import { SpotInfoDto } from "./dto/SpotInfoDto";
@@ -28,12 +28,12 @@ export class GetSpotInfoUsecase {
             id: spot.id,
             name: spot.name,
             address: spot.address,
-            phone: spot.phone,
-            info: spot.info,
+            phone: spot.phone || "",
+            info: spot.info || "",
             category: spot.category,
             link: spot.link || "",
-            avgPrice: spot.avgPrice,
-            avgWaitingTime: spot.avgWaitingTime,
+            avgPrice: spot.avgPrice || 0,
+            avgWaitingTime: spot.avgWaitingTime || 0,
             ticketDetail: tickets.map((ticket) => ({
                 id: ticket.id,
                 name: ticket.name,

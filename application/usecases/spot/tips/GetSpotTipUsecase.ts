@@ -5,16 +5,22 @@ import { Reaction, Spot, User } from "@prisma/client";
 import { SpotTipDto } from "./dto/SpotTipDto";
 import ReactionRepository from "@/domain/repositories/ReactionRepository";
 import { TipReactionDto } from "./dto/TipReactionDto";
-
+import ImageRepository from "@/domain/repositories/ImageRepository";
+import { TipImageDto } from "./dto/TipImageDto";
+import { Image } from "@prisma/client";
 export class GetSpotTipUsecase {
     constructor(
         private tipRepository: TipRepository,
         private userRepository: UserRepository,
         private spotRepository: SpotRepository,
-        private reactionRepository: ReactionRepository
+        private reactionRepository: ReactionRepository,
+        private imageRepository: ImageRepository
     ) {}
 
-    async execute(spotId: number, orderBy: "createdAt" | "reactionCount"): Promise<SpotTipDto[]> {
+    async execute(
+        spotId: number,
+        orderBy: "createdAt" | "reactionCount"
+    ): Promise<SpotTipDto[]> {
         const tips = await this.tipRepository.getTipsBySpotId(spotId, orderBy);
 
         const spotTipList: SpotTipDto[] = await Promise.all(
@@ -46,6 +52,22 @@ export class GetSpotTipUsecase {
                         };
                     }
                 );
+
+                const tipImages: Image[] | null =
+                  await this.imageRepository.getImageByTipId(tip.id);
+              
+                if (!tipImages) {
+                    throw new Error("이미지 정보를 찾을 수 없습니다.");
+                }
+
+                const tipImageList: TipImageDto[] = tipImages?.map((image) => {
+                    return {
+                        id: image.id,
+                        tipId: image.tipId,
+                        path: image.path ?? "",
+                    };
+                });
+
                 return {
                     id: tip.id,
                     userId: user.id,
@@ -55,7 +77,10 @@ export class GetSpotTipUsecase {
                     price: tip.price.toLocaleString(),
                     description: tip.description,
                     tipReaction: tipReactionList,
+                    tipImages: tipImageList,
                     createdAt: tip.createdAt.toLocaleDateString(),
+                    waitingTime: tip.waitingTime,
+                    spotId: tip.spotId,
                 };
             })
         );
