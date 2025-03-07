@@ -48,20 +48,20 @@ const LoginPage = () => {
 
       alert("로그인 성공!");
       const responseData = await response.json();
-      console.log("response", responseData);
 
       // 로그인을 했을 때 관리자면 관리자페이지로, 아니면 로그인 진입 전 페이지로 이동
       if (responseData.isAdmin) {
         router.push("/admin/spots");
       } else {
-        const returnUrl = document.cookie
+        const prevUrl = document.cookie
           .split("; ")
-          .find((row) => row.startsWith("returnUrl="))
+          .find((row) => row.startsWith("prevUrl="))
           ?.split("=")[1];
-        if (returnUrl) {
-          router.push(decodeURIComponent(returnUrl));
+
+        if (prevUrl) {
+          router.push(decodeURIComponent(prevUrl));
         } else {
-          router.push("/user/my-tips");
+          router.push("/");
         }
       }
     } catch (err: unknown) {
