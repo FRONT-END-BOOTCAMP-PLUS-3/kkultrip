@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
-import { PgDocentRepository } from "@/infrastructure/repositories/PgDocentRepository";
+import PgDocentRepository from "@/infrastructure/repositories/PgDocentRepository";
 import { DeleteDocentUseCase } from "@/application/usecases/admin/spot/docent/dto/DeleteDocentUseCase";
-import { DocentRepository } from "@/domain/repositories/DocentRepository";
+import DocentRepository from "@/domain/repositories/DocentRepository";
 
 export async function DELETE(req: Request) {
   try {

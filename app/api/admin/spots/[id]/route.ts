@@ -7,9 +7,9 @@ import { TicketRepository } from "@/domain/repositories/TicketRepository";
 import PgSpotRepository from "@/infrastructure/repositories/PgSpotRepository";
 import SpotRepository from "@/domain/repositories/SpotRepository";
 import { PgTimeRepository } from "@/infrastructure/repositories/PgTimeRepository";
-import { TimeRepository } from "@/domain/repositories/TimeRepository";
-import { DocentRepository } from "@/domain/repositories/DocentRepository";
-import { PgDocentRepository } from "@/infrastructure/repositories/PgDocentRepository";
+import TimeRepository from "@/domain/repositories/TimeRepository";
+import DocentRepository from "@/domain/repositories/DocentRepository";
+import PgDocentRepository from "@/infrastructure/repositories/PgDocentRepository";
 import { promises as fs } from "fs";
 import path from "path";
 

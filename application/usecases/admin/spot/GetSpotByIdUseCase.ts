@@ -1,8 +1,8 @@
 import SpotRepository from "@/domain/repositories/SpotRepository";
 import { TicketRepository } from "@/domain/repositories/TicketRepository";
-import { TimeRepository } from "@/domain/repositories/TimeRepository";
+import TimeRepository from "@/domain/repositories/TimeRepository";
 import { GetSpotDto } from "./dto/GetSpotDto";
-import { DocentRepository } from "@/domain/repositories/DocentRepository";
+import DocentRepository from "@/domain/repositories/DocentRepository";
 
 export class GetSpotByIdUseCase {
   constructor(

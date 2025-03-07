@@ -184,8 +184,6 @@ const SpotsCreatePage = () => {
       category: formData.category,
       link: formData.link || null,
       img: formData.img,
-      avgPrice: null,
-      avgWaitingTime: null,
       tickets: validTickets.map((ticket) => ({
         name: ticket.name,
         price: Number(ticket.price),

@@ -1,5 +1,5 @@
 import { Docent } from "@prisma/client";
-import { DocentRepository } from "@/domain/repositories/DocentRepository";
+import DocentRepository from "@/domain/repositories/DocentRepository";
 
 export class DeleteDocentUseCase {
   constructor(private docentRepository: DocentRepository) {}

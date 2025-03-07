@@ -1,6 +1,6 @@
 import { Time } from "@prisma/client";
 
-export interface TimeRepository {
+export default interface TimeRepository {
   getTodayHours(spotId: number): Promise<string | null>;
 
   createTime(time: Time): Promise<Time>;

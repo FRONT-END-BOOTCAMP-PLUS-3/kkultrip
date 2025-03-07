@@ -8,10 +8,10 @@ import { promises as fs } from "fs";
 import path from "path";
 import { CreateSpotDto } from "@/application/usecases/admin/spot/dto/CreateSpotDto";
 import SpotRepository from "@/domain/repositories/SpotRepository";
-import { TimeRepository } from "@/domain/repositories/TimeRepository";
-import { DocentRepository } from "@/domain/repositories/DocentRepository";
+import TimeRepository from "@/domain/repositories/TimeRepository";
+import DocentRepository from "@/domain/repositories/DocentRepository";
 import { PgTimeRepository } from "@/infrastructure/repositories/PgTimeRepository";
-import { PgDocentRepository } from "@/infrastructure/repositories/PgDocentRepository";
+import PgDocentRepository from "@/infrastructure/repositories/PgDocentRepository";
 
 export async function GET() {
   try {

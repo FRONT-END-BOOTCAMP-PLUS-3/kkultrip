@@ -2,8 +2,8 @@ import { Spot, Ticket, Time, Docent } from "@prisma/client";
 import SpotRepository from "@/domain/repositories/SpotRepository";
 import { TicketRepository } from "@/domain/repositories/TicketRepository";
 import { CreateSpotDto } from "./dto/CreateSpotDto";
-import { TimeRepository } from "@/domain/repositories/TimeRepository";
-import { DocentRepository } from "@/domain/repositories/DocentRepository";
+import TimeRepository from "@/domain/repositories/TimeRepository";
+import DocentRepository from "@/domain/repositories/DocentRepository";
 
 export class CreateSpotUseCase {
   constructor(
