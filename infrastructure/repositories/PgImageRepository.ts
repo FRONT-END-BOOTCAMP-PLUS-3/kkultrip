@@ -2,6 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { ImageRepository } from "@/domain/repositories/ImageRepository";
 import path from "path";
 import fs from "fs";
+import { Image } from "@prisma/client";
 
 export class PgImageRepository implements ImageRepository {
   async createImages(tipId: number, imageFiles: File[]): Promise<void> {
@@ -72,5 +73,12 @@ export class PgImageRepository implements ImageRepository {
     } finally {
       await prisma.$disconnect();
     }
+  }
+
+  async getImageByTipId(tipId: number): Promise<Image[]> {
+    const images = await prisma.image.findMany({
+      where: { tipId },
+    });
+    return images;
   }
 }

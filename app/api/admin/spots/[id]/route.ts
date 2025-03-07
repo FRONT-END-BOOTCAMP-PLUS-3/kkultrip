@@ -3,9 +3,9 @@ import { GetSpotByIdUseCase } from "@/application/usecases/admin/spot/GetSpotsBy
 import { UpdateSpotUseCase } from "@/application/usecases/admin/spot/UpdateSpotUseCase";
 import { DeleteSpotUseCase } from "@/application/usecases/admin/spot/DeleteSpotUseCase";
 import { PgTicketRepository } from "@/infrastructure/repositories/PgTicketRepository";
+import  SpotRepository  from "@/domain/repositories/SpotRepository";
 import { TicketRepository } from "@/domain/repositories/TicketRepository";
 import PgSpotRepository from "@/infrastructure/repositories/PgSpotRepository";
-import SpotRepository from "@/domain/repositories/SpotRepository";
 
 export async function GET(
   req: Request,

@@ -1,15 +1,15 @@
 "use client";
 
-import { TipReactionDto } from "@/application/usecases/spot/dto/TipReactionDto";
+import { TipReactionDto } from "@/application/usecases/spot/tips/dto/TipReactionDto";
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useMemo } from "react";
 import Emotion from "./Emotion";
 import styles from "./Reaction.module.scss";
 import Report from "./Report";
 
 const Reaction = ({
     tipReaction,
-    userId, // 팁 작성한 유저 아이디
+    userId, // 접속한 유저 아이디
     tipId,
 }: {
     tipReaction: TipReactionDto[];
@@ -18,26 +18,16 @@ const Reaction = ({
 }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [showMessage, setShowMessage] = useState(false);
-    // const [reaction, setReaction] = useState<ReactionDto | null>(null);P
+    const [tipReactions, setTipReactions] =
+        useState<TipReactionDto[]>(tipReaction);
     const modalRef = useRef<HTMLDivElement | null>(null);
 
-    // 접속중인 유저 아이디
-    const accessUserId = "bf56f7ec-252c-4e27-80c2-460946715e32";
+    const accessUserId = "7379a017-90cb-40da-9635-eb7eff4d8e83";
 
-    const userReactionType = tipReaction.find(
-        (reaction) => reaction.userId === accessUserId
-    )?.type;
-
-    // useEffect(() => {
-    //     const fetchReaction = async () => {
-    //         const data = await fetch(
-    //             `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/tips/${tipId}/reactions?accessUserId=${accessUserId}`
-    //         );
-    //         const reaction = await data.json();
-    //         setReaction(reaction);
-    //     };
-    //     fetchReaction();
-    // }, [tipId]);
+    const userReactionType = useMemo(() => {
+        return tipReactions.find((reaction) => reaction.userId === accessUserId)
+            ?.type;
+    }, [tipReactions]);
 
     const handleButtonClick = () => {
         setIsModalOpen(!isModalOpen);
@@ -70,28 +60,97 @@ const Reaction = ({
             return;
         }
 
-        try {
-            const response = await fetch(
-                `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/tips/${tipId}/reactions`,
-                {
+        if (userReactionType) {
+            if (userReactionType === type) {
+                try {
+                    const response = await fetch(
+                        `/api/tips/${tipId}/reactions`,
+                        {
+                            method: "DELETE",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify({
+                                userId: accessUserId,
+                                type,
+                            }),
+                        }
+                    );
+
+                    if (response.ok) {
+                        console.log("반응 삭제 성공");
+
+                        setTipReactions((prevReactions) =>
+                            prevReactions.filter(
+                                (reaction) => reaction.type !== type
+                            )
+                        );
+                    } else {
+                        console.error("반응 삭제 실패", Error);
+                    }
+                } catch (error) {
+                    console.error("Error while deleting reaction:", error);
+                }
+            } else {
+                try {
+                    const response = await fetch(
+                        `/api/tips/${tipId}/reactions`,
+                        {
+                            method: "PUT",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify({
+                                userId: accessUserId,
+                                type,
+                            }),
+                        }
+                    );
+
+                    if (response.ok) {
+                        console.log("반응 수정 성공");
+
+                        setTipReactions((prevReactions) =>
+                            prevReactions.map((reaction) =>
+                                reaction.userId === accessUserId
+                                    ? { ...reaction, type }
+                                    : reaction
+                            )
+                        );
+                    } else {
+                        console.error("반응 수정 실패", Error);
+                    }
+                } catch (error) {
+                    console.error("Error while updating reaction:", error);
+                }
+            }
+        } else {
+            try {
+                const response = await fetch(`/api/tips/${tipId}/reactions`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
                     },
                     body: JSON.stringify({
-                        userId,
+                        userId: accessUserId,
                         type,
                     }),
-                }
-            );
+                });
 
-            if (response.ok) {
-                console.log("반응 남기기 성공");
-            } else {
-                console.error("반응 남기기 실패", Error);
+                if (response.ok) {
+                    const newReaction = await response.json();
+
+                    setTipReactions((prevReactions) => [
+                        ...prevReactions,
+                        newReaction,
+                    ]);
+                    console.log("반응 남기기 성공");
+                } else {
+                    console.error("반응 남기기 실패", Error);
+                }
+            } catch (error) {
+                console.error("Error while creating reaction:", error);
             }
-        } catch (error) {
-            console.error("Error while creating reaction:", error);
         }
     };
 
@@ -107,7 +166,7 @@ const Reaction = ({
         };
     }, [isModalOpen]);
 
-    const typeCounts = tipReaction.reduce((acc, { type }) => {
+    const typeCounts = tipReactions.reduce((acc, { type }) => {
         acc[type] = (acc[type] || 0) + 1;
         return acc;
     }, {} as Record<number, number>);
@@ -139,15 +198,13 @@ const Reaction = ({
                     {[1, 2, 3, 4].map((type) => (
                         <button
                             key={type}
-                            className={styles.emotionOption}
+                            className={`${styles.emotionOption} ${
+                                userReactionType === type
+                                    ? styles.emotionOptionYellow
+                                    : ""
+                            }`}
                             id={`reaction-button-${type}`}
                             onClick={() => handleReactionClick(type)}
-                            style={{
-                                color:
-                                    userReactionType === type
-                                        ? "yellow"
-                                        : "inherit",
-                            }}
                         >
                             <Image
                                 src={reactions[type].image}
@@ -160,7 +217,7 @@ const Reaction = ({
                     ))}
                     {showMessage && (
                         <div className={styles.reactionMessage}>
-                            자신의 반응은 남길 수 없습니다.
+                            자신의 팁에는 반응은 남길 수 없습니다.
                         </div>
                     )}
                 </div>
