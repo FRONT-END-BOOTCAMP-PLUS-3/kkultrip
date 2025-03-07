@@ -1,10 +1,11 @@
 "use client";
 
-import { TimeDetailDto } from "@/application/usecases/spot/dto/TimeDetailDto";
+
 import { useState } from "react";
 import { FaRegClock } from "react-icons/fa";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import styles from "./TimeList.module.scss";
+import { TimeDetailDto } from "@/application/usecases/spot/info/dto/TimeDetailDto";
 
 const TimeList = ({
     times,

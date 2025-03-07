@@ -1,5 +1,5 @@
 import { Spot, Ticket } from "@prisma/client";
-import { SpotRepository } from "@/domain/repositories/SpotRepository";
+import SpotRepository  from "@/domain/repositories/SpotRepository";
 import { TicketRepository } from "@/domain/repositories/TicketRepository";
 import { CreateSpotDto } from "./dto/CreateSpotDto";
 

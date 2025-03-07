@@ -1,5 +1,5 @@
 import { Spot } from "@prisma/client";
-import { SpotRepository } from "@/domain/repositories/SpotRepository";
+import SpotRepository from "@/domain/repositories/SpotRepository";
 
 export class DeleteSpotUseCase {
   constructor(private spotRepository: SpotRepository) {}

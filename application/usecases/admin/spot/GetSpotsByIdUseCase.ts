@@ -1,4 +1,4 @@
-import { SpotRepository } from "@/domain/repositories/SpotRepository";
+import SpotRepository from "@/domain/repositories/SpotRepository";
 import { TicketRepository } from "@/domain/repositories/TicketRepository";
 import { GetSpotDto } from "./dto/GetSpotDto";
 import { Spot } from "@prisma/client";
@@ -21,11 +21,11 @@ export class GetSpotByIdUseCase {
       address: spot.address,
       lon: spot.lon,
       lat: spot.lat,
-      phone: spot.phone,
-      info: spot.info,
+      phone: spot.phone ?? "",
+      info: spot.info ?? "",
       category: spot.category,
-      link: spot.link ?? null,
-      img: spot.img,
+      link: spot.link ?? "",
+      img: spot.img ?? "",
       avgPrice: spot.avgPrice ?? null,
       avgWaitingTime: spot.avgWaitingTime ?? null,
       tickets, // 티켓 정보 추가
