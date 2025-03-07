@@ -12,8 +12,6 @@ export interface CreateSpotDto {
   category: string;
   link?: string | null;
   img: string;
-  avgPrice?: null;
-  avgWaitingTime?: null;
   tickets?: CreateTicketDto[];
   times?: CreateTimeDto[];
   docents?: CreateDocentDto[];

@@ -1,5 +1,5 @@
 import { Spot, Ticket, Time, Docent } from "@prisma/client";
-import { SpotRepository } from "@/domain/repositories/SpotRepository";
+import SpotRepository from "@/domain/repositories/SpotRepository";
 import { TicketRepository } from "@/domain/repositories/TicketRepository";
 import { CreateSpotDto } from "./dto/CreateSpotDto";
 import { TimeRepository } from "@/domain/repositories/TimeRepository";
@@ -30,8 +30,8 @@ export class CreateSpotUseCase {
       category: dto.category,
       link: dto.link ?? null,
       img: dto.img,
-      avgPrice: 0,
-      avgWaitingTime: 0,
+      avgPrice: null,
+      avgWaitingTime: null,
       createdAt: new Date(),
       updatedAt: new Date(),
     };
@@ -66,7 +66,7 @@ export class CreateSpotUseCase {
           open: timeDto.open || null,
           close: timeDto.close || null,
           day: timeDto.day,
-          all_hours: timeDto.all_hours,
+          allHours: timeDto.all_hours,
           closeDay: timeDto.closeDay,
         };
         const createdTime: Time = await this.timeRepository.createTime(newTime);

@@ -39,8 +39,6 @@ export default class PgSpotRepository implements SpotRepository {
         category: spot.category,
         link: spot.link ?? null,
         img: spot.img,
-        avgPrice: null,
-        avgWaitingTime: null,
       },
     });
   }

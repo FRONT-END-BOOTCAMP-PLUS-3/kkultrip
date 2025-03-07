@@ -114,7 +114,7 @@ export async function PATCH(req: Request) {
           );
           await fs.unlink(existingImagePath);
         } catch (unlinkError) {
-          console.warn("Failed to delete old image:", unlinkError);
+          console.log("Failed to delete old image:", unlinkError);
         }
       }
 
@@ -150,7 +150,7 @@ export async function PATCH(req: Request) {
               );
               await fs.unlink(existingAudioPath);
             } catch (unlinkError) {
-              console.warn("Failed to delete old audio:", unlinkError);
+              console.log("Failed to delete old audio:", unlinkError);
             }
           }
 
@@ -216,7 +216,7 @@ export async function DELETE(req: Request) {
         await fs.unlink(existingImgPath);
         console.log(`Deleted existing image: ${existingImgFilename}`);
       } catch (error) {
-        console.warn("No existing image found or failed to delete:", error);
+        console.log("No existing image found or failed to delete:", error);
       }
     }
 
@@ -234,7 +234,7 @@ export async function DELETE(req: Request) {
           await fs.unlink(audioPath);
           console.log(`Deleted audio file: ${audioFilename}`);
         } catch (error) {
-          console.warn(
+          console.log(
             "No existing audio file found or failed to delete:",
             error
           );
