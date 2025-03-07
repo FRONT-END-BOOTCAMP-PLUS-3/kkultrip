@@ -61,6 +61,16 @@ const SpotsEditPage = () => {
   const [initialTickets, setInitialTickets] = useState<
     { id: number | null; name: string; price: string | number }[]
   >([]);
+
+  const [initialDocents, setInitialDocents] = useState<
+    {
+      id: number | null;
+      title: string;
+      description: string;
+      audioPath: string;
+    }[]
+  >([]);
+
   const phoneRef1 = useRef<HTMLInputElement>(null);
   const phoneRef2 = useRef<HTMLInputElement>(null);
   const phoneRef3 = useRef<HTMLInputElement>(null);
@@ -107,6 +117,7 @@ const SpotsEditPage = () => {
             ],
           });
           setInitialTickets(data.tickets || []);
+          setInitialDocents(data.docents || []);
         });
     }
   }, [spotId]);
@@ -268,7 +279,18 @@ const SpotsEditPage = () => {
     );
 
     for (const ticket of deletedTickets) {
-      await fetch(`/api/admin/spots/${spotId}/${ticket.id}`, {
+      await fetch(`/api/admin/spots/${spotId}/ticket/${ticket.id}`, {
+        method: "DELETE",
+      });
+    }
+
+    const deletedDocents = initialDocents.filter(
+      (initialDocent) =>
+        !formData.docents.some((docent) => docent.id === initialDocent.id)
+    );
+
+    for (const docent of deletedDocents) {
+      await fetch(`/api/admin/spots/${spotId}/docent/${docent.id}`, {
         method: "DELETE",
       });
     }

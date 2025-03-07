@@ -1,4 +1,4 @@
-import { UpdateDocentDto } from "../../docent/dto/UpdateDocentDto";
+import { UpdateDocentDto } from "../docent/dto/UpdateDocentDto";
 import { UpdateTicketDto } from "../ticket/dto/UpdateTicketDto";
 import { UpdateTimeDto } from "../time/dto/UpdateTimeDto";
 

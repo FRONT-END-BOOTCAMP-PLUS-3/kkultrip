@@ -1,4 +1,4 @@
-import { GetDocentDto } from "../../docent/dto/GetDocentDto";
+import { GetDocentDto } from "../docent/dto/GetDocentDto";
 import { GetTicketDto } from "../ticket/dto/GetTicketDto";
 import { GetTimeDto } from "../time/dto/GetTimeDto";
 

@@ -1,4 +1,4 @@
-import { CreateDocentDto } from "../../docent/dto/CreateDocentDto";
+import { CreateDocentDto } from "../docent/dto/CreateDocentDto";
 import { CreateTicketDto } from "../ticket/dto/CreateTicketDto";
 import { CreateTimeDto } from "../time/dto/CreateTimeDto";
 
