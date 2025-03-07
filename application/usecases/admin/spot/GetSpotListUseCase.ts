@@ -1,6 +1,5 @@
 import SpotRepository from "@/domain/repositories/SpotRepository";
 import { GetSpotListDto } from "./dto/GetSpotListDto";
-import { Spot } from "@prisma/client";
 
 export class GetSpotListUseCase {
   constructor(private spotRepository: SpotRepository) {}
@@ -8,10 +7,15 @@ export class GetSpotListUseCase {
   async execute(): Promise<GetSpotListDto[]> {
     const spots = await this.spotRepository.getAllSpots();
 
-    return spots.map((spot: Spot) => ({
-      ...spot,
-      createdAt: spot.createdAt.toISOString(), // Date → string 변환
-      updatedAt: spot.updatedAt.toISOString(), // Date → string 변환
-    }));
+    return spots.map((spot) => {
+      return {
+        id: spot.id,
+        name: spot.name,
+        address: spot.address,
+        phone: spot.phone,
+        category: spot.category,
+        info: spot.info,
+      };
+    });
   }
 }

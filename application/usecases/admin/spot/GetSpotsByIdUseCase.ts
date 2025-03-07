@@ -28,12 +28,8 @@ export class GetSpotByIdUseCase {
       category: spot.category,
       link: spot.link ?? null,
       img: spot.img,
-      avgPrice: spot.avgPrice ?? null,
-      avgWaitingTime: spot.avgWaitingTime ?? null,
       tickets: tickets ?? null,
       times: times ?? null,
-      createdAt: spot.createdAt.toISOString(),
-      updatedAt: spot.updatedAt.toISOString(),
     };
   }
 }
