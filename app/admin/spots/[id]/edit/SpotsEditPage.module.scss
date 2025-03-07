@@ -136,6 +136,21 @@
       width: 100%;
       margin-top: 0.8rem;
     }
+    .wrapTextArea {
+      position: relative;
+      .textareaField {
+        width: 100%;
+      }
+      .charCount {
+        position: absolute;
+        display: block;
+        text-align: right;
+        font-size: 0.875rem;
+        color: #666;
+        bottom: 2rem;
+        right: 1rem;
+      }
+    }
   }
 
   .backButton {

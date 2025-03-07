@@ -372,14 +372,18 @@ const SpotsCreatePage = () => {
           />
         </div>
 
-        <textarea
-          name="info"
-          placeholder="정보"
-          value={formData.info}
-          onChange={handleChange}
-          className={styles.textareaField}
-          maxLength={100}
-        />
+        <div className={styles.wrapTextArea}>
+          <textarea
+            name="info"
+            value={formData.info ?? ""}
+            onChange={handleChange}
+            className={styles.textareaField}
+            maxLength={100}
+          />
+          <span className={styles.charCount}>
+            {(formData.info ?? "").length} / 100
+          </span>
+        </div>
 
         <select
           name="category"
