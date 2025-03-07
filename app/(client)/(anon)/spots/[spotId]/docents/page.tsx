@@ -1,32 +1,35 @@
-import styles from "./docentsPage.module.scss";
+import styles from "./DocentsPage.module.scss";
 import DocentContent from "./components/DocentContent";
+import { SpotDocentDto } from "@/application/usecases/spot/docent/dto/SpotDocentDto";
 
-const data = [
-    {
-        content: `경주 불국사 대웅전(慶州 佛國寺 大雄殿)은 경상북도 경주시,
-                불국사의 대웅전으로 조선시대의 건축물이다. 2011년 12월 30일
-                대한민국의 보물 제1744호로 지정되었다. 석가여래 부처님을 모시는
-                법당으로, 불국사 경 내 중심이 되는 건물이다. 경주 불국사
-                대웅전(慶州 佛國寺 大雄殿)은 경상북도 경주시, 불국사의
-                대웅전으로 조선시대의 건축물이다. 2011년 12월 30일 대한민국의
-                보물 제1744호로 지정되었다. 석가여래 부처님을 모시는 법당으로,
-                  불국사 경 내 중심이 되는 건물이다.`,
-    },
-    {
-        content: `경주 불국사 대웅전(慶州 佛國寺 大雄殿)은 경상북도 경주시,
-                불국사의 대웅전으로 조선시대의 건축물이다. 2011년 12월 30일
-                대한민국의 보물 제1744호로 지정되었다. 석가여래 부처님을 모시는
-                법당으로, 불국사 경 내 중심이 되는 건물이다.`,
-    },
-];
+const DocentsPage = async (props: { params: Promise<{ spotId: string }> }) => {
+    const params = await props.params;
+    const data = await fetch(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/spots/${params.spotId}/docent`
+    );
+    const docentData: SpotDocentDto[] = await data.json();
 
-const DocentsPage = () => {
+    if (!docentData || docentData.length === 0) {
+        return (
+            <div className={styles.noData}>
+                <p>도슨트가 준비되지 않았습니다.</p>
+                <p>관리자에게 도슨트를 요청해주세요!</p>
+            </div>
+        );
+    }
+
     return (
         <div className={styles.docentsContainer}>
-            <h2 className={styles.srOnly}>불국사 도슨트</h2>
+            <h2 className={styles.srOnly}>{docentData[0].spotName} 도슨트</h2>
             <div className={styles.docentWrapper}>
-                {data.map((item) => (
-                    <DocentContent key={item.content} content={item.content} />
+                {docentData.map((docent) => (
+                    <DocentContent
+                        key={docent.id}
+                        title={docent.title}
+                        description={docent.description}
+                        audioPath={docent.audioPath}
+                        docentId={docent.id}
+                    />
                 ))}
             </div>
         </div>

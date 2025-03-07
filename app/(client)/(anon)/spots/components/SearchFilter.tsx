@@ -1,37 +1,25 @@
 "use client";
 
 import styles from "./SearchFilter.module.scss";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { IoSearch, IoClose } from "react-icons/io5";
 import { TbCurrentLocation } from "react-icons/tb";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
+import { getGeocode } from "@/utils/getGeocode";
+import { getMyLocation } from "@/utils/getMyLocation";
 
-const SearchFilter = ({
-  updateFilters,
-  tempQuery,
-  setTempQuery,
-  initialCategory,
-  initialPrice,
-}: {
-  updateFilters: (filters: {
-    lat?: number;
-    lon?: number;
-    query?: string;
-    category?: string;
-    price?: string;
-  }) => void;
-  tempQuery: string;
-  setTempQuery: (value: string) => void;
-  initialCategory: string;
-  initialPrice: string;
-}) => {
+const SearchFilter = () => {
+  const searchParams = useSearchParams();
   const router = useRouter();
 
-  const [selectedCategory, setSelectedCategory] = useState(initialCategory);
-  const [selectedPrice, setSelectedPrice] = useState(initialPrice);
+  const query = searchParams.get("query") || "";
+  const selectedCategory = searchParams.get("category") || "";
+  const selectedPrice = searchParams.get("price") || "";
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
-  const [isRecentVisible, setIsRecentVisible] = useState(false); // 🔹 최근 검색어 표시 여부
+  const [isRecentVisible, setIsRecentVisible] = useState(false);
+  const [tempQuery, setTempQuery] = useState(query);
+  const inputRef = useRef<HTMLInputElement>(null); // 검색 input 요소 참조 추가
 
   // 로컬 스토리지에서 최근 검색어 불러오기
   useEffect(() => {
@@ -41,88 +29,137 @@ const SearchFilter = ({
     setRecentSearches(storedSearches);
   }, []);
 
-  // 최근 검색어 저장 함수
+  // 최근 검색어 저장 (중복 제거 & 최대 5개 유지)
   const saveRecentSearch = (query: string) => {
-    if (!query.trim()) return; // 빈 값 저장 방지
+    if (!query.trim()) return;
 
     let updatedSearches = [query, ...recentSearches.filter((q) => q !== query)];
-    updatedSearches = updatedSearches.slice(0, 5); // 최대 5개 유지
+    updatedSearches = updatedSearches.slice(0, 5);
 
     setRecentSearches(updatedSearches);
     localStorage.setItem("recentSearches", JSON.stringify(updatedSearches));
   };
 
+  // 검색어 및 필터 업데이트
+  const updateFilters = async (updates: {
+    query?: string;
+    category?: string;
+    price?: string;
+    lat?: number;
+    lon?: number;
+  }) => {
+    const params = new URLSearchParams(searchParams.toString());
+
+    if (updates.query !== undefined) {
+      if (!updates.query.trim()) {
+        params.delete("query");
+      } else {
+        params.set("query", updates.query);
+
+        // 1. DB에서 검색한 명소의 위치 가져오기
+        try {
+          const res = await fetch(`/api/spots?query=${updates.query}`);
+          const data = await res.json();
+
+          if (data.spots.length === 1) {
+            const spot = data.spots[0];
+            params.set("lat", spot.lat.toString());
+            params.set("lon", spot.lon.toString());
+          } else {
+            // 2. DB에 없을 경우, 일반 주소 geocode 검색
+            const geocode = await getGeocode(updates.query);
+            if (geocode) {
+              params.set("lat", geocode.lat.toString());
+              params.set("lon", geocode.lon.toString());
+            }
+          }
+        } catch (error) {
+          console.log("❌ 위치 검색 실패:", error);
+        }
+      }
+    }
+
+    if (updates.category !== undefined) {
+      if (updates.category === "") {
+        params.delete("category");
+      } else {
+        params.set("category", updates.category);
+      }
+    }
+
+    if (updates.price !== undefined) {
+      if (updates.price === "") {
+        params.delete("price");
+      } else {
+        params.set("price", updates.price);
+      }
+    }
+
+    // 검색어(쿼리) 입력 시, 위도/경도 가져오기 & 지도 이동
+    if (updates.query && updates.query.trim() !== "default") {
+      const geocode = await getGeocode(updates.query);
+      if (geocode) {
+        params.set("lat", geocode.lat.toString());
+        params.set("lon", geocode.lon.toString());
+      }
+    }
+
+    // 내 위치 업데이트 시, `lat, lon` 추가
+    if (updates.lat !== undefined && updates.lon !== undefined) {
+      params.set("lat", updates.lat.toString());
+      params.set("lon", updates.lon.toString());
+    }
+
+    router.push(`/spots?${params.toString()}`);
+  };
+
+  // 검색 실행
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     saveRecentSearch(tempQuery);
-    updateFilters({
-      query: tempQuery,
-      category: selectedCategory,
-      price: selectedPrice,
-    });
-    setIsRecentVisible(false);
-  };
+    updateFilters({ query: tempQuery });
 
-  const handleCategorySelect = (category: string) => {
-    setSelectedCategory(category);
-    updateFilters({ category, price: selectedPrice, query: tempQuery });
-  };
-
-  const handlePriceSelect = (price: string) => {
-    setSelectedPrice(price);
-    updateFilters({ category: selectedCategory, price, query: tempQuery });
-  };
-
-  const updateCurrentLocation = () => {
-    if (!navigator.geolocation) {
-      alert("현재 위치를 가져올 수 없습니다.");
-      return;
+    if (inputRef.current) {
+      inputRef.current.blur(); // 검색 후 input 포커스 해제
     }
-
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const userLat = position.coords.latitude;
-        const userLon = position.coords.longitude;
-        updateFilters({
-          lat: userLat,
-          lon: userLon,
-          query: "",
-          category: "",
-          price: "",
-        });
-        setTempQuery("");
-
-        // URL 업데이트
-        const params = new URLSearchParams();
-        params.set("lat", userLat.toString());
-        params.set("lon", userLon.toString());
-
-        router.push(`/spots?${params.toString()}`);
-      },
-      (error) => {
-        console.log("위치 정보를 가져올 수 없음:", error);
-        alert("위치 정보를 가져오지 못했습니다.");
-      }
-    );
   };
 
-  // 최근 검색어 클릭 시 검색어 입력
+  // 최근 검색어 클릭 시 검색어 적용
   const handleRecentSearchClick = (query: string) => {
     setTempQuery(query);
-    updateFilters({ query, category: selectedCategory, price: selectedPrice });
+    updateFilters({ query });
     setIsRecentVisible(false);
   };
 
-  // 최근 검색어 개별 삭제
+  // 개별 최근 검색어 삭제
   const removeRecentSearch = (query: string) => {
     const updatedSearches = recentSearches.filter((q) => q !== query);
     setRecentSearches(updatedSearches);
     localStorage.setItem("recentSearches", JSON.stringify(updatedSearches));
   };
-  // 최근 검색어 전체 삭제
+
+  // 모든 최근 검색어 삭제
   const removeAllRecentSearch = () => {
     setRecentSearches([]);
-    localStorage.setItem("recentSearches", "");
+    localStorage.removeItem("recentSearches");
+  };
+
+  // 내 위치 업데이트 기능 (위도/경도 가져오기)
+  const handleUpdateLocation = async () => {
+    try {
+      const location = await getMyLocation();
+      if (location) {
+        updateFilters({ lat: location.lat, lon: location.lon, query: "" });
+        setTempQuery("");
+      } else {
+        alert("현재 위치를 가져올 수 없습니다. 기본 위치로 이동합니다.");
+        updateFilters({ lat: 37.5665, lon: 126.978, query: "" });
+      }
+    } catch (error) {
+      console.log("위치 정보를 가져올 수 없음:", error);
+      alert("현재 위치를 가져올 수 없습니다. 기본 위치로 이동합니다.");
+      updateFilters({ lat: 37.5665, lon: 126.978, query: "" });
+    }
   };
 
   return (
@@ -130,10 +167,11 @@ const SearchFilter = ({
       {/* 검색창 */}
       <form onSubmit={handleSearch} className={styles.searchBox}>
         <input
+          ref={inputRef}
           type="text"
           placeholder="명소, 주소 검색"
           value={tempQuery}
-          onChange={(e) => setTempQuery(e.target.value)} // 실시간 URL 변경 X
+          onChange={(e) => setTempQuery(e.target.value)}
           onFocus={() => setIsRecentVisible(true)} // 포커스 시 최근 검색어 표시
           onBlur={() => setTimeout(() => setIsRecentVisible(false), 200)} // 포커스 해제 시 숨김
         />
@@ -142,13 +180,13 @@ const SearchFilter = ({
         </button>
       </form>
 
-      {/*  최근 검색어 리스트 */}
+      {/* 최근 검색어 리스트 */}
       {isRecentVisible && (
         <div className={styles.recentSearchContainer}>
           {recentSearches.length > 0 && (
             <div className={styles.top}>
               <span>최근 검색어</span>
-              <button onClick={() => removeAllRecentSearch()}>모두삭제</button>
+              <button onClick={removeAllRecentSearch}>모두삭제</button>
             </div>
           )}
           {recentSearches.length > 0 ? (
@@ -176,7 +214,7 @@ const SearchFilter = ({
             className={
               selectedCategory === category.value ? styles.selected : ""
             }
-            onClick={() => handleCategorySelect(category.value)}
+            onClick={() => updateFilters({ category: category.value })}
           >
             {category.icon && (
               <Image
@@ -198,16 +236,18 @@ const SearchFilter = ({
           <button
             key={price.value}
             className={selectedPrice === price.value ? styles.selected : ""}
-            onClick={() => handlePriceSelect(price.value)}
+            onClick={() => updateFilters({ price: price.value })}
           >
             <span className={styles.label}>{price.label}</span>
           </button>
         ))}
       </div>
+
+      {/* 현재 위치 업데이트 버튼 */}
       <button
         type="button"
         className={styles.updateLocationBtn}
-        onClick={updateCurrentLocation}
+        onClick={handleUpdateLocation}
       >
         <TbCurrentLocation className={styles.icon} />
       </button>

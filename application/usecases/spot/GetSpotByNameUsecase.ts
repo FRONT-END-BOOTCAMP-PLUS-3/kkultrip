@@ -1,6 +1,6 @@
 import BookmarkRepository from "@/domain/repositories/BookmarkRepository";
 import { GetSpotsDTO } from "./dto/GetSpotsDto";
-import { SpotRepository } from "@/domain/repositories/SpotRepository";
+import  SpotRepository  from "@/domain/repositories/SpotRepository";
 import TipRepository from "@/domain/repositories/TipRepository";
 import TimeRepository from "@/domain/repositories/TimeRepository";
 

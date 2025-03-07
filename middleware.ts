@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { GetUserInfoByJWT } from "./lib/jwt";
 
 export const middleware = async (req: NextRequest) => {
+  const requestHeaders = new Headers(req.headers);
+  requestHeaders.set("x-pathname", req.nextUrl.pathname);
+
   const token = req.cookies.get("token")?.value;
   const tokenData = token ? await GetUserInfoByJWT(token) : null;
   const isAdmin = tokenData?.isAdmin;
@@ -19,7 +22,11 @@ export const middleware = async (req: NextRequest) => {
     return NextResponse.redirect(new URL("/", req.url));
   }
 
-  return NextResponse.next();
+  return NextResponse.next({
+    request: {
+      headers: requestHeaders,
+    },
+  });
 };
 
 export const config = {

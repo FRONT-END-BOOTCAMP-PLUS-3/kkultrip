@@ -33,7 +33,7 @@ export class PgUserRepository implements UserRepository {
   }
 
   // id로 내 정보 찾기
-  async findById(id: string): Promise<User | null> {
+  async getUserById(id: string): Promise<User | null> {
     try {
       const user = await prisma.user.findUnique({
         where: { id },
