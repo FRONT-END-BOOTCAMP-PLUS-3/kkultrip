@@ -231,14 +231,28 @@ const SpotsEditPage = () => {
         id: docent.id || null,
         title: docent.title,
         description: docent.description,
-        audioPath: docent.audioPath,
+        audioPath:
+          typeof docent.audioPath === "object"
+            ? (docent.audioPath as File).name
+            : docent.audioPath,
       })),
       updatedAt: new Date(),
     };
+
+    const formDataToSend = new FormData();
+    formDataToSend.append("body", JSON.stringify(data));
+    if (fileInputRef.current?.files?.[0]) {
+      formDataToSend.append("file", fileInputRef.current.files[0]);
+    }
+    formData.docents.forEach((docent, index) => {
+      if (docent.audioPath && typeof docent.audioPath === "object") {
+        formDataToSend.append(`docentAudio${index}`, docent.audioPath);
+      }
+    });
+
     const res = await fetch(`/api/admin/spots/${spotId}`, {
       method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
+      body: formDataToSend,
     });
 
     if (res.ok) {
