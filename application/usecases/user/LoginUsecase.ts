@@ -19,7 +19,7 @@ export class LoginUsecase {
     const userId = user.id;
     const isAdmin = user.isAdmin;
     const response = {
-      token: createJWT(userId, isAdmin),
+      token: await createJWT(userId, isAdmin),
       isAdmin: isAdmin,
     };
 
