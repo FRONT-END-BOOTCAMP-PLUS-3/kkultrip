@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import styles from "./userLayout.module.scss";
+import styles from "./UserLayout.module.scss";
 import Tab from "./components/Tab";
 import { usePathname } from "next/navigation";
 

@@ -1,7 +1,7 @@
 "use client";
 
 import TipBox from "../components/TipBox";
-import Styles from "./my-tips.module.scss";
+import Styles from "./MyTips.module.scss";
 
 const MyTips = () => {
   return (

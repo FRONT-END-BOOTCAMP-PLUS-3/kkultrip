@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import styles from "./signup.module.scss";
+import styles from "./SignupPage.module.scss";
 import Button from "@/components/button/Button";
 import ImageUpload from "@/components/imageUpload/ImageUpload";
 
