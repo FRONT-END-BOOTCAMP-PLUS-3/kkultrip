@@ -37,14 +37,18 @@ export class PgTimeRepository implements TimeRepository {
         }
     }
 
-    async getTimeBySpotId(spotId: number): Promise<Time[] | null> {
-        return prisma.time.findMany({
-            where: {
-                spotId,
-            },
-        });
+  async getTimeBySpotId(spotId: number): Promise<Time[] | null> {
+    try {
+      return await prisma.time.findMany({
+        where: {
+          spotId,
+        },
+      });
+    } catch (error) {
+      console.log("❌ getTimeBySpotId 오류 발생:", error);
+      throw new Error("해당 명소의 영업시간을 가져오지 못했습니다.");
+    } finally {
+      await prisma.$disconnect();
     }
-
-
-  
+  }
 }

@@ -13,45 +13,66 @@ export class PgImageRepository implements ImageRepository {
       fs.mkdirSync(uploadDir, { recursive: true });
     }
 
-    for (const file of imageFiles) {
-      const fileName = `${tipId}_${Date.now()}_${file.name}`;
-      const filePath = path.join(uploadDir, fileName);
-      const fileUrl = `/images/tips/${fileName}`;
+    try {
+      for (const file of imageFiles) {
+        const fileName = `${tipId}_${Date.now()}_${file.name}`;
+        const filePath = path.join(uploadDir, fileName);
+        const fileUrl = `/images/tips/${fileName}`;
 
-      // 파일 저장
-      const fileBuffer = await file.arrayBuffer();
-      fs.writeFileSync(filePath, Buffer.from(fileBuffer));
+        // 파일 저장
+        const fileBuffer = await file.arrayBuffer();
+        fs.writeFileSync(filePath, Buffer.from(fileBuffer));
 
-      // DB 저장
-      await prisma.image.create({
-        data: {
-          tipId,
-          path: fileUrl,
-        },
-      });
+        // DB 저장
+        await prisma.image.create({
+          data: {
+            tipId,
+            path: fileUrl,
+          },
+        });
+      }
+    } catch (error) {
+      console.log("❌ createImages 오류 발생:", error);
+      throw new Error("이미지 저장 중 오류가 발생했습니다.");
+    } finally {
+      await prisma.$disconnect();
     }
   }
 
   async getImagesByTipId(tipId: number): Promise<string[]> {
-    const images = await prisma.image.findMany({
-      where: { tipId },
-      select: { path: true },
-    });
-    return images.map((img) => img.path || "");
+    try {
+      const images = await prisma.image.findMany({
+        where: { tipId },
+        select: { path: true },
+      });
+      return images.map((img) => img.path || "");
+    } catch (error) {
+      console.log("❌ getImagesByTipId 오류 발생:", error);
+      throw new Error("이미지 정보를 가져오는 데 실패했습니다.");
+    } finally {
+      await prisma.$disconnect();
+    }
   }
 
   async deleteImagesByPaths(imagePaths: string[]) {
-    await prisma.image.deleteMany({
-      where: { path: { in: imagePaths } },
-    });
+    try {
+      await prisma.image.deleteMany({
+        where: { path: { in: imagePaths } },
+      });
 
-    // 로컬 파일 삭제
-    imagePaths.forEach((imagePath) => {
-      const filePath = path.join(process.cwd(), "public", imagePath);
-      if (fs.existsSync(filePath)) {
-        fs.unlinkSync(filePath);
-      }
-    });
+      // 로컬 파일 삭제
+      imagePaths.forEach((imagePath) => {
+        const filePath = path.join(process.cwd(), "public", imagePath);
+        if (fs.existsSync(filePath)) {
+          fs.unlinkSync(filePath);
+        }
+      });
+    } catch (error) {
+      console.log("❌ deleteImagesByPaths 오류 발생:", error);
+      throw new Error("이미지 삭제 중 오류가 발생했습니다.");
+    } finally {
+      await prisma.$disconnect();
+    }
   }
 
   async getImageByTipId(tipId: number): Promise<Image[]> {
