@@ -13,9 +13,7 @@ export const GET = async (req: Request) => {
 
   try {
     const response = await fetch(
-      `https://naveropenapi.apigw.ntruss.com/map-geocode/v2/geocode?query=${encodeURIComponent(
-        query
-      )}`,
+      `https://naveropenapi.apigw.ntruss.com/map-geocode/v2/geocode?query=${query}`,
       {
         headers: {
           "X-NCP-APIGW-API-KEY-ID":
@@ -26,7 +24,7 @@ export const GET = async (req: Request) => {
     );
 
     if (!response.ok) {
-      console.error(
+      console.log(
         `❌ 네이버 Geocode API 오류: ${response.status} ${response.statusText}`
       );
       return NextResponse.json(
@@ -47,7 +45,7 @@ export const GET = async (req: Request) => {
       );
     }
   } catch (error) {
-    console.error("❌ 서버 내부 오류:", error);
+    console.log("❌ 서버 내부 오류:", error);
     return NextResponse.json({ error: "서버 오류 발생" }, { status: 500 });
   }
 };
