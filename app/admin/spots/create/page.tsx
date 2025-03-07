@@ -278,6 +278,37 @@ const SpotsCreatePage = () => {
     }));
   };
 
+  const handlePhonePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+    const pasteData = e.clipboardData.getData("Text").replace(/\D/g, "");
+    if (pasteData.length >= 9 && pasteData.length <= 11) {
+      let phone1 = "";
+      let phone2 = "";
+      let phone3 = "";
+
+      if (pasteData.length === 9) {
+        phone1 = pasteData.slice(0, 2);
+        phone2 = pasteData.slice(2, 5);
+        phone3 = pasteData.slice(5, 9);
+      } else if (pasteData.length === 10) {
+        phone1 = pasteData.slice(0, 2);
+        phone2 = pasteData.slice(2, 6);
+        phone3 = pasteData.slice(6, 10);
+      } else if (pasteData.length === 11) {
+        phone1 = pasteData.slice(0, 3);
+        phone2 = pasteData.slice(3, 7);
+        phone3 = pasteData.slice(7, 11);
+      }
+
+      setFormData((prev) => ({
+        ...prev,
+        phone1,
+        phone2,
+        phone3,
+      }));
+      e.preventDefault();
+    }
+  };
+
   return (
     <div className={styles.container}>
       <button
@@ -344,6 +375,7 @@ const SpotsCreatePage = () => {
             value={formData.phone1}
             onChange={(e) => handlePhoneChange(e, "phone1")}
             onKeyDown={(e) => handleKeyDown(e, "phone1")}
+            onPaste={handlePhonePaste}
             className={styles.inputField}
             placeholder="000"
             maxLength={3}
@@ -355,6 +387,7 @@ const SpotsCreatePage = () => {
             value={formData.phone2}
             onChange={(e) => handlePhoneChange(e, "phone2")}
             onKeyDown={(e) => handleKeyDown(e, "phone2")}
+            onPaste={handlePhonePaste}
             className={styles.inputField}
             placeholder="0000"
             maxLength={4}
@@ -366,6 +399,7 @@ const SpotsCreatePage = () => {
             value={formData.phone3}
             onChange={(e) => handlePhoneChange(e, "phone3")}
             onKeyDown={(e) => handleKeyDown(e, "phone3")}
+            onPaste={handlePhonePaste}
             className={styles.inputField}
             placeholder="0000"
             maxLength={4}
