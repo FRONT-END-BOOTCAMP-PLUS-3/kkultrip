@@ -4,33 +4,61 @@ import { Spot } from "@prisma/client";
 
 export default class PgSpotRepository implements SpotRepository {
   async getAllSpots(): Promise<Spot[]> {
-    return await prisma.spot.findMany();
+    try {
+      return await prisma.spot.findMany();
+    } catch (error) {
+      console.error("❌ getAllSpots 오류 발생:", error);
+      throw new Error("모든 명소 데이터를 가져오지 못했습니다.");
+    } finally {
+      await prisma.$disconnect();
+    }
   }
 
   async getSpotById(id: number): Promise<Spot | null> {
-    return await prisma.spot.findUnique({
-      where: { id },
-    });
+    try {
+      return await prisma.spot.findUnique({
+        where: { id },
+      });
+    } catch (error) {
+      console.error("❌ getSpotById 오류 발생:", error);
+      throw new Error("명소 데이터를 가져오지 못했습니다.");
+    } finally {
+      await prisma.$disconnect();
+    }
   }
 
   async createSpot(
     spot: Omit<Spot, "id" | "createdAt" | "updatedAt">
   ): Promise<Spot> {
-    return await prisma.spot.create({
-      data: {
-        ...spot,
-        info: spot.info || "",
-        avgPrice: spot.avgPrice ?? 0,
-        avgWaitingTime: spot.avgWaitingTime ?? 0,
-      },
-    });
+    try {
+      return await prisma.spot.create({
+        data: {
+          ...spot,
+          info: spot.info || "",
+          avgPrice: spot.avgPrice ?? 0,
+          avgWaitingTime: spot.avgWaitingTime ?? 0,
+        },
+      });
+    } catch (error) {
+      console.error("❌ createSpot 오류 발생:", error);
+      throw new Error("명소 생성 중 오류가 발생했습니다.");
+    } finally {
+      await prisma.$disconnect();
+    }
   }
 
   async updateSpot(id: number, spot: Partial<Spot>): Promise<Spot | null> {
-    return await prisma.spot.update({
-      where: { id },
-      data: spot,
-    });
+    try {
+      return await prisma.spot.update({
+        where: { id },
+        data: spot,
+      });
+    } catch (error) {
+      console.error("❌ updateSpot 오류 발생:", error);
+      throw new Error("명소 업데이트 중 오류가 발생했습니다.");
+    } finally {
+      await prisma.$disconnect();
+    }
   }
 
   async deleteSpot(id: number): Promise<Spot | null> {
@@ -39,8 +67,10 @@ export default class PgSpotRepository implements SpotRepository {
         where: { id },
       });
     } catch (error) {
-      console.error("Error deleting spot:", error);
-      return null; // 존재하지 않는 경우를 고려해 null 반환
+      console.error("❌ deleteSpot 오류 발생:", error);
+      throw new Error("명소 삭제 중 오류가 발생했습니다.");
+    } finally {
+      await prisma.$disconnect();
     }
   }
 
@@ -55,7 +85,7 @@ export default class PgSpotRepository implements SpotRepository {
         where: {
           category: category ? category : undefined,
           avgPrice: maxPrice !== undefined ? { lte: maxPrice } : undefined,
-          lat: { gte: lat - 0.02, lte: lat + 0.02 }, // 위도(lat), 경도(lon)를 ± 0.02 정도로 검색 => 대략 2.2km
+          lat: { gte: lat - 0.02, lte: lat + 0.02 }, // 대략 반경 2.2km 검색
           lon: { gte: lng - 0.02, lte: lng + 0.02 },
         },
       });
@@ -63,7 +93,7 @@ export default class PgSpotRepository implements SpotRepository {
       return spots;
     } catch (error) {
       console.log("❌ getNearbySpots 오류 발생:", error);
-      throw new Error("명소 데이터를 가져오지 못했습니다.");
+      throw new Error("근처 명소 데이터를 가져오지 못했습니다.");
     } finally {
       await prisma.$disconnect();
     }
@@ -71,7 +101,7 @@ export default class PgSpotRepository implements SpotRepository {
 
   async getSpotByName(name: string): Promise<Spot | null> {
     try {
-      const spot = await prisma.spot.findFirst({
+      return await prisma.spot.findFirst({
         where: {
           name: {
             contains: name, // 부분 검색 가능
@@ -79,8 +109,6 @@ export default class PgSpotRepository implements SpotRepository {
           },
         },
       });
-
-      return spot;
     } catch (error) {
       console.log("❌ getSpotByName 오류 발생:", error);
       throw new Error("명소 데이터를 가져오지 못했습니다.");
@@ -90,17 +118,24 @@ export default class PgSpotRepository implements SpotRepository {
   }
 
   async getSpotAvg(spotId: number) {
-    const spot = await prisma.spot.findUnique({
-      where: { id: spotId },
-      select: { avgPrice: true, avgWaitingTime: true },
-    });
+    try {
+      const spot = await prisma.spot.findUnique({
+        where: { id: spotId },
+        select: { avgPrice: true, avgWaitingTime: true },
+      });
 
-    return spot
-      ? {
-          avgPrice: spot.avgPrice ?? 0,
-          avgWaitingTime: spot.avgWaitingTime ?? 0,
-        }
-      : null;
+      return spot
+        ? {
+            avgPrice: spot.avgPrice ?? 0,
+            avgWaitingTime: spot.avgWaitingTime ?? 0,
+          }
+        : null;
+    } catch (error) {
+      console.log("❌ getSpotAvg 오류 발생:", error);
+      throw new Error("명소 평균 데이터를 가져오는 데 실패했습니다.");
+    } finally {
+      await prisma.$disconnect();
+    }
   }
 
   async updateSpotAvg(
@@ -108,12 +143,19 @@ export default class PgSpotRepository implements SpotRepository {
     avgPrice: number,
     avgWaitingTime: number
   ) {
-    await prisma.spot.update({
-      where: { id: spotId },
-      data: {
-        avgPrice: Math.round(avgPrice), // 반올림 처리
-        avgWaitingTime: Math.round(avgWaitingTime),
-      },
-    });
+    try {
+      await prisma.spot.update({
+        where: { id: spotId },
+        data: {
+          avgPrice: Math.round(avgPrice), // 반올림 처리
+          avgWaitingTime: Math.round(avgWaitingTime),
+        },
+      });
+    } catch (error) {
+      console.log("❌ updateSpotAvg 오류 발생:", error);
+      throw new Error("명소 평균 데이터를 업데이트하는 데 실패했습니다.");
+    } finally {
+      await prisma.$disconnect();
+    }
   }
 }
