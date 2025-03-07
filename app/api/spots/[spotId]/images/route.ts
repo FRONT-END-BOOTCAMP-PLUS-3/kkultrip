@@ -1,7 +1,7 @@
 import GetImageBySpotIdUsecase from "@/application/usecases/spot/images/GetImageBySpotIdUsecase";
-import ImageRepository from "@/domain/repositories/ImageRepository";
+import { ImageRepository } from "@/domain/repositories/ImageRepository";
 import TipRepository from "@/domain/repositories/TipRepository";
-import PgImageRepository from "@/infrastructure/repositories/PgImageRepository";
+import { PgImageRepository } from "@/infrastructure/repositories/PgImageRepository";
 import { PgTipRepository } from "@/infrastructure/repositories/PgTipRepository";
 import { NextRequest, NextResponse } from "next/server";
 

@@ -1,3 +1,4 @@
+import { CreatedReactionDto } from "@/application/usecases/spot/tips/dto/CreatedReactionDto";
 import ReactionRepository from "@/domain/repositories/ReactionRepository";
 import { prisma } from "@/lib/prisma";
 import { Reaction } from "@prisma/client";
@@ -22,15 +23,20 @@ export default class PgReactionRepository implements ReactionRepository {
             throw error;
         }
     }
-    async createReaction(reaction: Reaction): Promise<void> {
+    async createReaction(reaction: Reaction): Promise<CreatedReactionDto> {
         try {
-            await prisma.reaction.create({
+            const createdReaction = await prisma.reaction.create({
                 data: {
                     tipId: reaction.tipId,
                     userId: reaction.userId,
                     type: reaction.type,
                 },
             });
+            return {
+                tipId: createdReaction.tipId,
+                userId: createdReaction.userId,
+                type: createdReaction.type,
+            };
         } catch (error) {
             console.error("Error creating reaction:", error);
             throw error;
@@ -52,6 +58,22 @@ export default class PgReactionRepository implements ReactionRepository {
             });
         } catch (error) {
             console.error("Error updating reaction:", error);
+            throw error;
+        }
+    }
+
+    async deleteReaction(tipId: number, userId: string): Promise<void> {
+        try {
+            await prisma.reaction.delete({
+                where: {
+                    tipId_userId: {
+                        tipId: tipId,
+                        userId: userId,
+                    },
+                },
+            });
+        } catch (error) {
+            console.error("Error deleting reaction:", error);
             throw error;
         }
     }

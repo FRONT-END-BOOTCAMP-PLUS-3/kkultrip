@@ -6,6 +6,10 @@ const TipButton = ({ tipId, spotId }: { tipId: number; spotId: number }) => {
     const handleDelete = async () => {
         const response = await fetch(`/api/tips/${tipId}`, {
             method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ spotId }),
         });
         if (response.ok) {
             alert("삭제되었습니다.");

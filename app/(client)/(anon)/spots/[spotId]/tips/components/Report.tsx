@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 import { PiSirenFill } from "react-icons/pi";
 import styles from "./Report.module.scss";
@@ -17,18 +19,15 @@ const Report = ({ tipId, userId }: { tipId: number; userId: string }) => {
             return;
         }
 
-        const response = await fetch(
-            `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/tips/${tipId}/report`,
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    userId,
-                }),
-            }
-        );
+        const response = await fetch(`/api/tips/${tipId}/report`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                userId,
+            }),
+        });
 
         if (response.ok) {
             setErrorMessage("신고가 완료되었습니다.");

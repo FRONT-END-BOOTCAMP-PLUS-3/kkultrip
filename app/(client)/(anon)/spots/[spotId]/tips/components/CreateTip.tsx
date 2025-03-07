@@ -3,7 +3,7 @@
 import { FaPlus } from "react-icons/fa";
 import styles from "./CreateTip.module.scss";
 
-const CreateTip = ({ spotId }: { spotId: string }) => {
+  const CreateTip = ({ spotId }: { spotId: string }) => {
     return (
         <button
             className={styles.createButton}
