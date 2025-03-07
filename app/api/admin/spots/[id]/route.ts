@@ -197,13 +197,11 @@ export async function DELETE(req: Request) {
       new PgDocentRepository()
     );
 
-    // 1️⃣ 삭제할 Spot 데이터 조회
     const spot = await getSpotUseCase.execute(Number(id));
     if (!spot) {
       return NextResponse.json({ error: "Spot not found" }, { status: 404 });
     }
 
-    // 2️⃣ 기존 이미지 삭제
     if (spot.img) {
       try {
         const existingImgFilename = path.basename(spot.img);
@@ -222,7 +220,6 @@ export async function DELETE(req: Request) {
       }
     }
 
-    // 3️⃣ 기존 오디오 파일 삭제 (도슨트 정보에서 audioPath 제거)
     for (const docent of spot.docents || []) {
       if (docent.audioPath) {
         try {
@@ -245,7 +242,6 @@ export async function DELETE(req: Request) {
       }
     }
 
-    // 4️⃣ Spot 데이터 삭제
     const deleteSpotUseCase = new DeleteSpotUseCase(spotRepository);
     const deletedSpot = await deleteSpotUseCase.execute(Number(id));
 
