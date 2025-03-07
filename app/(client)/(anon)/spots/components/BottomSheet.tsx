@@ -153,7 +153,9 @@ const BottomSheet = ({ spots }: { spots: GetSpotsDTO[] }) => {
                   </span>
                   <span className={styles.price}>
                     <FaWonSign />
-                    {spot.avgPrice?.toLocaleString() || "정보 없음"}원
+                    {spot.avgPrice != null
+                      ? `${spot.avgPrice.toLocaleString()}원`
+                      : "정보 없음"}
                   </span>
                 </div>
               </div>
