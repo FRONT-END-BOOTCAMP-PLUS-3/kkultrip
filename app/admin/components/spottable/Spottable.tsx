@@ -2,13 +2,13 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import styles from "./Spottable.module.scss";
+import styles from "./SpotTable.module.scss";
 import { Spot } from "@prisma/client";
 
 type SortKey = "id" | "name" | "address" | "phone" | "category" | "avgPrice";
 type SortOrder = "asc" | "desc";
 
-const Spottable = ({ spots }: { spots: Spot[] }) => {
+const SpotTable = ({ spots }: { spots: Spot[] }) => {
   const router = useRouter();
   const [sortKey, setSortKey] = useState<SortKey>("id");
   const [sortOrder, setSortOrder] = useState<SortOrder>("asc");
@@ -50,7 +50,6 @@ const Spottable = ({ spots }: { spots: Spot[] }) => {
       alert("삭제 중 오류가 발생했습니다.");
     }
   };
-
 
   return (
     <table className={styles.table}>
@@ -125,4 +124,4 @@ const Spottable = ({ spots }: { spots: Spot[] }) => {
   );
 };
 
-export default Spottable;
+export default SpotTable;
