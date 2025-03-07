@@ -1,26 +1,34 @@
-import jwt from "jsonwebtoken";
+import { SignJWT, jwtVerify } from "jose";
 
-export const createJWT = (id: string, isAdmin: boolean) => {
+export const createJWT = async (id: string, isAdmin: boolean) => {
   const SECRET_KEY = process.env.JWT_SECRET_KEY!;
 
-  const payload = { id, isAdmin };
-  const options = { expiresIn: 12 * 60 * 60 }; // 12시간 동안 유효
-  const token = jwt.sign(payload, SECRET_KEY, options);
-  return token;
+  return await new SignJWT({ id, isAdmin })
+    .setProtectedHeader({ alg: "HS256" }) // 해싱 알고리즘
+    .setExpirationTime("12h")
+    .sign(new TextEncoder().encode(SECRET_KEY));
 };
 
-export const GetUserIdByJWT = (token: string) => {
+export const GetUserInfoByJWT = async (token: string) => {
   const SECRET_KEY = process.env.JWT_SECRET_KEY!;
 
   try {
-    const decoded = jwt.verify(token, SECRET_KEY) as {
-      id: string;
-      isAdmin: boolean;
-    };
-    const userId = decoded.id;
-    const isAdmin = decoded.isAdmin;
+    // 토큰 디코딩 및 유효성 검사
+    const { payload } = await jwtVerify(
+      token,
+      new TextEncoder().encode(SECRET_KEY),
+      {
+        algorithms: ["HS256"], // 🔥 생성할 때 사용한 알고리즘과 동일해야 함
+      }
+    );
+    console.log("=== Token 유효성 검사 ===");
+    console.log("Token:", payload);
+    console.log("==========================");
+    const userId = payload.id;
+    const isAdmin = payload.isAdmin;
     return { userId, isAdmin };
-  } catch {
-    return null; // 유효하지 않거나 만료된 토큰
+  } catch (error) {
+    console.error("Invalid token:", error);
+    return null;
   }
 };
