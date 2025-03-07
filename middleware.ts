@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { GetUserInfoByJWT } from "./lib/jwt";
+import { GetUserInfoByJWT } from "./utils/jwt";
 
 export const middleware = async (req: NextRequest) => {
   const requestHeaders = new Headers(req.headers);
@@ -30,6 +30,5 @@ export const middleware = async (req: NextRequest) => {
 };
 
 export const config = {
-  runtime: "nodejs",
   matcher: ["/user/:path*", "/admin/:path*"],
 };

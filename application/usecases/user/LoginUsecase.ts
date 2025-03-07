@@ -1,7 +1,7 @@
 import UserRepository from "@/domain/repositories/UserRepository";
 import { LoginUserDto } from "./dto/LoginUserDto";
 import bcrypt from "bcrypt";
-import { createJWT } from "@/lib/jwt";
+import { createJWT } from "@/utils/jwt";
 
 export class LoginUsecase {
   constructor(private userRepository: UserRepository) {}
