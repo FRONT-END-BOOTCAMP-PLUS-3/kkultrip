@@ -1,7 +1,7 @@
 "use client";
 
 import SpotImageCard from "@/components/spotImageCard/SpotImageCard";
-import styles from "./spots.module.scss";
+import styles from "./SpotsPage.module.scss";
 
 const Spots = () => {
   const spotsData = [
