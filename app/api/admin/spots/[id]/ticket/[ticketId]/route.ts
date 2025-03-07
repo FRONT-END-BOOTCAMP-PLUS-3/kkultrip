@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { PgTicketRepository } from "@/infrastructure/repositories/PgTicketRepository";
-import { DeleteTicketUseCase } from "@/application/usecases/ticket/DeleteTicketUseCase";
+import { DeleteTicketUseCase } from "@/application/usecases/admin/spot/ticket/DeleteTicketUseCase";
 import { TicketRepository } from "@/domain/repositories/TicketRepository";
 
 export async function DELETE(req: Request) {
