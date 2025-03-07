@@ -1,25 +1,15 @@
 "use client";
 
-import { Tip } from "@prisma/client";
 import { useState } from "react";
-import styles from "./Tiptable.module.scss";
+import { useRouter } from "next/navigation";
+import styles from "./SpotTable.module.scss";
+import { Spot } from "@prisma/client";
 
-interface TipTableProps {
-  tips: Tip[];
-}
-
-type SortKey =
-  | "id"
-  | "spotId"
-  | "userId"
-  | "description"
-  | "price"
-  | "reportCnt"
-  | "createdAt";
+type SortKey = "id" | "name" | "address" | "phone" | "category" | "avgPrice";
 type SortOrder = "asc" | "desc";
 
-const Tiptable = ({ tips }: TipTableProps) => {
-  // const router = useRouter();
+const SpotTable = ({ spots }: { spots: Spot[] }) => {
+  const router = useRouter();
   const [sortKey, setSortKey] = useState<SortKey>("id");
   const [sortOrder, setSortOrder] = useState<SortOrder>("asc");
 
@@ -28,7 +18,7 @@ const Tiptable = ({ tips }: TipTableProps) => {
     setSortKey(key);
   };
 
-  const sortedTips = [...tips].sort((a, b) => {
+  const sortedSpots = [...spots].sort((a, b) => {
     const aValue = a[sortKey] || "";
     const bValue = b[sortKey] || "";
 
@@ -41,16 +31,14 @@ const Tiptable = ({ tips }: TipTableProps) => {
       : String(bValue).localeCompare(String(aValue));
   });
 
-  // const handleEdit = (id: number) => router.push(`/admin/tips/${id}/edit`);
+  const handleEdit = (id: string) => router.push(`/admin/spots/${id}/edit`);
 
   const handleDelete = async (id: number) => {
     if (!confirm("정말로 삭제하시겠습니까?")) return;
 
     try {
-      const response = await fetch("/api/admin/tips", {
+      const response = await fetch(`/api/admin/spots/${id}`, {
         method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id }),
       });
 
       if (!response.ok) throw new Error("삭제 실패");
@@ -58,7 +46,7 @@ const Tiptable = ({ tips }: TipTableProps) => {
       alert("삭제되었습니다.");
       window.location.reload();
     } catch (error) {
-      console.error("Error deleting tip:", error);
+      console.error("Error deleting spot:", error);
       alert("삭제 중 오류가 발생했습니다.");
     }
   };
@@ -70,12 +58,11 @@ const Tiptable = ({ tips }: TipTableProps) => {
           {(
             [
               "id",
-              "spotId",
-              "userId",
-              "description",
-              "price",
-              "reportCnt",
-              "createdAt",
+              "name",
+              "address",
+              "phone",
+              "category",
+              "avgPrice",
             ] as SortKey[]
           ).map((key) => (
             <th
@@ -85,37 +72,40 @@ const Tiptable = ({ tips }: TipTableProps) => {
             >
               {key === "id"
                 ? "번호"
-                : key === "spotId"
-                ? "명소 ID"
-                : key === "userId"
-                ? "사용자 ID"
-                : key === "description"
-                ? "설명"
-                : key === "price"
-                ? "가격"
-                : key === "reportCnt"
-                ? "신고 횟수"
-                : "생성 날짜"}
+                : key === "name"
+                ? "이름"
+                : key === "address"
+                ? "주소"
+                : key === "phone"
+                ? "전화번호"
+                : key === "category"
+                ? "카테고리"
+                : "정보"}
             </th>
           ))}
           <th>관리</th>
         </tr>
       </thead>
       <tbody>
-        {sortedTips.length > 0 ? (
-          sortedTips.map((tip) => (
-            <tr key={tip.id}>
-              <td>{tip.id}</td>
-              <td>{tip.spotId}</td>
-              <td>{tip.userId}</td>
-              <td>{tip.description}</td>
-              <td>{tip.price}</td>
-              <td>{tip.reportCnt}</td>
-              <td>{new Date(tip.createdAt).toLocaleDateString()}</td>
+        {sortedSpots.length > 0 ? (
+          sortedSpots.map((spot) => (
+            <tr key={spot.id}>
+              <td>{spot.id}</td>
+              <td>{spot.name}</td>
+              <td>{spot.address}</td>
+              <td>{spot.phone}</td>
+              <td>{spot.category}</td>
+              <td>{spot.info}</td>
               <td>
                 <button
+                  className={styles.editButton}
+                  onClick={() => handleEdit(spot.id.toString())}
+                >
+                  수정
+                </button>
+                <button
                   className={styles.deleteButton}
-                  onClick={() => handleDelete(tip.id)}
+                  onClick={() => handleDelete(spot.id)}
                 >
                   삭제
                 </button>
@@ -124,7 +114,7 @@ const Tiptable = ({ tips }: TipTableProps) => {
           ))
         ) : (
           <tr>
-            <td colSpan={8} className={styles.noData}>
+            <td colSpan={6} className={styles.noData}>
               데이터가 없습니다.
             </td>
           </tr>
@@ -134,4 +124,4 @@ const Tiptable = ({ tips }: TipTableProps) => {
   );
 };
 
-export default Tiptable;
+export default SpotTable;
