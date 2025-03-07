@@ -177,10 +177,13 @@ export async function PATCH(req: Request) {
   }
 }
 
-export async function DELETE(req: Request) {
+export async function DELETE(
+  req: Request,
+  props: { params: Promise<{ id: string }> }
+) {
   try {
-    const url = new URL(req.url);
-    const id = url.pathname.split("/").pop();
+    const params = await props.params;
+    const id = params.id;
 
     if (!id) {
       return NextResponse.json(
