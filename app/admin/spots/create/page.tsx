@@ -378,7 +378,9 @@ const SpotsCreatePage = () => {
           value={formData.info}
           onChange={handleChange}
           className={styles.textareaField}
+          maxLength={100}
         />
+
         <select
           name="category"
           value={formData.category}
