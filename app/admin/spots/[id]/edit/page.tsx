@@ -35,6 +35,11 @@ const SpotsEditPage = () => {
     img: string;
     tickets: { id: number | null; name: string; price: string | number }[];
     operatingHours: typeof defaultOperatingHours;
+    docents: {
+      title: string;
+      description: string;
+      audioPath: string | File | null;
+    }[];
   }>({
     name: "",
     address: "",
@@ -49,6 +54,7 @@ const SpotsEditPage = () => {
     img: "",
     tickets: [{ id: null, name: "", price: "" }],
     operatingHours: defaultOperatingHours,
+    docents: [{ title: "", description: "", audioPath: "" }],
   });
 
   const [initialTickets, setInitialTickets] = useState<
@@ -69,7 +75,6 @@ const SpotsEditPage = () => {
             "",
             "",
           ];
-
           const operatingHours = days.reduce((acc, day) => {
             const timeInfo = data.times?.find((time: Time) => time.day === day);
             if (timeInfo) {
@@ -96,6 +101,9 @@ const SpotsEditPage = () => {
             phone3,
             operatingHours,
             tickets: data.tickets || [],
+            docents: data.docents || [
+              { title: "", description: "", audioPath: "" },
+            ],
           });
           setInitialTickets(data.tickets || []);
         });
@@ -218,6 +226,12 @@ const SpotsEditPage = () => {
         all_hours: hours.type === "24시간",
         closeDay: hours.type === "휴무",
       })),
+      docents: formData.docents.map((docent) => ({
+        id: docent.id,
+        title: docent.title,
+        description: docent.description,
+        audioPath: docent.audioPath,
+      })),
       updatedAt: new Date(),
     };
     const res = await fetch(`/api/admin/spots/${spotId}`, {
@@ -274,6 +288,33 @@ const SpotsEditPage = () => {
     setFormData((prev) => ({
       ...prev,
       tickets: prev.tickets.filter((_, i) => i !== index),
+    }));
+  };
+
+  const handleDocentChange = (
+    index: number,
+    field: "title" | "description" | "audioPath",
+    value: string | File | null
+  ) => {
+    setFormData((prev) => ({
+      ...prev,
+      docents: prev.docents.map((docent, i) =>
+        i === index ? { ...docent, [field]: value } : docent
+      ),
+    }));
+  };
+
+  const addDocent = () => {
+    setFormData((prev) => ({
+      ...prev,
+      docents: [...prev.docents, { title: "", description: "", audioPath: "" }],
+    }));
+  };
+
+  const removeDocent = (index: number) => {
+    setFormData((prev) => ({
+      ...prev,
+      docents: prev.docents.filter((_, i) => i !== index),
     }));
   };
 
@@ -519,6 +560,62 @@ const SpotsEditPage = () => {
               </div>
             );
           })}
+        </div>
+
+        <div className={styles.docentsContainer}>
+          <h2>도슨트 정보</h2>
+          {formData.docents.map((docent, index) => (
+            <div key={index} className={styles.docentItem}>
+              <div className={styles.docentRow}>
+                <input
+                  type="text"
+                  placeholder="도슨트 제목"
+                  value={docent.title}
+                  className={styles.inputField}
+                  onChange={(e) =>
+                    handleDocentChange(index, "title", e.target.value)
+                  }
+                />
+                <textarea
+                  placeholder="도슨트 설명"
+                  value={docent.description}
+                  className={styles.textareaField}
+                  onChange={(e) =>
+                    handleDocentChange(index, "description", e.target.value)
+                  }
+                />
+                <button type="button" onClick={() => removeDocent(index)}>
+                  삭제
+                </button>
+              </div>
+              <div className={styles.docentRow}>
+                <input
+                  type="file"
+                  accept="audio/*"
+                  className={styles.inputField}
+                  onChange={(e) =>
+                    handleDocentChange(
+                      index,
+                      "audioPath",
+                      e.target.files?.[0] || null
+                    )
+                  }
+                />
+              </div>
+              <div className={styles.docentRow}>
+                {typeof docent.audioPath === "string" && (
+                  <p className={styles.inputField}>{docent.audioPath}</p>
+                )}
+              </div>
+            </div>
+          ))}
+          <button
+            type="button"
+            onClick={addDocent}
+            className={styles.addButton}
+          >
+            도슨트 추가
+          </button>
         </div>
 
         <button type="submit" className={styles.submitButton}>

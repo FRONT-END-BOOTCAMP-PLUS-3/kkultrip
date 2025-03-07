@@ -1,3 +1,4 @@
+import { UpdateDocentDto } from "../../docent/dto/UpdateDocentDto";
 import { UpdateTicketDto } from "../ticket/dto/UpdateTicketDto";
 import { UpdateTimeDto } from "../time/dto/UpdateTimeDto";
 
@@ -15,5 +16,6 @@ export interface UpdateSpotDto {
   avgWaitingTime?: number;
   tickets?: UpdateTicketDto[];
   times?: UpdateTimeDto[];
+  docents?: UpdateDocentDto[];
   updatedAt?: Date;
 }

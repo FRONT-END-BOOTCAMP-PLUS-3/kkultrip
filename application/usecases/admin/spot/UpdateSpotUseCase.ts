@@ -1,20 +1,27 @@
-import { Spot, Ticket, Time } from "@prisma/client";
-import { SpotRepository } from "@/domain/repositories/SpotRepository";
+import { Spot, Ticket, Time, Docent } from "@prisma/client";
+import SpotRepository from "@/domain/repositories/SpotRepository";
 import { TicketRepository } from "@/domain/repositories/TicketRepository";
 import { TimeRepository } from "@/domain/repositories/TimeRepository";
+import { DocentRepository } from "@/domain/repositories/DocentRepository";
 import { UpdateSpotDto } from "./dto/UpdateSpotDto";
 
 export class UpdateSpotUseCase {
   constructor(
     private spotRepository: SpotRepository,
     private ticketRepository: TicketRepository,
-    private timeRepository: TimeRepository
+    private timeRepository: TimeRepository,
+    private docentRepository: DocentRepository
   ) {}
 
   async execute(
     id: number,
     dto: UpdateSpotDto
-  ): Promise<{ spot: Spot | null; tickets: Ticket[]; times: Time[] }> {
+  ): Promise<{
+    spot: Spot | null;
+    tickets: Ticket[];
+    times: Time[];
+    docents: Docent[];
+  }> {
     const existingSpot = await this.spotRepository.getSpotById(id);
     if (!existingSpot) {
       throw new Error("Spot not found");
@@ -92,7 +99,7 @@ export class UpdateSpotUseCase {
               day: timeDto.day,
               open: timeDto.open ?? null,
               close: timeDto.close ?? null,
-              all_hours: timeDto.all_hours,
+              allHours: timeDto.all_hours,
               closeDay: timeDto.closeDay,
               createdAt: existingSpot.createdAt,
               updatedAt: new Date(),
@@ -105,10 +112,48 @@ export class UpdateSpotUseCase {
       }
     }
 
+    // 도슨트 업데이트 로직
+    const updatedDocents: Docent[] = [];
+    if (dto.docents && dto.docents.length > 0) {
+      for (const docentDto of dto.docents) {
+        if (docentDto.id) {
+          // 기존 도슨트 업데이트
+          const existingDocent = await this.docentRepository.updateDocent(
+            docentDto.id,
+            {
+              spotId: existingSpot.id,
+              id: docentDto.id,
+              title: docentDto.title,
+              description: docentDto.description,
+              audioPath: docentDto.audioPath,
+              createdAt: existingSpot.createdAt,
+              updatedAt: new Date(),
+            }
+          );
+          if (existingDocent) {
+            updatedDocents.push(existingDocent);
+          }
+        } else {
+          // 새로운 도슨트 생성
+          const newDocent = await this.docentRepository.createDocent({
+            id: 0,
+            spotId: id,
+            title: docentDto.title,
+            description: docentDto.description,
+            audioPath: docentDto.audioPath,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+          });
+          updatedDocents.push(newDocent);
+        }
+      }
+    }
+
     return {
       spot: updatedSpotResult,
       tickets: updatedTickets,
       times: updatedTimes,
+      docents: updatedDocents,
     };
   }
 }

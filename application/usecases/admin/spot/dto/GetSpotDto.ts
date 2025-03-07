@@ -1,3 +1,4 @@
+import { GetDocentDto } from "../../docent/dto/GetDocentDto";
 import { GetTicketDto } from "../ticket/dto/GetTicketDto";
 import { GetTimeDto } from "../time/dto/GetTimeDto";
 
@@ -14,4 +15,5 @@ export interface GetSpotDto {
   img: string;
   tickets: GetTicketDto[] | null;
   times: GetTimeDto[] | null;
+  docents: GetDocentDto[] | null;
 }

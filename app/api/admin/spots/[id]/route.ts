@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { GetSpotByIdUseCase } from "@/application/usecases/admin/spot/GetSpotsByIdUseCase";
+import { GetSpotByIdUseCase } from "@/application/usecases/admin/spot/GetSpotByIdUseCase";
 import { UpdateSpotUseCase } from "@/application/usecases/admin/spot/UpdateSpotUseCase";
 import { DeleteSpotUseCase } from "@/application/usecases/admin/spot/DeleteSpotUseCase";
 import { PgTicketRepository } from "@/infrastructure/repositories/PgTicketRepository";
@@ -8,6 +8,9 @@ import PgSpotRepository from "@/infrastructure/repositories/PgSpotRepository";
 import SpotRepository from "@/domain/repositories/SpotRepository";
 import { PgTimeRepository } from "@/infrastructure/repositories/PgTimeRepository";
 import { TimeRepository } from "@/domain/repositories/TimeRepository";
+import { DocentRepository } from "@/domain/repositories/DocentRepository";
+import { PgDocentRepository } from "@/infrastructure/repositories/PgDocentRepository";
+import { Docent } from "@prisma/client";
 
 export async function GET(
   req: Request,
@@ -24,13 +27,14 @@ export async function GET(
     const spotRepository: SpotRepository = new PgSpotRepository();
     const ticketRepository: TicketRepository = new PgTicketRepository();
     const timeRepository: TimeRepository = new PgTimeRepository();
+    const docentRepository: DocentRepository = new PgDocentRepository();
     const getSpotUseCase = new GetSpotByIdUseCase(
       spotRepository,
       ticketRepository,
-      timeRepository
+      timeRepository,
+      docentRepository
     );
     const spot = await getSpotUseCase.execute(Number(id));
-
     if (!spot) {
       return NextResponse.json({ error: "Spot not found" }, { status: 404 });
     }
@@ -47,7 +51,7 @@ export async function GET(
 
 export async function PATCH(req: Request) {
   try {
-    const { id, tickets, times, ...updateData } = await req.json();
+    const { id, tickets, times, docents, ...updateData } = await req.json();
 
     if (!id) {
       return NextResponse.json(
@@ -59,16 +63,28 @@ export async function PATCH(req: Request) {
     const spotRepository: SpotRepository = new PgSpotRepository();
     const ticketRepository: TicketRepository = new PgTicketRepository();
     const timeRepository: TimeRepository = new PgTimeRepository();
+    const docentRepository: DocentRepository = new PgDocentRepository();
     const updateSpotUseCase = new UpdateSpotUseCase(
       spotRepository,
       ticketRepository,
-      timeRepository
+      timeRepository,
+      docentRepository
     );
+
+    // 도슨트 업데이트 로직에서 audioPath를 문자열로 변환
+    const updatedDocents = docents.map((docent: Docent) => ({
+      ...docent,
+      audioPath:
+        typeof docent.audioPath === "object"
+          ? (docent.audioPath as { path: string }).path
+          : docent.audioPath,
+    }));
 
     const updatedSpot = await updateSpotUseCase.execute(id, {
       ...updateData,
       tickets,
       times,
+      docents: updatedDocents,
     });
 
     return NextResponse.json(updatedSpot, { status: 200 });
