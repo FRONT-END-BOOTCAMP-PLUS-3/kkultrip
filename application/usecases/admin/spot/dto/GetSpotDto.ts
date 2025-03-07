@@ -1,4 +1,6 @@
+import { GetDocentDto } from "../docent/dto/GetDocentDto";
 import { GetTicketDto } from "../ticket/dto/GetTicketDto";
+import { GetTimeDto } from "../time/dto/GetTimeDto";
 
 export interface GetSpotDto {
   id: number;
@@ -6,14 +8,12 @@ export interface GetSpotDto {
   address: string;
   lon: number;
   lat: number;
-  phone: string;
-  info: string;
+  phone: string | null;
+  info: string | null;
   category: string;
   link: string | null;
   img: string;
-  avgPrice: number | null;
-  avgWaitingTime: number | null;
-  tickets: GetTicketDto[]; // 추가
-  createdAt: string;
-  updatedAt: string;
+  tickets: GetTicketDto[] | null;
+  times: GetTimeDto[] | null;
+  docents: GetDocentDto[] | null;
 }

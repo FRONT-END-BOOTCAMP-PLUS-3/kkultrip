@@ -27,38 +27,27 @@ export default class PgSpotRepository implements SpotRepository {
     }
   }
 
-  async createSpot(
-    spot: Omit<Spot, "id" | "createdAt" | "updatedAt">
-  ): Promise<Spot> {
-    try {
-      return await prisma.spot.create({
-        data: {
-          ...spot,
-          info: spot.info || "",
-          avgPrice: spot.avgPrice ?? 0,
-          avgWaitingTime: spot.avgWaitingTime ?? 0,
-        },
-      });
-    } catch (error) {
-      console.error("❌ createSpot 오류 발생:", error);
-      throw new Error("명소 생성 중 오류가 발생했습니다.");
-    } finally {
-      await prisma.$disconnect();
-    }
+  async createSpot(spot: Spot): Promise<Spot> {
+    return await prisma.spot.create({
+      data: {
+        name: spot.name,
+        address: spot.address,
+        lon: spot.lon,
+        lat: spot.lat,
+        phone: spot.phone,
+        info: spot.info,
+        category: spot.category,
+        link: spot.link ?? null,
+        img: spot.img,
+      },
+    });
   }
 
-  async updateSpot(id: number, spot: Partial<Spot>): Promise<Spot | null> {
-    try {
-      return await prisma.spot.update({
-        where: { id },
-        data: spot,
-      });
-    } catch (error) {
-      console.error("❌ updateSpot 오류 발생:", error);
-      throw new Error("명소 업데이트 중 오류가 발생했습니다.");
-    } finally {
-      await prisma.$disconnect();
-    }
+  async updateSpot(id: number, spot: Spot): Promise<Spot | null> {
+    return await prisma.spot.update({
+      where: { id },
+      data: spot,
+    });
   }
 
   async deleteSpot(id: number): Promise<Spot | null> {

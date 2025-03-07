@@ -7,6 +7,14 @@ import styles from "./SpotsCreatePage.module.scss";
 import { CreateSpotDto } from "@/application/usecases/admin/spot/dto/CreateSpotDto";
 
 const SpotsCreatePage = () => {
+  const days = ["월", "화", "수", "목", "금", "토", "일"];
+  const defaultOperatingHours = Object.fromEntries(
+    days.map((day) => [
+      day,
+      { type: "시간 지정", start: "09:00", end: "18:00" },
+    ])
+  );
+
   const router = useRouter();
   const [formData, setFormData] = useState({
     name: "",
@@ -21,12 +29,38 @@ const SpotsCreatePage = () => {
     link: "",
     img: "",
     tickets: [{ name: "", price: "" }],
+    operatingHours: defaultOperatingHours,
+    docents: [{ title: "", description: "", audioPath: "" }],
   });
 
   const phoneRef1 = useRef<HTMLInputElement>(null);
   const phoneRef2 = useRef<HTMLInputElement>(null);
   const phoneRef3 = useRef<HTMLInputElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleOperatingHoursChange = (
+    day: keyof typeof defaultOperatingHours,
+    field: "type" | "start" | "end",
+    value: string
+  ) => {
+    setFormData((prev) => {
+      const updatedHours = { ...prev.operatingHours };
+
+      if (field === "type") {
+        if (value === "24시간") {
+          updatedHours[day] = { type: value, start: "", end: "" };
+        } else if (value === "휴무") {
+          updatedHours[day] = { type: value, start: "", end: "" };
+        } else {
+          updatedHours[day] = { type: value, start: "09:00", end: "18:00" };
+        }
+      } else {
+        updatedHours[day] = { ...updatedHours[day], [field]: value };
+      }
+
+      return { ...prev, operatingHours: updatedHours };
+    });
+  };
 
   const handlePhoneChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -66,7 +100,8 @@ const SpotsCreatePage = () => {
     }));
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  // 이미지 파일 변경 핸들러
+  const handleImageFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       const imageUrl = URL.createObjectURL(file);
@@ -74,10 +109,70 @@ const SpotsCreatePage = () => {
     }
   };
 
+  const handleDocentChange = (
+    index: number,
+    field: "title" | "description" | "audioPath",
+    value: string | File | null
+  ) => {
+    setFormData((prev) => ({
+      ...prev,
+      docents: prev.docents.map((docent, i) =>
+        i === index ? { ...docent, [field]: value } : docent
+      ),
+    }));
+  };
+
+  const addDocent = () => {
+    setFormData((prev) => ({
+      ...prev,
+      docents: [...prev.docents, { title: "", description: "", audioPath: "" }],
+    }));
+  };
+
+  const removeDocent = (index: number) => {
+    setFormData((prev) => ({
+      ...prev,
+      docents: prev.docents.filter((_, i) => i !== index),
+    }));
+  };
+
+  const handleConvertAddress = async () => {
+    try {
+      const res = await fetch(
+        `/api/geocode?query=${encodeURIComponent(formData.address)}`
+      );
+      const data = await res.json();
+      if (data.lat && data.lon) {
+        setFormData((prev) => ({
+          ...prev,
+          lat: data.lat,
+          lon: data.lon,
+        }));
+        alert("주소가 성공적으로 변환되었습니다.");
+      } else {
+        alert("주소 변환에 실패했습니다.");
+      }
+    } catch (error) {
+      console.error("주소 변환 오류:", error);
+      alert("주소 변환 중 오류가 발생했습니다.");
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const phone = `${formData.phone1}-${formData.phone2}-${formData.phone3}`;
+
+    const validTickets = formData.tickets.filter(
+      (ticket) => ticket.name.trim() !== "" && ticket.price !== ""
+    );
+
+    const validDocents = formData.docents.filter(
+      (docent) =>
+        docent.title.trim() !== "" &&
+        docent.description.trim() !== "" &&
+        docent.audioPath !== ""
+    );
 
     const data: CreateSpotDto = {
       name: formData.name,
@@ -89,11 +184,21 @@ const SpotsCreatePage = () => {
       category: formData.category,
       link: formData.link || null,
       img: formData.img,
-      avgPrice: null,
-      avgWaitingTime: null,
-      tickets: formData.tickets.map((ticket) => ({
+      tickets: validTickets.map((ticket) => ({
         name: ticket.name,
         price: Number(ticket.price),
+      })),
+      times: Object.entries(formData.operatingHours).map(([day, hours]) => ({
+        day,
+        open: hours.start || null,
+        close: hours.end || null,
+        all_hours: hours.type === "24시간",
+        closeDay: hours.type === "휴무",
+      })),
+      docents: validDocents.map((docent) => ({
+        title: docent.title,
+        description: docent.description,
+        audioPath: docent.audioPath,
       })),
     };
 
@@ -102,6 +207,11 @@ const SpotsCreatePage = () => {
     if (fileInputRef.current?.files?.[0]) {
       formDataToSend.append("file", fileInputRef.current.files[0]);
     }
+    validDocents.forEach((docent, index) => {
+      if (docent.audioPath) {
+        formDataToSend.append(`docentAudio${index}`, docent.audioPath);
+      }
+    });
 
     const res = await fetch("/api/admin/spots", {
       method: "POST",
@@ -125,6 +235,8 @@ const SpotsCreatePage = () => {
         link: "",
         img: "",
         tickets: [{ name: "", price: "" }],
+        operatingHours: defaultOperatingHours,
+        docents: [{ title: "", description: "", audioPath: "" }],
       });
       router.push("/admin/spots");
     } else {
@@ -164,6 +276,37 @@ const SpotsCreatePage = () => {
     }));
   };
 
+  const handlePhonePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+    const pasteData = e.clipboardData.getData("Text").replace(/\D/g, "");
+    if (pasteData.length >= 9 && pasteData.length <= 11) {
+      let phone1 = "";
+      let phone2 = "";
+      let phone3 = "";
+
+      if (pasteData.length === 9) {
+        phone1 = pasteData.slice(0, 2);
+        phone2 = pasteData.slice(2, 5);
+        phone3 = pasteData.slice(5, 9);
+      } else if (pasteData.length === 10) {
+        phone1 = pasteData.slice(0, 2);
+        phone2 = pasteData.slice(2, 6);
+        phone3 = pasteData.slice(6, 10);
+      } else if (pasteData.length === 11) {
+        phone1 = pasteData.slice(0, 3);
+        phone2 = pasteData.slice(3, 7);
+        phone3 = pasteData.slice(7, 11);
+      }
+
+      setFormData((prev) => ({
+        ...prev,
+        phone1,
+        phone2,
+        phone3,
+      }));
+      e.preventDefault();
+    }
+  };
+
   return (
     <div className={styles.container}>
       <button
@@ -183,15 +326,24 @@ const SpotsCreatePage = () => {
           className={styles.inputField}
           required
         />
-        <input
-          type="text"
-          name="address"
-          placeholder="주소"
-          value={formData.address}
-          onChange={handleChange}
-          className={styles.inputField}
-          required
-        />
+        <div className={styles.addressContainer}>
+          <input
+            type="text"
+            name="address"
+            placeholder="주소"
+            value={formData.address}
+            onChange={handleChange}
+            className={styles.inputField}
+            required
+          />
+          <button
+            type="button"
+            onClick={handleConvertAddress}
+            className={styles.convertButton}
+          >
+            변환
+          </button>
+        </div>
         <input
           type="number"
           name="lon"
@@ -221,10 +373,10 @@ const SpotsCreatePage = () => {
             value={formData.phone1}
             onChange={(e) => handlePhoneChange(e, "phone1")}
             onKeyDown={(e) => handleKeyDown(e, "phone1")}
+            onPaste={handlePhonePaste}
             className={styles.inputField}
             placeholder="000"
             maxLength={3}
-            required
           />
           <span>-</span>
           <input
@@ -233,10 +385,10 @@ const SpotsCreatePage = () => {
             value={formData.phone2}
             onChange={(e) => handlePhoneChange(e, "phone2")}
             onKeyDown={(e) => handleKeyDown(e, "phone2")}
+            onPaste={handlePhonePaste}
             className={styles.inputField}
             placeholder="0000"
             maxLength={4}
-            required
           />
           <span>-</span>
           <input
@@ -245,20 +397,26 @@ const SpotsCreatePage = () => {
             value={formData.phone3}
             onChange={(e) => handlePhoneChange(e, "phone3")}
             onKeyDown={(e) => handleKeyDown(e, "phone3")}
+            onPaste={handlePhonePaste}
             className={styles.inputField}
             placeholder="0000"
             maxLength={4}
-            required
           />
         </div>
 
-        <textarea
-          name="info"
-          placeholder="정보"
-          value={formData.info}
-          onChange={handleChange}
-          className={styles.textareaField}
-        />
+        <div className={styles.wrapTextArea}>
+          <textarea
+            name="info"
+            value={formData.info ?? ""}
+            onChange={handleChange}
+            className={styles.textareaField}
+            maxLength={100}
+          />
+          <span className={styles.charCount}>
+            {(formData.info ?? "").length} / 100
+          </span>
+        </div>
+
         <select
           name="category"
           value={formData.category}
@@ -284,7 +442,7 @@ const SpotsCreatePage = () => {
         <input
           type="file"
           accept="image/*"
-          onChange={handleFileChange}
+          onChange={handleImageFileChange}
           className={styles.inputField}
           ref={fileInputRef}
           required
@@ -314,7 +472,6 @@ const SpotsCreatePage = () => {
                 onChange={(e) =>
                   handleTicketChange(index, "name", e.target.value)
                 }
-                required
               />
               <input
                 type="number"
@@ -324,7 +481,6 @@ const SpotsCreatePage = () => {
                 onChange={(e) =>
                   handleTicketChange(index, "price", e.target.value)
                 }
-                required
               />
               <button type="button" onClick={() => removeTicket(index)}>
                 삭제
@@ -337,6 +493,118 @@ const SpotsCreatePage = () => {
             className={styles.addButton}
           >
             티켓 추가
+          </button>
+        </div>
+
+        <div className={styles.operatingHoursContainer}>
+          <h2>운영 시간</h2>
+          {Object.entries(formData.operatingHours).map(([day, data]) => {
+            const isDisabled = data.type !== "시간 지정";
+
+            return (
+              <div key={day} className={styles.operatingHoursRow}>
+                <span className={styles.dayLabel}>{day}</span>
+
+                <input
+                  type="time"
+                  value={data.start}
+                  disabled={isDisabled}
+                  onChange={(e) =>
+                    handleOperatingHoursChange(
+                      day as keyof typeof defaultOperatingHours,
+                      "start",
+                      e.target.value
+                    )
+                  }
+                  className={`${styles.timeInput} ${
+                    isDisabled ? styles.disabledInput : ""
+                  }`}
+                />
+
+                <input
+                  type="time"
+                  value={data.end}
+                  disabled={isDisabled}
+                  onChange={(e) =>
+                    handleOperatingHoursChange(
+                      day as keyof typeof defaultOperatingHours,
+                      "end",
+                      e.target.value
+                    )
+                  }
+                  className={`${styles.timeInput} ${
+                    isDisabled ? styles.disabledInput : ""
+                  }`}
+                />
+
+                <select
+                  value={data.type}
+                  onChange={(e) =>
+                    handleOperatingHoursChange(
+                      day as keyof typeof defaultOperatingHours,
+                      "type",
+                      e.target.value
+                    )
+                  }
+                  className={styles.selectField}
+                >
+                  <option value="시간 지정">시간 지정</option>
+                  <option value="24시간">24시간</option>
+                  <option value="휴무">휴무</option>
+                </select>
+              </div>
+            );
+          })}
+        </div>
+
+        <div className={styles.docentsContainer}>
+          <h2>도슨트 정보</h2>
+          {formData.docents.map((docent, index) => (
+            <div key={index} className={styles.docentItem}>
+              <div className={styles.docentRow}>
+                <input
+                  type="text"
+                  placeholder="도슨트 제목"
+                  value={docent.title}
+                  className={styles.inputField}
+                  onChange={(e) =>
+                    handleDocentChange(index, "title", e.target.value)
+                  }
+                />
+                <textarea
+                  placeholder="도슨트 설명"
+                  value={docent.description}
+                  className={styles.textareaField}
+                  onChange={(e) =>
+                    handleDocentChange(index, "description", e.target.value)
+                  }
+                />
+                <button type="button" onClick={() => removeDocent(index)}>
+                  삭제
+                </button>
+              </div>
+              <div className={styles.docentRow}>
+                <input
+                  type="file"
+                  accept="audio/*"
+                  className={styles.inputField}
+                  onChange={(e) =>
+                    handleDocentChange(
+                      index,
+                      "audioPath",
+                      e.target.files?.[0] || null
+                    )
+                  }
+                />
+              </div>
+            </div>
+          ))}
+          <button
+            type="button"
+            onClick={addDocent}
+            className={styles.addButton}
+          >
+            도슨트 추가
           </button>
         </div>
 
