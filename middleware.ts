@@ -1,22 +1,28 @@
 import { NextRequest, NextResponse } from "next/server";
+import { GetUserInfoByJWT } from "./lib/jwt";
 
-export function middleware(req: NextRequest) {
+export const middleware = async (req: NextRequest) => {
   const token = req.cookies.get("token")?.value;
-  const protectedRoutes = ["/user", "/admin"];
+  const tokenData = token ? await GetUserInfoByJWT(token) : null;
+  const isAdmin = tokenData?.isAdmin;
 
-  if (
-    !token &&
-    protectedRoutes.some((route) => req.nextUrl.pathname.startsWith(route))
-  ) {
-    const returnUrl = req.nextUrl.pathname;
-    const response = NextResponse.redirect(new URL("/login", req.url));
-    response.cookies.set("returnUrl", returnUrl);
-    return response;
+  const protectedRoutes = ["/user", "/admin"];
+  const currentPath = req.nextUrl.pathname;
+
+  if (!token) {
+    if (protectedRoutes.some((route) => currentPath.startsWith(route))) {
+      const response = NextResponse.redirect(new URL("/login", req.url));
+      response.cookies.set("prevUrl", currentPath);
+      return response;
+    }
+  } else if (!isAdmin && currentPath.startsWith("/admin")) {
+    return NextResponse.redirect(new URL("/", req.url));
   }
 
   return NextResponse.next();
-}
+};
 
 export const config = {
+  runtime: "nodejs",
   matcher: ["/user/:path*", "/admin/:path*"],
 };
