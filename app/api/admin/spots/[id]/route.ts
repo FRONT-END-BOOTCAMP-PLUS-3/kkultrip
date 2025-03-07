@@ -10,7 +10,6 @@ import { PgTimeRepository } from "@/infrastructure/repositories/PgTimeRepository
 import { TimeRepository } from "@/domain/repositories/TimeRepository";
 import { DocentRepository } from "@/domain/repositories/DocentRepository";
 import { PgDocentRepository } from "@/infrastructure/repositories/PgDocentRepository";
-import { Docent } from "@prisma/client";
 import { promises as fs } from "fs";
 import path from "path";
 
@@ -76,64 +75,96 @@ export async function PATCH(req: Request) {
       docentRepository
     );
 
-    // 기존 데이터 조회
     const existingSpot = await spotRepository.getSpotById(Number(id));
     if (!existingSpot) {
       return NextResponse.json({ error: "Spot not found" }, { status: 404 });
     }
 
-    const uploadDir = path.join(process.cwd(), "public", "images", "spots");
+    const uploadDirImages = path.join(
+      process.cwd(),
+      "public",
+      "images",
+      "spots"
+    );
+    const uploadDirAudios = path.join(process.cwd(), "public", "audios");
 
-    // 기존 이미지 삭제 로직
-    if (existingSpot.img) {
-      const existingImagePath = path.join(
-        process.cwd(),
-        "public",
-        existingSpot.img
-      );
-      try {
-        await fs.unlink(existingImagePath);
-      } catch (unlinkError) {
-        console.warn("Failed to delete old image:", unlinkError);
-      }
-    }
-
-    // 새 이미지 파일 처리
-    const file = formData.get("file") as File;
-    if (file) {
+    if (formData.has("file")) {
+      const file = formData.get("file") as File;
       const buffer = await file.arrayBuffer();
-      let filePath = path.join(uploadDir, file.name);
+      let filePath = path.join(uploadDirImages, file.name);
       let fileName = path.parse(file.name).name;
       const fileExt = path.parse(file.name).ext;
 
-      const existingFiles = await fs.readdir(uploadDir);
+      const existingFiles = await fs.readdir(uploadDirImages);
       const fileNames = existingFiles.map((f) => path.parse(f).name);
 
       let counter = 1;
       while (fileNames.includes(fileName)) {
         fileName = `${fileName}_${counter}`;
-        filePath = path.join(uploadDir, `${fileName}${fileExt}`);
+        filePath = path.join(uploadDirImages, `${fileName}${fileExt}`);
         counter++;
+      }
+
+      if (existingSpot.img) {
+        try {
+          const existingImagePath = path.join(
+            process.cwd(),
+            "public",
+            existingSpot.img
+          );
+          await fs.unlink(existingImagePath);
+        } catch (unlinkError) {
+          console.warn("Failed to delete old image:", unlinkError);
+        }
       }
 
       await fs.writeFile(filePath, Buffer.from(buffer));
       updateData.img = `/images/spots/${fileName}${fileExt}`;
     }
 
-    // 도슨트 업데이트 로직에서 audioPath를 문자열로 변환
-    const updatedDocents = docents.map((docent: Docent) => ({
-      ...docent,
-      audioPath:
-        typeof docent.audioPath === "object"
-          ? (docent.audioPath as { path: string }).path
-          : docent.audioPath,
-    }));
+    if (docents) {
+      for (let i = 0; i < docents.length; i++) {
+        const audioFile = formData.get(`docentAudio${i}`) as File;
+        if (audioFile) {
+          const buffer = await audioFile.arrayBuffer();
+          let filePath = path.join(uploadDirAudios, audioFile.name);
+          let fileName = path.parse(audioFile.name).name;
+          const fileExt = path.parse(audioFile.name).ext;
+
+          const existingFiles = await fs.readdir(uploadDirAudios);
+          const fileNames = existingFiles.map((f) => path.parse(f).name);
+
+          let counter = 1;
+          while (fileNames.includes(fileName)) {
+            fileName = `${fileName}_${counter}`;
+            filePath = path.join(uploadDirAudios, `${fileName}${fileExt}`);
+            counter++;
+          }
+
+          if (docents[i].audioPath) {
+            try {
+              const existingAudioPath = path.join(
+                process.cwd(),
+                "public",
+                docents[i].audioPath
+              );
+              await fs.unlink(existingAudioPath);
+            } catch (unlinkError) {
+              console.warn("Failed to delete old audio:", unlinkError);
+            }
+          }
+
+          await fs.writeFile(filePath, Buffer.from(buffer));
+          docents[i].audioPath = `/audios/${fileName}${fileExt}`;
+        }
+      }
+    }
 
     const updatedSpot = await updateSpotUseCase.execute(id, {
       ...updateData,
       tickets,
       times,
-      docents: updatedDocents,
+      docents,
     });
 
     return NextResponse.json(updatedSpot, { status: 200 });
