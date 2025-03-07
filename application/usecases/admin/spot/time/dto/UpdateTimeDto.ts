@@ -1,5 +1,5 @@
 export interface UpdateTimeDto {
-  id: number;
+  id: number | null;
   day: string;
   open?: string | null;
   close?: string | null;

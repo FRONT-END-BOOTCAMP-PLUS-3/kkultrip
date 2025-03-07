@@ -36,9 +36,10 @@ const SpotsEditPage = () => {
     tickets: { id: number | null; name: string; price: string | number }[];
     operatingHours: typeof defaultOperatingHours;
     docents: {
+      id: number | null;
       title: string;
       description: string;
-      audioPath: string | File | null;
+      audioPath: string;
     }[];
   }>({
     name: "",
@@ -54,7 +55,7 @@ const SpotsEditPage = () => {
     img: "",
     tickets: [{ id: null, name: "", price: "" }],
     operatingHours: defaultOperatingHours,
-    docents: [{ title: "", description: "", audioPath: "" }],
+    docents: [{ id: null, title: "", description: "", audioPath: "" }],
   });
 
   const [initialTickets, setInitialTickets] = useState<
@@ -218,7 +219,7 @@ const SpotsEditPage = () => {
       phone,
       tickets,
       times: Object.entries(formData.operatingHours).map(([day, hours]) => ({
-        id: hours.id || 0,
+        id: hours.id || null,
         spotId: Number(spotId),
         day,
         open: hours.start || null,
@@ -227,7 +228,7 @@ const SpotsEditPage = () => {
         closeDay: hours.type === "휴무",
       })),
       docents: formData.docents.map((docent) => ({
-        id: docent.id,
+        id: docent.id || null,
         title: docent.title,
         description: docent.description,
         audioPath: docent.audioPath,
@@ -307,7 +308,10 @@ const SpotsEditPage = () => {
   const addDocent = () => {
     setFormData((prev) => ({
       ...prev,
-      docents: [...prev.docents, { title: "", description: "", audioPath: "" }],
+      docents: [
+        ...prev.docents,
+        { id: null, title: "", description: "", audioPath: "" },
+      ],
     }));
   };
 
