@@ -5,11 +5,13 @@ import { UpdateTipUsecase } from "@/application/usecases/spot/tip/UpdateTipUseca
 import { GetTipUsecase } from "@/application/usecases/spot/tip/GetTipUsecase";
 import PgSpotRepository from "@/infrastructure/repositories/PgSpotRepository";
 
-export async function GET(req: NextRequest) {
+export async function GET(
+    req: NextRequest,
+    props: { params: Promise<{ spotId: string; tipId: string }> }
+) {
     try {
-        // URL에서 tipId 추출
-        const urlParts = req.nextUrl.pathname.split("/");
-        const tipId = urlParts[urlParts.length - 1]; // 마지막 경로값이 tipId
+        const params = await props.params;
+        const { tipId } = params;
 
         if (!tipId) {
             return NextResponse.json(
