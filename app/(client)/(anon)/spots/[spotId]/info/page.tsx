@@ -1,4 +1,4 @@
-import { SpotInfoDto } from "@/application/usecases/spot/dto/SpotInfoDto";
+import { SpotInfoDto } from "@/application/usecases/spot/info/dto/SpotInfoDto";
 import { BiPhoneCall } from "react-icons/bi";
 import { FaClock } from "react-icons/fa";
 import { IoIosLink, IoMdPerson } from "react-icons/io";
