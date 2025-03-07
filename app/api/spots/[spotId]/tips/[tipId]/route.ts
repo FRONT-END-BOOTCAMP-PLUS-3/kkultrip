@@ -5,28 +5,25 @@ import { UpdateTipUsecase } from "@/application/usecases/spot/tip/UpdateTipUseca
 import { GetTipUsecase } from "@/application/usecases/spot/tip/GetTipUsecase";
 import PgSpotRepository from "@/infrastructure/repositories/PgSpotRepository";
 
-export async function GET(
-    req: NextRequest,
-    props: { params: Promise<{ tipId: string }> }
-) {
+export async function GET(req: NextRequest) {
     try {
-        const params = await props.params;
+        // URL에서 tipId 추출
+        const urlParts = req.nextUrl.pathname.split("/");
+        const tipId = urlParts[urlParts.length - 1]; // 마지막 경로값이 tipId
+
+        if (!tipId) {
+            return NextResponse.json(
+                { error: "Tip ID is required" },
+                { status: 400 }
+            );
+        }
+
         const tipRepo = new PgTipRepository();
         const imageRepo = new PgImageRepository();
         const getTipWithImagesUsecase = new GetTipUsecase(tipRepo, imageRepo);
 
-        // // 요청 헤더에서 userId 가져오기
-        // const userId = req.headers.get("userId");
-        // if (!userId) {
-        //   return NextResponse.json(
-        //     { error: "유저 정보가 없습니다." },
-        //     { status: 401 }
-        //   );
-        // }
-
         const userId = "d9b78231-1d27-479c-9a28-903bd67433e6";
-
-        const tip = await getTipWithImagesUsecase.execute(Number(params.tipId));
+        const tip = await getTipWithImagesUsecase.execute(Number(tipId));
 
         if (!tip) {
             return NextResponse.json(
@@ -35,7 +32,6 @@ export async function GET(
             );
         }
 
-        // 요청한 유저가 작성자가 아니면 에러 반환
         if (tip.userId !== userId) {
             return NextResponse.json(
                 { error: "본인이 작성한 팁만 수정할 수 있습니다." },
@@ -45,16 +41,24 @@ export async function GET(
 
         return NextResponse.json(tip, { status: 200 });
     } catch (error) {
-        console.log("❌ 팁 불러오기에 실패했습니다 :", error);
+        console.error("❌ 팁 불러오기에 실패했습니다 :", error);
         return NextResponse.json({ error: "서버 오류 발생" }, { status: 500 });
     }
 }
 
-export const PUT = async (
-    req: Request,
-    { params }: { params: { tipId: string } }
-) => {
+export async function PUT(req: NextRequest) {
     try {
+        // URL에서 tipId 추출
+        const urlParts = req.nextUrl.pathname.split("/");
+        const tipId = urlParts[urlParts.length - 1]; // 마지막 경로값이 tipId
+
+        if (!tipId) {
+            return NextResponse.json(
+                { error: "Tip ID is required" },
+                { status: 400 }
+            );
+        }
+
         const formData = await req.formData();
         const description = formData.get("description") as string;
         const price = Number(formData.get("price"));
@@ -62,7 +66,7 @@ export const PUT = async (
         const newImageFiles = formData.getAll("images") as File[];
         const existingImagePaths = formData.getAll(
             "existingImages"
-        ) as string[]; // 기존 이미지 목록
+        ) as string[];
 
         const tipRepo = new PgTipRepository();
         const imageRepo = new PgImageRepository();
@@ -74,7 +78,7 @@ export const PUT = async (
         );
 
         await updateTipUsecase.execute({
-            tipId: parseInt(params.tipId),
+            tipId: parseInt(tipId),
             description,
             price,
             waitingTime,
@@ -84,7 +88,7 @@ export const PUT = async (
 
         return NextResponse.json({ status: 201 });
     } catch (error) {
-        console.log("❌ 팁 업데이트 오류:", error);
+        console.error("❌ 팁 업데이트 오류:", error);
         return NextResponse.json({ error: "서버 오류 발생" }, { status: 500 });
     }
-};
+}

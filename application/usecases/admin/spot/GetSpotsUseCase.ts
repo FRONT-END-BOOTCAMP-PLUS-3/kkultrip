@@ -1,4 +1,4 @@
-import { SpotRepository } from "@/domain/repositories/SpotRepository";
+import SpotRepository from "@/domain/repositories/SpotRepository";
 import { GetSpotDto } from "./dto/GetSpotDto";
 
 export class GetSpotsUseCase {
@@ -8,7 +8,19 @@ export class GetSpotsUseCase {
     const spots = await this.spotRepository.getAllSpots();
 
     return spots.map((spot) => ({
-      ...spot,
+      id: spot.id,
+      name: spot.name,
+      address: spot.address,
+      lon: spot.lon,
+      lat: spot.lat,
+      phone: spot.phone ?? "",
+      info: spot.info ?? "",
+      category: spot.category,
+      link: spot.link ?? "",
+      img: spot.img,
+      avgPrice: spot.avgPrice ?? null,
+      tickets: [],
+      avgWaitingTime: spot.avgWaitingTime ?? null,
       createdAt: spot.createdAt.toISOString(), // Date → string 변환
       updatedAt: spot.updatedAt.toISOString(), // Date → string 변환
     }));

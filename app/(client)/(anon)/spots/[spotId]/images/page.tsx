@@ -12,6 +12,8 @@ const ImagesPage = async (props: { params: Promise<{ spotId: string }> }) => {
     );
     const images: TipImageDto[] = await data.json();
 
+    console.log(images);
+
     if (images.length === 0) {
         return (
             <div className={styles.noData}>

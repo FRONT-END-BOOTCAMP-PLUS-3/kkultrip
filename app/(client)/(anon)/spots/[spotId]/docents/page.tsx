@@ -1,6 +1,6 @@
 import styles from "./DocentsPage.module.scss";
 import DocentContent from "./components/DocentContent";
-import { SpotDocentDto } from "@/application/usecases/spot/dto/SpotDocentDto";
+import { SpotDocentDto } from "@/application/usecases/spot/docent/dto/SpotDocentDto";
 
 const DocentsPage = async (props: { params: Promise<{ spotId: string }> }) => {
     const params = await props.params;

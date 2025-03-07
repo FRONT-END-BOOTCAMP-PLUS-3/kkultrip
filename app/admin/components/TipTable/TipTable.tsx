@@ -1,9 +1,8 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import styles from "./Tiptable.module.scss";
 import { Tip } from "@prisma/client";
+import { useState } from "react";
+import styles from "./Tiptable.module.scss";
 
 interface TipTableProps {
   tips: Tip[];
@@ -20,7 +19,7 @@ type SortKey =
 type SortOrder = "asc" | "desc";
 
 const Tiptable = ({ tips }: TipTableProps) => {
-  const router = useRouter();
+  // const router = useRouter();
   const [sortKey, setSortKey] = useState<SortKey>("id");
   const [sortOrder, setSortOrder] = useState<SortOrder>("asc");
 
@@ -42,7 +41,7 @@ const Tiptable = ({ tips }: TipTableProps) => {
       : String(bValue).localeCompare(String(aValue));
   });
 
-  const handleEdit = (id: number) => router.push(`/admin/tips/${id}/edit`);
+  // const handleEdit = (id: number) => router.push(`/admin/tips/${id}/edit`);
 
   const handleDelete = async (id: number) => {
     if (!confirm("정말로 삭제하시겠습니까?")) return;

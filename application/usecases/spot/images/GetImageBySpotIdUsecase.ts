@@ -1,4 +1,5 @@
-import ImageRepository from "@/domain/repositories/ImageRepository";
+
+import { ImageRepository } from "@/domain/repositories/ImageRepository";
 import TipRepository from "@/domain/repositories/TipRepository";
 import { Tip, Image } from "@prisma/client";
 

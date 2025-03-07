@@ -4,8 +4,9 @@ import { useState } from "react";
 import { FaWonSign } from "react-icons/fa6";
 import { IoIosArrowDown } from "react-icons/io";
 import { IoIosArrowUp } from "react-icons/io";
-import { TicketDetailDto } from "@/application/usecases/spot/dto/TicketDetailDto";
+
 import styles from "./TicketList.module.scss";
+import { TicketDetailDto } from "@/application/usecases/spot/info/dto/TicketDetailDto";
 
 const TicketList = ({
     tickets,
