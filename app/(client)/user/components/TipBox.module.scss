@@ -65,6 +65,11 @@
       color: var(--primary-color);
       font-weight: bold;
       margin: 0 0.2rem;
+
+      .minute {
+        color: var(--grey-2-color);
+        font-weight: normal;
+      }
     }
   }
 
