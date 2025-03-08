@@ -51,9 +51,17 @@ const AdminSpotsPage = () => {
           >
             이전
           </button>
-          <span>
-            {currentPage} / {totalPages}
-          </span>
+
+          {Array.from({ length: totalPages }, (_, index) => (
+            <button
+              key={index + 1}
+              onClick={() => handlePageChange(index + 1)}
+              className={currentPage === index + 1 ? styles.active : ""}
+            >
+              {index + 1}
+            </button>
+          ))}
+
           <button
             onClick={() => handlePageChange(currentPage + 1)}
             disabled={currentPage === totalPages}

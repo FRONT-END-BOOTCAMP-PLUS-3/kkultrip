@@ -4,13 +4,44 @@
   .main {
     flex: 1;
     padding: 2rem;
-    background: white;
     position: relative;
+    height: 100%;
+    .pagination {
+      position: absolute;
+      display: flex;
+      gap: 1rem;
+      bottom: 10%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      margin-top: 1rem;
+
+      button {
+        padding: 0.5rem;
+        background: none;
+        border: 1px solid #ccc;
+        cursor: pointer;
+
+        &.active {
+          background: var(--primary-color);
+          color: white;
+        }
+
+        &:disabled {
+          cursor: not-allowed;
+          background-color: #f0f0f0;
+        }
+      }
+
+      span {
+        margin: 0 0.5rem;
+      }
+    }
+
     .addButton {
       position: absolute;
       bottom: 2rem;
       right: 2rem;
-      background: var(--primary-color); // 글로벌 CSS 변수 사용
+      background: var(--primary-color);
       color: #000;
       padding: 1rem;
       border-radius: 50%;
