@@ -13,6 +13,7 @@ const Header = () => {
   const router = useRouter();
   const pathname = usePathname();
   const isLoggedIn = useUserStore((state) => state.isLoggedIn);
+  const clearInfo = useUserStore((state) => state.clearInfo);
 
   // 헤더 타입 결정
   let type: "default" | "back" | "mypage" | null = "default";
@@ -30,8 +31,22 @@ const Header = () => {
     return null;
   }
 
-  const handleLogout = () => {
-    setMenuOpen(false);
+  const handleLogout = async () => {
+    try {
+      const response = await fetch("/api/logout", {
+        method: "POST",
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to logout");
+      }
+
+      clearInfo();
+      setMenuOpen(false);
+      router.push("/");
+    } catch (error) {
+      console.log("로그아웃 에러:", error);
+    }
   };
 
   const handleWithdraw = () => {
