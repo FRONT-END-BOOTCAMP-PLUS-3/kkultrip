@@ -10,11 +10,11 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   req: NextRequest,
-  props: { params: Promise<{ tipId: string }> }
+  props: { params: Promise<{ id: string }> }
 ) {
   try {
     const params = await props.params;
-    const { tipId } = params;
+    const tipId = params.id;
     const tipRepo = new PgTipRepository();
     const imageRepo = new PgImageRepository();
     const getTipWithImagesUsecase = new GetTipUsecase(tipRepo, imageRepo);
@@ -63,11 +63,11 @@ export async function GET(
 
 export const PUT = async (
   req: NextRequest,
-  props: { params: Promise<{ tipId: string }> }
+  props: { params: Promise<{ id: string }> }
 ) => {
   try {
     const params = await props.params;
-    const { tipId } = params;
+    const tipId = params.id;
 
     if (!tipId) {
       return NextResponse.json(
