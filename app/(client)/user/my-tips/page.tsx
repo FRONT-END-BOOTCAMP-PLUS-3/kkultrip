@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import TipBox from "../components/TipBox";
-import Styles from "./MyTips.module.scss";
+import styles from "./MyTips.module.scss";
 import { UserTipDto } from "@/application/usecases/user/dto/UserTipDto";
 
 const MyTips = () => {
@@ -24,9 +24,9 @@ const MyTips = () => {
   }, []);
 
   return (
-    <div className={Styles.myTipsContainer}>
+    <div className={styles.myTipsContainer}>
       {userMyTipList.length === 0 ? (
-        <p className={Styles.noTipText}>작성한 꿀팁이 없습니다.</p>
+        <p className={styles.noTipText}>작성한 꿀팁이 없습니다.</p>
       ) : (
         userMyTipList.map((tip) => <TipBox key={tip.id} tip={tip} />)
       )}
