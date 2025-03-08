@@ -72,7 +72,9 @@ const Header = () => {
           {type === "default" ? (
             <div
               className={styles.menu}
-              onClick={() => router.push("/user/my-tips")}
+              onClick={() =>
+                router.push(isLoggedIn ? "/user/my-tips" : "/login")
+              }
             >
               {isLoggedIn ? "마이페이지" : "로그인"}
             </div>
@@ -95,7 +97,7 @@ const Header = () => {
           </div>
           <div
             className={styles.menu}
-            onClick={() => router.push("/user/my-tips")}
+            onClick={() => router.push(isLoggedIn ? "/user/my-tips" : "/login")}
           >
             {isLoggedIn ? "마이페이지" : "로그인"}
           </div>
