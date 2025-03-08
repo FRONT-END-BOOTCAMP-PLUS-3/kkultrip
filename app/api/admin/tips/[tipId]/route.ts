@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { PgTipRepository } from "@/infrastructure/repositories/PgTipRepository";
 import { PgImageRepository } from "@/infrastructure/repositories/PgImageRepository";
 import { GetTipUsecase } from "@/application/usecases/spot/tip/GetTipUsecase";
+import PgSpotRepository from "@/infrastructure/repositories/PgSpotRepository";
+import DeleteTipUsecase from "@/application/usecases/spot/tips/DeleteTipUsecase";
 
 export async function GET(req: NextRequest) {
   try {
@@ -33,6 +35,32 @@ export async function GET(req: NextRequest) {
     console.error("❌ GET 요청 처리 중 오류 발생:", error);
     return NextResponse.json(
       { error: "서버 오류가 발생했습니다." },
+      { status: 500 }
+    );
+  }
+}
+
+export async function DELETE(request: Request) {
+  try {
+    const { tipId, spotId } = await request.json();
+    const tipRepository = new PgTipRepository();
+    const spotRepository = new PgSpotRepository();
+    const deleteTipUsecase = new DeleteTipUsecase(
+      tipRepository,
+      spotRepository
+    );
+
+    await deleteTipUsecase.execute(tipId, spotId);
+
+    return NextResponse.json(
+      { message: "Tip deleted successfully" },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error("Error deleting tip:", error);
+
+    return NextResponse.json(
+      { error: "Failed to delete tip" },
       { status: 500 }
     );
   }
