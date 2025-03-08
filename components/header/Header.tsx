@@ -42,6 +42,8 @@ const Header = () => {
       }
 
       clearInfo();
+      document.cookie =
+        "prevUrl=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
       setMenuOpen(false);
       router.push("/");
     } catch (error) {
