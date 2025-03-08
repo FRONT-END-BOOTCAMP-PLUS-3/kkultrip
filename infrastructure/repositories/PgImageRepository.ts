@@ -6,11 +6,10 @@ import { Image } from "@prisma/client";
 export class PgImageRepository implements ImageRepository {
   async createImages(tipId: number, imageFiles: File[]): Promise<void> {
     const uploadDir = path.join(process.cwd(), "public/images/tips");
-
     // 서버 환경에서만 fs 모듈을 사용
+
     if (typeof window === "undefined") {
       const fs = await import("fs");
-
       // 저장 폴더가 없으면 생성
       if (!fs.existsSync(uploadDir)) {
         fs.mkdirSync(uploadDir, { recursive: true });
