@@ -13,12 +13,14 @@ import DocentRepository from "@/domain/repositories/DocentRepository";
 import { PgTimeRepository } from "@/infrastructure/repositories/PgTimeRepository";
 import PgDocentRepository from "@/infrastructure/repositories/PgDocentRepository";
 
-export async function GET() {
+export async function GET(req: Request) {
   try {
+    const url = new URL(req.url);
+    const page = parseInt(url.searchParams.get("page") || "1", 10);
+
     const spotRepository: SpotRepository = new PgSpotRepository();
     const getSpotListUseCase = new GetSpotListUseCase(spotRepository);
-    const spots = await getSpotListUseCase.execute();
-
+    const spots = await getSpotListUseCase.execute(page); // 페이지 번호를 전달
     return NextResponse.json(spots, { status: 200 });
   } catch (error) {
     console.error("Error fetching spots:", error);

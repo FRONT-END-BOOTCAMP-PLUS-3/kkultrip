@@ -1,9 +1,7 @@
-import { GetSpotDto } from "./GetSpotDto";
+import { GetSpotListDto } from "./GetSpotListDto";
 
 export interface SpotListDto {
-  spots: GetSpotDto[];
-
-  // 페이지네이션을 위한 데이터
+  spots: GetSpotListDto[]; // GetSpotListDto의 배열
   totalCount: number;
   totalPages: number;
   hasPreviousPage: boolean;
