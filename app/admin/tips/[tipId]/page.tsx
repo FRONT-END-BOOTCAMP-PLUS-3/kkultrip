@@ -1,6 +1,6 @@
 "use client";
 
-import { GetTipDto } from "@/application/usecases/spot/tip/dto/GetTipDto";
+import { GetTipWithSpotDto } from "@/application/usecases/admin/tip/dto/GetTipWithSpotDto";
 import { ReactionDto } from "@/application/usecases/spot/tips/dto/ReactionDto";
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
@@ -10,7 +10,7 @@ import styles from "./TipDetailPage.module.scss";
 const TipDetailPage = () => {
   const { tipId } = useParams();
   const router = useRouter();
-  const [tip, setTip] = useState<GetTipDto | null>(null);
+  const [tip, setTip] = useState<GetTipWithSpotDto | null>(null);
   const [reaction, setReaction] = useState<ReactionDto | null>(null);
 
   const reactions: Record<number, { name: string; image: string }> = {
@@ -72,6 +72,7 @@ const TipDetailPage = () => {
         <div className={styles.Container}>
           <div className={styles.contentsContainer}>
             <p className={styles.detail}>ID: {tip.id}</p>
+            <p className={styles.detail}>명소 이름: {tip.spotName}</p>
             <p className={styles.detail}>명소 ID: {tip.spotId}</p>
             <p className={styles.detail}>사용자 ID: {tip.userId}</p>
             <p className={styles.detail}>설명: {tip.description}</p>
