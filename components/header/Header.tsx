@@ -5,22 +5,20 @@ import styles from "./Header.module.scss";
 import Image from "next/image";
 import { FaArrowLeft } from "react-icons/fa6";
 import { IoMenu } from "react-icons/io5";
+import useUserStore from "@/store/useUserStore";
 
-type HeaderProps = {
-  isLoggedIn: boolean;
-};
-
-const Header = ({ isLoggedIn }: HeaderProps) => {
+const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const router = useRouter();
   const pathname = usePathname();
+  const isLoggedIn = useUserStore((state) => state.isLoggedIn);
 
   // 헤더 타입 결정
   let type: "default" | "back" | "mypage" | null = "default";
-  if (pathname === "/spots") {
+  if (pathname === "/spots" || pathname === "/login") {
     type = "default"; // 로고헤더
-  } else if (pathname === "/user/my-tips") {
+  } else if (pathname.startsWith("/user")) {
     type = "mypage"; // 마이페이지 헤더
   } else if (pathname === "/") {
     type = null;
