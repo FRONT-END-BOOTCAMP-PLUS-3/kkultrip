@@ -4,10 +4,16 @@ import Image from "next/image";
 import styles from "./TipBox.module.scss";
 import { usePathname } from "next/navigation";
 
+type TipImage = { path: string } | null;
+
 const TipBox = () => {
   const pathname = usePathname();
   const count1 = 3;
   const count2 = 0;
+  const tipImages: TipImage[] = [
+    // { path: "/images/spots/test.png" },
+    // { path: "/images/spots/test.png" },
+  ];
 
   return (
     <div className={styles.tipBoxContainer}>
@@ -44,6 +50,27 @@ const TipBox = () => {
         </p>
         |<p>랜드마크</p>
       </div>
+      {tipImages && tipImages.length > 0 && (
+        <div
+          className={
+            tipImages.length === 2
+              ? styles.imageFullWrapper
+              : styles.imageWrapper
+          }
+        >
+          {tipImages.map((image, index) => (
+            <div key={index}>
+              <Image
+                src={image?.path || ""}
+                width={100}
+                height={100}
+                alt="spot image"
+                className={styles.image}
+              />
+            </div>
+          ))}
+        </div>
+      )}
       <p>신라 역사에 대해 잘 알 수 있었어요! 석굴암도 같이 갔다왔네요</p>
       <div className={styles.emotionWrapper}>
         <div className={styles.emotionBox}>
