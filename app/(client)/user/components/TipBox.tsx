@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import styles from "./TipBox.module.scss";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { UserTipDto } from "@/application/usecases/user/dto/UserTipDto";
 
 type TipBoxProps = {
@@ -11,6 +11,8 @@ type TipBoxProps = {
 
 const TipBox = ({ tip }: TipBoxProps) => {
   const pathname = usePathname();
+  const router = useRouter();
+
   const reactions = [
     {
       src: "/images/reaction-type1.png",
@@ -34,6 +36,27 @@ const TipBox = ({ tip }: TipBoxProps) => {
     },
   ];
 
+  const handleTipEditButtonClick = () => {
+    router.push(`/spots/${tip.spotId}/tips/${tip.id}/edit`);
+  };
+
+  const handleTipDeleteButtonClick = async () => {
+    try {
+      const response = await fetch(`/api/tips/${tip.id}`, {
+        method: "DELETE",
+        body: JSON.stringify({ spotId: tip.spotId }),
+      });
+      if (!response.ok) {
+        throw new Error("Failed to delete the tip");
+      }
+
+      alert("꿀팁이 삭제되었습니다.");
+      window.location.reload();
+    } catch (error) {
+      console.log("팁 삭제 에러:", error);
+    }
+  };
+
   return (
     <div className={styles.tipBoxContainer}>
       <h3 className={styles.srOnly}>{tip.spotName} 꿀팁</h3>
@@ -52,8 +75,18 @@ const TipBox = ({ tip }: TipBoxProps) => {
         </figure>
         {pathname === "/user/my-tips" && (
           <div className={styles.buttonBox}>
-            <button className={styles.editButton}>수정</button>
-            <button className={styles.deleteButton}>삭제</button>
+            <button
+              className={styles.editButton}
+              onClick={handleTipEditButtonClick}
+            >
+              수정
+            </button>
+            <button
+              className={styles.deleteButton}
+              onClick={handleTipDeleteButtonClick}
+            >
+              삭제
+            </button>
           </div>
         )}
       </div>
