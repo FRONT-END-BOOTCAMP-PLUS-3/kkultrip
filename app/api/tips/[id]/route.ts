@@ -6,6 +6,7 @@ import TipRepository from "@/domain/repositories/TipRepository";
 import { PgImageRepository } from "@/infrastructure/repositories/PgImageRepository";
 import PgSpotRepository from "@/infrastructure/repositories/PgSpotRepository";
 import { PgTipRepository } from "@/infrastructure/repositories/PgTipRepository";
+import { GetUserInfoByJWT } from "@/utils/jwt";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
@@ -25,17 +26,24 @@ export async function GET(
         { status: 400 }
       );
     }
+    const token = req.cookies.get("token")?.value;
+    if (!token) {
+      return NextResponse.json(
+        { message: "토큰정보가 없습니다. 로그인이 필요합니다." },
+        { status: 401 }
+      );
+    }
 
-    // // 요청 헤더에서 userId 가져오기
-    // const userId = req.headers.get("userId");
-    // if (!userId) {
-    //   return NextResponse.json(
-    //     { error: "유저 정보가 없습니다." },
-    //     { status: 401 }
-    //   );
-    // }
+    const jwtData = await GetUserInfoByJWT(token);
+    if (!jwtData) {
+      return NextResponse.json(
+        { message: "토큰정보가 없습니다. 로그인이 필요합니다." },
+        { status: 401 }
+      );
+    }
+    const userId = jwtData.userId as string;
 
-    const userId = "d9b78231-1d27-479c-9a28-903bd67433e6";
+    // const userId = "d9b78231-1d27-479c-9a28-903bd67433e6";
 
     const tip = await getTipWithImagesUsecase.execute(Number(tipId));
 
