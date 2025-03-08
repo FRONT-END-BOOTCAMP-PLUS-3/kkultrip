@@ -6,4 +6,5 @@ export default interface ReactionRepository {
   getReaction(tipId: number, userId: string): Promise<Reaction | null>;
   updateReaction(reaction: Reaction): Promise<void>;
   deleteReaction(tipId: number, userId: string): Promise<void>;
+  getTipIdsByUserId(userId: string): Promise<number[]>;
 }
