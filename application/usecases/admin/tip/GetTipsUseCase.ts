@@ -14,6 +14,7 @@ export class GetTipsUseCase {
       description: tip.description,
       price: tip.price,
       reportCnt: tip.reportCnt,
+      waitingTime: tip.waitingTime,
       createdAt: tip.createdAt.toISOString(),
       updatedAt: tip.updatedAt.toISOString(),
     }));

@@ -5,17 +5,20 @@ import { useState } from "react";
 import styles from "./TipTable.module.scss";
 
 interface TipTableProps {
-  tips: Tip[];
+  tips: (Tip & { spotName: string })[];
 }
 
 type SortKey =
   | "id"
   | "spotId"
+  | "spotName"
   | "userId"
   | "description"
   | "price"
+  | "waitingTime"
   | "reportCnt"
-  | "createdAt";
+  | "createdAt"
+  | "updatedAt";
 type SortOrder = "asc" | "desc";
 
 const TipTable = ({ tips }: TipTableProps) => {
@@ -40,8 +43,6 @@ const TipTable = ({ tips }: TipTableProps) => {
       ? String(aValue).localeCompare(String(bValue))
       : String(bValue).localeCompare(String(aValue));
   });
-
-  // const handleEdit = (id: number) => router.push(`/admin/tips/${id}/edit`);
 
   const handleDelete = async (id: number) => {
     if (!confirm("정말로 삭제하시겠습니까?")) return;
@@ -71,11 +72,14 @@ const TipTable = ({ tips }: TipTableProps) => {
             [
               "id",
               "spotId",
+              "spotName",
               "userId",
               "description",
               "price",
+              "waitingTime",
               "reportCnt",
               "createdAt",
+              "updatedAt",
             ] as SortKey[]
           ).map((key) => (
             <th
@@ -87,15 +91,21 @@ const TipTable = ({ tips }: TipTableProps) => {
                 ? "번호"
                 : key === "spotId"
                 ? "명소 ID"
+                : key === "spotName"
+                ? "명소 이름"
                 : key === "userId"
                 ? "사용자 ID"
                 : key === "description"
                 ? "설명"
                 : key === "price"
                 ? "가격"
+                : key === "waitingTime"
+                ? "대기 시간"
                 : key === "reportCnt"
                 ? "신고 횟수"
-                : "생성 날짜"}
+                : key === "createdAt"
+                ? "생성 날짜"
+                : "수정 날짜"}
             </th>
           ))}
           <th>관리</th>
@@ -107,11 +117,14 @@ const TipTable = ({ tips }: TipTableProps) => {
             <tr key={tip.id}>
               <td>{tip.id}</td>
               <td>{tip.spotId}</td>
+              <td>{tip.spotName}</td>
               <td>{tip.userId}</td>
               <td>{tip.description}</td>
               <td>{tip.price}</td>
+              <td>{tip.waitingTime}</td>
               <td>{tip.reportCnt}</td>
               <td>{new Date(tip.createdAt).toLocaleDateString()}</td>
+              <td>{new Date(tip.updatedAt).toLocaleDateString()}</td>
               <td>
                 <button
                   className={styles.deleteButton}
@@ -124,7 +137,7 @@ const TipTable = ({ tips }: TipTableProps) => {
           ))
         ) : (
           <tr>
-            <td colSpan={8} className={styles.noData}>
+            <td colSpan={9} className={styles.noData}>
               데이터가 없습니다.
             </td>
           </tr>

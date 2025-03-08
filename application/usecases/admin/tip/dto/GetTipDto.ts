@@ -5,6 +5,7 @@ export interface GetTipDto {
   description: string;
   price: number;
   reportCnt: number;
+  waitingTime: number;
   createdAt: string;
   updatedAt: string;
 }
