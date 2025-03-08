@@ -2,6 +2,7 @@
 
 import { Tip } from "@prisma/client";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import styles from "./TipTable.module.scss";
 
 interface TipTableProps {
@@ -22,13 +23,17 @@ type SortKey =
 type SortOrder = "asc" | "desc";
 
 const TipTable = ({ tips }: TipTableProps) => {
-  // const router = useRouter();
+  const router = useRouter();
   const [sortKey, setSortKey] = useState<SortKey>("id");
   const [sortOrder, setSortOrder] = useState<SortOrder>("asc");
 
   const handleSort = (key: SortKey) => {
     setSortOrder(sortKey === key && sortOrder === "asc" ? "desc" : "asc");
     setSortKey(key);
+  };
+
+  const handleRowClick = (id: number) => {
+    router.push(`/admin/tips/${id}`);
   };
 
   const sortedTips = [...tips].sort((a, b) => {
@@ -114,7 +119,11 @@ const TipTable = ({ tips }: TipTableProps) => {
       <tbody>
         {sortedTips.length > 0 ? (
           sortedTips.map((tip) => (
-            <tr key={tip.id}>
+            <tr
+              key={tip.id}
+              onClick={() => handleRowClick(tip.id)}
+              className={styles.tableRow}
+            >
               <td>{tip.id}</td>
               <td>{tip.spotId}</td>
               <td>{tip.spotName}</td>
@@ -128,7 +137,10 @@ const TipTable = ({ tips }: TipTableProps) => {
               <td>
                 <button
                   className={styles.deleteButton}
-                  onClick={() => handleDelete(tip.id)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDelete(tip.id);
+                  }}
                 >
                   삭제
                 </button>
