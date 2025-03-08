@@ -32,6 +32,11 @@ const Header = () => {
   }
 
   const handleLogout = async () => {
+    const confirmLogout = confirm("로그아웃하시겠습니까?");
+    if (!confirmLogout) {
+      return;
+    }
+
     try {
       const response = await fetch("/api/logout", {
         method: "POST",
@@ -51,11 +56,29 @@ const Header = () => {
     }
   };
 
-  const handleWithdraw = () => {
-    alert("탈퇴가 진행됩니다.");
-    // 회원 탈퇴 로직 추가
-    setMenuOpen(false);
-    router.push("/");
+  const handleWithdraw = async () => {
+    const confirmWithdraw = confirm("회원탈퇴하시겠습니까?");
+    if (!confirmWithdraw) {
+      return;
+    }
+
+    try {
+      const response = await fetch("/api/withdraw", {
+        method: "POST",
+      });
+
+      if (!response.ok) {
+        throw new Error("회원 탈퇴 실패");
+      }
+
+      clearInfo();
+      document.cookie =
+        "prevUrl=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+      setMenuOpen(false);
+      router.push("/");
+    } catch (error) {
+      console.log("회원탈퇴 에러:", error);
+    }
   };
 
   return (
