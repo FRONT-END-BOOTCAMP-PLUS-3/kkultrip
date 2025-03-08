@@ -3,7 +3,7 @@
 import { GetReactedTipDto } from "@/application/usecases/user/dto/GetReactedTipDto";
 import { useEffect, useState } from "react";
 import TipBox from "../components/TipBox";
-import styles from "./Tips.module.scss";
+import styles from "./ReactedTipsPage.module.scss";
 
 const Tips = () => {
   const [reactTipList, setReactTipList] = useState<GetReactedTipDto[]>([]);

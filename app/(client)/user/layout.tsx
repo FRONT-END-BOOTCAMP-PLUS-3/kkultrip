@@ -10,8 +10,8 @@ const UserLayout = ({ children }: { children: React.ReactNode }) => {
 
   const tabs = [
     { name: "나의 꿀팁", path: "/user/my-tips" },
-    { name: "관심 명소", path: "/user/spots" },
-    { name: "관심 꿀팁", path: "/user/tips" },
+    { name: "관심 명소", path: "/user/bookmarked-spots" },
+    { name: "관심 꿀팁", path: "/user/reacted-tips" },
   ];
 
   return (

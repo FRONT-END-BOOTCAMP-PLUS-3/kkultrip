@@ -3,7 +3,7 @@
 import { GetBookmarkedSpotDto } from "@/application/usecases/user/dto/GetBookmarkedSpotDto";
 import SpotImageCard from "@/components/spotImageCard/SpotImageCard";
 import { useEffect, useState } from "react";
-import styles from "./SpotsPage.module.scss";
+import styles from "./BookmarkedSpotsPage.module.scss";
 
 const Spots = () => {
   const [bookmarkedSpotList, setBookmarkedSpotList] = useState<
