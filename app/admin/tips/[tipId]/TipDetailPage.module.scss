@@ -5,8 +5,9 @@
   background: white;
   border-radius: 0.5rem;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  text-align: center;
   position: relative;
+  border: 1px solid var(--grey-1-color);
+  border-radius: 0.25rem;
 
   .backButton {
     position: absolute;
@@ -16,29 +17,34 @@
     border: none;
     padding: 0.6rem 1rem;
     border-radius: 0.25rem;
-    font-size: 1rem;
     cursor: pointer;
   }
 
   .title {
+    text-align: center;
     font-size: 1.8rem;
     font-weight: bold;
     margin-bottom: 1.5rem;
   }
 
   .content {
+    border: 1px solid var(--grey-1-color);
+    border-radius: 0.25rem;
+    padding: 1rem;
     text-align: left;
   }
 
   .detail {
     margin-bottom: 1rem;
-    font-size: 1rem;
     color: var(--grey-3-color);
   }
 
-  .images {
+  .imagesContainer {
     margin-top: 1rem;
     text-align: center;
+    border: 1px solid var(--grey-1-color);
+    border-radius: 0.25rem;
+    padding: 1rem;
 
     h2 {
       font-size: 1.3rem;
@@ -48,8 +54,43 @@
     img {
       max-width: 100%;
       border-radius: 0.5rem;
-      box-shadow: 0 0 0.3125rem rgba(0, 0, 0, 0.2);
+      box-shadow: 0 0 1rem rgba(0, 0, 0, 0.2);
       margin-bottom: 1rem;
+    }
+  }
+
+  .contentsContainer {
+    border: 1px solid var(--grey-1-color);
+    border-radius: 0.25rem;
+    padding: 1rem;
+    text-align: left;
+  }
+
+  .reaction {
+    margin-top: 1rem;
+    text-align: center;
+    border: 1px solid var(--grey-1-color);
+    border-radius: 0.25rem;
+    padding: 1rem;
+
+    h2 {
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+    }
+
+    .detail {
+      margin-bottom: 1rem;
+      color: var(--grey-3-color);
+    }
+
+    p {
+      color: var(--grey-3-color);
+    }
+
+    .reactionImage {
+      width: 2rem;
+      height: 2rem;
+      margin-right: 0.5rem;
     }
   }
 }
