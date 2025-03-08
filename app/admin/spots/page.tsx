@@ -3,11 +3,11 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation"; // 추가
 import { FaPlus } from "react-icons/fa";
+import SideBar from "../components/sideBar/SideBar";
+import Header from "../components/header/Header";
+import SpotTable from "../components/spotTable/SpotTable";
 import styles from "./AdminSpotsPage.module.scss";
 import { Spot } from "@prisma/client";
-import SideBar from "../components/sidebar/Sidebar";
-import Header from "../components/header/Header";
-import SpotTable from "../components/spotTable/Spottable";
 
 const AdminSpotsPage = () => {
   const router = useRouter(); // 추가
