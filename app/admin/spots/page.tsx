@@ -3,9 +3,9 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation"; // 추가
 import { FaPlus } from "react-icons/fa";
-import SideBar from "../components/sideBar/SideBar";
+import Sidebar from "../components/sideBar/SideBar";
 import Header from "../components/header/Header";
-import SpotTable from "../components/spotTable/SpotTable";
+import Spottable from "../components/spotTable/SpotTable";
 import styles from "./AdminSpotsPage.module.scss";
 import { Spot } from "@prisma/client";
 
@@ -32,10 +32,10 @@ const AdminSpotsPage = () => {
 
   return (
     <div className={styles.container}>
-      <SideBar />
+      <Sidebar />
       <main className={styles.main}>
         <Header title="명소 관리" />
-        <SpotTable spots={spots} />
+        <Spottable spots={spots} />
         <button
           className={styles.addButton}
           onClick={() => router.push("/admin/spots/create")}
