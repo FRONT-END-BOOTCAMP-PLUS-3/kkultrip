@@ -60,4 +60,20 @@ export class PgBookmarkRepository implements BookmarkRepository {
       await prisma.$disconnect();
     }
   }
+
+  async getSpotIdsByUserId(userId: string): Promise<number[]> {
+    try {
+      const bookmarks = await prisma.bookmark.findMany({
+        where: { userId },
+        select: { spotId: true }, // spotId만 선택
+      });
+
+      return bookmarks.map((bookmark) => bookmark.spotId);
+    } catch (error) {
+      console.log("❌ getSpotIdsByUserId 오류 발생:", error);
+      throw new Error("사용자가 저장한 명소 목록을 가져오는 데 실패했습니다.");
+    } finally {
+      await prisma.$disconnect();
+    }
+  }
 }

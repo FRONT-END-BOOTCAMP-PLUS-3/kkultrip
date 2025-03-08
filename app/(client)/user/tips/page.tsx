@@ -1,12 +1,12 @@
 "use client";
 
-import { UserTipDto } from "@/application/usecases/user/dto/GetMyTipDto";
+import { GetReactedTipDto } from "@/application/usecases/user/dto/GetReactedTipDto";
 import { useEffect, useState } from "react";
 import TipBox from "../components/TipBox";
 import styles from "./Tips.module.scss";
 
 const Tips = () => {
-  const [ReactTipList, setReactTipList] = useState<UserTipDto[]>([]);
+  const [reactTipList, setReactTipList] = useState<GetReactedTipDto[]>([]);
 
   useEffect(() => {
     const fetchReactTips = async () => {
@@ -25,10 +25,10 @@ const Tips = () => {
 
   return (
     <div className={styles.TipsContainer}>
-      {ReactTipList.length === 0 ? (
+      {reactTipList.length === 0 ? (
         <p className={styles.noTipText}>반응을 남긴 꿀팁이 없습니다.</p>
       ) : (
-        ReactTipList.map((tip) => <TipBox key={tip.id} tip={tip} />)
+        reactTipList.map((tip) => <TipBox key={tip.id} tip={tip} />)
       )}
     </div>
   );
