@@ -1,18 +1,25 @@
 "use client";
 
-import { User } from "@prisma/client";
+import { GetUserListDto } from "@/application/usecases/admin/user/dto/GetUserListDto";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./UserTable.module.scss";
 
 interface UserTableProps {
-  users: (User & { role: string })[];
+  users: GetUserListDto[];
 }
 
-type SortKey = "id" | "name" | "email" | "role" | "createdAt" | "updatedAt";
+type SortKey =
+  | "id"
+  | "nickname"
+  | "email"
+  | "isAdmin"
+  | "createdAt"
+  | "updatedAt";
 type SortOrder = "asc" | "desc";
 
-const UserTable = ({ users }: UserTableProps) => {
+const UserTable = ({ users = [] }: UserTableProps) => {
+  // Default value for users
   const router = useRouter();
   const [sortKey, setSortKey] = useState<SortKey>("id");
   const [sortOrder, setSortOrder] = useState<SortOrder>("asc");
@@ -22,7 +29,7 @@ const UserTable = ({ users }: UserTableProps) => {
     setSortKey(key);
   };
 
-  const handleRowClick = (id: number) => {
+  const handleRowClick = (id: string) => {
     router.push(`/admin/users/${id}`);
   };
 
@@ -30,7 +37,11 @@ const UserTable = ({ users }: UserTableProps) => {
     const aValue = a[sortKey] || "";
     const bValue = b[sortKey] || "";
 
-    return typeof aValue === "number" && typeof bValue === "number"
+    return typeof aValue === "boolean" && typeof bValue === "boolean"
+      ? sortOrder === "asc"
+        ? Number(aValue) - Number(bValue)
+        : Number(bValue) - Number(aValue)
+      : typeof aValue === "number" && typeof bValue === "number"
       ? sortOrder === "asc"
         ? aValue - bValue
         : bValue - aValue
@@ -39,7 +50,7 @@ const UserTable = ({ users }: UserTableProps) => {
       : String(bValue).localeCompare(String(aValue));
   });
 
-  const handleDelete = async (id: number) => {
+  const handleDelete = async (id: string) => {
     if (!confirm("정말로 삭제하시겠습니까?")) return;
 
     try {
@@ -66,9 +77,9 @@ const UserTable = ({ users }: UserTableProps) => {
           {(
             [
               "id",
-              "name",
+              "nickname",
               "email",
-              "role",
+              "isAdmin",
               "createdAt",
               "updatedAt",
             ] as SortKey[]
@@ -80,12 +91,12 @@ const UserTable = ({ users }: UserTableProps) => {
             >
               {key === "id"
                 ? "ID"
-                : key === "name"
-                ? "이름"
+                : key === "nickname"
+                ? "닉네임"
                 : key === "email"
                 ? "이메일"
-                : key === "role"
-                ? "역할"
+                : key === "isAdmin"
+                ? "관리자 여부"
                 : key === "createdAt"
                 ? "생성 날짜"
                 : "수정 날짜"}
@@ -103,9 +114,9 @@ const UserTable = ({ users }: UserTableProps) => {
               className={styles.tableRow}
             >
               <td>{user.id}</td>
-              <td>{user.name}</td>
+              <td>{user.nickname}</td>
               <td>{user.email}</td>
-              <td>{user.role}</td>
+              <td>{user.isAdmin ? "관리자" : "유저"}</td>
               <td>{new Date(user.createdAt).toLocaleDateString()}</td>
               <td>{new Date(user.updatedAt).toLocaleDateString()}</td>
               <td>

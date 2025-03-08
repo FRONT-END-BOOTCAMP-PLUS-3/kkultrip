@@ -1,8 +1,8 @@
 export interface GetUserListDto {
-  id: number;
-  is_admin: boolean;
+  id: string;
+  isAdmin: boolean;
   nickname: string;
-  created_at: Date;
-  updated_at: Date;
+  createdAt: Date;
+  updatedAt: Date;
   email: string;
 }

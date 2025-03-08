@@ -3,36 +3,36 @@
 import SideBar from "../components/sideBar/SideBar";
 import Header from "../components/header/Header";
 import styles from "./AdminUsersPage.module.scss";
-import { Tip } from "@prisma/client";
+import { GetUserListDto } from "@/application/usecases/admin/user/dto/GetUserListDto";
 import { useEffect, useState } from "react";
 import UserTable from "../components/userTable/UserTable";
 
 const AdminUsersPage = () => {
-  const [tips, setTips] = useState<(Tip & { spotName: string })[]>([]);
+  const [users, setUsers] = useState<GetUserListDto[]>([]);
 
   useEffect(() => {
-    const fetchSpots = async () => {
+    const fetchUsers = async () => {
       try {
-        const res = await fetch("/api/admin/tips");
+        const res = await fetch("/api/admin/users");
         if (!res.ok) {
-          throw new Error("Failed to fetch spots");
+          throw new Error("Failed to fetch users");
         }
-        const data: (Tip & { spotName: string })[] = await res.json();
-        setTips(data);
+        const data: GetUserListDto[] = await res.json();
+        setUsers(data);
       } catch (error) {
         console.error(error);
       }
     };
 
-    fetchSpots();
+    fetchUsers();
   }, []);
 
   return (
     <div className={styles.container}>
       <SideBar />
       <main className={styles.main}>
-        <Header title="꿀팁 관리" />
-        <UserTable tips={tips} />
+        <Header title="유저 관리" />
+        <UserTable users={users} />
       </main>
     </div>
   );
