@@ -41,12 +41,12 @@ const TipDetailPage = () => {
   }, [tipId]);
 
   const getReactionDetails = () => {
-    if (!reaction) {
+    if (!reaction || !reactions[reaction.type]) {
       return <p>등록한 반응이 없습니다</p>;
     }
 
     const reactionDetail = reactions[reaction.type];
-    return reactionDetail ? (
+    return (
       <>
         <p>{reactionDetail.name}</p>
         <Image
@@ -56,8 +56,6 @@ const TipDetailPage = () => {
           height={50}
         />
       </>
-    ) : (
-      <p>등록한 반응이 없습니다</p>
     );
   };
 
