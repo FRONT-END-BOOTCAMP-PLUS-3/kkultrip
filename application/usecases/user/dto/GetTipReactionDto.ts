@@ -1,4 +1,4 @@
-export interface TipReactionDto {
+export interface GetTipReactionDto {
   useful: number;
   wantToGo: number;
   disappointing: number;

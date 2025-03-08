@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import TipBox from "../components/TipBox";
 import styles from "./MyTips.module.scss";
-import { UserTipDto } from "@/application/usecases/user/dto/UserTipDto";
+import { UserTipDto } from "@/application/usecases/user/dto/GetMyTipDto";
 
 const MyTips = () => {
   const [userMyTipList, setUserMyTipList] = useState<UserTipDto[]>([]);

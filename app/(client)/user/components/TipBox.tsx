@@ -3,10 +3,10 @@
 import Image from "next/image";
 import styles from "./TipBox.module.scss";
 import { usePathname, useRouter } from "next/navigation";
-import { UserTipDto } from "@/application/usecases/user/dto/UserTipDto";
+import { GetMyTipDto } from "@/application/usecases/user/dto/GetMyTipDto";
 
 type TipBoxProps = {
-  tip: UserTipDto;
+  tip: GetMyTipDto;
 };
 
 const TipBox = ({ tip }: TipBoxProps) => {

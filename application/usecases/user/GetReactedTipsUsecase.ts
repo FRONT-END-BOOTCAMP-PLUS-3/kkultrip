@@ -1,10 +1,10 @@
 import ReactionRepository from "@/domain/repositories/ReactionRepository";
 import TipRepository from "@/domain/repositories/TipRepository";
 import SpotRepository from "@/domain/repositories/SpotRepository";
-import { UserTipDto } from "./dto/UserTipDto";
-import { TipReactionDto } from "./dto/TipReactionDto";
+import { GetReactedTipDto } from "./dto/GetReactedTipDto";
+import { GetTipReactionDto } from "./dto/GetTipReactionDto";
 import { ImageRepository } from "@/domain/repositories/ImageRepository";
-import { TipImageDto } from "./dto/TipImageDto";
+import { GetTipImageDto } from "./dto/GetTipImageDto";
 
 export class GetReactedTipsUsecase {
   constructor(
@@ -14,7 +14,7 @@ export class GetReactedTipsUsecase {
     private spotRepository: SpotRepository
   ) {}
 
-  async execute(userId: string): Promise<UserTipDto[]> {
+  async execute(userId: string): Promise<GetReactedTipDto[]> {
     const reactedTipIds = await this.reactionRepository.getTipIdsByUserId(
       userId
     );
@@ -27,7 +27,7 @@ export class GetReactedTipsUsecase {
       reactedTipIds.map((tipId) => this.tipRepository.getTipById(tipId))
     );
 
-    const reactedTipList: UserTipDto[] = await Promise.all(
+    const reactedTipList: GetReactedTipDto[] = await Promise.all(
       tips.map(async (tip) => {
         if (!tip) {
           throw new Error("Tip 정보를 찾을 수 없습니다.");
@@ -41,14 +41,14 @@ export class GetReactedTipsUsecase {
           tip.id
         );
 
-        const reactionTypeMap: Record<number, keyof TipReactionDto> = {
+        const reactionTypeMap: Record<number, keyof GetTipReactionDto> = {
           1: "useful",
           2: "wantToGo",
           3: "disappointing",
           4: "interesting",
         };
 
-        const tipReactionList: TipReactionDto = {
+        const tipReactionList: GetTipReactionDto = {
           useful: 0,
           wantToGo: 0,
           disappointing: 0,
@@ -64,7 +64,7 @@ export class GetReactedTipsUsecase {
 
         const tipImages = await this.imageRepository.getImageByTipId(tip.id);
 
-        const tipImageList: TipImageDto[] = tipImages.map((image) => ({
+        const tipImageList: GetTipImageDto[] = tipImages.map((image) => ({
           path: image.path,
         }));
 

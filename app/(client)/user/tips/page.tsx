@@ -1,6 +1,6 @@
 "use client";
 
-import { UserTipDto } from "@/application/usecases/user/dto/UserTipDto";
+import { UserTipDto } from "@/application/usecases/user/dto/GetMyTipDto";
 import { useEffect, useState } from "react";
 import TipBox from "../components/TipBox";
 import styles from "./Tips.module.scss";
