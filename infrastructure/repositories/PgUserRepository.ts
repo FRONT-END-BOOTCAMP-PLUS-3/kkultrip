@@ -43,4 +43,13 @@ export class PgUserRepository implements UserRepository {
       await prisma.$disconnect();
     }
   }
+
+  // 모든 사용자 정보 가져오기
+  async getAllUsers(): Promise<User[]> {
+    try {
+      return await prisma.user.findMany();
+    } finally {
+      await prisma.$disconnect();
+    }
+  }
 }
