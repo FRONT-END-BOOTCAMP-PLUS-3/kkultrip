@@ -33,7 +33,7 @@ const TipDetailPage = () => {
         setTip(data.tip);
         setReaction(data.reaction);
       } catch (error) {
-        console.error("❌ Error fetching tip or reaction:", error);
+        console.log("❌ Error fetching tip or reaction:", error);
       }
     };
 

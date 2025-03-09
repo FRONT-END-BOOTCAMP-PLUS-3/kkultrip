@@ -23,7 +23,7 @@ const UserDetailPage = () => {
         const data: GetUserDto = await response.json();
         setUser(data);
       } catch (error) {
-        console.error("❌ Error fetching user:", error);
+        console.log("❌ Error fetching user:", error);
       }
     };
 

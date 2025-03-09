@@ -64,7 +64,7 @@ const TipTable = ({ tips }: TipTableProps) => {
       alert("삭제되었습니다.");
       window.location.reload();
     } catch (error) {
-      console.error("Error deleting tip:", error);
+      console.log("Error deleting tip:", error);
       alert("삭제 중 오류가 발생했습니다.");
     }
   };
