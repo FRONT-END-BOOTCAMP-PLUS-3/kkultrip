@@ -5,35 +5,39 @@
     flex: 1;
     padding: 2rem;
     position: relative;
+    overflow-y: auto;
     height: 100%;
-    .pagination {
-      position: absolute;
+    .contentsContainer {
+      height: 100%;
       display: flex;
-      gap: 1rem;
-      bottom: 10%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      margin-top: 1rem;
+      flex-direction: column;
+      justify-content: space-between;
+      .pagination {
+        justify-content: center;
+        display: flex;
+        gap: 1rem;
+        margin-top: 1rem;
 
-      button {
-        padding: 0.5rem;
-        background: none;
-        border: 1px solid #ccc;
-        cursor: pointer;
+        button {
+          padding: 0.5rem;
+          background: none;
+          border: 1px solid #ccc;
+          cursor: pointer;
 
-        &.active {
-          background: var(--primary-color);
-          color: white;
+          &.active {
+            background: var(--primary-color);
+            color: white;
+          }
+
+          &:disabled {
+            cursor: not-allowed;
+            background-color: #f0f0f0;
+          }
         }
 
-        &:disabled {
-          cursor: not-allowed;
-          background-color: #f0f0f0;
+        span {
+          margin: 0 0.5rem;
         }
-      }
-
-      span {
-        margin: 0 0.5rem;
       }
     }
 
