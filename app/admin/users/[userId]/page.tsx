@@ -23,7 +23,7 @@ const UserDetailPage = () => {
         const data: GetUserDto = await response.json();
         setUser(data);
       } catch (error) {
-        console.error("❌ Error fetching user:", error);
+        console.log("❌ Error fetching user:", error);
       }
     };
 
@@ -49,7 +49,7 @@ const UserDetailPage = () => {
               관리자: {user.isAdmin ? "관리자" : "유저"}
             </p>
             <p className={styles.detail}>
-              생성일: {new Date(user.createdAt).toLocaleString()}
+              가입일: {new Date(user.createdAt).toLocaleString()}
             </p>
             <p className={styles.detail}>
               수정일: {new Date(user.updatedAt).toLocaleString()}

@@ -184,7 +184,7 @@ const SpotsEditPage = () => {
         alert("주소 변환에 실패했습니다.");
       }
     } catch (error) {
-      console.error("주소 변환 오류:", error);
+      console.log("주소 변환 오류:", error);
       alert("주소 변환 중 오류가 발생했습니다.");
     }
   };

@@ -20,7 +20,7 @@ const AdminTipsPage = () => {
         const data: (Tip & { spotName: string })[] = await res.json();
         setTips(data);
       } catch (error) {
-        console.error(error);
+        console.log(error);
       }
     };
 

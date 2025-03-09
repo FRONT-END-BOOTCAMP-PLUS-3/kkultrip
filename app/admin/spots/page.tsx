@@ -3,9 +3,9 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { FaPlus } from "react-icons/fa";
-import Sidebar from "../components/sideBar/SideBar";
+import SideBar from "../components/sideBar/SideBar";
 import Header from "../components/header/Header";
-import Spottable from "../components/spotTable/SpotTable";
+import SpotTable from "../components/spotTable/SpotTable";
 import styles from "./AdminSpotsPage.module.scss";
 import { Spot } from "@prisma/client";
 
@@ -26,7 +26,7 @@ const AdminSpotsPage = () => {
         setSpots(data.spots);
         setTotalPages(data.totalPages);
       } catch (error) {
-        console.error(error);
+        console.log(error);
       }
     };
 
@@ -40,10 +40,10 @@ const AdminSpotsPage = () => {
 
   return (
     <div className={styles.container}>
-      <Sidebar />
+      <SideBar />
       <main className={styles.main}>
         <Header title="명소 관리" />
-        <Spottable spots={spots} />
+        <SpotTable spots={spots} />
         <div className={styles.pagination}>
           <button
             onClick={() => handlePageChange(currentPage - 1)}
