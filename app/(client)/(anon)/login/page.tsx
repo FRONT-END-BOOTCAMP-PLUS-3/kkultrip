@@ -48,7 +48,6 @@ const LoginPage = () => {
         throw new Error(message || "로그인 실패");
       }
 
-      alert("로그인 성공!");
       const responseData = await response.json();
 
       // 로그인 성공 시 zustand에 로그인 상태, img, 닉네임 저장
