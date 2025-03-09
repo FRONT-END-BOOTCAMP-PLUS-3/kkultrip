@@ -30,16 +30,19 @@ const AdminImagesPage = () => {
     fetchImages();
   }, []);
 
-  const handleSearch = (query: string, category: string) => {
-    const filtered = images.filter((image) => {
-      if (category === "user") {
-        return image.userName.toLowerCase().includes(query.toLowerCase());
-      } else if (category === "spot") {
-        return image.spotName.toLowerCase().includes(query.toLowerCase());
+  const handleSearch = async (query: string) => {
+    try {
+      const res = await fetch(
+        `/api/admin/images/search?spotName=${encodeURIComponent(query)}`
+      );
+      if (!res.ok) {
+        throw new Error("Failed to fetch search results");
       }
-      return true;
-    });
-    setFilteredImages(filtered);
+      const data = await res.json();
+      setFilteredImages(data.images); // images 배열만 저장
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
