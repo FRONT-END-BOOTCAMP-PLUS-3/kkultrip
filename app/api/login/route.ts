@@ -42,16 +42,24 @@ export async function POST(req: NextRequest) {
 
     return response;
   } catch (error: unknown) {
-    if (error instanceof Error && error.message === "isNotComparePassword") {
-      return NextResponse.json(
-        { message: "비밀번호를 확인하세요" },
-        { status: 303 }
-      );
+    if (error instanceof Error) {
+      if (error.message === "userNotFound") {
+        return NextResponse.json(
+          { message: "존재하지 않는 계정입니다." },
+          { status: 404 }
+        );
+      }
+      if (error.message === "isNotComparePassword") {
+        return NextResponse.json(
+          { message: "비밀번호를 확인하세요" },
+          { status: 401 }
+        );
+      }
     }
   }
 
   return NextResponse.json(
-    { message: "Unknown error occurred" },
+    { message: "서버 오류가 발생했습니다" },
     { status: 500 }
   );
 }
