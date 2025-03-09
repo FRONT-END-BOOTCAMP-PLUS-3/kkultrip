@@ -75,13 +75,13 @@ const AdminSpotsPage = () => {
             </button>
           </div>
         </div>
-        <button
-          className={styles.addButton}
-          onClick={() => router.push("/admin/spots/create")}
-        >
-          <FaPlus />
-        </button>
       </main>
+      <button
+        className={styles.addButton}
+        onClick={() => router.push("/admin/spots/create")}
+      >
+        <FaPlus />
+      </button>
     </div>
   );
 };

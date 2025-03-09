@@ -40,17 +40,16 @@
         }
       }
     }
-
-    .addButton {
-      position: absolute;
-      bottom: 2rem;
-      right: 2rem;
-      background: var(--primary-color);
-      color: #000;
-      padding: 1rem;
-      border-radius: 50%;
-      border: none;
-      cursor: pointer;
-    }
+  }
+  .addButton {
+    position: absolute;
+    bottom: 2rem;
+    right: 2rem;
+    background: var(--primary-color);
+    color: #000;
+    padding: 1rem;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
   }
 }
