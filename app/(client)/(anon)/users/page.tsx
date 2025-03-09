@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Category from "@/components/category/Category";
 import Image from "next/image";
@@ -8,11 +8,11 @@ import styles from "./UsersPage.module.scss";
 import SpotImageCard from "@/components/spotImageCard/SpotImageCard";
 import { GetUserTipDto } from "@/application/usecases/users/dto/GetUserTipDto";
 
-const UsersPage = () => {
+const UserTipsFetcher = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  const nickname = searchParams.get("nickname");
+  const nickname = searchParams.get("nickname") || "";
   const sort = (searchParams.get("sort") as "latest" | "popular") || "latest";
 
   const [tipsData, setTipsData] = useState<GetUserTipDto[]>([]);
@@ -29,11 +29,9 @@ const UsersPage = () => {
       const response = await fetch(
         `/api/users?nickname=${nickname}&sort=${sort}`
       );
-      if (!response.ok) throw new Error("Failed to fetch tips");
-
       const data = await response.json();
       setTipsData(data.tips);
-    } catch (error) {
+    } catch {
       setTipsData([]);
     }
   };
@@ -118,6 +116,14 @@ const UsersPage = () => {
         )}
       </div>
     </div>
+  );
+};
+
+const UsersPage = () => {
+  return (
+    <Suspense fallback={<p>로딩 중...</p>}>
+      <UserTipsFetcher />
+    </Suspense>
   );
 };
 
