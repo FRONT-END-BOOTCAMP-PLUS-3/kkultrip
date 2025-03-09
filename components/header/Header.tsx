@@ -5,22 +5,21 @@ import styles from "./Header.module.scss";
 import Image from "next/image";
 import { FaArrowLeft } from "react-icons/fa6";
 import { IoMenu } from "react-icons/io5";
+import useUserStore from "@/store/useUserStore";
 
-type HeaderProps = {
-  isLoggedIn: boolean;
-};
-
-const Header = ({ isLoggedIn }: HeaderProps) => {
+const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const router = useRouter();
   const pathname = usePathname();
+  const isLoggedIn = useUserStore((state) => state.isLoggedIn);
+  const clearInfo = useUserStore((state) => state.clearInfo);
 
   // 헤더 타입 결정
   let type: "default" | "back" | "mypage" | null = "default";
-  if (pathname === "/spots") {
+  if (pathname === "/spots" || pathname === "/login") {
     type = "default"; // 로고헤더
-  } else if (pathname === "/user/my-tips") {
+  } else if (pathname.startsWith("/user")) {
     type = "mypage"; // 마이페이지 헤더
   } else if (pathname === "/") {
     type = null;
@@ -32,15 +31,54 @@ const Header = ({ isLoggedIn }: HeaderProps) => {
     return null;
   }
 
-  const handleLogout = () => {
-    setMenuOpen(false);
+  const handleLogout = async () => {
+    const confirmLogout = confirm("로그아웃하시겠습니까?");
+    if (!confirmLogout) {
+      return;
+    }
+
+    try {
+      const response = await fetch("/api/logout", {
+        method: "POST",
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to logout");
+      }
+
+      clearInfo();
+      document.cookie =
+        "prevUrl=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+      setMenuOpen(false);
+      router.push("/");
+    } catch (error) {
+      console.log("로그아웃 에러:", error);
+    }
   };
 
-  const handleWithdraw = () => {
-    alert("탈퇴가 진행됩니다.");
-    // 회원 탈퇴 로직 추가
-    setMenuOpen(false);
-    router.push("/");
+  const handleWithdraw = async () => {
+    const confirmWithdraw = confirm("회원탈퇴하시겠습니까?");
+    if (!confirmWithdraw) {
+      return;
+    }
+
+    try {
+      const response = await fetch("/api/withdraw", {
+        method: "POST",
+      });
+
+      if (!response.ok) {
+        throw new Error("회원 탈퇴 실패");
+      }
+
+      clearInfo();
+      document.cookie =
+        "prevUrl=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+      setMenuOpen(false);
+      router.push("/");
+    } catch (error) {
+      console.log("회원탈퇴 에러:", error);
+    }
   };
 
   return (
@@ -59,7 +97,9 @@ const Header = ({ isLoggedIn }: HeaderProps) => {
           {type === "default" ? (
             <div
               className={styles.menu}
-              onClick={() => router.push("/user/my-tips")}
+              onClick={() =>
+                router.push(isLoggedIn ? "/user/my-tips" : "/login")
+              }
             >
               {isLoggedIn ? "마이페이지" : "로그인"}
             </div>
@@ -82,7 +122,7 @@ const Header = ({ isLoggedIn }: HeaderProps) => {
           </div>
           <div
             className={styles.menu}
-            onClick={() => router.push("/user/my-tips")}
+            onClick={() => router.push(isLoggedIn ? "/user/my-tips" : "/login")}
           >
             {isLoggedIn ? "마이페이지" : "로그인"}
           </div>

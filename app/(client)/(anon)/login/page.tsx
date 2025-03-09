@@ -5,9 +5,11 @@ import Link from "next/link";
 import styles from "./LoginPage.module.scss";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import useUserStore from "@/store/useUserStore";
 
 const LoginPage = () => {
   const router = useRouter();
+  const { setImg, setNickname, setIsLoggedIn } = useUserStore();
 
   const [formData, setFormData] = useState({
     email: "",
@@ -46,8 +48,12 @@ const LoginPage = () => {
         throw new Error(message || "로그인 실패");
       }
 
-      alert("로그인 성공!");
       const responseData = await response.json();
+
+      // 로그인 성공 시 zustand에 로그인 상태, img, 닉네임 저장
+      setIsLoggedIn(true);
+      setImg(responseData.img);
+      setNickname(responseData.nickname);
 
       // 로그인을 했을 때 관리자면 관리자페이지로, 아니면 로그인 진입 전 페이지로 이동
       if (responseData.isAdmin) {
