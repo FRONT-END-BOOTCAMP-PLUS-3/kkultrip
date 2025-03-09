@@ -25,14 +25,12 @@ const ImageContainer: React.FC<ImageContainerProps> = ({ images }) => {
             className={styles.imageWrapper}
             onClick={() => handleImageClick(image.tipId)}
           >
-            {/* Replace <img> with <Image> */}
             <Image
               src={image.path!}
               alt={`Image ${image.id}`}
               className={styles.image}
-              width={500} // Set width or use the aspect ratio you need
-              height={300} // Set height or use the aspect ratio you need
-              layout="intrinsic" // Set layout for responsive image
+              width={500}
+              height={300}
             />
           </div>
           <div className={styles.imageDetails}>
