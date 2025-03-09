@@ -11,7 +11,8 @@ import PgReactionRepository from "@/infrastructure/repositories/PgReactionReposi
 import PgSpotRepository from "@/infrastructure/repositories/PgSpotRepository";
 import { PgTipRepository } from "@/infrastructure/repositories/PgTipRepository";
 import { PgUserRepository } from "@/infrastructure/repositories/PgUserRepository";
-import { NextResponse } from "next/server";
+import { GetUserInfoByJWT } from "@/utils/jwt";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   request: Request,
@@ -49,17 +50,33 @@ export async function GET(
 }
 
 export async function POST(
-  req: Request,
+  req: NextRequest,
   props: { params: Promise<{ spotId: string }> }
 ) {
   try {
     const params = await props.params;
     const formData = await req.formData();
-    const userId = formData.get("userId") as string;
     const description = formData.get("description") as string;
     const price = Number(formData.get("price"));
     const waitingTime = Number(formData.get("waitingTime"));
     const images: File[] = formData.getAll("images") as unknown as File[];
+
+    const token = req.cookies.get("token")?.value;
+    if (!token) {
+      return NextResponse.json(
+        { message: "토큰정보가 없습니다. 로그인이 필요합니다." },
+        { status: 401 }
+      );
+    }
+
+    const jwtData = await GetUserInfoByJWT(token);
+    if (!jwtData) {
+      return NextResponse.json(
+        { message: "토큰정보가 없습니다. 로그인이 필요합니다." },
+        { status: 401 }
+      );
+    }
+    const userId = jwtData.userId as string;
 
     const tipRepo = new PgTipRepository();
     const imageRepo = new PgImageRepository();
