@@ -20,9 +20,9 @@ export class GetImageByUserNameUseCase {
   }
 
   // 유저 이름으로 유저를 조회하고, 그 유저가 쓴 팁을 조회 후, 팁에 관련된 이미지들을 반환
-  async execute(userName: string): Promise<GetImageListDTO[] | null> {
+  async execute(nickname: string): Promise<GetImageListDTO[] | null> {
     const user: GetUserDto | null = await this.userRepository.getUserByName(
-      userName
+      nickname
     );
 
     if (!user) {
