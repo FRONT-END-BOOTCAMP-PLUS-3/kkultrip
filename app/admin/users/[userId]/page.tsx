@@ -46,7 +46,7 @@ const UserDetailPage = () => {
             <p className={styles.detail}>닉네임: {user.nickname}</p>
             <p className={styles.detail}>이메일: {user.email}</p>
             <p className={styles.detail}>
-              관리자: {user.isAdmin ? "네" : "아니오"}
+              관리자: {user.isAdmin ? "관리자" : "유저"}
             </p>
             <p className={styles.detail}>
               가입일: {new Date(user.createdAt).toLocaleString()}

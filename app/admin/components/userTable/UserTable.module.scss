@@ -17,7 +17,7 @@
   }
 
   tbody tr:hover {
-    background: var(--grey-1-color); /* Hover effect for table rows */
+    background: var(--grey-1-color);
     transition: background 0.2s ease-in-out;
   }
 
@@ -58,4 +58,18 @@
   background-color: var(--red-1-color);
   color: white;
   transition: background 0.2s ease-in-out;
+}
+
+.adminButton {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s ease-in-out;
+  margin-right: 0.5rem;
+
+  &:hover {
+    color: black;
+  }
 }

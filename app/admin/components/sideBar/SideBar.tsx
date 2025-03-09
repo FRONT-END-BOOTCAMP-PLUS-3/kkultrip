@@ -6,14 +6,14 @@ import styles from "./SideBar.module.scss";
 
 const SideBar = () => {
   const router = useRouter();
-  const pathname = usePathname(); // 현재 경로 가져오기
+  const pathname = usePathname();
   const handleNavigation = (path: string) => {
     router.push(`/admin/${path}`);
   };
 
   return (
     <aside className={styles.sidebar}>
-      <h1 className={styles.logo}>HoneyTrip</h1>
+      <h1 className={styles.logo}>KKulTrip</h1>
       <nav>
         <ul className={styles.navList}>
           <li
@@ -31,6 +31,14 @@ const SideBar = () => {
             onClick={() => handleNavigation("tips")}
           >
             꿀팁 관리
+          </li>
+          <li
+            className={`${styles.navItem} ${
+              pathname === "/admin/images" ? styles.active : ""
+            }`}
+            onClick={() => handleNavigation("images")}
+          >
+            꿀팁 사진 관리
           </li>
           <li
             className={`${styles.navItem} ${

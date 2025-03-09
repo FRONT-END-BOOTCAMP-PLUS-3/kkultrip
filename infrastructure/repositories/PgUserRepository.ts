@@ -44,6 +44,26 @@ export class PgUserRepository implements UserRepository {
     }
   }
 
+  // 모든 사용자 정보 가져오기
+  async getAllUsers(): Promise<User[]> {
+    try {
+      return await prisma.user.findMany();
+    } finally {
+      await prisma.$disconnect();
+    }
+  }
+
+  // 권한 변경 (관리자/유저)
+  async updateUserRole(id: string, isAdmin: boolean): Promise<void> {
+    try {
+      await prisma.user.update({
+        where: { id },
+        data: { isAdmin },
+      });
+    } finally {
+      await prisma.$disconnect();
+    }
+  }
   // 회원탈퇴
   async deleteUser(id: string): Promise<void> {
     try {
