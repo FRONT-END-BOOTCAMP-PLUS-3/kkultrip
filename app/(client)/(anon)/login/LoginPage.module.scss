@@ -1,10 +1,8 @@
 .loginContainer {
   width: 100%;
-  max-width: 37.5rem;
   height: 100%;
   margin: 0 auto;
   padding: 2.5rem;
-
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -14,12 +12,37 @@
     flex-direction: column;
     align-items: center;
     width: 100%;
-    max-width: 31.25rem;
+    .logoBox {
+      width: 15.6rem;
+      height: 15.6rem;
+      background: var(--primary-color);
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 2rem auto;
+      @media (max-width: 375px) {
+        width: 11.25rem;
+        height: 11.25rem;
+        margin: 0.8rem auto;
+
+        .logo {
+          width: 9.375rem;
+          height: 9.375rem;
+        }
+      }
+    }
 
     h1 {
+      font-family: var(--font-sub);
+      color: var(--primary-color);
+
       font-weight: bold;
       font-size: 1.875rem;
       margin-bottom: 1.25rem;
+      @media (max-width: 375px) {
+        font-size: 1.5rem;
+      }
     }
 
     form {
@@ -29,30 +52,51 @@
       align-items: center;
 
       .inputBox {
+        width: 100%;
         margin: 0.625rem 0;
+        @media (max-width: 375px) {
+          margin: 0.3rem 0;
+        }
 
         label {
-          display: none;
+          display: block;
+          margin-bottom: 0.625rem;
+          font-size: 1rem;
+          @media (max-width: 375px) {
+            font-size: 0.8rem;
+          }
         }
 
         input {
-          height: 2.5rem;
-          padding: 0 0.625rem;
-          border-bottom: 1px solid var(--grey-3-color);
+          box-sizing: border-box;
+          width: 100%;
+          padding: 1rem;
+          border: 1px solid var(--grey-border-color);
+          border-radius: 0.625rem;
+          outline: none;
+          font-size: 0.875rem;
+          @media (max-width: 375px) {
+            padding: 0.7rem;
+          }
+
+          &::placeholder {
+            color: var(--grey-2-color);
+          }
 
           &:focus {
+            border-color: var(--primary-color);
             border-bottom: 1px solid var(--primary-color);
           }
         }
       }
 
       .error {
-        color: red;
+        color: var(--red-1-color);
         margin-top: 0.625rem;
       }
 
       .buttonBox {
-        width: 70%;
+        width: 100%;
         margin-top: 1.875rem;
       }
 
