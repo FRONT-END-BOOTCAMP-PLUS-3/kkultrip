@@ -8,6 +8,7 @@ import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { getGeocode } from "@/utils/getGeocode";
 import { getMyLocation } from "@/utils/getMyLocation";
+import useUserStore from "@/store/useUserStore";
 
 const SearchFilter = () => {
   const searchParams = useSearchParams();
@@ -19,6 +20,10 @@ const SearchFilter = () => {
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
   const [isRecentVisible, setIsRecentVisible] = useState(false);
   const [tempQuery, setTempQuery] = useState(query);
+  const { setUserLat, setUserLon } = useUserStore();
+  const userLat = useUserStore((state) => state.userLat);
+  const userLon = useUserStore((state) => state.userLon);
+
   const inputRef = useRef<HTMLInputElement>(null); // 검색 input 요소 참조 추가
 
   // 로컬 스토리지에서 최근 검색어 불러오기
@@ -149,16 +154,20 @@ const SearchFilter = () => {
     try {
       const location = await getMyLocation();
       if (location) {
+        setUserLat(location.lat);
+        setUserLon(location.lon);
         updateFilters({ lat: location.lat, lon: location.lon, query: "" });
         setTempQuery("");
       } else {
         alert("현재 위치를 가져올 수 없습니다. 기본 위치로 이동합니다.");
-        updateFilters({ lat: 37.5665, lon: 126.978, query: "" });
+        updateFilters({ lat: userLat, lon: userLon, query: "" });
       }
     } catch (error) {
       console.log("위치 정보를 가져올 수 없음:", error);
-      alert("현재 위치를 가져올 수 없습니다. 기본 위치로 이동합니다.");
-      updateFilters({ lat: 37.5665, lon: 126.978, query: "" });
+      alert(
+        "현재 위치를 가져올 수 없습니다. 기본 위치(서울시청)로 이동합니다."
+      );
+      updateFilters({ lat: userLat, lon: userLon, query: "" });
     }
   };
 

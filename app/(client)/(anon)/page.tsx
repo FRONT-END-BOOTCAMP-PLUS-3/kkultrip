@@ -5,22 +5,25 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import styles from "./IndexPage.module.scss";
 import { getMyLocation } from "@/utils/getMyLocation";
-
-const DEFAULT_LAT = 37.5665;
-const DEFAULT_LON = 126.978;
+import useUserStore from "@/store/useUserStore";
 
 const IndexPage = () => {
   const router = useRouter();
+  const userLat = useUserStore((state) => state.userLat);
+  const userLon = useUserStore((state) => state.userLon);
+  const { setUserLat, setUserLon } = useUserStore();
 
   useEffect(() => {
     getMyLocation()
       .then(({ lat, lon }) => {
+        setUserLat(lat);
+        setUserLon(lon);
         router.replace(`/spots?lat=${lat}&lon=${lon}`);
       })
       .catch(() => {
-        router.replace(`/spots?lat=${DEFAULT_LAT}&lon=${DEFAULT_LON}`);
+        router.replace(`/spots?lat=${userLat}&lon=${userLon}`);
       });
-  }, [router]);
+  }, [router, userLat, userLon, setUserLat, setUserLon]);
 
   return (
     <div className={styles.indexContainer}>
