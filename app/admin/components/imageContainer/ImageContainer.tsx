@@ -2,11 +2,12 @@
 
 import React from "react";
 import styles from "./ImageContainer.module.scss";
-import { Image } from "@prisma/client";
+import { Image as PrismaImage } from "@prisma/client";
 import { useRouter } from "next/navigation";
+import Image from "next/image"; // Importing Next.js Image component
 
 interface ImageContainerProps {
-  images: Image[];
+  images: PrismaImage[];
 }
 
 const ImageContainer: React.FC<ImageContainerProps> = ({ images }) => {
@@ -24,10 +25,14 @@ const ImageContainer: React.FC<ImageContainerProps> = ({ images }) => {
             className={styles.imageWrapper}
             onClick={() => handleImageClick(image.tipId)}
           >
-            <img
+            {/* Replace <img> with <Image> */}
+            <Image
               src={image.path!}
               alt={`Image ${image.id}`}
               className={styles.image}
+              width={500} // Set width or use the aspect ratio you need
+              height={300} // Set height or use the aspect ratio you need
+              layout="intrinsic" // Set layout for responsive image
             />
           </div>
           <div className={styles.imageDetails}>
