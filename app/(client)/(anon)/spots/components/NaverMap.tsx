@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { GetSpotsDTO } from "@/application/usecases/spot/dto/GetSpotsDto";
 import { useRouter } from "next/navigation";
-import { getMyLocation } from "@/utils/getMyLocation";
+import useUserStore from "@/store/useUserStore";
 
 const categoryMap: { [key: string]: string } = {
   액티비티: "activity",
@@ -27,6 +27,8 @@ const NaverMap = ({
   const markersRef = useRef<naver.maps.Marker[]>([]);
   const myLocationMarkerRef = useRef<naver.maps.Marker | null>(null);
   const [isMapLoaded, setIsMapLoaded] = useState(false);
+  const userLat = useUserStore((state) => state.userLat);
+  const userLon = useUserStore((state) => state.userLon);
 
   // 네이버 지도 API 로드
   useEffect(() => {
@@ -122,26 +124,18 @@ const NaverMap = ({
     }
 
     // 내 위치 가져오기
-    getMyLocation()
-      .then(({ lat: userLat, lon: userLon }) => {
-        myLocationMarkerRef.current = new window.naver.maps.Marker({
-          position: new window.naver.maps.LatLng(userLat, userLon),
-          map: mapRef.current!,
-          icon: {
-            url: "/images/bee_50x50.svg",
-            size: new window.naver.maps.Size(50, 50),
-          },
-        });
+    myLocationMarkerRef.current = new window.naver.maps.Marker({
+      position: new window.naver.maps.LatLng(userLat, userLon),
+      map: mapRef.current!,
+      icon: {
+        url: "/images/bee_50x50.svg",
+        size: new window.naver.maps.Size(50, 50),
+      },
+    });
 
-        // 지도 중심을 내 위치로 이동
-        mapRef.current?.setCenter(
-          new window.naver.maps.LatLng(userLat, userLon)
-        );
-      })
-      .catch((error) => {
-        console.log("내 위치를 가져올 수 없습니다:", error.message);
-      });
-  }, [isMapLoaded]);
+    // 지도 중심을 내 위치로 이동
+    mapRef.current?.setCenter(new window.naver.maps.LatLng(userLat, userLon));
+  }, [isMapLoaded, userLat, userLon]);
 
   return (
     <div id="map" style={{ height: "calc(100vh - 5rem)", width: "100%" }} />

@@ -8,32 +8,17 @@ import { FaWonSign } from "react-icons/fa6";
 import Link from "next/link";
 import { GetSpotsDTO } from "@/application/usecases/spot/dto/GetSpotsDto";
 import Image from "next/image";
-import { getMyLocation } from "@/utils/getMyLocation";
+import useUserStore from "@/store/useUserStore";
 
 const BottomSheet = ({ spots }: { spots: GetSpotsDTO[] }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [startY, setStartY] = useState(0);
   const [translateY, setTranslateY] = useState(0);
-  const [userLat, setUserLat] = useState<number | null>(null);
-  const [userLon, setUserLon] = useState<number | null>(null);
   const [sortedSpots, setSortedSpots] = useState<GetSpotsDTO[]>(spots);
   const [selectedSort, setSelectedSort] = useState<string>("distance");
+  const userLat = useUserStore((state) => state.userLat); // 내 위치 가져오기 -> 거리계산 목적
+  const userLon = useUserStore((state) => state.userLon);
   const sheetRef = useRef<HTMLDivElement>(null);
-
-  // 내 위치 가져오기 -> 거리계산 목적
-  useEffect(() => {
-    getMyLocation()
-      .then(({ lat, lon }) => {
-        setUserLat(lat);
-        setUserLon(lon);
-      })
-      .catch((error) => {
-        console.log(error.message);
-        // 현재위치 가져오기 실패 시 디폴트값으로 설정
-        setUserLat(37.5665);
-        setUserLon(126.978);
-      });
-  }, []);
 
   useEffect(() => {
     if (spots.length === 0) {

@@ -14,11 +14,13 @@ const Header = () => {
   const pathname = usePathname();
   const isLoggedIn = useUserStore((state) => state.isLoggedIn);
   const clearInfo = useUserStore((state) => state.clearInfo);
+  const userLat = useUserStore((state) => state.userLat);
+  const userLon = useUserStore((state) => state.userLon);
 
   // 헤더 타입 결정
-  let type: "default" | "back" | "mypage" | null = "default";
+  let type: "logo" | "back" | "mypage" | null = "logo";
   if (pathname === "/spots" || pathname === "/login") {
-    type = "default"; // 로고헤더
+    type = "logo"; // 로고헤더
   } else if (pathname.startsWith("/user")) {
     type = "mypage"; // 마이페이지 헤더
   } else if (pathname === "/") {
@@ -50,7 +52,7 @@ const Header = () => {
       document.cookie =
         "prevUrl=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
       setMenuOpen(false);
-      router.push("/");
+      router.push(`/spots?lat=${userLat}&lon=${userLon}`);
     } catch (error) {
       console.log("로그아웃 에러:", error);
     }
@@ -75,7 +77,7 @@ const Header = () => {
       document.cookie =
         "prevUrl=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
       setMenuOpen(false);
-      router.push("/");
+      router.push(`/spots?lat=${userLat}&lon=${userLon}`);
     } catch (error) {
       console.log("회원탈퇴 에러:", error);
     }
@@ -83,9 +85,12 @@ const Header = () => {
 
   return (
     <header className={styles.headerContainer}>
-      {(type === "default" || type === "mypage") && (
+      {(type === "logo" || type === "mypage") && (
         <div className={styles.wrapper}>
-          <div className={styles.logo} onClick={() => router.push("/spots")}>
+          <div
+            className={styles.logo}
+            onClick={() => router.push(`/spots?lat=${userLat}&lon=${userLon}`)}
+          >
             <Image
               width="100"
               height="54"
@@ -94,7 +99,7 @@ const Header = () => {
               priority
             />
           </div>
-          {type === "default" ? (
+          {type === "logo" ? (
             <div
               className={styles.menu}
               onClick={() =>
