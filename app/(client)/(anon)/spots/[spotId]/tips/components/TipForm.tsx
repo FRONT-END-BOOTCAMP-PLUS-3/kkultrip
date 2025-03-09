@@ -100,7 +100,6 @@ const TipForm = ({
   // 팁 등록 또는 수정 요청
   const handleSubmit = async () => {
     const formData = new FormData();
-    formData.append("userId", "d9b78231-1d27-479c-9a28-903bd67433e6");
     formData.append("description", tipContent);
     formData.append("price", cost.replace(/,/g, ""));
     formData.append("waitingTime", waitingTime);
@@ -116,6 +115,11 @@ const TipForm = ({
         method,
         body: formData,
       });
+
+      if (response.status === 401) {
+        alert("로그인이 필요합니다.");
+        router.push("/login");
+      }
 
       if (response.ok) {
         alert(isEdit ? "팁이 수정되었습니다." : "팁이 등록되었습니다.");

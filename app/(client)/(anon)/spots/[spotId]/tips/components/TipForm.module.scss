@@ -101,6 +101,7 @@
           width: 60%;
           margin-right: 0.625rem;
           input {
+            all: inherit;
             width: 100%;
             padding: 0.6rem;
             padding-right: 1.8rem;
@@ -130,6 +131,9 @@
         .checkbox {
           display: flex;
           align-items: center;
+          input {
+            appearance: checkbox;
+          }
           span {
             margin-left: 0.4rem;
             width: 3.5rem;
