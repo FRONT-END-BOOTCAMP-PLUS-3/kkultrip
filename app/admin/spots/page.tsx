@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation"; // useSearchParams 추가
 import { FaPlus } from "react-icons/fa";
 import SideBar from "../components/sideBar/SideBar";
 import Header from "../components/header/Header";
@@ -11,8 +11,10 @@ import { Spot } from "@prisma/client";
 
 const AdminSpotsPage = () => {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const currentPageFromUrl = parseInt(searchParams.get("page") || "1", 10); // URL에서 현재 페이지를 가져옴
   const [spots, setSpots] = useState<Spot[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(currentPageFromUrl);
   const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
@@ -36,6 +38,8 @@ const AdminSpotsPage = () => {
   const handlePageChange = (page: number) => {
     if (page < 1 || page > totalPages) return;
     setCurrentPage(page);
+    // 페이지 번호를 URL에 반영
+    router.push(`/admin/spots?page=${page}`);
   };
 
   return (
