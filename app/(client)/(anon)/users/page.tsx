@@ -16,6 +16,8 @@ const UsersPage = () => {
   const sort = (searchParams.get("sort") as "latest" | "popular") || "latest";
 
   const [tipsData, setTipsData] = useState<GetUserTipDto[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<string>("전체");
+  const [filteredTips, setFilteredTips] = useState<GetUserTipDto[]>([]);
 
   const fetchUserTips = async (
     nickname: string,
@@ -40,6 +42,16 @@ const UsersPage = () => {
     if (!nickname) return;
     fetchUserTips(nickname, sort);
   }, [nickname, sort]);
+
+  useEffect(() => {
+    if (selectedCategory === "전체") {
+      setFilteredTips(tipsData);
+    } else {
+      setFilteredTips(
+        tipsData.filter((tip) => tip.category === selectedCategory)
+      );
+    }
+  }, [selectedCategory, tipsData]);
 
   const handleSortChange = (newSort: "latest" | "popular") => {
     router.push(`/users?nickname=${nickname}&sort=${newSort}`);
@@ -86,13 +98,16 @@ const UsersPage = () => {
         </li>
       </ul>
       <div className={styles.categoryWrapper}>
-        <Category />
+        <Category
+          selectedCategory={selectedCategory}
+          setSelectedCategory={setSelectedCategory}
+        />
       </div>
       <div className={styles.tipsWrapper}>
-        {tipsData.length === 0 ? (
+        {filteredTips.length === 0 ? (
           <p className={styles.noTipText}>작성된 꿀팁이 없습니다.</p>
         ) : (
-          tipsData.map((tip) => (
+          filteredTips.map((tip) => (
             <SpotImageCard
               key={tip.id}
               imageSrc={tip.spotImg}
