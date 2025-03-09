@@ -49,7 +49,7 @@ const UserDetailPage = () => {
               관리자: {user.isAdmin ? "네" : "아니오"}
             </p>
             <p className={styles.detail}>
-              생성일: {new Date(user.createdAt).toLocaleString()}
+              가입일: {new Date(user.createdAt).toLocaleString()}
             </p>
             <p className={styles.detail}>
               수정일: {new Date(user.updatedAt).toLocaleString()}
