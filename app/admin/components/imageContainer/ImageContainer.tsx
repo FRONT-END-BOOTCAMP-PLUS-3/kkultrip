@@ -4,7 +4,7 @@ import React from "react";
 import styles from "./ImageContainer.module.scss";
 import { Image as PrismaImage } from "@prisma/client";
 import { useRouter } from "next/navigation";
-import Image from "next/image"; // Importing Next.js Image component
+import Image from "next/image";
 
 interface ImageContainerProps {
   images: PrismaImage[];
