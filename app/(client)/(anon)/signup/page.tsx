@@ -1,151 +1,130 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
-import styles from "./SignupPage.module.scss";
 import Button from "@/components/button/Button";
-import ImageUpload from "@/components/imageUpload/ImageUpload";
+import Link from "next/link";
+import useCheckNickname from "./hooks/useCheckNickname";
+import useForm from "./hooks/useForm";
+import useSubmitSignup from "./hooks/useSubmitSignup";
+import styles from "./SignupPage.module.scss";
 
-const SignUp = () => {
-  const router = useRouter();
+const SignupForm = () => {
+  const {
+    email: { email, emailError, handleChangeEmail },
+    nickname: { nickname, nicknameError, handleChangeNickname },
+    password: { password, passwordError, handleChangePassword },
+    passwordCheck: {
+      passwordCheck,
+      passwordCheckError,
+      handleChangePasswordCheck,
+    },
+    isFormValid,
+  } = useForm();
 
-  const [formData, setFormData] = useState({
-    img: "",
-    nickname: "",
-    email: "",
-    password: "",
-    password1: "",
-  });
+  const {
+    isNicknameAvailable,
+    nicknameCheckError,
+    nicknameCheckSuccess,
+    handleCheckNickname,
+    resetNicknameCheckState,
+  } = useCheckNickname();
 
-  const [imageFile, setImageFile] = useState<File | null>(null);
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
-  const handleImageChange = (file: File | null) => {
-    if (file) {
-      setImageFile(file);
-      setFormData((prev) => ({
-        ...prev,
-        img: URL.createObjectURL(file),
-      }));
-    } else {
-      setImageFile(null);
-      setFormData((prev) => ({ ...prev, img: "" }));
-    }
-  };
+  const { submitSignup, isLoading, submitError } = useSubmitSignup();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
-    setLoading(true);
+    // if (!isNicknameAvailable || !isFormValid) return;
 
-    const { nickname, email, password, password1 } = formData;
+    await submitSignup(email, nickname, password);
+  };
 
-    if (password !== password1) {
-      setError("비밀번호가 일치하지 않습니다.");
-      setLoading(false);
-      return;
-    }
+  const handleCheckNicknameClick = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    handleCheckNickname(nickname);
+  };
 
-    const formDataToSend = new FormData();
-
-    formDataToSend.append("nickname", nickname);
-    formDataToSend.append("email", email);
-    formDataToSend.append("password", password);
-
-    if (imageFile) {
-      formDataToSend.append("file", imageFile);
-    }
-
-    try {
-      const response = await fetch("/api/signup", {
-        method: "POST",
-        body: formDataToSend,
-      });
-
-      if (!response.ok) {
-        const { message } = await response.json();
-        throw new Error(message || "회원가입 실패");
-      }
-
-      alert("회원가입 성공! 로그인 페이지로 이동합니다.");
-      router.push("/login");
-    } catch (err: unknown) {
-      setError(
-        err instanceof Error ? err.message : "알 수 없는 오류가 발생했습니다."
-      );
-    } finally {
-      setLoading(false);
-    }
+  const handleChangeNicknameWithReset = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    handleChangeNickname(e);
+    resetNicknameCheckState();
   };
 
   return (
     <div className={styles.signupContainer}>
       <section className={styles.signupWrapper}>
-        <h1>kkultrip 회원가입</h1>
+        <h1>회원가입</h1>
         <form onSubmit={handleSubmit}>
-          {/* 추후 프로필 이미지 추가 */}
-          <div className={styles.inputBox}>
-            <label>프로필 이미지</label>
-            <ImageUpload onImageChange={handleImageChange} />
-          </div>
-          <div className={styles.inputBox}>
-            <label>닉네임</label>
-            <input
-              type="text"
-              name="nickname"
-              placeholder="닉네임"
-              value={formData.nickname}
-              onChange={handleChange}
-              required
-            />
-          </div>
           <div className={styles.inputBox}>
             <label>이메일</label>
             <input
               type="email"
-              name="email"
-              placeholder="이메일"
-              value={formData.email}
-              onChange={handleChange}
+              placeholder="이메일을 입력하세요"
+              value={email}
+              onChange={handleChangeEmail}
               required
             />
+            {emailError && <p className={styles.error}>{emailError}</p>}
           </div>
+
+          <div className={styles.duplicateTest}>
+            <div className={styles.inputBox}>
+              <label>닉네임</label>
+              <input
+                type="text"
+                placeholder="닉네임을 입력하세요"
+                value={nickname}
+                onChange={handleChangeNicknameWithReset}
+                required
+              />
+              {nicknameCheckError && (
+                <p className={styles.error}>{nicknameCheckError}</p>
+              )}
+              {nicknameCheckSuccess && (
+                <p className={styles.success}>사용 가능한 닉네임입니다.</p>
+              )}
+            </div>
+
+            <Button
+              type="button"
+              isLong={false}
+              color="main"
+              onClick={() => handleCheckNicknameClick}
+            >
+              중복확인
+            </Button>
+          </div>
+
           <div className={styles.inputBox}>
             <label>비밀번호</label>
             <input
               type="password"
-              name="password"
-              placeholder="비밀번호"
-              value={formData.password}
-              onChange={handleChange}
+              placeholder="비밀번호를 입력하세요"
+              value={password}
+              onChange={handleChangePassword}
               required
             />
+            {passwordError && <p className={styles.error}>{passwordError}</p>}
           </div>
+
           <div className={styles.inputBox}>
             <label>비밀번호 확인</label>
             <input
               type="password"
-              name="password1"
-              placeholder="비밀번호 확인"
-              value={formData.password1}
-              onChange={handleChange}
+              placeholder="비밀번호를 한 번 더 입력하세요"
+              value={passwordCheck}
+              onChange={handleChangePasswordCheck}
               required
             />
+            {passwordCheckError && (
+              <p className={styles.error}>{passwordCheckError}</p>
+            )}
           </div>
-          {error && <p className={styles.error}>{error}</p>}
+
+          {submitError && <p className={styles.error}>{submitError}</p>}
+
           <div className={styles.buttonBox}>
             <Button type="submit" isLong={true} color="main">
-              {loading ? "가입 중..." : "가입하기"}
+              {isLoading ? "가입 중..." : "가입하기"}
             </Button>
           </div>
           <div className={styles.linkBox}>
@@ -157,4 +136,4 @@ const SignUp = () => {
   );
 };
 
-export default SignUp;
+export default SignupForm;

@@ -9,7 +9,6 @@ export class PgUserRepository implements UserRepository {
     try {
       await prisma.user.create({
         data: {
-          img: user.img,
           nickname: user.nickname,
           email: user.email,
           password: user.password,
