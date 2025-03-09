@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation"; // useSearchParams 추가
 import { FaPlus } from "react-icons/fa";
 import SideBar from "../components/sideBar/SideBar";
@@ -9,7 +9,7 @@ import SpotTable from "../components/spotTable/SpotTable";
 import styles from "./AdminSpotsPage.module.scss";
 import { Spot } from "@prisma/client";
 
-const AdminSpotsPage = () => {
+const AdminSpotsPageContent = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const currentPageFromUrl = parseInt(searchParams.get("page") || "1", 10); // URL에서 현재 페이지를 가져옴
@@ -83,6 +83,14 @@ const AdminSpotsPage = () => {
         <FaPlus />
       </button>
     </div>
+  );
+};
+
+const AdminSpotsPage = () => {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <AdminSpotsPageContent />
+    </Suspense>
   );
 };
 

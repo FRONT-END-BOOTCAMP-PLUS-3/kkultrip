@@ -1,14 +1,14 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation"; // useSearchParams 추가
+import { useState, useEffect, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import SideBar from "../components/sideBar/SideBar";
 import Header from "../components/header/Header";
 import TipTable from "../components/tipTable/TipTable";
 import styles from "./AdminTipsPage.module.scss";
 import { Tip } from "@prisma/client";
 
-const AdminTipsPage = () => {
+const AdminTipsPageContent = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const currentPageFromUrl = parseInt(searchParams.get("page") || "1", 10); // URL에서 현재 페이지를 가져옴
@@ -77,6 +77,14 @@ const AdminTipsPage = () => {
         </div>
       </main>
     </div>
+  );
+};
+
+const AdminTipsPage = () => {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <AdminTipsPageContent />
+    </Suspense>
   );
 };
 
