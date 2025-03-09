@@ -13,7 +13,7 @@ const SideBar = () => {
 
   return (
     <aside className={styles.sidebar}>
-      <h1 className={styles.logo}>HoneyTrip</h1>
+      <h1 className={styles.logo}>KKulTrip</h1>
       <nav>
         <ul className={styles.navList}>
           <li
