@@ -19,7 +19,6 @@ type SortKey =
 type SortOrder = "asc" | "desc";
 
 const UserTable = ({ users = [] }: UserTableProps) => {
-  // Default value for users
   const router = useRouter();
   const [sortKey, setSortKey] = useState<SortKey>("id");
   const [sortOrder, setSortOrder] = useState<SortOrder>("asc");
@@ -57,7 +56,6 @@ const UserTable = ({ users = [] }: UserTableProps) => {
       const response = await fetch(`/api/admin/users/${id}`, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId: id }),
       });
 
       if (!response.ok) throw new Error("삭제 실패");
@@ -67,6 +65,30 @@ const UserTable = ({ users = [] }: UserTableProps) => {
     } catch (error) {
       console.log("Error deleting user:", error);
       alert("삭제 중 오류가 발생했습니다.");
+    }
+  };
+
+  const handleToggleAdmin = async (id: string, isAdmin: boolean) => {
+    const message = isAdmin
+      ? "유저 권한으로 바꾸시겠습니까?"
+      : "관리자 권한으로 바꾸시겠습니까?";
+
+    if (!confirm(message)) return;
+
+    try {
+      const response = await fetch(`/api/admin/users/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: id, isAdmin: !isAdmin }),
+      });
+
+      if (!response.ok) throw new Error("권한 변경 실패");
+
+      alert("권한이 변경되었습니다.");
+      window.location.reload();
+    } catch (error) {
+      console.log("Error updating user role:", error);
+      alert("권한 변경 중 오류가 발생했습니다.");
     }
   };
 
@@ -120,6 +142,15 @@ const UserTable = ({ users = [] }: UserTableProps) => {
               <td>{new Date(user.createdAt).toLocaleDateString()}</td>
               <td>{new Date(user.updatedAt).toLocaleDateString()}</td>
               <td>
+                <button
+                  className={styles.adminButton}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleToggleAdmin(user.id, user.isAdmin);
+                  }}
+                >
+                  권한 변경
+                </button>
                 <button
                   className={styles.deleteButton}
                   onClick={(e) => {

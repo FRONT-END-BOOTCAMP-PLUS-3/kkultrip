@@ -52,4 +52,16 @@ export class PgUserRepository implements UserRepository {
       await prisma.$disconnect();
     }
   }
+
+  // 권한 변경 (관리자/유저)
+  async updateUserRole(id: string, isAdmin: boolean): Promise<void> {
+    try {
+      await prisma.user.update({
+        where: { id },
+        data: { isAdmin },
+      });
+    } finally {
+      await prisma.$disconnect();
+    }
+  }
 }

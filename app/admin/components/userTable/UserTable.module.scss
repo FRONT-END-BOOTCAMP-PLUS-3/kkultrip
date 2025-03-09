@@ -63,3 +63,17 @@
   color: white;
   transition: background 0.2s ease-in-out;
 }
+
+.adminButton {
+  background-color: var(--primary-color);
+  color: black;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s ease-in-out;
+  margin-right: 0.5rem;
+
+  &:hover {
+    color: white;
+  }
+}
