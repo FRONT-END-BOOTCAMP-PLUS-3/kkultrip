@@ -81,4 +81,9 @@ export class PgImageRepository implements ImageRepository {
     });
     return images;
   }
+
+  async getAllImages(): Promise<Image[]> {
+    const images = await prisma.image.findMany();
+    return images;
+  }
 }

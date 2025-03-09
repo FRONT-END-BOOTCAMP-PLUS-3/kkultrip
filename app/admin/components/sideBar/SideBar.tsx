@@ -6,7 +6,7 @@ import styles from "./SideBar.module.scss";
 
 const SideBar = () => {
   const router = useRouter();
-  const pathname = usePathname(); // 현재 경로 가져오기
+  const pathname = usePathname();
   const handleNavigation = (path: string) => {
     router.push(`/admin/${path}`);
   };
@@ -31,6 +31,14 @@ const SideBar = () => {
             onClick={() => handleNavigation("tips")}
           >
             꿀팁 관리
+          </li>
+          <li
+            className={`${styles.navItem} ${
+              pathname === "/admin/images" ? styles.active : ""
+            }`}
+            onClick={() => handleNavigation("images")}
+          >
+            꿀팁 사진 관리
           </li>
           <li
             className={`${styles.navItem} ${
