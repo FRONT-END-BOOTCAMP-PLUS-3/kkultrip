@@ -1,6 +1,7 @@
 export default interface BookmarkRepository {
-    countBySpot(spotId: number): Promise<number>;
-    checkBookmark(spotId: number, userId: string): Promise<boolean>;
-    createBookmark(spotId: number, userId: string): Promise<void>;
-    deleteBookmark(spotId: number, userId: string): Promise<void>;
+  countBySpot(spotId: number): Promise<number>;
+  checkBookmark(spotId: number, userId: string): Promise<boolean>;
+  createBookmark(spotId: number, userId: string): Promise<void>;
+  deleteBookmark(spotId: number, userId: string): Promise<void>;
+  getSpotIdsByUserId(userId: string): Promise<number[]>;
 }
