@@ -9,7 +9,7 @@ export class LoginUsecase {
 
   async execute({ email, password }: LoginUserDto): Promise<LoggedInUserDto> {
     const user = await this.userRepository.findByEmail(email);
-    if (!user) throw new Error("User not found");
+    if (!user) throw new Error("userNotFound");
 
     const isComparePassword = await bcrypt.compare(password, user.password);
     if (!isComparePassword) throw new Error("isNotComparePassword");
