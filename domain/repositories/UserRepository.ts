@@ -5,4 +5,5 @@ export default interface UserRepository {
   findByEmail(email: string): Promise<User | null>;
   getUserById(id: string): Promise<User | null>;
   deleteUser(id: string): Promise<void>;
+  getUserIdByNickname(nickname: string): Promise<{ id: string } | null>;
 }
