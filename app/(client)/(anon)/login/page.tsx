@@ -6,6 +6,7 @@ import styles from "./LoginPage.module.scss";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import useUserStore from "@/store/useUserStore";
+import Image from "next/image";
 
 const LoginPage = () => {
   const router = useRouter();
@@ -84,14 +85,23 @@ const LoginPage = () => {
   return (
     <div className={styles.loginContainer}>
       <section className={styles.loginWrapper}>
-        <h1>kkultrip 로그인</h1>
+        <div className={styles.logoBox}>
+          <Image
+            className={styles.logo}
+            src="/images/logo.svg"
+            alt="logo"
+            width={200}
+            height={200}
+          />
+        </div>
+        <h1>로그인</h1>
         <form onSubmit={handleSubmit}>
           <div className={styles.inputBox}>
             <label>이메일</label>
             <input
               type="email"
               name="email"
-              placeholder="이메일"
+              placeholder="이메일을 입력해주세요"
               value={formData.email}
               onChange={handleChange}
               required
@@ -102,7 +112,7 @@ const LoginPage = () => {
             <input
               type="password"
               name="password"
-              placeholder="비밀번호"
+              placeholder="비밀번호를 입력해주세요"
               value={formData.password}
               onChange={handleChange}
               required
@@ -116,7 +126,8 @@ const LoginPage = () => {
             </Button>
           </div>
           <div className={styles.linkBox}>
-            <Link href="/signup">회원가입페이지로 이동</Link>
+            계정이 없으신가요?
+            <Link href="/signup">계정 생성</Link>
           </div>
         </form>
       </section>
