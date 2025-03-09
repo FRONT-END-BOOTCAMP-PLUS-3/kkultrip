@@ -98,7 +98,7 @@ const UserTable = ({ users = [] }: UserTableProps) => {
                 : key === "isAdmin"
                 ? "관리자 여부"
                 : key === "createdAt"
-                ? "생성 날짜"
+                ? "가입 날짜"
                 : "수정 날짜"}
             </th>
           ))}
