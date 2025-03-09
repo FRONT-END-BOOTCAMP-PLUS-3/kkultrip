@@ -14,16 +14,11 @@
     text-align: left;
     cursor: pointer;
     transition: background 0.2s ease-in-out;
+  }
 
-    th.sorted {
-      background: var(--grey-2-color);
-      transform: scale(1.05);
-    }
-
-    tbody tr:hover {
-      background: var(--grey-1-color);
-      transition: background 0.2s ease-in-out;
-    }
+  tbody tr:hover {
+    background: var(--grey-1-color); /* Hover effect for table rows */
+    transition: background 0.2s ease-in-out;
   }
 
   td {
@@ -32,6 +27,7 @@
     text-align: left;
     color: var(--grey-3-color);
   }
+
   .tableRow {
     cursor: pointer;
   }
