@@ -10,6 +10,8 @@ import useUserStore from "@/store/useUserStore";
 const LoginPage = () => {
   const router = useRouter();
   const { setImg, setNickname, setIsLoggedIn } = useUserStore();
+  const userLat = useUserStore((state) => state.userLat);
+  const userLon = useUserStore((state) => state.userLon);
 
   const [formData, setFormData] = useState({
     email: "",
@@ -67,7 +69,7 @@ const LoginPage = () => {
         if (prevUrl) {
           router.push(decodeURIComponent(prevUrl));
         } else {
-          router.push("/");
+          router.push(`/spots?lat=${userLat}&lon=${userLon}`);
         }
       }
     } catch (err: unknown) {
