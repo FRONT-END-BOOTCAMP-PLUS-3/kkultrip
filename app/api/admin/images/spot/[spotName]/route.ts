@@ -51,6 +51,7 @@ export async function GET(req: Request) {
 
     return NextResponse.json({ images }, { status: 200 });
   } catch (error) {
+    console.log(error);
     return NextResponse.json(
       { error: "Something went wrong" },
       { status: 500 }

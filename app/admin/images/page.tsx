@@ -9,7 +9,6 @@ import { Image } from "@prisma/client";
 import SearchBar from "../components/searchBar/SearchBar";
 
 const AdminImagesPage = () => {
-  const [images, setImages] = useState<Image[]>([]);
   const [filteredImages, setFilteredImages] = useState<Image[]>([]);
 
   useEffect(() => {
@@ -20,8 +19,7 @@ const AdminImagesPage = () => {
           throw new Error("Failed to fetch images");
         }
         const data: Image[] = await res.json();
-        setImages(data);
-        setFilteredImages(data); // 초기 로드 시 모든 이미지를 표시
+        setFilteredImages(data); // Set all images initially
       } catch (error) {
         console.log(error);
       }
@@ -51,6 +49,7 @@ const AdminImagesPage = () => {
       const data = await res.json();
       setFilteredImages(data.images);
     } catch (error) {
+      console.log(error);
       alert("검색 결과가 없습니다.");
     }
   };
