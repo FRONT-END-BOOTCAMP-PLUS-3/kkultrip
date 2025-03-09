@@ -1,15 +1,13 @@
 import UserRepository from "@/domain/repositories/UserRepository";
-import { LoginUserDto } from "./dto/LoginUserDto";
-import bcrypt from "bcrypt";
 import { createJWT } from "@/utils/jwt";
+import bcrypt from "bcrypt";
+import { LoggedInUserDto } from "./dto/LoggedInUserDto";
+import { LoginUserDto } from "./dto/LoginUserDto";
 
 export class LoginUsecase {
   constructor(private userRepository: UserRepository) {}
 
-  async execute({
-    email,
-    password,
-  }: LoginUserDto): Promise<{ token: string; isAdmin: boolean }> {
+  async execute({ email, password }: LoginUserDto): Promise<LoggedInUserDto> {
     const user = await this.userRepository.findByEmail(email);
     if (!user) throw new Error("User not found");
 
@@ -18,9 +16,14 @@ export class LoginUsecase {
 
     const userId = user.id;
     const isAdmin = user.isAdmin;
+    const img = user.img;
+    const nickname = user.nickname;
+
     const response = {
       token: await createJWT(userId, isAdmin),
-      isAdmin: isAdmin,
+      isAdmin,
+      img,
+      nickname,
     };
 
     return response;

@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import TipTable from "../components/tipTable/TipTable";
 
 const AdminTipsPage = () => {
-  const [tips, setTips] = useState<Tip[]>([]);
+  const [tips, setTips] = useState<(Tip & { spotName: string })[]>([]);
 
   useEffect(() => {
     const fetchSpots = async () => {
@@ -17,10 +17,10 @@ const AdminTipsPage = () => {
         if (!res.ok) {
           throw new Error("Failed to fetch spots");
         }
-        const data: Tip[] = await res.json();
+        const data: (Tip & { spotName: string })[] = await res.json();
         setTips(data);
       } catch (error) {
-        console.error(error);
+        console.log(error);
       }
     };
 

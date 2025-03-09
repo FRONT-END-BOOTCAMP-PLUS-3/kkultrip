@@ -3,7 +3,7 @@ import { GetSpotListUseCase } from "@/application/usecases/admin/spot/GetSpotLis
 import { TicketRepository } from "@/domain/repositories/TicketRepository";
 import { CreateSpotUseCase } from "@/application/usecases/admin/spot/CreateSpotUseCase";
 import PgSpotRepository from "@/infrastructure/repositories/PgSpotRepository";
-import { PgTicketRepository } from "@/infrastructure/repositories/PgTicketRepository"; // TicketRepository 추가
+import { PgTicketRepository } from "@/infrastructure/repositories/PgTicketRepository";
 import { promises as fs } from "fs";
 import path from "path";
 import { CreateSpotDto } from "@/application/usecases/admin/spot/dto/CreateSpotDto";

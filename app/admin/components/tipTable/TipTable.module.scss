@@ -32,6 +32,9 @@
     text-align: left;
     color: var(--grey-3-color);
   }
+  .tableRow {
+    cursor: pointer;
+  }
 }
 
 .noData {
@@ -41,7 +44,6 @@
   color: var(--grey-2-color);
 }
 
-.editButton,
 .deleteButton {
   padding: 0.5rem 1rem;
   border: none;

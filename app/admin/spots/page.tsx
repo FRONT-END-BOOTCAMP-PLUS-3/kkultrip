@@ -23,7 +23,7 @@ const AdminSpotsPage = () => {
         const data: Spot[] = await res.json();
         setSpots(data);
       } catch (error) {
-        console.error(error);
+        console.log(error);
       }
     };
 

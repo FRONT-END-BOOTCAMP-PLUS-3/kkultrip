@@ -7,10 +7,9 @@ const ClientLayout = ({
 }: Readonly<{
   children: React.ReactNode;
 }>) => {
-  const isLoggedIn = true;
   return (
     <div className="container">
-      <Header isLoggedIn={isLoggedIn} />
+      <Header />
       {children}
     </div>
   );
