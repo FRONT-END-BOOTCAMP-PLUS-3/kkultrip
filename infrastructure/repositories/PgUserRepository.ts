@@ -63,6 +63,7 @@ export class PgUserRepository implements UserRepository {
     }finally {
       await prisma.$disconnect();
     }
+  }
   // 회원탈퇴
   async deleteUser(id: string): Promise<void> {
     try {
