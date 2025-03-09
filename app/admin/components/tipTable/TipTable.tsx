@@ -49,14 +49,14 @@ const TipTable = ({ tips }: TipTableProps) => {
       : String(bValue).localeCompare(String(aValue));
   });
 
-  const handleDelete = async (id: number, spotId: number) => {
+  const handleDelete = async (tipId: number, spotId: number) => {
     if (!confirm("정말로 삭제하시겠습니까?")) return;
 
     try {
-      const response = await fetch(`/api/admin/tips/${id}`, {
+      const response = await fetch(`/api/admin/tips`, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ tipId: id, spotId }),
+        body: JSON.stringify({ tipId, spotId }),
       });
 
       if (!response.ok) throw new Error("삭제 실패");
