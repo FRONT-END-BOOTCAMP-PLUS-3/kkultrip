@@ -49,8 +49,7 @@ export async function GET(req: Request) {
 
     const images = await getImageBySpotIdUsecase.execute(spot.id, "createdAt");
 
-    // 명소 정보와 이미지 정보를 함께 반환
-    return NextResponse.json({ spot, images }, { status: 200 });
+    return NextResponse.json({ images }, { status: 200 });
   } catch (error) {
     return NextResponse.json(
       { error: "Something went wrong" },

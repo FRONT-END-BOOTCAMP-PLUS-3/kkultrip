@@ -12,7 +12,9 @@ const SearchBar = ({ onSearch }: SearchBarProps) => {
   const [category, setCategory] = useState<string>("user");
 
   const handleSearch = () => {
-    onSearch(query, category);
+    if (query.trim()) {
+      onSearch(query, category); // 검색어와 선택된 카테고리 전달
+    }
   };
 
   return (

@@ -30,18 +30,28 @@ const AdminImagesPage = () => {
     fetchImages();
   }, []);
 
-  const handleSearch = async (query: string) => {
+  const handleSearch = async (query: string, category: string) => {
     try {
-      const res = await fetch(
-        `/api/admin/images/search?spotName=${encodeURIComponent(query)}`
-      );
+      let url = "";
+
+      if (category === "spot") {
+        url = `/api/admin/images/spot/search?spotName=${encodeURIComponent(
+          query
+        )}`;
+      } else if (category === "user") {
+        url = `/api/admin/images/user/search?userName=${encodeURIComponent(
+          query
+        )}`;
+      }
+
+      const res = await fetch(url);
       if (!res.ok) {
         throw new Error("Failed to fetch search results");
       }
       const data = await res.json();
-      setFilteredImages(data.images); // images 배열만 저장
+      setFilteredImages(data.images);
     } catch (error) {
-      console.log(error);
+      alert("검색 결과가 없습니다.");
     }
   };
 
