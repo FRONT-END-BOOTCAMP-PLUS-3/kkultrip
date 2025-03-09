@@ -46,7 +46,7 @@ const SpotTable = ({ spots }: { spots: Spot[] }) => {
       alert("삭제되었습니다.");
       window.location.reload();
     } catch (error) {
-      console.error("Error deleting spot:", error);
+      console.log("Error deleting spot:", error);
       alert("삭제 중 오류가 발생했습니다.");
     }
   };
