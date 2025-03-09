@@ -74,4 +74,17 @@ export class PgUserRepository implements UserRepository {
       await prisma.$disconnect();
     }
   }
+
+  async getUserIdByNickname(nickname: string): Promise<{ id: string } | null> {
+    try {
+      const userId = await prisma.user.findUnique({
+        where: { nickname },
+        select: { id: true },
+      });
+
+      return userId ?? null;
+    } finally {
+      await prisma.$disconnect();
+    }
+  }
 }

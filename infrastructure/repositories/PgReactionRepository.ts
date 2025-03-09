@@ -99,4 +99,17 @@ export default class PgReactionRepository implements ReactionRepository {
       await prisma.$disconnect();
     }
   }
+
+  async countReactionsByTipId(tipId: number): Promise<number> {
+    try {
+      return await prisma.reaction.count({
+        where: { tipId },
+      });
+    } catch (error) {
+      console.log("❌ countReactionsByTipId 오류 발생:", error);
+      throw new Error("팁의 반응수를 가져오는 데 실패했습니다.");
+    } finally {
+      await prisma.$disconnect();
+    }
+  }
 }

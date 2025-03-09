@@ -1,6 +1,12 @@
-import { useState } from "react";
+"use client";
+
 import Image from "next/image";
 import styles from "./Category.module.scss";
+
+type CategoryProps = {
+  selectedCategory: string;
+  setSelectedCategory: (category: string) => void;
+};
 
 const categories = [
   { id: "all", label: "전체" },
@@ -10,18 +16,16 @@ const categories = [
   { id: "restaurant", label: "음식점", icon: "/images/restaurant.svg" },
 ];
 
-const Category = () => {
-  const [selected, setSelected] = useState<string>("all");
-
+const Category = ({ selectedCategory, setSelectedCategory }: CategoryProps) => {
   return (
     <div className={styles.container}>
       {categories.map((category) => (
         <button
           key={category.id}
           className={`${styles.category} ${
-            selected === category.id ? styles.selected : ""
+            selectedCategory === category.label ? styles.selected : ""
           }`}
-          onClick={() => setSelected(category.id)}
+          onClick={() => setSelectedCategory(category.label)}
         >
           {category.icon && (
             <Image

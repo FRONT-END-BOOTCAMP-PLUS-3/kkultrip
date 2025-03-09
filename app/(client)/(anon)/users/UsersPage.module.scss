@@ -70,6 +70,7 @@
 
   .categoryWrapper {
     display: flex;
+    justify-content: center;
     align-items: center;
     position: sticky;
     top: 1.8rem;
@@ -85,5 +86,9 @@
     width: 100%;
     gap: 0.625rem;
     padding: 0.625rem 1.25rem;
+
+    .noTipText {
+      text-align: center;
+    }
   }
 }
