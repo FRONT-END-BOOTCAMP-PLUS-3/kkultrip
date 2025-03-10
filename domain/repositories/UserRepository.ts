@@ -8,5 +8,6 @@ export default interface UserRepository {
   getAllUsers(): Promise<User[] | null>;
   updateUserRole(id: string, isAdmin: boolean): Promise<void>;
   deleteUser(id: string): Promise<void>;
+  getUserByName(nickname: string): Promise<User | null>;
   getUserIdByNickname(nickname: string): Promise<{ id: string } | null>;
 }

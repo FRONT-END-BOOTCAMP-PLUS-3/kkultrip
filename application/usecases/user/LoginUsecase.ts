@@ -24,6 +24,7 @@ export class LoginUsecase {
       isAdmin,
       img,
       nickname,
+      userId,
     };
 
     return response;

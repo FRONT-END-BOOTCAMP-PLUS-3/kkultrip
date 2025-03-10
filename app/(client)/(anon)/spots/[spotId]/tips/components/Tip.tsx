@@ -4,9 +4,8 @@ import { SpotTipDto } from "@/application/usecases/spot/tips/dto/SpotTipDto";
 import TipImage from "./TipImage";
 import TipButton from "./TipButton";
 
-//
 const Tip = ({ tip }: { tip: SpotTipDto }) => {
-    const accessUserId = "7379a017-90cb-40da-9635-eb7eff4d8e83";
+    
 
     return (
         <div id={tip.id.toString()} className={styles.tipContainer}>
@@ -24,9 +23,12 @@ const Tip = ({ tip }: { tip: SpotTipDto }) => {
                         <h4>{tip.userName}</h4>
                     </figcaption>
                 </figure>
-                {tip.userId === accessUserId && (
-                    <TipButton tipId={tip.id} spotId={tip.spotId} />
-                )}
+
+                <TipButton
+                    tipId={tip.id}
+                    spotId={tip.spotId}
+                    nickName={tip.userName}
+                />
             </div>
 
             <div className={styles.costWrapper}>
