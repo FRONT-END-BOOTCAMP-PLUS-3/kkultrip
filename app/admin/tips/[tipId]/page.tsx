@@ -61,10 +61,7 @@ const TipDetailPage = () => {
 
   return (
     <div className={styles.container}>
-      <button
-        className={styles.backButton}
-        onClick={() => router.push("/admin/tips")}
-      >
+      <button className={styles.backButton} onClick={() => router.back()}>
         뒤로가기
       </button>
       <h1 className={styles.title}>Tip 상세 정보</h1>
