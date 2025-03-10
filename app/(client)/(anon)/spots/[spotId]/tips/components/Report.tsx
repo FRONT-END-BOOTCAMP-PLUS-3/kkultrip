@@ -3,10 +3,12 @@
 import { useState } from "react";
 import { PiSirenFill } from "react-icons/pi";
 import styles from "./Report.module.scss";
+import useUserStore from "@/store/useUserStore";
 
 const Report = ({ tipId, userId }: { tipId: number; userId: string }) => {
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
-    const accessUserId = "7379a017-90cb-40da-9635-eb7eff4d8e83";
+    const user = useUserStore();
+    const accessUserId = user.id;
     const handleReportClick = async () => {
         const confirm = window.confirm("신고하시겠습니까?");
         if (!confirm) return;

@@ -3,4 +3,5 @@ export interface LoggedInUserDto {
   isAdmin: boolean;
   img: string;
   nickname: string;
+  userId: string;
 }
