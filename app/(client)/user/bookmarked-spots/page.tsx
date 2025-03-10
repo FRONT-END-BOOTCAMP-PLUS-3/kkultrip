@@ -38,13 +38,8 @@ const Spots = () => {
       {bookmarkedSpotList.length === 0 ? (
         <p className={styles.noSpotText}>저장한 장소가 없습니다.</p>
       ) : (
-        bookmarkedSpotList.map((spot, index) => (
-          <SpotImageCard
-            key={index}
-            imageSrc={spot.img}
-            spotCategory={spot.category}
-            spotName={spot.name}
-          />
+        bookmarkedSpotList.map((spot) => (
+          <SpotImageCard key={spot.id} spot={spot} navigateTo="info" />
         ))
       )}
     </div>

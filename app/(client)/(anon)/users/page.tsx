@@ -109,9 +109,14 @@ const UserTipsFetcher = () => {
           filteredTips.map((tip) => (
             <SpotImageCard
               key={tip.id}
-              imageSrc={tip.spotImg}
-              spotCategory={tip.category}
-              spotName={tip.spotName}
+              spot={{
+                id: tip.spotId,
+                img: tip.spotImg,
+                category: tip.category,
+                name: tip.spotName,
+              }}
+              navigateTo="tips"
+              tipId={tip.id}
             />
           ))
         )}
