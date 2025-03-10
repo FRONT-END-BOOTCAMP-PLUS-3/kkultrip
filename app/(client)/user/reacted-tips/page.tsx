@@ -6,7 +6,7 @@ import TipBox from "../components/TipBox";
 import styles from "./ReactedTipsPage.module.scss";
 import Loading from "@/components/loading/Loading";
 
-const Tips = () => {
+const ReactedTips = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [reactTipList, setReactTipList] = useState<GetReactedTipDto[]>([]);
 
@@ -41,4 +41,4 @@ const Tips = () => {
   );
 };
 
-export default Tips;
+export default ReactedTips;

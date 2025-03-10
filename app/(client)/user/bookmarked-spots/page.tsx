@@ -6,7 +6,7 @@ import SpotImageCard from "@/components/spotImageCard/SpotImageCard";
 import { useEffect, useState } from "react";
 import styles from "./BookmarkedSpotsPage.module.scss";
 
-const Spots = () => {
+const BookMarkedSpots = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [bookmarkedSpotList, setBookmarkedSpotList] = useState<
     GetBookmarkedSpotDto[]
@@ -46,4 +46,4 @@ const Spots = () => {
   );
 };
 
-export default Spots;
+export default BookMarkedSpots;
