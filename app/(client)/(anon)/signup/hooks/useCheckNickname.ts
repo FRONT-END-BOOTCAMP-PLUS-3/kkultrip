@@ -36,9 +36,11 @@ const useCheckNickname = () => {
       if (data.isAvailable) {
         setIsNicknameAvailable(true);
         setNicknameCheckSuccess("사용 가능한 닉네임입니다.");
+        setNicknameCheckError(null);
       } else {
         setNicknameCheckError("이미 사용중인 닉네임입니다.");
         setIsNicknameAvailable(false);
+        setNicknameCheckSuccess(null);
       }
     } catch (error) {
       console.log("닉네임 중복 확인 중 오류 발생:", error);

@@ -10,7 +10,7 @@ import styles from "./SignupPage.module.scss";
 const SignupForm = () => {
   const {
     email: { email, emailError, handleChangeEmail },
-    nickname: { nickname, handleChangeNickname },
+    nickname: { nickname, nicknameError, handleChangeNickname },
     password: { password, passwordError, handleChangePassword },
     passwordCheck: {
       passwordCheck,
@@ -75,6 +75,7 @@ const SignupForm = () => {
                 onChange={handleChangeNicknameWithReset}
                 required
               />
+              {nicknameError && <p className={styles.error}>{nicknameError}</p>}
               {nicknameCheckError && (
                 <p className={styles.error}>{nicknameCheckError}</p>
               )}
@@ -86,7 +87,8 @@ const SignupForm = () => {
             <Button
               type="button"
               isLong={false}
-              color="main"
+              color={nicknameError || nicknameCheckError ? "disabled" : "main"}
+              disabled={!!nicknameError || !!nicknameCheckError}
               onClick={handleCheckNicknameClick}
             >
               중복확인
@@ -97,7 +99,7 @@ const SignupForm = () => {
             <label>비밀번호</label>
             <input
               type="password"
-              placeholder="소문자+숫자 (8자 이상)"
+              placeholder="소문자,숫자 (8자 이상)"
               value={password}
               onChange={handleChangePassword}
               required
