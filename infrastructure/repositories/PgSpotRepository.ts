@@ -147,4 +147,22 @@ export default class PgSpotRepository implements SpotRepository {
       await prisma.$disconnect();
     }
   }
+
+  async getSpotsByPartialName(name: string): Promise<Spot[] | null> {
+    try {
+      return await prisma.spot.findMany({
+        where: {
+          name: {
+            contains: name, // 부분 검색 가능
+            mode: "insensitive", // 대소문자 구분 없이 검색
+          },
+        },
+      });
+    } catch (error) {
+      console.log("❌ getSpotsByPartialName 오류 발생:", error);
+      throw new Error("명소 데이터를 가져오지 못했습니다.");
+    } finally {
+      await prisma.$disconnect();
+    }
+  }
 }
