@@ -7,6 +7,7 @@ import Header from "../components/header/Header";
 import TipTable from "../components/tipTable/TipTable";
 import styles from "./AdminTipsPage.module.scss";
 import { Tip } from "@prisma/client";
+import SearchBar from "../components/searchBar/SearchBar";
 
 const AdminTipsPageContent = () => {
   const router = useRouter();
@@ -42,12 +43,17 @@ const AdminTipsPageContent = () => {
     router.push(`/admin/tips?page=${page}`);
   };
 
+  const handleSearch = async (query: string, category: string) => {
+    console.log("asd");
+  };
+
   return (
     <div className={styles.container}>
       <SideBar />
       <main className={styles.main}>
         <Header title="꿀팁 관리" />
         <div className={styles.contentsContainer}>
+          <SearchBar onSearch={handleSearch} isSpotOnly={true} />
           <TipTable tips={tips} />
           <div className={styles.pagination}>
             <button

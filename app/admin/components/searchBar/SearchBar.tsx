@@ -5,15 +5,18 @@ import styles from "./SearchBar.module.scss";
 
 interface SearchBarProps {
   onSearch: (query: string, category: string) => void;
+  isSpotOnly?: boolean;
 }
 
-const SearchBar = ({ onSearch }: SearchBarProps) => {
+const SearchBar = ({ onSearch, isSpotOnly = false }: SearchBarProps) => {
   const [query, setQuery] = useState<string>("");
-  const [category, setCategory] = useState<string>("user");
+  const [category, setCategory] = useState<string>(
+    isSpotOnly ? "spot" : "user"
+  );
 
   const handleSearch = () => {
     if (query.trim()) {
-      onSearch(query, category); // 검색어와 선택된 카테고리 전달
+      onSearch(query, category);
     }
   };
 
@@ -30,6 +33,7 @@ const SearchBar = ({ onSearch }: SearchBarProps) => {
         value={category}
         onChange={(e) => setCategory(e.target.value)}
         className={styles.select}
+        disabled={isSpotOnly} // 2 페이지에서는 선택할 수 없게 비활성화
       >
         <option value="user">유저 이름</option>
         <option value="spot">명소 이름</option>
