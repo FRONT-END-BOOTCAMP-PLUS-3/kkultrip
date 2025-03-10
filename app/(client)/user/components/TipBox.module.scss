@@ -33,16 +33,28 @@
         width: 2.25rem;
         height: 2.25rem;
       }
-      p {
-        font-size: 1.1rem;
+
+      figcaption {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+
+        .category {
+          font-size: 0.75rem;
+        }
+
+        .name {
+          font-size: 1.1rem;
+        }
       }
     }
 
     .buttonBox {
       display: flex;
-      gap: 2rem;
+      gap: 1rem;
       margin-right: 1rem;
       font-size: 0.75rem;
+
       .editButton {
         color: var(--grey-2-color);
       }
@@ -96,6 +108,10 @@
       border-radius: 1rem;
       object-fit: cover;
     }
+  }
+
+  .description {
+    padding: 0 1rem;
   }
 
   .emotionWrapper {

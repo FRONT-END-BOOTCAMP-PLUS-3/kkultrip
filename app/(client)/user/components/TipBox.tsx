@@ -70,7 +70,8 @@ const TipBox = ({ tip }: TipBoxProps) => {
             className={styles.imageBorder}
           />
           <figcaption>
-            <p>{tip.spotName}</p>
+            <p className={styles.category}>{tip.category}</p>
+            <p className={styles.name}>{tip.spotName}</p>
           </figcaption>
         </figure>
         {pathname === "/user/my-tips" && (
@@ -109,7 +110,6 @@ const TipBox = ({ tip }: TipBoxProps) => {
             )}
           </span>
         </p>
-        |<p>{tip.category}</p>
       </div>
       {tip.tipImages && tip.tipImages.length > 0 && (
         <div
@@ -132,7 +132,7 @@ const TipBox = ({ tip }: TipBoxProps) => {
           ))}
         </div>
       )}
-      <p>{tip.description}</p>
+      <p className={styles.description}>{tip.description}</p>
       <div className={styles.emotionWrapper}>
         {reactions.map((reaction, index) => (
           <div key={index} className={styles.emotionBox}>
