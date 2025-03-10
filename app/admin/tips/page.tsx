@@ -6,14 +6,16 @@ import SideBar from "../components/sideBar/SideBar";
 import Header from "../components/header/Header";
 import TipTable from "../components/tipTable/TipTable";
 import styles from "./AdminTipsPage.module.scss";
-import { Tip } from "@prisma/client";
+import { GetTipListDto } from "@/application/usecases/admin/tip/dto/GetTipListDto";
 import SearchBar from "../components/searchBar/SearchBar";
 
 const AdminTipsPageContent = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const currentPageFromUrl = parseInt(searchParams.get("page") || "1", 10); // URL에서 현재 페이지를 가져옴
-  const [tips, setTips] = useState<(Tip & { spotName: string })[]>([]);
+  const [tips, setTips] = useState<(GetTipListDto & { spotName: string })[]>(
+    []
+  );
   const [currentPage, setCurrentPage] = useState(currentPageFromUrl);
   const [totalPages, setTotalPages] = useState(1);
 
@@ -67,7 +69,7 @@ const AdminTipsPageContent = () => {
       <main className={styles.main}>
         <Header title="꿀팁 관리" />
         <div className={styles.contentsContainer}>
-          <SearchBar onSearch={handleSearch} isSpotOnly={true} />
+          <SearchBar onSearch={handleSearch} />
           <TipTable tips={tips} />
           <div className={styles.pagination}>
             <button

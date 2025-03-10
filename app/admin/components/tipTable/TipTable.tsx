@@ -1,19 +1,19 @@
 "use client";
 
-import { Tip } from "@prisma/client";
+import { GetTipListDto } from "@/application/usecases/admin/tip/dto/GetTipListDto";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./TipTable.module.scss";
 
 interface TipTableProps {
-  tips: (Tip & { spotName: string })[];
+  tips: (GetTipListDto & { spotName: string })[];
 }
 
 type SortKey =
   | "id"
   | "spotId"
   | "spotName"
-  | "userId"
+  | "nickname"
   | "description"
   | "price"
   | "waitingTime"
@@ -78,7 +78,7 @@ const TipTable = ({ tips }: TipTableProps) => {
               "id",
               "spotId",
               "spotName",
-              "userId",
+              "nickname",
               "description",
               "price",
               "waitingTime",
@@ -98,8 +98,8 @@ const TipTable = ({ tips }: TipTableProps) => {
                 ? "명소 ID"
                 : key === "spotName"
                 ? "명소 이름"
-                : key === "userId"
-                ? "사용자 ID"
+                : key === "nickname"
+                ? "작성자 이름"
                 : key === "description"
                 ? "설명"
                 : key === "price"
@@ -127,7 +127,7 @@ const TipTable = ({ tips }: TipTableProps) => {
               <td>{tip.id}</td>
               <td>{tip.spotId}</td>
               <td>{tip.spotName}</td>
-              <td>{tip.userId}</td>
+              <td>{tip.nickname}</td>
               <td>{tip.description}</td>
               <td>{tip.price}</td>
               <td>{tip.waitingTime}</td>

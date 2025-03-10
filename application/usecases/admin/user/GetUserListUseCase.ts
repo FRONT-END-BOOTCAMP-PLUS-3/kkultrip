@@ -1,6 +1,5 @@
 import UserRepository from "@/domain/repositories/UserRepository";
 import { GetUserListDto } from "./dto/GetUserListDto";
-import { User } from "@prisma/client";
 
 export default class GetUserListUseCase {
   constructor(private userRepository: UserRepository) {}
