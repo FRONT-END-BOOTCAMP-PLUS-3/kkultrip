@@ -14,6 +14,7 @@ export class GetSpotHeaderUsecase {
     ): Promise<SpotHeaderDto | null> {
         const spot = await this.spotRepository.getSpotById(spotId);
         if (!spot) return null;
+        console.log(userId, "!!!!!!!!!!!");
 
         const isBookMarked = await this.bookmarkRepository.checkBookmark(
             spotId,
