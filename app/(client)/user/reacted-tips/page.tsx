@@ -4,8 +4,10 @@ import { GetReactedTipDto } from "@/application/usecases/user/dto/GetReactedTipD
 import { useEffect, useState } from "react";
 import TipBox from "../components/TipBox";
 import styles from "./ReactedTipsPage.module.scss";
+import Loading from "@/components/loading/Loading";
 
 const Tips = () => {
+  const [isLoading, setIsLoading] = useState(true);
   const [reactTipList, setReactTipList] = useState<GetReactedTipDto[]>([]);
 
   useEffect(() => {
@@ -15,6 +17,7 @@ const Tips = () => {
         const data = await response.json();
 
         setReactTipList(data.reactedTipList);
+        setIsLoading(false);
       } catch (error) {
         console.error("Error fetching reacted tips:", error);
       }
@@ -22,6 +25,10 @@ const Tips = () => {
 
     fetchReactTips();
   }, []);
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   return (
     <div className={styles.TipsContainer}>

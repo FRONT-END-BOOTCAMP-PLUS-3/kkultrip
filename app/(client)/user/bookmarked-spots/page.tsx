@@ -1,11 +1,13 @@
 "use client";
 
 import { GetBookmarkedSpotDto } from "@/application/usecases/user/dto/GetBookmarkedSpotDto";
+import Loading from "@/components/loading/Loading";
 import SpotImageCard from "@/components/spotImageCard/SpotImageCard";
 import { useEffect, useState } from "react";
 import styles from "./BookmarkedSpotsPage.module.scss";
 
 const Spots = () => {
+  const [isLoading, setIsLoading] = useState(true);
   const [bookmarkedSpotList, setBookmarkedSpotList] = useState<
     GetBookmarkedSpotDto[]
   >([]);
@@ -19,11 +21,18 @@ const Spots = () => {
         setBookmarkedSpotList(data.bookmarkedSpotList);
       } catch (error) {
         console.error("Error fetching reacted tips:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
     fetchBookmarkedSpots();
   }, []);
+
+  if (isLoading) {
+    return <Loading />;
+  }
+
   return (
     <div className={styles.spotsContainer}>
       {bookmarkedSpotList.length === 0 ? (

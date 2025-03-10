@@ -1,12 +1,13 @@
 "use client";
 
-import { Suspense, useEffect, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import Category from "@/components/category/Category";
-import Image from "next/image";
-import styles from "./UsersPage.module.scss";
-import SpotImageCard from "@/components/spotImageCard/SpotImageCard";
 import { GetUserTipDto } from "@/application/usecases/users/dto/GetUserTipDto";
+import Category from "@/components/category/Category";
+import Loading from "@/components/loading/Loading";
+import SpotImageCard from "@/components/spotImageCard/SpotImageCard";
+import Image from "next/image";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense, useEffect, useState } from "react";
+import styles from "./UsersPage.module.scss";
 
 const UserTipsFetcher = () => {
   const searchParams = useSearchParams();
@@ -121,7 +122,7 @@ const UserTipsFetcher = () => {
 
 const UsersPage = () => {
   return (
-    <Suspense fallback={<p>로딩 중...</p>}>
+    <Suspense fallback={<Loading />}>
       <UserTipsFetcher />
     </Suspense>
   );
