@@ -18,15 +18,15 @@ export async function GET(req: Request) {
 
     const getUserByUserNameUseCase = new GetUserByNameUseCase(userRepository);
 
-    const usera = await getUserByUserNameUseCase.execute(userName);
-    if (!usera) {
+    const users = await getUserByUserNameUseCase.execute(userName);
+    if (!users) {
       return NextResponse.json(
         { error: "No user found with this username" },
         { status: 404 }
       );
     }
 
-    return NextResponse.json({ usera }, { status: 200 });
+    return NextResponse.json({ users }, { status: 200 });
   } catch (error) {
     console.log("❌ Error in GET request:", error);
 
