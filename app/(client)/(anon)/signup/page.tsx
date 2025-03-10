@@ -2,13 +2,13 @@
 
 import Button from "@/components/button/Button";
 import Link from "next/link";
+import useCheckEmail from "./hooks/useCheckEmail";
 import useCheckNickname from "./hooks/useCheckNickname";
 import useForm from "./hooks/useForm";
 import useSubmitSignup from "./hooks/useSubmitSignup";
 import styles from "./SignupPage.module.scss";
-import useCheckEmail from "./hooks/useCheckEmail";
 
-const SignupForm = () => {
+const SignupPage = () => {
   const {
     email: { email, emailError, handleChangeEmail },
     nickname: { nickname, nicknameError, handleChangeNickname },
@@ -176,4 +176,4 @@ const SignupForm = () => {
   );
 };
 
-export default SignupForm;
+export default SignupPage;

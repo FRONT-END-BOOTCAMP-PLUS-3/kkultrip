@@ -103,6 +103,10 @@
       .linkBox {
         margin-top: 1.875rem;
         text-align: center;
+        color: var(--grey-2-color);
+        display: flex;
+        justify-content: center;
+        gap: 0.5rem;
 
         a {
           color: var(--primary-color);
