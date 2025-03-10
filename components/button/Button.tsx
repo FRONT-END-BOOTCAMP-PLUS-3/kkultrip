@@ -9,7 +9,7 @@ type ButtonProps = {
   type?: "button" | "submit" | "reset";
   isLong: boolean;
   color: ButtonColor;
-  onClick?: () => void;
+  onClick?: (e: React.MouseEvent) => void;
 };
 
 const Button = ({

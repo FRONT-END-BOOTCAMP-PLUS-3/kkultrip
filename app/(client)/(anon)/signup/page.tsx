@@ -10,7 +10,7 @@ import styles from "./SignupPage.module.scss";
 const SignupForm = () => {
   const {
     email: { email, emailError, handleChangeEmail },
-    nickname: { nickname, nicknameError, handleChangeNickname },
+    nickname: { nickname, handleChangeNickname },
     password: { password, passwordError, handleChangePassword },
     passwordCheck: {
       passwordCheck,
@@ -32,8 +32,7 @@ const SignupForm = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // if (!isNicknameAvailable || !isFormValid) return;
-
+    if (!isNicknameAvailable || !isFormValid) return;
     await submitSignup(email, nickname, password);
   };
 
@@ -88,7 +87,7 @@ const SignupForm = () => {
               type="button"
               isLong={false}
               color="main"
-              onClick={() => handleCheckNicknameClick}
+              onClick={handleCheckNicknameClick}
             >
               중복확인
             </Button>
@@ -98,7 +97,7 @@ const SignupForm = () => {
             <label>비밀번호</label>
             <input
               type="password"
-              placeholder="비밀번호를 입력하세요"
+              placeholder="소문자+숫자 (8자 이상)"
               value={password}
               onChange={handleChangePassword}
               required

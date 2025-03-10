@@ -17,9 +17,8 @@ const useCheckNickname = () => {
 
   const handleCheckNickname = async (nickname: string) => {
     if (!nickname) {
-      setNicknameCheckError(null);
+      setNicknameCheckError("닉네임을 입력하세요.");
       setNicknameCheckSuccess(null);
-
       return;
     }
 
@@ -42,16 +41,17 @@ const useCheckNickname = () => {
         setIsNicknameAvailable(false);
       }
     } catch (error) {
+      console.log("닉네임 중복 확인 중 오류 발생:", error);
+
       setNicknameCheckSuccess(
         error instanceof Error
           ? error.message
-          : "회원가입 중 오류가 발생했습니다."
+          : "닉네임 중복확인 중 오류가 발생했습니다."
       );
 
       setIsNicknameAvailable(false);
     }
   };
-
   return {
     isNicknameAvailable,
     nicknameCheckError,

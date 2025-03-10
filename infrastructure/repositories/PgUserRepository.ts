@@ -31,6 +31,17 @@ export class PgUserRepository implements UserRepository {
     }
   }
 
+  // 닉네임으로 유저 찾기
+  async findByNickname(nickname: string): Promise<User | null> {
+    try {
+      return await prisma.user.findUnique({
+        where: { nickname },
+      });
+    } finally {
+      await prisma.$disconnect();
+    }
+  }
+
   // id로 내 정보 찾기
   async getUserById(id: string): Promise<User | null> {
     try {
