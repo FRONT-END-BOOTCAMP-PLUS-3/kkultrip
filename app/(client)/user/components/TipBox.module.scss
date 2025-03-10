@@ -5,6 +5,12 @@
   gap: 1rem;
   padding: 1rem;
   border-bottom: 1px solid var(--disabled-color);
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+
+  &:hover {
+    background-color: rgba(253, 187, 9, 0.05); /* 마우스 올리면 배경색 변경 */
+  }
 
   .srOnly {
     position: absolute;
@@ -57,9 +63,11 @@
 
       .editButton {
         color: var(--grey-2-color);
+        cursor: pointer;
       }
       .deleteButton {
         color: var(--red-1-color);
+        cursor: pointer;
       }
     }
   }

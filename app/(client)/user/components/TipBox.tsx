@@ -36,11 +36,15 @@ const TipBox = ({ tip }: TipBoxProps) => {
     },
   ];
 
-  const handleTipEditButtonClick = () => {
+  const handleTipEditButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation(); // 부모 div 클릭 이벤트 방지
     router.push(`/spots/${tip.spotId}/tips/${tip.id}/edit`);
   };
 
-  const handleTipDeleteButtonClick = async () => {
+  const handleTipDeleteButtonClick = async (
+    e: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    e.stopPropagation(); // 부모 div의 클릭 이벤트 방지
     const confirmDelete = confirm("꿀팁을 삭제하시겠습니까?");
     if (!confirmDelete) return;
 
@@ -60,8 +64,12 @@ const TipBox = ({ tip }: TipBoxProps) => {
     }
   };
 
+  const handleTipClick = () => {
+    router.push(`/spots/${tip.spotId}/tips#${tip.id}`);
+  };
+
   return (
-    <div className={styles.tipBoxContainer}>
+    <div className={styles.tipBoxContainer} onClick={handleTipClick}>
       <h3 className={styles.srOnly}>{tip.spotName} 꿀팁</h3>
       <div className={styles.tipBoxWrapper}>
         <figure className={styles.spotBox}>
