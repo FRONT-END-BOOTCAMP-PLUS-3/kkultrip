@@ -11,7 +11,7 @@ export class PgTicketRepository implements TicketRepository {
         },
       });
     } catch (error) {
-      console.error("❌ getTicketBySpotId 오류 발생:", error);
+      console.log("❌ getTicketBySpotId 오류 발생:", error);
       throw new Error("해당 명소의 티켓 정보를 가져오는 데 실패했습니다.");
     } finally {
       await prisma.$disconnect();
@@ -28,7 +28,7 @@ export class PgTicketRepository implements TicketRepository {
         },
       });
     } catch (error) {
-      console.error("❌ createTicket 오류 발생:", error);
+      console.log("❌ createTicket 오류 발생:", error);
       throw new Error("티켓 생성 중 오류가 발생했습니다.");
     } finally {
       await prisma.$disconnect();
@@ -45,7 +45,7 @@ export class PgTicketRepository implements TicketRepository {
         data: ticket,
       });
     } catch (error) {
-      console.error("❌ updateTicket 오류 발생:", error);
+      console.log("❌ updateTicket 오류 발생:", error);
       throw new Error("티켓 업데이트 중 오류가 발생했습니다.");
     } finally {
       await prisma.$disconnect();
@@ -58,7 +58,7 @@ export class PgTicketRepository implements TicketRepository {
         where: { id },
       });
     } catch (error) {
-      console.error("❌ deleteTicket 오류 발생:", error);
+      console.log("❌ deleteTicket 오류 발생:", error);
       throw new Error("티켓 삭제 중 오류가 발생했습니다.");
     } finally {
       await prisma.$disconnect();

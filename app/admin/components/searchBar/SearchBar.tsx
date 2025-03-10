@@ -31,7 +31,7 @@ const SearchBar = ({ onSearch }: SearchBarProps) => {
         onChange={(e) => setCategory(e.target.value)}
         className={styles.select}
       >
-        <option value="user">유저 이름</option>
+        <option value="user">작성자 이름</option>
         <option value="spot">명소 이름</option>
       </select>
       <button onClick={handleSearch} className={styles.button}>

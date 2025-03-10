@@ -16,7 +16,7 @@ export const getGeocode = async (
       return null;
     }
   } catch (error) {
-    console.error("지오코딩 API 오류:", error);
+    console.log("지오코딩 API 오류:", error);
     return null;
   }
 };

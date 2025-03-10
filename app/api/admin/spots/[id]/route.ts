@@ -42,7 +42,7 @@ export async function GET(
 
     return NextResponse.json(spot, { status: 200 });
   } catch (error) {
-    console.error("Error fetching spot:", error);
+    console.log("Error fetching spot:", error);
     return NextResponse.json(
       { error: "Failed to fetch spot" },
       { status: 500 }
@@ -169,7 +169,7 @@ export async function PATCH(req: Request) {
 
     return NextResponse.json(updatedSpot, { status: 200 });
   } catch (error) {
-    console.error("Error updating spot:", error);
+    console.log("Error updating spot:", error);
     return NextResponse.json(
       { error: "Failed to update spot" },
       { status: 500 }
@@ -250,7 +250,7 @@ export async function DELETE(
 
     return NextResponse.json(deletedSpot, { status: 200 });
   } catch (error) {
-    console.error("Error deleting spot:", error);
+    console.log("Error deleting spot:", error);
     return NextResponse.json(
       { error: "Failed to delete spot" },
       { status: 500 }

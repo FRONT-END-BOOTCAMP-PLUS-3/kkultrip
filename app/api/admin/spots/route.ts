@@ -23,7 +23,7 @@ export async function GET(req: Request) {
     const spots = await getSpotListUseCase.execute(page); // 페이지 번호를 전달
     return NextResponse.json(spots, { status: 200 });
   } catch (error) {
-    console.error("Error fetching spots:", error);
+    console.log("Error fetching spots:", error);
 
     return NextResponse.json(
       { error: "Failed to fetch spots" },
@@ -105,7 +105,7 @@ export async function POST(req: Request) {
       { status: 201 }
     );
   } catch (error) {
-    console.error("Spot 생성 오류:", error);
+    console.log("Spot 생성 오류:", error);
     return NextResponse.json(
       { error: "서버 오류가 발생했습니다." },
       { status: 500 }

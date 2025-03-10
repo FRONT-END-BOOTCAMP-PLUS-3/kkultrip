@@ -3,6 +3,7 @@ import { GetTipListUseCase } from "@/application/usecases/admin/tip/GetTipListUs
 import { PgTipRepository } from "@/infrastructure/repositories/PgTipRepository";
 import PgSpotRepository from "@/infrastructure/repositories/PgSpotRepository";
 import DeleteTipUsecase from "@/application/usecases/spot/tips/DeleteTipUsecase";
+import { PgUserRepository } from "@/infrastructure/repositories/PgUserRepository";
 
 export async function GET(req: Request) {
   try {
@@ -11,13 +12,18 @@ export async function GET(req: Request) {
 
     const tipRepository = new PgTipRepository();
     const spotRepository = new PgSpotRepository();
-    const getTipUseCase = new GetTipListUseCase(tipRepository, spotRepository);
+    const userRepository = new PgUserRepository();
+    const getTipUseCase = new GetTipListUseCase(
+      tipRepository,
+      spotRepository,
+      userRepository
+    );
 
     const tips = await getTipUseCase.execute(page);
 
     return NextResponse.json(tips, { status: 200 });
   } catch (error) {
-    console.error("Error fetching tips:", error);
+    console.log("Error fetching tips:", error);
     return NextResponse.json(
       { error: "Failed to fetch tips" },
       { status: 500 }
@@ -43,7 +49,7 @@ export async function DELETE(request: Request) {
       { status: 200 }
     );
   } catch (error) {
-    console.error("Error deleting tip:", error);
+    console.log("Error deleting tip:", error);
 
     return NextResponse.json(
       { error: "Failed to delete tip" },

@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 
 interface ImageContainerProps {
-  images: PrismaImage[];
+  images: (PrismaImage & { nickname: string; spotName: string })[];
 }
 
 const ImageContainer: React.FC<ImageContainerProps> = ({ images }) => {
@@ -34,6 +34,12 @@ const ImageContainer: React.FC<ImageContainerProps> = ({ images }) => {
             />
           </div>
           <div className={styles.imageDetails}>
+            <p>
+              <strong>작성자:</strong> {image.nickname} {/* 작성자 이름 */}
+            </p>
+            <p>
+              <strong>명소 이름:</strong> {image.spotName} {/* 명소 이름 */}
+            </p>
             <p>
               <strong>꿀팁 ID:</strong> {image.tipId}
             </p>

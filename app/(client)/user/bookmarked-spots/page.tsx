@@ -18,7 +18,7 @@ const Spots = () => {
 
         setBookmarkedSpotList(data.bookmarkedSpotList);
       } catch (error) {
-        console.error("Error fetching reacted tips:", error);
+        console.log("Error fetching reacted tips:", error);
       }
     };
 

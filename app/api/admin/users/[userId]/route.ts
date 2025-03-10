@@ -25,7 +25,7 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json(user, { status: 200 });
   } catch (error) {
-    console.error("Error fetching user:", error);
+    console.log("Error fetching user:", error);
     return NextResponse.json(
       { error: "Failed to fetch user" },
       { status: 500 }
@@ -60,7 +60,7 @@ export async function PATCH(req: NextRequest) {
       { status: 200 }
     );
   } catch (error) {
-    console.error("Error updating user role:", error);
+    console.log("Error updating user role:", error);
     return NextResponse.json(
       { error: "Failed to update user role" },
       { status: 500 }
