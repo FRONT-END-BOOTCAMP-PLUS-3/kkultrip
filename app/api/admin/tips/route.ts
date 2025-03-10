@@ -23,7 +23,7 @@ export async function GET(req: Request) {
 
     return NextResponse.json(tips, { status: 200 });
   } catch (error) {
-    console.error("Error fetching tips:", error);
+    console.log("Error fetching tips:", error);
     return NextResponse.json(
       { error: "Failed to fetch tips" },
       { status: 500 }
@@ -49,7 +49,7 @@ export async function DELETE(request: Request) {
       { status: 200 }
     );
   } catch (error) {
-    console.error("Error deleting tip:", error);
+    console.log("Error deleting tip:", error);
 
     return NextResponse.json(
       { error: "Failed to delete tip" },

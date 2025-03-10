@@ -54,7 +54,7 @@ export default class GetTipByUserNameUseCase {
 
       return tipsWithSpotInfo;
     } catch (error) {
-      console.error("❌ GetTipByUserNameUseCase 오류 발생:", error);
+      console.log("❌ GetTipByUserNameUseCase 오류 발생:", error);
       throw new Error("사용자 팁 데이터를 가져오는 데 실패했습니다.");
     }
   }

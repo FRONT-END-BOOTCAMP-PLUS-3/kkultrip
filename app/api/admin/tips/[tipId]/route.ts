@@ -45,7 +45,7 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json({ tip, reaction }, { status: 200 });
   } catch (error) {
-    console.error("❌ GET 요청 처리 중 오류 발생:", error);
+    console.log("❌ GET 요청 처리 중 오류 발생:", error);
     return NextResponse.json(
       { error: "서버 오류가 발생했습니다." },
       { status: 500 }

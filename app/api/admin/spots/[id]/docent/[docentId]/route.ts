@@ -21,7 +21,7 @@ export async function DELETE(req: Request) {
 
     return NextResponse.json({ message: "Docent deleted" }, { status: 200 });
   } catch (error) {
-    console.error("Error deleting docent:", error);
+    console.log("Error deleting docent:", error);
     return NextResponse.json(
       { error: "Failed to delete docent" },
       { status: 500 }

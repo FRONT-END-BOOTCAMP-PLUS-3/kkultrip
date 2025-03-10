@@ -29,6 +29,7 @@ const AdminTipsPageContent = () => {
         const data = await res.json();
         setTips(data.tips);
         setTotalPages(data.totalPages);
+        console.log(data);
       } catch (error) {
         console.log(error);
       }

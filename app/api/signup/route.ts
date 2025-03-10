@@ -54,9 +54,9 @@ export async function POST(req: NextRequest) {
     );
   } catch (error: unknown) {
     if (error instanceof Error) {
-      console.error("회원가입 실패:", error.message);
+      console.log("회원가입 실패:", error.message);
     } else {
-      console.error("회원가입 실패:", error);
+      console.log("회원가입 실패:", error);
     }
     return NextResponse.json(
       { message: (error as Error).message || "서버 오류가 발생했습니다." },

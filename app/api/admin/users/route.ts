@@ -15,7 +15,7 @@ export async function GET(req: Request) {
 
     return NextResponse.json(usersWithPagination, { status: 200 });
   } catch (error) {
-    console.error("Error fetching users:", error);
+    console.log("Error fetching users:", error);
     return NextResponse.json(
       { error: "Failed to fetch users" },
       { status: 500 }

@@ -22,7 +22,7 @@ export class PgTipRepository implements TipRepository {
         },
       });
     } catch (error) {
-      console.error("❌ createTip 오류 발생:", error);
+      console.log("❌ createTip 오류 발생:", error);
       throw new Error("Tip 생성 중 오류가 발생했습니다.");
     } finally {
       await prisma.$disconnect();
@@ -35,7 +35,7 @@ export class PgTipRepository implements TipRepository {
         where: { id: tipId },
       });
     } catch (error) {
-      console.error("❌ getTipById 오류 발생:", error);
+      console.log("❌ getTipById 오류 발생:", error);
       throw new Error("해당 Tip을 가져오는 데 실패했습니다.");
     } finally {
       await prisma.$disconnect();
@@ -59,7 +59,7 @@ export class PgTipRepository implements TipRepository {
         },
       });
     } catch (error) {
-      console.error("❌ updateTip 오류 발생:", error);
+      console.log("❌ updateTip 오류 발생:", error);
       throw new Error("Tip 업데이트 중 오류가 발생했습니다.");
     } finally {
       await prisma.$disconnect();
@@ -70,7 +70,7 @@ export class PgTipRepository implements TipRepository {
     try {
       return await prisma.tip.findMany();
     } catch (error) {
-      console.error("❌ getAllTips 오류 발생:", error);
+      console.log("❌ getAllTips 오류 발생:", error);
       throw new Error("모든 Tip을 가져오는 데 실패했습니다.");
     } finally {
       await prisma.$disconnect();
@@ -98,7 +98,7 @@ export class PgTipRepository implements TipRepository {
         (a, b) => Number(b[orderBy]) - Number(a[orderBy])
       );
     } catch (error) {
-      console.error("❌ getTipsBySpotId 오류 발생:", error);
+      console.log("❌ getTipsBySpotId 오류 발생:", error);
       throw new Error("명소의 Tip을 가져오는 데 실패했습니다.");
     } finally {
       await prisma.$disconnect();
@@ -109,7 +109,7 @@ export class PgTipRepository implements TipRepository {
     try {
       return await prisma.tip.count({ where: { spotId } });
     } catch (error) {
-      console.error("❌ countBySpot 오류 발생:", error);
+      console.log("❌ countBySpot 오류 발생:", error);
       throw new Error("해당 명소의 Tip 개수를 가져오는 데 실패했습니다.");
     } finally {
       await prisma.$disconnect();
@@ -123,7 +123,7 @@ export class PgTipRepository implements TipRepository {
         data: { reportCnt: { increment: 1 } },
       });
     } catch (error) {
-      console.error("❌ updateTipReportCount 오류 발생:", error);
+      console.log("❌ updateTipReportCount 오류 발생:", error);
       throw new Error("Tip 신고 수 업데이트 중 오류가 발생했습니다.");
     } finally {
       await prisma.$disconnect();
@@ -136,7 +136,7 @@ export class PgTipRepository implements TipRepository {
         where: { id: tipId },
       });
     } catch (error) {
-      console.error("❌ deleteTip 오류 발생:", error);
+      console.log("❌ deleteTip 오류 발생:", error);
       throw new Error("Tip 삭제 중 오류가 발생했습니다.");
     } finally {
       await prisma.$disconnect();
@@ -149,7 +149,7 @@ export class PgTipRepository implements TipRepository {
         where: { userId },
       });
     } catch (error) {
-      console.error("❌ getTipsByUserId 오류 발생:", error);
+      console.log("❌ getTipsByUserId 오류 발생:", error);
       throw new Error("해당 유저의 Tip을 가져오는 데 실패했습니다.");
     } finally {
       await prisma.$disconnect();

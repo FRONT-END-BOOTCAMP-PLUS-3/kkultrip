@@ -25,7 +25,7 @@ export async function DELETE(
 
     return NextResponse.json({ message: "Ticket deleted" }, { status: 200 });
   } catch (error) {
-    console.error("Error deleting ticket:", error);
+    console.log("Error deleting ticket:", error);
     return NextResponse.json(
       { error: "Failed to delete ticket" },
       { status: 500 }

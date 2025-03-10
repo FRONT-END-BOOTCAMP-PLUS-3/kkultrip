@@ -28,7 +28,7 @@ export const GetUserInfoByJWT = async (token: string) => {
     const isAdmin = payload.isAdmin;
     return { userId, isAdmin };
   } catch (error) {
-    console.error("Invalid token:", error);
+    console.log("Invalid token:", error);
     return null;
   }
 };

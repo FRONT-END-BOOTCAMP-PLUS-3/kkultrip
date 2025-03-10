@@ -61,7 +61,7 @@ export default class GetTipBySpotNameUseCase {
 
       return allTips;
     } catch (error) {
-      console.error("❌ GetTipBySpotNameUseCase 오류 발생:", error);
+      console.log("❌ GetTipBySpotNameUseCase 오류 발생:", error);
       throw new Error("명소 팁 데이터를 가져오는 데 실패했습니다.");
     }
   }

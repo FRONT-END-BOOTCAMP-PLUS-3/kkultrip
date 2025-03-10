@@ -44,7 +44,7 @@ export async function GET(req: Request) {
     // 유저 이름에 해당하는 이미지들 반환
     return NextResponse.json({ images }, { status: 200 });
   } catch (error) {
-    console.error(error);
+    console.log(error);
     return NextResponse.json(
       { error: "Something went wrong" },
       { status: 500 }

@@ -37,7 +37,7 @@ const NaverMap = ({
       script.src = `https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=${process.env.NEXT_PUBLIC_NAVER_MAP_CLIENT_ID}`;
       script.async = true;
       script.onload = () => setIsMapLoaded(true);
-      script.onerror = () => console.error("네이버 지도 API 로드 실패");
+      script.onerror = () => console.log("네이버 지도 API 로드 실패");
       document.head.appendChild(script);
     } else {
       setIsMapLoaded(true);

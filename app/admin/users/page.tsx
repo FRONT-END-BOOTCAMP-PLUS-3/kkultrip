@@ -7,6 +7,7 @@ import Header from "../components/header/Header";
 import styles from "./AdminUsersPage.module.scss";
 import { GetUserListDto } from "@/application/usecases/admin/user/dto/GetUserListDto";
 import UserTable from "../components/userTable/UserTable";
+import SearchBar from "../components/searchBar/SearchBar";
 
 const AdminUsersPage = () => {
   const router = useRouter();
@@ -27,9 +28,10 @@ const AdminUsersPage = () => {
         }
         const data = await res.json();
         setUsers(data.users);
+
         setTotalPages(data.totalPages);
       } catch (error) {
-        console.error(error);
+        console.log(error);
       }
     };
 
@@ -44,11 +46,33 @@ const AdminUsersPage = () => {
     router.push(`/admin/users?page=${page}`);
   };
 
+  const handleSearch = async (query: string, category: string) => {
+    try {
+      let url = "";
+
+      url = `/api/admin/users/user/search?userName=${encodeURIComponent(
+        query
+      )}`;
+
+      const res = await fetch(url);
+      if (!res.ok) {
+        throw new Error("Failed to fetch search results");
+      }
+      const data = await res.json();
+      // 데이터를 배열 형태로 처리
+      setUsers(data.usera);
+    } catch (error) {
+      console.log(error);
+      alert("검색 결과가 없습니다.");
+    }
+  };
+
   return (
     <div className={styles.container}>
       <SideBar />
       <main className={styles.main}>
         <Header title="유저 관리" />
+        <SearchBar onSearch={handleSearch} />
         <div className={styles.contentsContainer}>
           <UserTable users={users} />
           <div className={styles.pagination}>

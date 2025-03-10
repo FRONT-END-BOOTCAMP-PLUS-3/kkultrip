@@ -8,7 +8,7 @@ export default class PgReactionRepository implements ReactionRepository {
     try {
       return await prisma.reaction.findMany({ where: { tipId } });
     } catch (error) {
-      console.error("❌ getReactionsByTipId 오류 발생:", error);
+      console.log("❌ getReactionsByTipId 오류 발생:", error);
       throw new Error("해당 Tip의 반응 정보를 가져오는 데 실패했습니다.");
     } finally {
       await prisma.$disconnect();
@@ -21,7 +21,7 @@ export default class PgReactionRepository implements ReactionRepository {
         where: { tipId_userId: { tipId, userId } },
       });
     } catch (error) {
-      console.error("❌ getReaction 오류 발생:", error);
+      console.log("❌ getReaction 오류 발생:", error);
       throw new Error("특정 유저의 반응 정보를 가져오는 데 실패했습니다.");
     } finally {
       await prisma.$disconnect();
@@ -43,7 +43,7 @@ export default class PgReactionRepository implements ReactionRepository {
         type: createdReaction.type,
       };
     } catch (error) {
-      console.error("❌ createReaction 오류 발생:", error);
+      console.log("❌ createReaction 오류 발생:", error);
       throw new Error("반응 생성 중 오류가 발생했습니다.");
     } finally {
       await prisma.$disconnect();
@@ -64,7 +64,7 @@ export default class PgReactionRepository implements ReactionRepository {
         },
       });
     } catch (error) {
-      console.error("Error updating reaction:", error);
+      console.log("Error updating reaction:", error);
       throw error;
     }
   }
@@ -80,7 +80,7 @@ export default class PgReactionRepository implements ReactionRepository {
         },
       });
     } catch (error) {
-      console.error("Error deleting reaction:", error);
+      console.log("Error deleting reaction:", error);
       throw error;
     }
   }
