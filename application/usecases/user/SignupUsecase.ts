@@ -6,11 +6,10 @@ export default class SignupUsecase {
   constructor(private repository: UserRepository) {}
 
   async execute(data: CreateUserDto): Promise<void> {
-    const { img, nickname, email, password } = data;
+    const { nickname, email, password } = data;
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const user: CreateUserDto = {
-      img: img,
       nickname: nickname,
       email: email,
       password: hashedPassword,
@@ -21,6 +20,7 @@ export default class SignupUsecase {
       id: "",
       isAdmin: false,
       kakaoId: 0,
+      img: "/images/users/default.png",
       createdAt: new Date(),
       updatedAt: new Date(),
     });
