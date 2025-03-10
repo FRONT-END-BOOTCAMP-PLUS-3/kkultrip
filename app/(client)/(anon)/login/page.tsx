@@ -10,7 +10,7 @@ import Image from "next/image";
 
 const LoginPage = () => {
   const router = useRouter();
-  const { setImg, setNickname, setIsLoggedIn } = useUserStore();
+  const { setImg, setNickname, setIsLoggedIn, setId } = useUserStore();
   const userLat = useUserStore((state) => state.userLat);
   const userLon = useUserStore((state) => state.userLon);
 
@@ -52,12 +52,11 @@ const LoginPage = () => {
       }
 
       const responseData = await response.json();
-
       // 로그인 성공 시 zustand에 로그인 상태, img, 닉네임 저장
       setIsLoggedIn(true);
       setImg(responseData.img);
       setNickname(responseData.nickname);
-
+      setId(responseData.userId);
       // 로그인을 했을 때 관리자면 관리자페이지로, 아니면 로그인 진입 전 페이지로 이동
       if (responseData.isAdmin) {
         router.push("/admin/spots");

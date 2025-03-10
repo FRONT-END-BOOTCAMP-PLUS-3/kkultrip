@@ -14,7 +14,7 @@ const InfoPage = async (props: { params: Promise<{ spotId: string }> }) => {
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/spots/${params.spotId}/info`
     );
     const spotData: SpotInfoDto = await data.json();
-    console.log(spotData);
+    
 
     return (
         <div className={styles.infoContainer}>

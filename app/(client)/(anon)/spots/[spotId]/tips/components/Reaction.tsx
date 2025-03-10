@@ -6,10 +6,11 @@ import { useEffect, useRef, useState, useMemo } from "react";
 import Emotion from "./Emotion";
 import styles from "./Reaction.module.scss";
 import Report from "./Report";
+import useUserStore from "@/store/useUserStore";
 
 const Reaction = ({
     tipReaction,
-    userId, // 접속한 유저 아이디
+    userId, // 작성자 아이디
     tipId,
 }: {
     tipReaction: TipReactionDto[];
@@ -21,13 +22,13 @@ const Reaction = ({
     const [tipReactions, setTipReactions] =
         useState<TipReactionDto[]>(tipReaction);
     const modalRef = useRef<HTMLDivElement | null>(null);
-
-    const accessUserId = "7379a017-90cb-40da-9635-eb7eff4d8e83";
+    const user = useUserStore();
+    const accessUserId = user.id;
 
     const userReactionType = useMemo(() => {
         return tipReactions.find((reaction) => reaction.userId === accessUserId)
             ?.type;
-    }, [tipReactions]);
+    }, [tipReactions, accessUserId]);
 
     const handleButtonClick = () => {
         setIsModalOpen(!isModalOpen);
