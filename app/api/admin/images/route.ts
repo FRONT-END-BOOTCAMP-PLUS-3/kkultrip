@@ -1,4 +1,4 @@
-import { GetImageListUseCase } from "@/application/usecases/image/GetImageListUseCase";
+import { GetImageListUseCase } from "@/application/usecases/admin/image/GetImageListUseCase";
 import { PgImageRepository } from "@/infrastructure/repositories/PgImageRepository";
 import { NextResponse } from "next/server";
 

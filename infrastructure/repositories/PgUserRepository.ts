@@ -64,12 +64,25 @@ export class PgUserRepository implements UserRepository {
       await prisma.$disconnect();
     }
   }
+
   // 회원탈퇴
   async deleteUser(id: string): Promise<void> {
     try {
       await prisma.user.delete({
         where: { id },
       });
+    } finally {
+      await prisma.$disconnect();
+    }
+  }
+
+  // 사용자 이름으로 정보 찾기
+  async getUserByName(nickname: string): Promise<User | null> {
+    try {
+      const user = await prisma.user.findUnique({
+        where: { nickname },
+      });
+      return user ?? null;
     } finally {
       await prisma.$disconnect();
     }
