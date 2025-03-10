@@ -9,6 +9,7 @@ type ButtonProps = {
   type?: "button" | "submit" | "reset";
   isLong: boolean;
   color: ButtonColor;
+  disabled?: boolean;
   onClick?: (e: React.MouseEvent) => void;
 };
 
@@ -18,13 +19,15 @@ const Button = ({
   color,
   onClick,
   type = "button",
+  disabled = false,
 }: ButtonProps) => {
   return (
     <button
       type={type}
       className={`${styles.button} ${isLong ? styles.long : styles.short} ${
         styles[color]
-      }`}
+      } ${disabled ? styles.disabled : ""}`}
+      disabled={disabled}
       onClick={onClick}
     >
       {children}
