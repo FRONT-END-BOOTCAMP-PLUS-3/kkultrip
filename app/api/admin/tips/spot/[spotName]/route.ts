@@ -37,7 +37,7 @@ export async function GET(req: Request) {
 
     return NextResponse.json({ tips }, { status: 200 });
   } catch (error) {
-    console.error("❌ Error in GET request:", error);
+    console.log("❌ Error in GET request:", error);
 
     return NextResponse.json(
       { error: "Something went wrong" },
