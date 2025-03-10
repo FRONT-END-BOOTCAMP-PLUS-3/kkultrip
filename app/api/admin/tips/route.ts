@@ -3,6 +3,7 @@ import { GetTipListUseCase } from "@/application/usecases/admin/tip/GetTipListUs
 import { PgTipRepository } from "@/infrastructure/repositories/PgTipRepository";
 import PgSpotRepository from "@/infrastructure/repositories/PgSpotRepository";
 import DeleteTipUsecase from "@/application/usecases/spot/tips/DeleteTipUsecase";
+import { PgUserRepository } from "@/infrastructure/repositories/PgUserRepository";
 
 export async function GET(req: Request) {
   try {
@@ -11,7 +12,12 @@ export async function GET(req: Request) {
 
     const tipRepository = new PgTipRepository();
     const spotRepository = new PgSpotRepository();
-    const getTipUseCase = new GetTipListUseCase(tipRepository, spotRepository);
+    const userRepository = new PgUserRepository();
+    const getTipUseCase = new GetTipListUseCase(
+      tipRepository,
+      spotRepository,
+      userRepository
+    );
 
     const tips = await getTipUseCase.execute(page);
 

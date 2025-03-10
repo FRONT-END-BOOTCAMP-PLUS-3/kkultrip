@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import GetTipBySpotNameUseCase from "@/application/usecases/admin/tip/GetTipBySpotNameUseCase";
 import { PgTipRepository } from "@/infrastructure/repositories/PgTipRepository";
 import PgSpotRepository from "@/infrastructure/repositories/PgSpotRepository";
+import { PgUserRepository } from "@/infrastructure/repositories/PgUserRepository";
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
@@ -17,10 +18,12 @@ export async function GET(req: Request) {
   try {
     const tipRepository = new PgTipRepository();
     const spotRepository = new PgSpotRepository();
+    const userRepository = new PgUserRepository();
 
     const getTipBySpotNameUseCase = new GetTipBySpotNameUseCase(
       tipRepository,
-      spotRepository
+      spotRepository,
+      userRepository
     );
 
     const tips = await getTipBySpotNameUseCase.execute(spotName, "createdAt");

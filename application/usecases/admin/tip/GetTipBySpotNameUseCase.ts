@@ -1,17 +1,21 @@
 import { PgTipRepository } from "@/infrastructure/repositories/PgTipRepository";
 import PgSpotRepository from "@/infrastructure/repositories/PgSpotRepository";
 import { GetTipListDto } from "./dto/GetTipListDto";
+import { PgUserRepository } from "@/infrastructure/repositories/PgUserRepository";
 
 export default class GetTipBySpotNameUseCase {
   private tipRepository: PgTipRepository;
   private spotRepository: PgSpotRepository;
+  private userRepository: PgUserRepository;
 
   constructor(
     tipRepository: PgTipRepository,
-    spotRepository: PgSpotRepository
+    spotRepository: PgSpotRepository,
+    userRepository: PgUserRepository
   ) {
     this.tipRepository = tipRepository;
     this.spotRepository = spotRepository;
+    this.userRepository = userRepository;
   }
 
   async execute(
@@ -30,20 +34,26 @@ export default class GetTipBySpotNameUseCase {
       const tipsPromises = spots.map(async (spot) => {
         const tips = await this.tipRepository.getTipsBySpotId(spot.id, orderBy);
 
-        return tips.map(
-          (tip): GetTipListDto => ({
-            id: tip.id,
-            spotId: tip.spotId,
-            spotName: spot.name, // spotName을 각 스팟에서 가져옵니다.
-            userId: tip.userId,
-            description: tip.description,
-            price: tip.price,
-            waitingTime: tip.waitingTime,
-            reportCnt: tip.reportCnt,
-            createdAt: tip.createdAt,
-            updatedAt: tip.updatedAt,
+        // 각 팁에 대해 유저 정보를 가져오는 부분을 수정
+        const tipsWithUserInfo = await Promise.all(
+          tips.map(async (tip) => {
+            const user = await this.userRepository.getUserById(tip.userId);
+            return {
+              id: tip.id,
+              spotId: tip.spotId,
+              spotName: spot.name, // spotName을 각 스팟에서 가져옵니다.
+              nickname: user!.nickname, // 유저의 nickname을 가져옵니다.
+              description: tip.description,
+              price: tip.price,
+              waitingTime: tip.waitingTime,
+              reportCnt: tip.reportCnt,
+              createdAt: tip.createdAt,
+              updatedAt: tip.updatedAt,
+            };
           })
         );
+
+        return tipsWithUserInfo;
       });
 
       // 모든 팁을 배열로 합침
