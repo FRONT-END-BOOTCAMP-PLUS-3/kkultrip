@@ -25,8 +25,8 @@ const AdminTipsPageContent = () => {
           throw new Error("Failed to fetch tips");
         }
         const data = await res.json();
-        setTips(data.tips); // 서버에서 받은 데이터를 state에 저장
-        setTotalPages(data.totalPages); // 총 페이지 수
+        setTips(data.tips);
+        setTotalPages(data.totalPages);
       } catch (error) {
         console.log(error);
       }
@@ -43,8 +43,22 @@ const AdminTipsPageContent = () => {
     router.push(`/admin/tips?page=${page}`);
   };
 
-  const handleSearch = async (query: string, category: string) => {
-    console.log("asd");
+  const handleSearch = async (query: string) => {
+    try {
+      const url = `/api/admin/tips/spot/search?spotName=${encodeURIComponent(
+        query
+      )}`;
+      const res = await fetch(url);
+      if (!res.ok) {
+        throw new Error("Failed to fetch search results");
+      }
+      const data = await res.json();
+
+      setTips(data.tips);
+    } catch (error) {
+      console.log(error);
+      alert("검색 결과가 없습니다.");
+    }
   };
 
   return (
