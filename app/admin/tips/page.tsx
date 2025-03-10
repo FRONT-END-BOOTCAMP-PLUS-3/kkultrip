@@ -68,8 +68,8 @@ const AdminTipsPageContent = () => {
       <SideBar />
       <main className={styles.main}>
         <Header title="꿀팁 관리" />
+        <SearchBar onSearch={handleSearch} />
         <div className={styles.contentsContainer}>
-          <SearchBar onSearch={handleSearch} />
           <TipTable tips={tips} />
           <div className={styles.pagination}>
             <button
