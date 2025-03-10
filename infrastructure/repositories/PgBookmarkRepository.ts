@@ -1,7 +1,5 @@
 import BookmarkRepository from "@/domain/repositories/BookmarkRepository";
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import { prisma } from "@/lib/prisma";
 
 export class PgBookmarkRepository implements BookmarkRepository {
     async countBySpot(spotId: number): Promise<number> {
