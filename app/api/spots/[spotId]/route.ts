@@ -21,10 +21,6 @@ export async function GET(
         ?.split(";")
         .find((c) => c.trim().startsWith("token="))
         ?.split("=")[1];
-
-    console.log("쿠키 헤더:", cookieHeader);
-    console.log("추출된 토큰:", token);
-
     let userId = "";
 
     if (token) {

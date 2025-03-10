@@ -52,7 +52,6 @@ const LoginPage = () => {
       }
 
       const responseData = await response.json();
-      console.log(responseData);
       // 로그인 성공 시 zustand에 로그인 상태, img, 닉네임 저장
       setIsLoggedIn(true);
       setImg(responseData.img);
