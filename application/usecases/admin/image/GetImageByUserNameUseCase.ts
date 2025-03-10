@@ -52,19 +52,14 @@ export class GetImageByUserNameUseCase {
             tipId: image.tipId,
             path: image.path,
             createdAt: image.createdAt,
-            nickname: user.nickname, // 작성자 이름 (닉네임)
-            spotName: spot.name, // 명소 이름
+            nickname: user.nickname,
+            spotName: spot.name,
           };
           images.push(imageDTO);
         }
       }
     }
 
-    if (images.length > 0) {
-      return images;
-    }
-
-    // 이미지가 없다면 null 반환
-    return null;
+    return images.length > 0 ? images : null;
   }
 }
