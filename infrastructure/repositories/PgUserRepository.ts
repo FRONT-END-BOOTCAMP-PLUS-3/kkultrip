@@ -19,7 +19,7 @@ export class PgUserRepository implements UserRepository {
     }
   }
 
-  // email로 내 정보 찾기
+  // email로 유저 찾기
   async findByEmail(email: string): Promise<User | null> {
     try {
       const user = await prisma.user.findUnique({

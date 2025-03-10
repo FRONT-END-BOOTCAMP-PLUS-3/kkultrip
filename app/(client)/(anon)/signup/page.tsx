@@ -6,6 +6,7 @@ import useCheckNickname from "./hooks/useCheckNickname";
 import useForm from "./hooks/useForm";
 import useSubmitSignup from "./hooks/useSubmitSignup";
 import styles from "./SignupPage.module.scss";
+import useCheckEmail from "./hooks/useCheckEmail";
 
 const SignupForm = () => {
   const {
@@ -28,17 +29,37 @@ const SignupForm = () => {
     resetNicknameCheckState,
   } = useCheckNickname();
 
+  const {
+    isEmailAvailable,
+    emailCheckError,
+    emailCheckSuccess,
+    handleCheckEmail,
+    resetEmailCheckState,
+  } = useCheckEmail();
+
   const { submitSignup, isLoading, submitError } = useSubmitSignup();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!isNicknameAvailable || !isFormValid) return;
+    if (!isNicknameAvailable || !isEmailAvailable || !isFormValid) return;
     await submitSignup(email, nickname, password);
+  };
+
+  const handleCheckEmailClick = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    handleCheckEmail(email);
   };
 
   const handleCheckNicknameClick = async (e: React.MouseEvent) => {
     e.preventDefault();
     handleCheckNickname(nickname);
+  };
+
+  const handleChangeEmailWithReset = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    handleChangeEmail(e);
+    resetEmailCheckState();
   };
 
   const handleChangeNicknameWithReset = (
@@ -53,16 +74,33 @@ const SignupForm = () => {
       <section className={styles.signupWrapper}>
         <h1>회원가입</h1>
         <form onSubmit={handleSubmit}>
-          <div className={styles.inputBox}>
-            <label>이메일</label>
-            <input
-              type="email"
-              placeholder="이메일을 입력하세요"
-              value={email}
-              onChange={handleChangeEmail}
-              required
-            />
-            {emailError && <p className={styles.error}>{emailError}</p>}
+          <div className={styles.duplicateTest}>
+            <div className={styles.inputBox}>
+              <label>이메일</label>
+              <input
+                type="email"
+                placeholder="이메일을 입력하세요"
+                value={email}
+                onChange={handleChangeEmailWithReset}
+                required
+              />
+              {emailError && <p className={styles.error}>{emailError}</p>}
+              {emailCheckError && (
+                <p className={styles.error}>{emailCheckError}</p>
+              )}
+              {emailCheckSuccess && (
+                <p className={styles.success}>사용 가능한 이메일입니다.</p>
+              )}
+            </div>
+            <Button
+              type="button"
+              isLong={false}
+              color={emailError || emailCheckError ? "disabled" : "main"}
+              disabled={!!emailError || !!emailCheckError}
+              onClick={handleCheckEmailClick}
+            >
+              중복확인
+            </Button>
           </div>
 
           <div className={styles.duplicateTest}>
@@ -129,6 +167,7 @@ const SignupForm = () => {
             </Button>
           </div>
           <div className={styles.linkBox}>
+            계정이 있으신가요?
             <Link href="/login">로그인페이지로 이동</Link>
           </div>
         </form>
