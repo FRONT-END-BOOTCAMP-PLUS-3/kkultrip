@@ -45,17 +45,25 @@ const AdminTipsPageContent = () => {
     router.push(`/admin/tips?page=${page}`);
   };
 
-  const handleSearch = async (query: string) => {
+  const handleSearch = async (query: string, category: string) => {
     try {
-      const url = `/api/admin/tips/spot/search?spotName=${encodeURIComponent(
-        query
-      )}`;
+      let url = "";
+
+      if (category === "spot") {
+        url = `/api/admin/tips/spot/search?spotName=${encodeURIComponent(
+          query
+        )}`;
+      } else if (category === "user") {
+        url = `/api/admin/tips/user/search?userName=${encodeURIComponent(
+          query
+        )}`;
+      }
+
       const res = await fetch(url);
       if (!res.ok) {
         throw new Error("Failed to fetch search results");
       }
       const data = await res.json();
-
       setTips(data.tips);
     } catch (error) {
       console.log(error);
