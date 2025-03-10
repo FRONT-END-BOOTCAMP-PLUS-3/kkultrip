@@ -21,14 +21,12 @@ export const GetUserInfoByJWT = async (token: string) => {
         algorithms: ["HS256"], // 🔥 생성할 때 사용한 알고리즘과 동일해야 함
       }
     );
-    console.log("=== Token 유효성 검사 ===");
-    console.log("Token:", payload);
-    console.log("==========================");
+
     const userId = payload.id;
     const isAdmin = payload.isAdmin;
     return { userId, isAdmin };
   } catch (error) {
-    console.log("Invalid token:", error);
+    console.error("Invalid token:", error);
     return null;
   }
 };

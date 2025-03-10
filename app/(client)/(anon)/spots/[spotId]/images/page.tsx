@@ -12,14 +12,12 @@ const ImagesPage = async (props: { params: Promise<{ spotId: string }> }) => {
     );
     const images: TipImageDto[] = await data.json();
 
-    console.log(images);
-
     if (images.length === 0) {
         return (
             <div className={styles.noData}>
                 <p>등록된 이미지가 없습니다.</p>
                 <p>첫 번째 이미지를 등록해볼까요?</p>
-                <Link href={`/spots/${spotId}/tips`} className={styles.link}>
+                <Link href={`/spots/${spotId}/tips/create`} className={styles.link}>
                     꿀팁 작성하기
                 </Link>
             </div>

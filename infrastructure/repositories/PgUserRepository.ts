@@ -1,7 +1,6 @@
 import UserRepository from "@/domain/repositories/UserRepository";
-import { PrismaClient, User } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import { prisma } from "@/lib/prisma";
+import { User } from "@prisma/client";
 
 export class PgUserRepository implements UserRepository {
   // 회원가입
@@ -9,7 +8,6 @@ export class PgUserRepository implements UserRepository {
     try {
       await prisma.user.create({
         data: {
-          img: user.img,
           nickname: user.nickname,
           email: user.email,
           password: user.password,
@@ -20,13 +18,24 @@ export class PgUserRepository implements UserRepository {
     }
   }
 
-  // email로 내 정보 찾기
+  // email로 유저 찾기
   async findByEmail(email: string): Promise<User | null> {
     try {
       const user = await prisma.user.findUnique({
         where: { email },
       });
       return user ?? null;
+    } finally {
+      await prisma.$disconnect();
+    }
+  }
+
+  // 닉네임으로 유저 찾기
+  async findByNickname(nickname: string): Promise<User | null> {
+    try {
+      return await prisma.user.findUnique({
+        where: { nickname },
+      });
     } finally {
       await prisma.$disconnect();
     }

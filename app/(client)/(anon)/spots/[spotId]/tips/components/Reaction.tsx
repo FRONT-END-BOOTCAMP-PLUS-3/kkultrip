@@ -6,82 +6,59 @@ import { useEffect, useRef, useState, useMemo } from "react";
 import Emotion from "./Emotion";
 import styles from "./Reaction.module.scss";
 import Report from "./Report";
+import useUserStore from "@/store/useUserStore";
 
 const Reaction = ({
-  tipReaction,
-  userId, // 접속한 유저 아이디
-  tipId,
+    tipReaction,
+    userId, // 작성자 아이디
+    tipId,
 }: {
   tipReaction: TipReactionDto[];
   userId: string;
   tipId: number;
 }) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [showMessage, setShowMessage] = useState(false);
-  const [tipReactions, setTipReactions] =
-    useState<TipReactionDto[]>(tipReaction);
-  const modalRef = useRef<HTMLDivElement | null>(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [showMessage, setShowMessage] = useState(false);
+    const [tipReactions, setTipReactions] =
+        useState<TipReactionDto[]>(tipReaction);
+    const modalRef = useRef<HTMLDivElement | null>(null);
+    const user = useUserStore();
+    const accessUserId = user.id;
 
-  const accessUserId = "7379a017-90cb-40da-9635-eb7eff4d8e83";
+    const userReactionType = useMemo(() => {
+        return tipReactions.find((reaction) => reaction.userId === accessUserId)
+            ?.type;
+    }, [tipReactions, accessUserId]);
 
-  const userReactionType = useMemo(() => {
-    return tipReactions.find((reaction) => reaction.userId === accessUserId)
-      ?.type;
-  }, [tipReactions]);
+    const handleButtonClick = () => {
+        setIsModalOpen(!isModalOpen);
+    };
+    
+    const handleClickOutside = (event: MouseEvent) => {
+        if (
+            modalRef.current &&
+            !modalRef.current.contains(event.target as Node)
+        ) {
+            setIsModalOpen(false);
+        }
+    };
 
-  const handleButtonClick = () => {
-    setIsModalOpen(!isModalOpen);
-  };
+    const handleReactionClick = async (type: number) => {
+        const button = document.getElementById(`reaction-button-${type}`);
+        if (button) {
+            button.classList.add(styles.shake);
+            setTimeout(() => {
+                button.classList.remove(styles.shake);
+                setIsModalOpen(false);
+            }, 1000);
+        }
 
-  const handleClickOutside = (event: MouseEvent) => {
-    if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
-      setIsModalOpen(false);
-    }
-  };
-
-  const handleReactionClick = async (type: number) => {
-    const button = document.getElementById(`reaction-button-${type}`);
-    if (button) {
-      button.classList.add(styles.shake);
-      setTimeout(() => {
-        button.classList.remove(styles.shake);
-        setIsModalOpen(false);
-      }, 1000);
-    }
-
-    if (userId === accessUserId) {
-      setShowMessage(true);
-      setTimeout(() => {
-        setShowMessage(false);
-      }, 1000);
-      return;
-    }
-
-    if (userReactionType) {
-      if (userReactionType === type) {
-        try {
-          const response = await fetch(`/api/tips/${tipId}/reactions`, {
-            method: "DELETE",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              userId: accessUserId,
-              type,
-            }),
-          });
-
-          if (response.ok) {
-            console.log("반응 삭제 성공");
-
-            setTipReactions((prevReactions) =>
-              prevReactions.filter((reaction) => reaction.type !== type)
-            );
-          } else {
-            console.log("반응 삭제 실패", Error);
-          }
-        } catch (error) {
-          console.log("Error while deleting reaction:", error);
+        if (userId === accessUserId) {
+            setShowMessage(true);
+            setTimeout(() => {
+                setShowMessage(false);
+            }, 1000);
+            return;
         }
       } else {
         try {

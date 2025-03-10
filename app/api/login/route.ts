@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
 
     const userRepository: UserRepository = new PgUserRepository();
     const usecase = new LoginUsecase(userRepository);
-    const { token, isAdmin, img, nickname } = await usecase.execute({
+    const { token, isAdmin, img, nickname, userId } = await usecase.execute({
       email,
       password,
     });
@@ -28,7 +28,7 @@ export async function POST(req: NextRequest) {
     }
 
     const response = NextResponse.json(
-      { message: "로그인 성공", isAdmin, img, nickname },
+      { message: "로그인 성공", isAdmin, img, nickname, userId },
       { status: 200 }
     );
 

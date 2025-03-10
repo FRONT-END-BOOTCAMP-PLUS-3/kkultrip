@@ -3,12 +3,24 @@ import Image from "next/image";
 import styles from "./SpotHeader.module.scss";
 import { SpotHeaderDto } from "@/application/usecases/spot/dto/SpotHeaderDto";
 import BookMark from "./BookMark";
+import { cookies } from "next/headers";
 
 const SpotHeader = async ({ spotId }: { spotId: string }) => {
-    const accessUserId = "7379a017-90cb-40da-9635-eb7eff4d8e83";
+    const cookieStore = await cookies();
+    const token = cookieStore.get("token")?.value;
+
     const data = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/spots/${spotId}?accessUserId=${accessUserId}`
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/spots/${spotId}`,
+        {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                Cookie: `token=${token}`, 
+            },
+            cache: "no-store",
+        }
     );
+
     const spotHeaderData: SpotHeaderDto | null = await data.json();
 
     if (!spotHeaderData) {
