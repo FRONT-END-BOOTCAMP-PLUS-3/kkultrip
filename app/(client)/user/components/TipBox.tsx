@@ -41,6 +41,9 @@ const TipBox = ({ tip }: TipBoxProps) => {
   };
 
   const handleTipDeleteButtonClick = async () => {
+    const confirmDelete = confirm("꿀팁을 삭제하시겠습니까?");
+    if (!confirmDelete) return;
+
     try {
       const response = await fetch(`/api/tips/${tip.id}`, {
         method: "DELETE",
