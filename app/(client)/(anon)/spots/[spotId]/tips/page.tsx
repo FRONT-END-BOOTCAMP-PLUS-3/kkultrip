@@ -17,6 +17,9 @@ const TipsPage = async (props: {
     const data = await fetch(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/spots/${spotId}/tips?sort=${sort}`
     );
+    if (data.status !== 200) {
+        return <div></div>;
+    }
     const tipList: SpotTipDto[] = await data.json();
 
     if (!tipList || tipList.length === 0) {
@@ -66,6 +69,7 @@ const TipsPage = async (props: {
                         tipReaction={tip.tipReaction}
                         userId={tip.userId}
                         tipId={tip.id}
+                        spotId={tip.spotId}
                     />
                 </div>
             ))}

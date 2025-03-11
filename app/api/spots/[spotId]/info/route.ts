@@ -29,7 +29,10 @@ export async function GET(
     );
 
     if (!spotInfo) {
-        return NextResponse.json({ error: "Spot not found" }, { status: 404 });
+        return NextResponse.json(
+            { error: "Spot not found" },
+            { status: 404 }
+        );
     }
 
     return NextResponse.json(spotInfo);

@@ -13,9 +13,10 @@ const InfoPage = async (props: { params: Promise<{ spotId: string }> }) => {
     const data = await fetch(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/spots/${params.spotId}/info`
     );
+    if (data.status !== 200) {
+        return <div></div>;
+    }
     const spotData: SpotInfoDto = await data.json();
-    
-
     return (
         <div className={styles.infoContainer}>
             {spotData.info && (
