@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import styles from "./Header.module.scss";
 import Image from "next/image";
@@ -9,6 +9,7 @@ import useUserStore from "@/store/useUserStore";
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement | null>(null);
 
   const router = useRouter();
   const pathname = usePathname();
@@ -17,16 +18,43 @@ const Header = () => {
   const userLat = useUserStore((state) => state.userLat);
   const userLon = useUserStore((state) => state.userLon);
 
+  // 외부 클릭 감지하여 드롭다운 닫기
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setMenuOpen(false);
+      }
+    };
+
+    if (menuOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [menuOpen]);
+
   // 헤더 타입 결정
-  let type: "logo" | "back" | "mypage" | null = "logo";
-  if (pathname === "/spots" || pathname === "/login") {
+  let type: "logo" | "back" | "mypage" | "backHome" | null = "logo";
+  if (pathname === "/spots") {
     type = "logo"; // 로고헤더
   } else if (pathname.startsWith("/user")) {
     type = "mypage"; // 마이페이지 헤더
   } else if (pathname === "/") {
     type = null;
+  } else if (pathname.includes("/create") || pathname.includes("/edit")) {
+    type = "back"; // 그냥 뒤로가기 버튼
+  } else if (
+    pathname.includes("/info") ||
+    pathname.includes("/docents") ||
+    pathname.includes("/tips") ||
+    pathname.includes("/images") ||
+    pathname === "/login"
+  ) {
+    type = "backHome"; // 맵으로 뒤로가기 버튼
   } else {
-    type = "back"; // 기본 헤더
+    type = "back";
   }
 
   if (type === null) {
@@ -120,11 +148,23 @@ const Header = () => {
       )}
 
       {/* 뒤로가기 헤더 */}
-      {type === "back" && (
+      {(type === "back" || type === "backHome") && (
         <div className={styles.wrapper}>
-          <div className={styles.back} onClick={() => router.back()}>
-            <FaArrowLeft />
-          </div>
+          {type === "back" ? (
+            <div className={styles.back} onClick={() => router.back()}>
+              <FaArrowLeft />
+            </div>
+          ) : (
+            <div
+              className={styles.back}
+              onClick={() =>
+                router.push(`/spots?lat=${userLat}&lon=${userLon}`)
+              }
+            >
+              <FaArrowLeft />
+            </div>
+          )}
+
           <div
             className={styles.menu}
             onClick={() => router.push(isLoggedIn ? "/user/my-tips" : "/login")}
@@ -136,7 +176,7 @@ const Header = () => {
 
       {/* 햄버거 메뉴 열렸을 때 */}
       {menuOpen && (
-        <div className={styles.dropdown}>
+        <div className={styles.dropdown} ref={menuRef}>
           <button onClick={handleLogout}>로그아웃</button>
           <button className={styles.danger} onClick={handleWithdraw}>
             탈퇴하기
