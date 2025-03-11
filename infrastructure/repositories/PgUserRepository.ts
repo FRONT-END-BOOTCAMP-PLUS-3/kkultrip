@@ -97,6 +97,7 @@ export class PgUserRepository implements UserRepository {
     }
   }
 
+  // 닉네임으로 유저 정보 찾기
   async getUserIdByNickname(nickname: string): Promise<{ id: string } | null> {
     try {
       const userId = await prisma.user.findUnique({
@@ -105,6 +106,23 @@ export class PgUserRepository implements UserRepository {
       });
 
       return userId ?? null;
+    } finally {
+      await prisma.$disconnect();
+    }
+  }
+
+  // 유저 정보 업데이트(닉네임, 프로필)
+  async updateUser(
+    id: string,
+    nickname: string,
+    img: string
+  ): Promise<User | null> {
+    try {
+      const updateUser = await prisma.user.update({
+        where: { id },
+        data: { nickname, img },
+      });
+      return updateUser;
     } finally {
       await prisma.$disconnect();
     }

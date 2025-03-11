@@ -1,16 +1,17 @@
 "use client";
 
 import Loading from "@/components/loading/Loading";
-import { useEffect, useState } from "react";
 import Image from "next/image";
-import styles from "./UserProfile.module.scss";
+import { useEffect, useState } from "react";
 import { FaCamera } from "react-icons/fa";
+import styles from "./UserProfile.module.scss";
 
 const UserProfile = () => {
   const [loading, setLoading] = useState(true);
   const [isEdit, setIsEdit] = useState(false);
   const [nickname, setNickname] = useState("");
   const [img, setImg] = useState("");
+  const [file, setFile] = useState<File | null>(null);
 
   useEffect(() => {
     const fetchUserInfo = async () => {
@@ -31,7 +32,25 @@ const UserProfile = () => {
     fetchUserInfo();
   }, []);
 
-  const handleEditToggle = () => {
+  const handleEditToggle = async () => {
+    if (isEdit) {
+      try {
+        const formData = new FormData();
+        formData.append("nickname", nickname);
+        if (file) formData.append("file", file);
+        const response = await fetch("/api/user", {
+          method: "PUT",
+          body: formData,
+        });
+
+        if (!response.ok) throw new Error("프로필 수정 실패");
+
+        const updatedData = await response.json();
+        setImg(updatedData.user.img);
+      } catch (error) {
+        console.error("프로필 수정 오류:", error);
+      }
+    }
     setIsEdit((prev) => !prev);
   };
 
@@ -39,6 +58,7 @@ const UserProfile = () => {
     const file = e.target.files?.[0];
     if (file) {
       setImg(URL.createObjectURL(file));
+      setFile(file);
     }
   };
 
