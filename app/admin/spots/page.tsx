@@ -64,8 +64,8 @@ const AdminSpotsPageContent = () => {
       <SideBar />
       <main className={styles.main}>
         <Header title="명소 관리" />
+        <SearchBar onSearch={handleSearch} options={["spot", "address"]} />
         <div className={styles.contentsContainer}>
-          <SearchBar onSearch={handleSearch} options={["spot", "address"]} />
           <SpotTable spots={spots} />
           <div className={styles.pagination}>
             <button
