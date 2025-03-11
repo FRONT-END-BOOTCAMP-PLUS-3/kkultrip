@@ -1,8 +1,7 @@
-body {
-  overflow: auto;
-}
-.container {
+.spotsContainer {
   max-width: 37.5rem;
+  height: 100vh;
+  overflow: auto;
   margin: 0 auto;
   padding: 2rem;
   background: white;
