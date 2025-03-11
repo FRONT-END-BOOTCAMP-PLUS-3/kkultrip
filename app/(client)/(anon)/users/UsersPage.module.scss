@@ -1,4 +1,12 @@
 .usersContainer {
+  overflow-y: auto;
+  scrollbar-width: none;
+  margin-bottom: 4.5rem;
+
+  .usersContainer::-webkit-scrollbar {
+    display: none;
+  }
+
   .profileWrapper {
     display: grid;
     grid-template-columns: 1.3fr 2fr;

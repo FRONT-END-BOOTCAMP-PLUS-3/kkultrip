@@ -2,7 +2,7 @@
   width: 100%;
   height: 100%;
   overflow: hidden;
-  padding: 0.625rem 1.25rem;
+  padding: 2rem 1.25rem 4.5rem;
 
   .userWrapper {
     display: flex;
@@ -14,5 +14,10 @@
     border-radius: 1.5625rem;
     background-color: white;
     overflow-y: auto;
+    scrollbar-width: none;
+  }
+
+  .userContainer::-webkit-scrollbar {
+    display: none;
   }
 }
