@@ -16,9 +16,11 @@ const UserLayout = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <div className={styles.userContainer}>
-      <UserProfile />
-      <Tab tabs={tabs} pathname={pathname} />
-      {children}
+      <div className={styles.userWrapper}>
+        <UserProfile />
+        <Tab tabs={tabs} pathname={pathname} />
+        {children}
+      </div>
     </div>
   );
 };

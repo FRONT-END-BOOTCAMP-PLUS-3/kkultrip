@@ -39,7 +39,7 @@ const Header = () => {
   let type: "logo" | "back" | "mypage" | "backHome" | null = "logo";
   if (pathname === "/spots") {
     type = "logo"; // 로고헤더
-  } else if (pathname.startsWith("/user")) {
+  } else if (pathname.startsWith("/user") && !pathname.startsWith("/users")) {
     type = "mypage"; // 마이페이지 헤더
   } else if (pathname === "/") {
     type = null;

@@ -22,7 +22,7 @@ const getFilteredSpots = async ({
   maxPrice?: number;
 }): Promise<GetSpotsDTO[]> => {
   const apiBaseUrl =
-    process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3010";
+    process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3000";
 
   try {
     let url = `${apiBaseUrl}/api/spots`;
