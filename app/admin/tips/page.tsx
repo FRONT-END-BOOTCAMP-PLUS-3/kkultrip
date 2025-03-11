@@ -77,7 +77,7 @@ const AdminTipsPageContent = () => {
       <SideBar />
       <main className={styles.main}>
         <Header title="꿀팁 관리" />
-        <SearchBar onSearch={handleSearch} />
+        <SearchBar onSearch={handleSearch} options={["user", "spot"]} />
         <div className={styles.contentsContainer}>
           <TipTable tips={tips} />
           <div className={styles.pagination}>

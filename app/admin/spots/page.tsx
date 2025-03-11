@@ -8,6 +8,7 @@ import Header from "../components/header/Header";
 import SpotTable from "../components/spotTable/SpotTable";
 import styles from "./AdminSpotsPage.module.scss";
 import { Spot } from "@prisma/client";
+import SearchBar from "../components/searchBar/SearchBar";
 
 const AdminSpotsPageContent = () => {
   const router = useRouter();
@@ -42,12 +43,29 @@ const AdminSpotsPageContent = () => {
     router.push(`/admin/spots?page=${page}`);
   };
 
+  const handleSearch = async (query: string) => {
+    try {
+      const url = `/api/admin/users/user/search?userName=${encodeURIComponent(
+        query
+      )}`;
+      const res = await fetch(url);
+      if (!res.ok) {
+        throw new Error("Failed to fetch search results");
+      }
+      const data = await res.json();
+      setUsers(data.users);
+    } catch (error) {
+      console.log(error);
+      alert("검색 결과가 없습니다.");
+    }
+  };
   return (
     <div className={styles.container}>
       <SideBar />
       <main className={styles.main}>
         <Header title="명소 관리" />
         <div className={styles.contentsContainer}>
+          <SearchBar onSearch={handleSearch} options={["spot", "address"]} />
           <SpotTable spots={spots} />
           <div className={styles.pagination}>
             <button

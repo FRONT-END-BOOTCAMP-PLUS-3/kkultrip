@@ -62,7 +62,7 @@ const AdminImagesPage = () => {
       <SideBar />
       <main className={styles.main}>
         <Header title="꿀팁 사진 관리" />
-        <SearchBar onSearch={handleSearch} />
+        <SearchBar onSearch={handleSearch} options={["user", "spot"]} />
         <ImageContainer images={filteredImages} />
       </main>
     </div>
