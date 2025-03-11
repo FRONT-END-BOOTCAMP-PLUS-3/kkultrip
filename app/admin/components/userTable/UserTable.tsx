@@ -4,6 +4,7 @@ import { GetUserListDto } from "@/application/usecases/admin/user/dto/GetUserLis
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./UserTable.module.scss";
+import { HiArrowUp, HiArrowDown } from "react-icons/hi";
 
 interface UserTableProps {
   users: GetUserListDto[];
@@ -122,8 +123,13 @@ const UserTable = ({ users = [] }: UserTableProps) => {
                 : key === "createdAt"
                 ? "가입 날짜"
                 : "수정 날짜"}
+              <span className={styles.sortArrow}>
+                {sortKey === key &&
+                  (sortOrder === "asc" ? <HiArrowUp /> : <HiArrowDown />)}
+              </span>
             </th>
           ))}
+
           <th>관리</th>
         </tr>
       </thead>

@@ -4,6 +4,7 @@ import { GetTipListDto } from "@/application/usecases/admin/tip/dto/GetTipListDt
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./TipTable.module.scss";
+import { HiArrowUp, HiArrowDown } from "react-icons/hi";
 
 interface TipTableProps {
   tips: (GetTipListDto & { spotName: string })[];
@@ -111,6 +112,10 @@ const TipTable = ({ tips }: TipTableProps) => {
                 : key === "createdAt"
                 ? "생성 날짜"
                 : "수정 날짜"}
+              <span className={styles.sortArrow}>
+                {sortKey === key &&
+                  (sortOrder === "asc" ? <HiArrowUp /> : <HiArrowDown />)}
+              </span>
             </th>
           ))}
           <th>관리</th>

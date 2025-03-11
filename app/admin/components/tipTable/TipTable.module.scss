@@ -2,7 +2,7 @@
   width: 100%;
   border-collapse: collapse;
   background: white;
-  border-radius: 0.5rem;
+  border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 
@@ -14,11 +14,28 @@
     text-align: left;
     cursor: pointer;
     transition: background 0.2s ease-in-out;
-  }
 
-  tbody tr:hover {
-    background: var(--grey-1-color); /* Hover effect for table rows */
-    transition: background 0.2s ease-in-out;
+    &.sorted {
+      background: var(--grey-2-color);
+      transform: scale(1.05);
+    }
+
+    .sortArrow {
+      margin-left: 0.5rem;
+      display: inline-block;
+      transition: transform 0.2s ease-in-out;
+      opacity: 0.7;
+    }
+
+    .sorted .sortArrow {
+      opacity: 1;
+      transform: scale(1.2);
+    }
+
+    tbody tr:hover {
+      background: var(--grey-1-color);
+      transition: background 0.2s ease-in-out;
+    }
   }
 
   td {
@@ -31,10 +48,6 @@
     white-space: nowrap;
     text-overflow: ellipsis;
   }
-
-  .tableRow {
-    cursor: pointer;
-  }
 }
 
 .noData {
@@ -44,6 +57,7 @@
   color: var(--grey-2-color);
 }
 
+.editButton,
 .deleteButton {
   padding: 0.5rem 1rem;
   border: none;

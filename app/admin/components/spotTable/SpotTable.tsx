@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./SpotTable.module.scss";
 import { Spot } from "@prisma/client";
+import { HiArrowUp, HiArrowDown } from "react-icons/hi";
 
 type SortKey = "id" | "name" | "address" | "phone" | "category" | "avgPrice";
 type SortOrder = "asc" | "desc";
@@ -81,6 +82,10 @@ const SpotTable = ({ spots }: { spots: Spot[] }) => {
                 : key === "category"
                 ? "카테고리"
                 : "정보"}
+              <span className={styles.sortArrow}>
+                {sortKey === key &&
+                  (sortOrder === "asc" ? <HiArrowUp /> : <HiArrowDown />)}
+              </span>
             </th>
           ))}
           <th>관리</th>
