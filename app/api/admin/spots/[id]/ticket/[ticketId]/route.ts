@@ -3,13 +3,10 @@ import { PgTicketRepository } from "@/infrastructure/repositories/PgTicketReposi
 import { DeleteTicketUseCase } from "@/application/usecases/admin/spot/ticket/DeleteTicketUseCase";
 import { TicketRepository } from "@/domain/repositories/TicketRepository";
 
-export async function DELETE(
-  req: Request,
-  props: { params: Promise<{ id: string }> }
-) {
+export async function DELETE(req: Request) {
   try {
-    const params = await props.params;
-    const id = params.id;
+    const url = new URL(req.url);
+    const id = url.pathname.split("/").pop();
 
     if (!id || isNaN(Number(id))) {
       return NextResponse.json(
