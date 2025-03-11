@@ -28,6 +28,7 @@ export class GetBookmarkedSpotsUsecase {
         }
 
         return {
+          id: spot.id,
           img: spot.img,
           name: spot.name,
           category: spot.category,

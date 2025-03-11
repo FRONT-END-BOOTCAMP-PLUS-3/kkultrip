@@ -1,12 +1,13 @@
 "use client";
 
 import Button from "@/components/button/Button";
-import Link from "next/link";
-import styles from "./LoginPage.module.scss";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
 import useUserStore from "@/store/useUserStore";
 import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { BeatLoader } from "react-spinners";
+import styles from "./LoginPage.module.scss";
 
 const LoginPage = () => {
   const router = useRouter();
@@ -121,7 +122,7 @@ const LoginPage = () => {
           {error && <p className={styles.error}>{error}</p>}
           <div className={styles.buttonBox}>
             <Button type="submit" isLong={true} color="main">
-              {loading ? "로그인 중..." : "로그인"}
+              {loading ? <BeatLoader size={12} color="white" /> : "로그인"}
             </Button>
           </div>
           <div className={styles.linkBox}>

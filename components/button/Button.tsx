@@ -5,7 +5,7 @@ import styles from "./Button.module.scss";
 type ButtonColor = "main" | "white" | "disabled";
 
 type ButtonProps = {
-  children?: string;
+  children?: React.ReactNode;
   type?: "button" | "submit" | "reset";
   isLong: boolean;
   color: ButtonColor;

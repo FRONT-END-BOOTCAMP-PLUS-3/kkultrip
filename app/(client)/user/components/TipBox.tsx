@@ -36,11 +36,18 @@ const TipBox = ({ tip }: TipBoxProps) => {
     },
   ];
 
-  const handleTipEditButtonClick = () => {
+  const handleTipEditButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation(); // 부모 div 클릭 이벤트 방지
     router.push(`/spots/${tip.spotId}/tips/${tip.id}/edit`);
   };
 
-  const handleTipDeleteButtonClick = async () => {
+  const handleTipDeleteButtonClick = async (
+    e: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    e.stopPropagation(); // 부모 div의 클릭 이벤트 방지
+    const confirmDelete = confirm("꿀팁을 삭제하시겠습니까?");
+    if (!confirmDelete) return;
+
     try {
       const response = await fetch(`/api/tips/${tip.id}`, {
         method: "DELETE",
@@ -57,8 +64,12 @@ const TipBox = ({ tip }: TipBoxProps) => {
     }
   };
 
+  const handleTipClick = () => {
+    router.push(`/spots/${tip.spotId}/tips?sort=latest#${tip.id}`);
+  };
+
   return (
-    <div className={styles.tipBoxContainer}>
+    <div className={styles.tipBoxContainer} onClick={handleTipClick}>
       <h3 className={styles.srOnly}>{tip.spotName} 꿀팁</h3>
       <div className={styles.tipBoxWrapper}>
         <figure className={styles.spotBox}>
@@ -70,7 +81,8 @@ const TipBox = ({ tip }: TipBoxProps) => {
             className={styles.imageBorder}
           />
           <figcaption>
-            <p>{tip.spotName}</p>
+            <p className={styles.category}>{tip.category}</p>
+            <p className={styles.name}>{tip.spotName}</p>
           </figcaption>
         </figure>
         {pathname === "/user/my-tips" && (
@@ -109,7 +121,6 @@ const TipBox = ({ tip }: TipBoxProps) => {
             )}
           </span>
         </p>
-        |<p>{tip.category}</p>
       </div>
       {tip.tipImages && tip.tipImages.length > 0 && (
         <div
@@ -132,7 +143,7 @@ const TipBox = ({ tip }: TipBoxProps) => {
           ))}
         </div>
       )}
-      <p>{tip.description}</p>
+      <p className={styles.description}>{tip.description}</p>
       <div className={styles.emotionWrapper}>
         {reactions.map((reaction, index) => (
           <div key={index} className={styles.emotionBox}>

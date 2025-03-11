@@ -2,6 +2,7 @@
 
 import Button from "@/components/button/Button";
 import Link from "next/link";
+import { BeatLoader } from "react-spinners";
 import useCheckEmail from "./hooks/useCheckEmail";
 import useCheckNickname from "./hooks/useCheckNickname";
 import useForm from "./hooks/useForm";
@@ -163,7 +164,7 @@ const SignupPage = () => {
 
           <div className={styles.buttonBox}>
             <Button type="submit" isLong={true} color="main">
-              {isLoading ? "가입 중..." : "가입하기"}
+              {isLoading ? <BeatLoader size={12} color="white" /> : "가입하기"}
             </Button>
           </div>
           <div className={styles.linkBox}>
