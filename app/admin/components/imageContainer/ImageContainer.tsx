@@ -16,9 +16,22 @@ const ImageContainer: React.FC<ImageContainerProps> = ({ images }) => {
     router.push(`/admin/tips/${tipId}`);
   };
 
-  const handleClose = (tipId: number) => {
-    console.log(`Close image with tipId: ${tipId}`);
-    // Add your image close/remove logic here
+  const handleDelete = async (id: number) => {
+    if (!confirm("정말로 삭제하시겠습니까?")) return;
+
+    try {
+      const response = await fetch(`/api/admin/images/${id}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) throw new Error("삭제 실패");
+
+      alert("삭제되었습니다.");
+      window.location.reload();
+    } catch (error) {
+      console.log("Error deleting user:", error);
+      alert("삭제 중 오류가 발생했습니다.");
+    }
   };
 
   return (
@@ -41,7 +54,7 @@ const ImageContainer: React.FC<ImageContainerProps> = ({ images }) => {
               className={styles.closeIcon}
               onClick={(e) => {
                 e.stopPropagation(); // Prevent the image click handler from firing
-                handleClose(image.tipId);
+                handleDelete(image.id);
               }}
             >
               <AiOutlineClose size={24} color="#fff" />
