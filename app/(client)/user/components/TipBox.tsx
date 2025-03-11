@@ -65,7 +65,7 @@ const TipBox = ({ tip }: TipBoxProps) => {
   };
 
   const handleTipClick = () => {
-    router.push(`/spots/${tip.spotId}/tips#${tip.id}`);
+    router.push(`/spots/${tip.spotId}/tips?sort=latest#${tip.id}`);
   };
 
   return (

@@ -23,7 +23,7 @@ const SpotImageCard = ({ spot, navigateTo, tipId }: SpotImageCardProps) => {
     if (navigateTo === "info") {
       router.push(`/spots/${spot.id}/info`);
     } else if (navigateTo === "tips" && tipId) {
-      router.push(`/spots/${spot.id}/tips#${tipId}`);
+      router.push(`/spots/${spot.id}/tips?sort=latest#${tipId}`);
     }
   };
 
