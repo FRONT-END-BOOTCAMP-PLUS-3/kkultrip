@@ -9,56 +9,80 @@ import Report from "./Report";
 import useUserStore from "@/store/useUserStore";
 
 const Reaction = ({
-    tipReaction,
-    userId, // 작성자 아이디
-    tipId,
+  tipReaction,
+  userId, // 작성자 아이디
+  tipId,
 }: {
   tipReaction: TipReactionDto[];
   userId: string;
   tipId: number;
 }) => {
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [showMessage, setShowMessage] = useState(false);
-    const [tipReactions, setTipReactions] =
-        useState<TipReactionDto[]>(tipReaction);
-    const modalRef = useRef<HTMLDivElement | null>(null);
-    const user = useUserStore();
-    const accessUserId = user.id;
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showMessage, setShowMessage] = useState(false);
+  const [tipReactions, setTipReactions] =
+    useState<TipReactionDto[]>(tipReaction);
+  const modalRef = useRef<HTMLDivElement | null>(null);
+  const user = useUserStore();
+  const accessUserId = user.id;
 
-    const userReactionType = useMemo(() => {
-        return tipReactions.find((reaction) => reaction.userId === accessUserId)
-            ?.type;
-    }, [tipReactions, accessUserId]);
+  const userReactionType = useMemo(() => {
+    return tipReactions.find((reaction) => reaction.userId === accessUserId)
+      ?.type;
+  }, [tipReactions, accessUserId]);
 
-    const handleButtonClick = () => {
-        setIsModalOpen(!isModalOpen);
-    };
-    
-    const handleClickOutside = (event: MouseEvent) => {
-        if (
-            modalRef.current &&
-            !modalRef.current.contains(event.target as Node)
-        ) {
-            setIsModalOpen(false);
-        }
-    };
+  const handleButtonClick = () => {
+    setIsModalOpen(!isModalOpen);
+  };
 
-    const handleReactionClick = async (type: number) => {
-        const button = document.getElementById(`reaction-button-${type}`);
-        if (button) {
-            button.classList.add(styles.shake);
-            setTimeout(() => {
-                button.classList.remove(styles.shake);
-                setIsModalOpen(false);
-            }, 1000);
-        }
+  const handleClickOutside = (event: MouseEvent) => {
+    if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+      setIsModalOpen(false);
+    }
+  };
 
-        if (userId === accessUserId) {
-            setShowMessage(true);
-            setTimeout(() => {
-                setShowMessage(false);
-            }, 1000);
-            return;
+  const handleReactionClick = async (type: number) => {
+    const button = document.getElementById(`reaction-button-${type}`);
+    if (button) {
+      button.classList.add(styles.shake);
+      setTimeout(() => {
+        button.classList.remove(styles.shake);
+        setIsModalOpen(false);
+      }, 1000);
+    }
+
+    if (userId === accessUserId) {
+      setShowMessage(true);
+      setTimeout(() => {
+        setShowMessage(false);
+      }, 1000);
+      return;
+    }
+
+    if (userReactionType) {
+      if (userReactionType === type) {
+        try {
+          const response = await fetch(`/api/tips/${tipId}/reactions`, {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              userId: accessUserId,
+              type,
+            }),
+          });
+
+          if (response.ok) {
+            console.log("반응 삭제 성공");
+
+            setTipReactions((prevReactions) =>
+              prevReactions.filter((reaction) => reaction.type !== type)
+            );
+          } else {
+            console.error("반응 삭제 실패", Error);
+          }
+        } catch (error) {
+          console.error("Error while deleting reaction:", error);
         }
       } else {
         try {
@@ -84,10 +108,10 @@ const Reaction = ({
               )
             );
           } else {
-            console.log("반응 수정 실패", Error);
+            console.error("반응 수정 실패", Error);
           }
         } catch (error) {
-          console.log("Error while updating reaction:", error);
+          console.error("Error while updating reaction:", error);
         }
       }
     } else {
@@ -109,10 +133,10 @@ const Reaction = ({
           setTipReactions((prevReactions) => [...prevReactions, newReaction]);
           console.log("반응 남기기 성공");
         } else {
-          console.log("반응 남기기 실패", Error);
+          console.error("반응 남기기 실패", Error);
         }
       } catch (error) {
-        console.log("Error while creating reaction:", error);
+        console.error("Error while creating reaction:", error);
       }
     }
   };
