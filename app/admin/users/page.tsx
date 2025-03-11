@@ -63,7 +63,7 @@ const UsersContent = () => {
   return (
     <div>
       <div className={styles.contentsContainer}>
-        <SearchBar onSearch={handleSearch} />
+        <SearchBar onSearch={handleSearch} userOnly={true} />
         <UserTable users={users} />
         <div className={styles.pagination}>
           <button
