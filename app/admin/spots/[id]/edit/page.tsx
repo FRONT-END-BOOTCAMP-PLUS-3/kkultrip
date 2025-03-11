@@ -121,7 +121,7 @@ const SpotsEditPage = () => {
           setInitialDocents(data.docents || []);
         });
     }
-  }, [defaultOperatingHours, spotId]);
+  }, [spotId]);
 
   const handlePhoneChange = (
     e: React.ChangeEvent<HTMLInputElement>,
