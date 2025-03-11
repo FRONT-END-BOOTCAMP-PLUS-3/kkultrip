@@ -9,17 +9,26 @@ export const middleware = async (req: NextRequest) => {
   const tokenData = token ? await GetUserInfoByJWT(token) : null;
   const isAdmin = tokenData?.isAdmin;
 
-  const protectedRoutes = ["/user", "/admin"];
+  const protectedRoutes = [
+    /^\/user/,
+    /^\/admin/,
+    /^\/spots\/[^/]+\/tips\/create$/,
+  ];
   const currentPath = req.nextUrl.pathname;
 
-  if (!token) {
-    if (protectedRoutes.some((route) => currentPath.startsWith(route))) {
+  if (!tokenData) {
+    if (protectedRoutes.some((route) => route.test(currentPath))) {
       const response = NextResponse.redirect(new URL("/login", req.url));
       response.cookies.set("prevUrl", currentPath);
       return response;
+    } else if (currentPath === "/login") {
+      const prevUrl = req.cookies.get("prevUrl")?.value || "/";
+      return NextResponse.redirect(new URL(prevUrl, req.url));
     }
-  } else if (!isAdmin && currentPath.startsWith("/admin")) {
-    return NextResponse.redirect(new URL("/", req.url));
+
+    if (!isAdmin && currentPath.startsWith("/admin")) {
+      return NextResponse.redirect(new URL("/", req.url));
+    }
   }
 
   return NextResponse.next({

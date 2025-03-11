@@ -1,11 +1,13 @@
 "use client";
 
 import { GetMyTipDto } from "@/application/usecases/user/dto/GetMyTipDto";
+import Loading from "@/components/loading/Loading";
 import { useEffect, useState } from "react";
 import TipBox from "../components/TipBox";
 import styles from "./MyTipsPage.module.scss";
 
 const MyTips = () => {
+  const [isLoading, setIsLoading] = useState(true);
   const [userMyTipList, setUserMyTipList] = useState<GetMyTipDto[]>([]);
 
   useEffect(() => {
@@ -15,6 +17,7 @@ const MyTips = () => {
         const data = await response.json();
 
         setUserMyTipList(data.userMyTipList);
+        setIsLoading(false);
       } catch (error) {
         console.log("Error fetching my tips:", error);
       }
@@ -22,6 +25,10 @@ const MyTips = () => {
 
     fetchMyTips();
   }, []);
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   return (
     <div className={styles.myTipsContainer}>

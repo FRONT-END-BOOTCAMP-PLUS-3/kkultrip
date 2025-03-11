@@ -1,4 +1,12 @@
 .usersContainer {
+  overflow-y: auto;
+  scrollbar-width: none;
+  margin-bottom: 4.5rem;
+
+  .usersContainer::-webkit-scrollbar {
+    display: none;
+  }
+
   .profileWrapper {
     display: grid;
     grid-template-columns: 1.3fr 2fr;
@@ -82,13 +90,16 @@
   .tipsWrapper {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-evenly;
+    justify-content: space-between;
     width: 100%;
     gap: 0.625rem;
     padding: 0.625rem 1.25rem;
 
     .noTipText {
+      width: 100%;
+      margin-top: 10rem;
       text-align: center;
+      font-size: 1.25rem;
     }
   }
 }

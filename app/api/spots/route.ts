@@ -51,7 +51,7 @@ export const GET = async (req: Request) => {
 
       // 지역 좌표 검색 (네이버 Geocode API 사용)
       const apiBaseUrl =
-        process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3010";
+        process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3000";
       const geoResponse = await fetch(
         `${apiBaseUrl}/api/geocode?query=${query}`
       );
