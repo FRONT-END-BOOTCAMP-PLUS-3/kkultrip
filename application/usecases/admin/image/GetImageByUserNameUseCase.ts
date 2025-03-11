@@ -23,39 +23,39 @@ export class GetImageByUserNameUseCase {
     this.spotRepository = spotRepository;
   }
 
-  // 유저 이름으로 유저를 조회하고, 그 유저가 쓴 팁을 조회 후, 팁에 관련된 이미지들을 반환
+  // 유저 이름으로 유저들을 조회하고, 그 유저들이 쓴 팁을 조회 후, 팁에 관련된 이미지들을 반환
   async execute(nickname: string): Promise<GetImageListDTO[] | null> {
-    const user: GetUserDto | null = await this.userRepository.getUserByName(
-      nickname
-    );
+    const users = await this.userRepository.getUsersByPartialName(nickname);
 
-    if (!user) {
-      throw new Error("User not found");
+    if (users!.length === 0) {
+      throw new Error("User(s) not found");
     }
-
-    const tips = await this.tipRepository.getTipsByUserId(user.id);
 
     const images: GetImageListDTO[] = [];
 
-    for (const tip of tips) {
-      // 해당 팁의 이미지가 있는지 확인
-      const imagesForTip = await this.imageRepository.getImageByTipId(tip.id);
+    for (const user of users!) {
+      const tips = await this.tipRepository.getTipsByUserId(user.id);
 
-      for (const image of imagesForTip) {
-        if (image.path) {
-          // 해당 팁에 대한 명소 정보 조회
-          const spot = await this.spotRepository.getSpotById(tip.spotId);
-          if (!spot) continue;
+      for (const tip of tips) {
+        // 해당 팁의 이미지가 있는지 확인
+        const imagesForTip = await this.imageRepository.getImageByTipId(tip.id);
 
-          const imageDTO: GetImageListDTO = {
-            id: image.id,
-            tipId: image.tipId,
-            path: image.path,
-            createdAt: image.createdAt,
-            nickname: user.nickname,
-            spotName: spot.name,
-          };
-          images.push(imageDTO);
+        for (const image of imagesForTip) {
+          if (image.path) {
+            // 해당 팁에 대한 명소 정보 조회
+            const spot = await this.spotRepository.getSpotById(tip.spotId);
+            if (!spot) continue;
+
+            const imageDTO: GetImageListDTO = {
+              id: image.id,
+              tipId: image.tipId,
+              path: image.path,
+              createdAt: image.createdAt,
+              nickname: user.nickname,
+              spotName: spot.name,
+            };
+            images.push(imageDTO);
+          }
         }
       }
     }
