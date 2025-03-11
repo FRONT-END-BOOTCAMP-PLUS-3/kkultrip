@@ -4,7 +4,7 @@ export const getGeocode = async (
   if (!query.trim() || query === "default") return null;
 
   const apiBaseUrl =
-    process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3000";
+    process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3010";
 
   try {
     const response = await fetch(`${apiBaseUrl}/api/geocode?query=${query}`);
@@ -16,7 +16,7 @@ export const getGeocode = async (
       return null;
     }
   } catch (error) {
-    console.error("지오코딩 API 오류:", error);
+    console.log("지오코딩 API 오류:", error);
     return null;
   }
 };

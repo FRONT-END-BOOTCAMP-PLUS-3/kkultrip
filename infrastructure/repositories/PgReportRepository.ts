@@ -12,7 +12,7 @@ export class PgReportRepository implements ReportRepository {
         },
       });
     } catch (error) {
-      console.error("❌ createReport 오류 발생:", error);
+      console.log("❌ createReport 오류 발생:", error);
       throw new Error("신고 생성 중 오류가 발생했습니다.");
     } finally {
       await prisma.$disconnect();

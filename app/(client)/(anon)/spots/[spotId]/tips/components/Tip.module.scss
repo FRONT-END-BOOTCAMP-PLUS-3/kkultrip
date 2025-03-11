@@ -29,6 +29,12 @@
     width: 2.25rem;
     height: 2.25rem;
   }
+
+  .description {
+    word-break: break-all;
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+  }
 }
 
 .costWrapper {
@@ -56,6 +62,8 @@
     font-weight: 400;
     font-size: 0.75rem;
   }
+
+
 
 }
 

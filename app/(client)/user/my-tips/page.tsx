@@ -19,7 +19,7 @@ const MyTips = () => {
         setUserMyTipList(data.userMyTipList);
         setIsLoading(false);
       } catch (error) {
-        console.error("Error fetching my tips:", error);
+        console.log("Error fetching my tips:", error);
       }
     };
 

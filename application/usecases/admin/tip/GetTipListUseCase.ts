@@ -1,11 +1,13 @@
 import TipRepository from "@/domain/repositories/TipRepository";
 import { TipListDto } from "./dto/TipListDto";
 import SpotRepository from "@/domain/repositories/SpotRepository";
+import UserRepository from "@/domain/repositories/UserRepository";
 
 export class GetTipListUseCase {
   constructor(
     private tipRepository: TipRepository,
-    private spotRepository: SpotRepository
+    private spotRepository: SpotRepository,
+    private userRepository: UserRepository
   ) {}
 
   async execute(page: number = 1): Promise<TipListDto> {
@@ -23,16 +25,20 @@ export class GetTipListUseCase {
     const hasPreviousPage = page > 1;
     const hasNextPage = page < totalPages;
 
-    // 팁과 관련된 스팟 정보 가져오기
+    // 팁과 관련된 사용자 정보 가져오기
     const tipsWithPagination: TipListDto = {
       tips: await Promise.all(
         paginatedTips.map(async (tip) => {
+          // 명소를 가져옴
           const spot = await this.spotRepository.getSpotById(tip.spotId);
+          // 사용자를 가져옴
+          const user = await this.userRepository.getUserById(tip.userId);
 
           return {
             id: tip.id,
-            spotId: tip.spotId,
+            spotId: spot!.id,
             spotName: spot!.name,
+            nickname: user!.nickname,
             userId: tip.userId,
             description: tip.description,
             price: tip.price,

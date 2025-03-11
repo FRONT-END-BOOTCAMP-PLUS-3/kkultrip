@@ -53,7 +53,7 @@ const Tip = ({ tip }: { tip: SpotTipDto }) => {
                 <TipImage image={tip.tipImages} name={tip.spotName} />
             )}
 
-            <p>{tip.description}</p>
+            <p className={styles.description}>{tip.description}</p>
         </div>
     );
 };

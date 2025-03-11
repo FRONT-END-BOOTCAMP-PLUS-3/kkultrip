@@ -94,7 +94,7 @@ export async function POST(
 
     return NextResponse.json({ status: 201 });
   } catch (error) {
-    console.error("Error creating tip:", error);
+    console.log("Error creating tip:", error);
     return NextResponse.json({ error: "서버 오류 발생" }, { status: 500 });
   }
 }

@@ -19,7 +19,7 @@ const ReactedTips = () => {
         setReactTipList(data.reactedTipList);
         setIsLoading(false);
       } catch (error) {
-        console.error("Error fetching reacted tips:", error);
+        console.log("Error fetching reacted tips:", error);
       }
     };
 

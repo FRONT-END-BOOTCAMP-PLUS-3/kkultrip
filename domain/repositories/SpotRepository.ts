@@ -28,4 +28,6 @@ export default interface SpotRepository {
     avgPrice: number | null,
     avgWaitingTime: number | null
   ): Promise<void>;
+
+  getSpotsByPartialName(name: string): Promise<Spot[] | null>;
 }
