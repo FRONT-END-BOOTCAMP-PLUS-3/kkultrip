@@ -45,7 +45,7 @@ const AdminSpotsPageContent = () => {
 
   const handleSearch = async (query: string) => {
     try {
-      const url = `/api/admin/users/user/search?userName=${encodeURIComponent(
+      const url = `/api/admin/spots/spot/search?spotName=${encodeURIComponent(
         query
       )}`;
       const res = await fetch(url);
@@ -53,7 +53,7 @@ const AdminSpotsPageContent = () => {
         throw new Error("Failed to fetch search results");
       }
       const data = await res.json();
-      setUsers(data.users);
+      setSpots(data.spots);
     } catch (error) {
       console.log(error);
       alert("검색 결과가 없습니다.");
