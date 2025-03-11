@@ -38,7 +38,7 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json({ tips }, { status: 200 });
   } catch (error) {
-    console.error("❌ 닉네임으로 꿀팁 조회 오류:", error);
+    console.log("❌ 닉네임으로 꿀팁 조회 오류:", error);
     return NextResponse.json({ message: "서버 오류 발생" }, { status: 500 });
   }
 }

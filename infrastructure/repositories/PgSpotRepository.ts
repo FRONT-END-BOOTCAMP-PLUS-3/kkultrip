@@ -7,7 +7,7 @@ export default class PgSpotRepository implements SpotRepository {
     try {
       return await prisma.spot.findMany();
     } catch (error) {
-      console.error("❌ getAllSpots 오류 발생:", error);
+      console.log("❌ getAllSpots 오류 발생:", error);
       throw new Error("모든 명소 데이터를 가져오지 못했습니다.");
     } finally {
       await prisma.$disconnect();
@@ -20,7 +20,7 @@ export default class PgSpotRepository implements SpotRepository {
         where: { id },
       });
     } catch (error) {
-      console.error("❌ getSpotById 오류 발생:", error);
+      console.log("❌ getSpotById 오류 발생:", error);
       throw new Error("명소 데이터를 가져오지 못했습니다.");
     } finally {
       await prisma.$disconnect();
@@ -56,7 +56,7 @@ export default class PgSpotRepository implements SpotRepository {
         where: { id },
       });
     } catch (error) {
-      console.error("❌ deleteSpot 오류 발생:", error);
+      console.log("❌ deleteSpot 오류 발생:", error);
       throw new Error("명소 삭제 중 오류가 발생했습니다.");
     } finally {
       await prisma.$disconnect();
@@ -143,6 +143,24 @@ export default class PgSpotRepository implements SpotRepository {
     } catch (error) {
       console.log("❌ updateSpotAvg 오류 발생:", error);
       throw new Error("명소 평균 데이터를 업데이트하는 데 실패했습니다.");
+    } finally {
+      await prisma.$disconnect();
+    }
+  }
+
+  async getSpotsByPartialName(name: string): Promise<Spot[] | null> {
+    try {
+      return await prisma.spot.findMany({
+        where: {
+          name: {
+            contains: name, // 부분 검색 가능
+            mode: "insensitive", // 대소문자 구분 없이 검색
+          },
+        },
+      });
+    } catch (error) {
+      console.log("❌ getSpotsByPartialName 오류 발생:", error);
+      throw new Error("명소 데이터를 가져오지 못했습니다.");
     } finally {
       await prisma.$disconnect();
     }

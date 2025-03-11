@@ -1,8 +1,7 @@
 import { NextResponse } from "next/server";
-import { GetImageBySpotNameUseCase } from "@/application/usecases/admin/image/GetImageBySpotNameUseCase";
-import { PgImageRepository } from "@/infrastructure/repositories/PgImageRepository";
-import PgSpotRepository from "@/infrastructure/repositories/PgSpotRepository";
+import GetTipBySpotNameUseCase from "@/application/usecases/admin/tip/GetTipBySpotNameUseCase";
 import { PgTipRepository } from "@/infrastructure/repositories/PgTipRepository";
+import PgSpotRepository from "@/infrastructure/repositories/PgSpotRepository";
 import { PgUserRepository } from "@/infrastructure/repositories/PgUserRepository";
 
 export async function GET(req: Request) {
@@ -17,32 +16,29 @@ export async function GET(req: Request) {
   }
 
   try {
-    // Initialize repositories
-    const spotRepository = new PgSpotRepository();
     const tipRepository = new PgTipRepository();
-    const imageRepository = new PgImageRepository();
+    const spotRepository = new PgSpotRepository();
     const userRepository = new PgUserRepository();
 
-    // Create the use case
-    const getImageBySpotNameUseCase = new GetImageBySpotNameUseCase(
-      spotRepository,
+    const getTipBySpotNameUseCase = new GetTipBySpotNameUseCase(
       tipRepository,
-      imageRepository,
+      spotRepository,
       userRepository
     );
 
-    const images = await getImageBySpotNameUseCase.execute(spotName);
+    const tips = await getTipBySpotNameUseCase.execute(spotName, "createdAt");
 
-    if (!images) {
+    if (!tips || tips.length === 0) {
       return NextResponse.json(
-        { error: "No images found for this spot" },
+        { error: "No tips found for this spot" },
         { status: 404 }
       );
     }
 
-    return NextResponse.json({ images }, { status: 200 });
+    return NextResponse.json({ tips }, { status: 200 });
   } catch (error) {
-    console.log(error);
+    console.log("❌ Error in GET request:", error);
+
     return NextResponse.json(
       { error: "Something went wrong" },
       { status: 500 }

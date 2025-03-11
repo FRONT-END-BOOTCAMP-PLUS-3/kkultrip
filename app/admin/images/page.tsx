@@ -5,11 +5,13 @@ import Header from "../components/header/Header";
 import styles from "./AdminImagesPage.module.scss";
 import { useEffect, useState } from "react";
 import ImageContainer from "../components/imageContainer/ImageContainer";
-import { Image } from "@prisma/client";
+import { Image as PrismaImage } from "@prisma/client";
 import SearchBar from "../components/searchBar/SearchBar";
 
 const AdminImagesPage = () => {
-  const [filteredImages, setFilteredImages] = useState<Image[]>([]);
+  const [filteredImages, setFilteredImages] = useState<
+    (PrismaImage & { nickname: string; spotName: string })[]
+  >([]);
 
   useEffect(() => {
     const fetchImages = async () => {
@@ -18,8 +20,9 @@ const AdminImagesPage = () => {
         if (!res.ok) {
           throw new Error("Failed to fetch images");
         }
-        const data: Image[] = await res.json();
-        setFilteredImages(data); // Set all images initially
+        const data: (PrismaImage & { nickname: string; spotName: string })[] =
+          await res.json();
+        setFilteredImages(data);
       } catch (error) {
         console.log(error);
       }

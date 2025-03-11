@@ -6,13 +6,16 @@ import SideBar from "../components/sideBar/SideBar";
 import Header from "../components/header/Header";
 import TipTable from "../components/tipTable/TipTable";
 import styles from "./AdminTipsPage.module.scss";
-import { Tip } from "@prisma/client";
+import { GetTipListDto } from "@/application/usecases/admin/tip/dto/GetTipListDto";
+import SearchBar from "../components/searchBar/SearchBar";
 
 const AdminTipsPageContent = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const currentPageFromUrl = parseInt(searchParams.get("page") || "1", 10); // URL에서 현재 페이지를 가져옴
-  const [tips, setTips] = useState<(Tip & { spotName: string })[]>([]);
+  const [tips, setTips] = useState<(GetTipListDto & { spotName: string })[]>(
+    []
+  );
   const [currentPage, setCurrentPage] = useState(currentPageFromUrl);
   const [totalPages, setTotalPages] = useState(1);
 
@@ -24,8 +27,9 @@ const AdminTipsPageContent = () => {
           throw new Error("Failed to fetch tips");
         }
         const data = await res.json();
-        setTips(data.tips); // 서버에서 받은 데이터를 state에 저장
-        setTotalPages(data.totalPages); // 총 페이지 수
+        setTips(data.tips);
+        setTotalPages(data.totalPages);
+        console.log(data);
       } catch (error) {
         console.log(error);
       }
@@ -42,11 +46,38 @@ const AdminTipsPageContent = () => {
     router.push(`/admin/tips?page=${page}`);
   };
 
+  const handleSearch = async (query: string, category: string) => {
+    try {
+      let url = "";
+
+      if (category === "spot") {
+        url = `/api/admin/tips/spot/search?spotName=${encodeURIComponent(
+          query
+        )}`;
+      } else if (category === "user") {
+        url = `/api/admin/tips/user/search?userName=${encodeURIComponent(
+          query
+        )}`;
+      }
+
+      const res = await fetch(url);
+      if (!res.ok) {
+        throw new Error("Failed to fetch search results");
+      }
+      const data = await res.json();
+      setTips(data.tips);
+    } catch (error) {
+      console.log(error);
+      alert("검색 결과가 없습니다.");
+    }
+  };
+
   return (
     <div className={styles.container}>
       <SideBar />
       <main className={styles.main}>
         <Header title="꿀팁 관리" />
+        <SearchBar onSearch={handleSearch} />
         <div className={styles.contentsContainer}>
           <TipTable tips={tips} />
           <div className={styles.pagination}>

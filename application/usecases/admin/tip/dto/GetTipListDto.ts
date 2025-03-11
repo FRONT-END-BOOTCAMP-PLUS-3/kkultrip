@@ -2,7 +2,7 @@ export interface GetTipListDto {
   id: number;
   spotId: number;
   spotName: string;
-  userId: string;
+  nickname: string;
   description: string;
   price: number;
   waitingTime: number;
