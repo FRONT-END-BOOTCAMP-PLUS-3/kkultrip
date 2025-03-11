@@ -1,10 +1,9 @@
-"use client";
-
 import React from "react";
 import styles from "./ImageContainer.module.scss";
 import { Image as PrismaImage } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { AiOutlineClose } from "react-icons/ai"; // Importing the X (close) icon
 
 interface ImageContainerProps {
   images: (PrismaImage & { nickname: string; spotName: string })[];
@@ -15,6 +14,11 @@ const ImageContainer: React.FC<ImageContainerProps> = ({ images }) => {
 
   const handleImageClick = (tipId: number) => {
     router.push(`/admin/tips/${tipId}`);
+  };
+
+  const handleClose = (tipId: number) => {
+    console.log(`Close image with tipId: ${tipId}`);
+    // Add your image close/remove logic here
   };
 
   return (
@@ -32,6 +36,16 @@ const ImageContainer: React.FC<ImageContainerProps> = ({ images }) => {
               width={500}
               height={300}
             />
+            {/* Close (X) Icon in the top-right corner */}
+            <div
+              className={styles.closeIcon}
+              onClick={(e) => {
+                e.stopPropagation(); // Prevent the image click handler from firing
+                handleClose(image.tipId);
+              }}
+            >
+              <AiOutlineClose size={24} color="#fff" />
+            </div>
           </div>
           <div className={styles.imageDetails}>
             <p>
