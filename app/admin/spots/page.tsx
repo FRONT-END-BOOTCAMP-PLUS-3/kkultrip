@@ -43,11 +43,20 @@ const AdminSpotsPageContent = () => {
     router.push(`/admin/spots?page=${page}`);
   };
 
-  const handleSearch = async (query: string) => {
+  const handleSearch = async (query: string, category: string) => {
     try {
-      const url = `/api/admin/spots/spot/search?spotName=${encodeURIComponent(
-        query
-      )}`;
+      let url = "";
+
+      if (category === "spot") {
+        url = `/api/admin/spots/spot/search?spotName=${encodeURIComponent(
+          query
+        )}`;
+      } else if (category === "address") {
+        url = `/api/admin/spots/address/search?address=${encodeURIComponent(
+          query
+        )}`;
+      }
+
       const res = await fetch(url);
       if (!res.ok) {
         throw new Error("Failed to fetch search results");
