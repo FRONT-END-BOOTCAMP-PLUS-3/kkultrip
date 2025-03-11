@@ -411,6 +411,7 @@ const SpotsCreatePage = () => {
             onChange={handleChange}
             className={styles.textareaField}
             maxLength={100}
+            placeholder="정보"
           />
           <span className={styles.charCount}>
             {(formData.info ?? "").length} / 100
