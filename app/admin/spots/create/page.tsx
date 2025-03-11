@@ -341,7 +341,7 @@ const SpotsCreatePage = () => {
             onClick={handleConvertAddress}
             className={styles.convertButton}
           >
-            변환
+            위도/경도 변환
           </button>
         </div>
         <input
