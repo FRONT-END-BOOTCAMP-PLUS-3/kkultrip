@@ -26,6 +26,10 @@
     padding: 1rem;
     text-align: left;
     color: var(--grey-3-color);
+    max-width: 20rem;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
 
   .tableRow {
