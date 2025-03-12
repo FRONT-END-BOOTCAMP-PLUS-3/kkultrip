@@ -7,7 +7,7 @@ const TipImage = (props: { image: TipImageDto[]; name: string }) => {
     <div className={styles.imageContainer}>
       {props.image.map((image) => (
         <Image
-          src={`${process.env.SERVICE_URL}${image.path}`}
+          src={`${process.env.NEXT_PUBLIC_SERVICE_URL}${image.path}`}
           alt={props.name}
           key={image.id}
           className={styles.image}

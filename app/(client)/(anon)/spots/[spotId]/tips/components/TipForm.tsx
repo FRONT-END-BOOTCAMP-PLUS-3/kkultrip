@@ -153,7 +153,7 @@ const TipForm = ({
         {imageUrls.map((img, index) => (
           <div key={index} className={styles.imageContainer}>
             <Image
-              src={`${process.env.SERVICE_URL}${img}`}
+              src={`${process.env.NEXT_PUBLIC_SERVICE_URL}${img}`}
               alt="기존 이미지"
               width={220}
               height={220}
