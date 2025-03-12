@@ -7,9 +7,10 @@ import { GetMyTipDto } from "@/application/usecases/user/dto/GetMyTipDto";
 
 type TipBoxProps = {
   tip: GetMyTipDto;
+  onDelete: (tipId: number, spotId: number) => void;
 };
 
-const TipBox = ({ tip }: TipBoxProps) => {
+const TipBox = ({ tip, onDelete }: TipBoxProps) => {
   const pathname = usePathname();
   const router = useRouter();
 
@@ -46,21 +47,8 @@ const TipBox = ({ tip }: TipBoxProps) => {
   ) => {
     e.stopPropagation(); // 부모 div의 클릭 이벤트 방지
     const confirmDelete = confirm("꿀팁을 삭제하시겠습니까?");
-    if (!confirmDelete) return;
-
-    try {
-      const response = await fetch(`/api/tips/${tip.id}`, {
-        method: "DELETE",
-        body: JSON.stringify({ spotId: tip.spotId }),
-      });
-      if (!response.ok) {
-        throw new Error("Failed to delete the tip");
-      }
-
-      alert("꿀팁이 삭제되었습니다.");
-      window.location.reload();
-    } catch (error) {
-      console.log("팁 삭제 에러:", error);
+    if (confirmDelete) {
+      onDelete(tip.id, tip.spotId);
     }
   };
 
