@@ -2,6 +2,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-bottom: 0.5rem;
 
   .profile {
     min-width: 8rem;
@@ -13,19 +14,78 @@
     border-radius: 50%;
     background-color: white;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    overflow: hidden;
     position: relative;
 
     .profileImage {
-      object-fit: "cover";
+      object-fit: cover;
+      border-radius: 50%;
     }
   }
 
+  .cameraButton {
+    position: absolute;
+    bottom: -0.3rem;
+    right: -0.3rem;
+    background-color: var(--primary-color);
+    width: 2.5rem;
+    height: 2.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    z-index: 10;
+  }
+
+  .uploadInput {
+    display: none;
+  }
+
   .nickname {
-    margin: 0.5rem 0;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 25rem;
+    margin-top: 0.5rem;
+    gap: 1rem;
+
     span {
+      flex: 1;
       font-size: 1.5rem;
       font-weight: bold;
+      text-align: center;
+      white-space: nowrap;
+      overflow: hidden;
+      padding-left: 5rem;
     }
+
+    .nicknameInput {
+      flex: 0.9;
+      font-size: 1.2rem;
+      font-weight: bold;
+      text-align: center;
+      border: 1px solid var(--grey-2-color);
+      border-radius: 0.5rem;
+      padding: 0.5rem;
+      min-width: 6rem;
+      margin-left: 5rem;
+
+      &:focus {
+        border-color: var(--primary-color);
+      }
+    }
+  }
+
+  .editButton {
+    flex-shrink: 0;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    background-color: var(--primary-color);
+    color: white;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    white-space: nowrap;
   }
 }
