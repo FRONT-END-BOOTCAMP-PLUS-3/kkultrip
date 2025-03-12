@@ -4,19 +4,20 @@ import path from "path";
 import fs from "fs";
 import { Image } from "@prisma/client";
 
+const UPLOAD_DIR = "/home/honeytrip/upload/images/tips"; // 새로운 저장 경로
 export class PgImageRepository implements ImageRepository {
   async createImages(tipId: number, imageFiles: File[]): Promise<void> {
-    const uploadDir = path.join(process.cwd(), "public/images/tips");
+    // const uploadDir = path.join(process.cwd(), "public/images/tips");
 
     // 저장 폴더가 없으면 생성
-    if (!fs.existsSync(uploadDir)) {
-      fs.mkdirSync(uploadDir, { recursive: true });
+    if (!fs.existsSync(UPLOAD_DIR)) {
+      fs.mkdirSync(UPLOAD_DIR, { recursive: true });
     }
 
     try {
       for (const file of imageFiles) {
         const fileName = `${tipId}_${Date.now()}_${file.name}`;
-        const filePath = path.join(uploadDir, fileName);
+        const filePath = path.join(UPLOAD_DIR, fileName);
         const fileUrl = `/images/tips/${fileName}`;
 
         // 파일 저장
@@ -62,7 +63,7 @@ export class PgImageRepository implements ImageRepository {
 
       // 로컬 파일 삭제
       imagePaths.forEach((imagePath) => {
-        const filePath = path.join(process.cwd(), "public", imagePath);
+        const filePath = path.join("/home/honeytrip/upload/", imagePath);
         if (fs.existsSync(filePath)) {
           fs.unlinkSync(filePath);
         }
