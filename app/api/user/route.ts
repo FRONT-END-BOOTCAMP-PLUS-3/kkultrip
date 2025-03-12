@@ -4,9 +4,6 @@ import UserRepository from "@/domain/repositories/UserRepository";
 import { PgUserRepository } from "@/infrastructure/repositories/PgUserRepository";
 import { GetUserInfoByJWT } from "@/utils/jwt";
 import { NextRequest, NextResponse } from "next/server";
-import { writeFile } from "fs/promises";
-import path from "path";
-import { promises as fs } from "fs";
 
 export async function GET(req: NextRequest) {
   try {
@@ -68,7 +65,7 @@ export async function PUT(req: NextRequest) {
     const userId = jwtData.userId as string;
     const formData = await req.formData();
     const nickname = formData.get("nickname") as string;
-    const file = formData.get("file") as File | null;
+    const file = formData.get("file") as File;
 
     if (!nickname) {
       return NextResponse.json(
@@ -80,37 +77,10 @@ export async function PUT(req: NextRequest) {
     const userRepository: UserRepository = new PgUserRepository();
     const usecase = new UpdateUserUsecase(userRepository);
 
-    const existingUser = await userRepository.getUserById(userId);
-    let imagePath = existingUser?.img;
-
-    if (file) {
-      if (imagePath && imagePath !== "/images/users/default.png") {
-        try {
-          const oldFilePath = path.join(process.cwd(), "public", imagePath);
-          await fs.unlink(oldFilePath);
-        } catch (error) {
-          console.log("기존 프로필 이미지 삭제 실패:", error);
-        }
-      }
-
-      const buffer = Buffer.from(await file.arrayBuffer());
-      const uploadDir = path.join(process.cwd(), "public/images/users");
-      await fs.mkdir(uploadDir, { recursive: true });
-
-      const fileName = `${file.name}_${Date.now()}`;
-      const filePath = path.join(uploadDir, fileName);
-      await writeFile(filePath, buffer);
-      imagePath = `/images/users/${fileName}`;
-    }
-
-    const updateUser = await usecase.execute(
-      userId,
-      nickname,
-      imagePath as string
-    );
+    await usecase.execute(userId, nickname, file);
 
     return NextResponse.json(
-      { user: updateUser, message: "프로필 업데이트 성공" },
+      { message: "프로필 업데이트 성공" },
       { status: 200 }
     );
   } catch (error) {

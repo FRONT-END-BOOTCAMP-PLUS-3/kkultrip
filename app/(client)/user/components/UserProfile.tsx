@@ -70,12 +70,13 @@ const UserProfile = () => {
     <div className={styles.profileContainer}>
       <div className={styles.profile}>
         <Image
-          src={img}
+          src={`${process.env.NEXT_PUBLIC_SERVICE_URL}${img}`}
           fill
           alt="profile image"
           sizes="10rem"
           className={styles.profileImage}
           priority
+          unoptimized
         />
         {isEdit && (
           <>
