@@ -7,7 +7,7 @@ import { GetMyTipDto } from "@/application/usecases/user/dto/GetMyTipDto";
 
 type TipBoxProps = {
   tip: GetMyTipDto;
-  onDelete: (tipId: number, spotId: number) => void;
+  onDelete?: (tipId: number, spotId: number) => void;
 };
 
 const TipBox = ({ tip, onDelete }: TipBoxProps) => {
@@ -46,9 +46,11 @@ const TipBox = ({ tip, onDelete }: TipBoxProps) => {
     e: React.MouseEvent<HTMLButtonElement>
   ) => {
     e.stopPropagation(); // 부모 div의 클릭 이벤트 방지
-    const confirmDelete = confirm("꿀팁을 삭제하시겠습니까?");
-    if (confirmDelete) {
-      onDelete(tip.id, tip.spotId);
+    if (onDelete) {
+      const confirmDelete = confirm("꿀팁을 삭제하시겠습니까?");
+      if (confirmDelete) {
+        onDelete(tip.id, tip.spotId);
+      }
     }
   };
 
