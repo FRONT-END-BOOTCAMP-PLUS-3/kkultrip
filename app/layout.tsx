@@ -32,7 +32,7 @@ const RootLayout = ({
         />
         <meta
           property="og:image"
-          content="https://kkultrip.newlecture.com/og-image.png"
+          content="https://kkultrip.newlecture.com/images/og-image.png"
         />
         <meta property="og:url" content="https://kkultrip.newlecture.com/" />
         <meta property="og:type" content="website" />
