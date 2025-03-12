@@ -25,7 +25,7 @@ const useUserStore = create<UserStore>()(
             isLoggedIn: false,
             userLat: 37.5665,
             userLon: 126.978,
-            id: "",
+            id: null,
             setImg: (img) => set({ img }),
             setNickname: (nickname) => set({ nickname }),
             setIsLoggedIn: (loggedIn) => set({ isLoggedIn: loggedIn }),

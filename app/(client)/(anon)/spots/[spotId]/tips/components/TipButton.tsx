@@ -13,7 +13,6 @@ const TipButton = ({
     nickName: string;
 }) => {
     const user = useUserStore();
-    console.log(user);
     const handleDelete = async () => {
         const response = await fetch(`/api/tips/${tipId}`, {
             method: "DELETE",
