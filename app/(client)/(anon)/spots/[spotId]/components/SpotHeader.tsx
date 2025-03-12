@@ -18,7 +18,7 @@ const SpotHeader = async ({ spotId }: { spotId: string }) => {
                 "Content-Type": "application/json",
                 Cookie: `token=${token}`,
             },
-            cache: "no-store",
+            cache: "no-cache",
         });
 
         if (data.status !== 200) {
@@ -40,6 +40,7 @@ const SpotHeader = async ({ spotId }: { spotId: string }) => {
         }
 
         const spotHeaderData: SpotHeaderDto | null = await data.json();
+        console.log(spotHeaderData);
 
         if (!spotHeaderData) {
             return <div>Spot not found</div>;
