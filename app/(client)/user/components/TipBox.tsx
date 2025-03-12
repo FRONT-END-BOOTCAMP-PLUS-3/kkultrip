@@ -74,11 +74,12 @@ const TipBox = ({ tip }: TipBoxProps) => {
       <div className={styles.tipBoxWrapper}>
         <figure className={styles.spotBox}>
           <Image
-            src={tip.spotImage}
+            src={`${process.env.NEXT_PUBLIC_SERVICE_URL}${tip.spotImage}`}
             alt={tip.spotName}
             width={36}
             height={36}
             className={styles.imageBorder}
+            unoptimized
           />
           <figcaption>
             <p className={styles.category}>{tip.category}</p>
@@ -133,11 +134,14 @@ const TipBox = ({ tip }: TipBoxProps) => {
           {tip.tipImages.map((image, index) => (
             <div key={index}>
               <Image
-                src={image?.path || ""}
+                src={
+                  `${process.env.NEXT_PUBLIC_SERVICE_URL}${image?.path}` || ""
+                }
                 width={100}
                 height={100}
                 alt="spot image"
                 className={styles.image}
+                unoptimized
               />
             </div>
           ))}
@@ -148,10 +152,11 @@ const TipBox = ({ tip }: TipBoxProps) => {
         {reactions.map((reaction, index) => (
           <div key={index} className={styles.emotionBox}>
             <Image
-              src={reaction.src}
+              src={`${process.env.NEXT_PUBLIC_SERVICE_URL}${reaction.src}`}
               alt={reaction.alt}
               width={16}
               height={16}
+              unoptimized
             />
             <p>{reaction.count}</p>
           </div>
