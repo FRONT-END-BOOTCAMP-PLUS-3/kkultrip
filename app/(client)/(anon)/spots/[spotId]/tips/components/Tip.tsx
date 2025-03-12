@@ -13,11 +13,12 @@ const Tip = ({ tip }: { tip: SpotTipDto }) => {
             <div className={styles.profileWrapper}>
                 <figure className={styles.profileWrapper}>
                     <Image
-                        src={tip.profileImage}
+                        src={`${process.env.SERVICE_URL}${tip.profileImage}`}
                         alt="사용자 이름의 프로필 사진"
                         width={36}
                         height={36}
                         className={styles.imageBorder}
+                        unoptimized
                     />
                     <figcaption>
                         <h4>{tip.userName}</h4>
