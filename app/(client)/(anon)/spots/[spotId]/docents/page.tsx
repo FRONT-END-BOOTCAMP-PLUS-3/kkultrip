@@ -3,10 +3,12 @@ import DocentContent from "./components/DocentContent";
 import { SpotDocentDto } from "@/application/usecases/spot/docent/dto/SpotDocentDto";
 
 const DocentsPage = async (props: { params: Promise<{ spotId: string }> }) => {
-    const params = await props.params;
-    const data = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/spots/${params.spotId}/docent`
-    );
+  const params = await props.params;
+  const apiBaseUrl =
+    process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3000";
+  const data = await fetch(
+    `${apiBaseUrl}/api/spots/${params.spotId}/docent`
+  );
     const docentData: SpotDocentDto[] = await data.json();
 
     if (!docentData || docentData.length === 0) {

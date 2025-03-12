@@ -13,9 +13,11 @@ const TipsPage = async (props: {
     const params = await props.params;
     const { spotId } = params;
     const sort = searchParams.sort || "latest";
+    const apiBaseUrl =
+        process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3000";
 
     const data = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/spots/${spotId}/tips?sort=${sort}`
+        `${apiBaseUrl}/api/spots/${spotId}/tips?sort=${sort}`
     );
     if (data.status !== 200) {
         return <div></div>;

@@ -10,9 +10,9 @@ import styles from "./InfoPage.module.scss";
 
 const InfoPage = async (props: { params: Promise<{ spotId: string }> }) => {
     const params = await props.params;
-    const data = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/spots/${params.spotId}/info`
-    );
+    const apiBaseUrl =
+        process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3000";
+    const data = await fetch(`${apiBaseUrl}/api/spots/${params.spotId}/info`);
     if (data.status !== 200) {
         return <div></div>;
     }

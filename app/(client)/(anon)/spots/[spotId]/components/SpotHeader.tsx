@@ -6,21 +6,20 @@ import BookMark from "./BookMark";
 import { cookies } from "next/headers";
 
 const SpotHeader = async ({ spotId }: { spotId: string }) => {
+    const apiBaseUrl =
+        process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3000";
     try {
         const cookieStore = await cookies();
         const token = cookieStore.get("token")?.value;
 
-        const data = await fetch(
-            `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/spots/${spotId}`,
-            {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    Cookie: `token=${token}`,
-                },
-                cache: "no-store",
-            }
-        );
+        const data = await fetch(`${apiBaseUrl}/api/spots/${spotId}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                Cookie: `token=${token}`,
+            },
+            cache: "no-store",
+        });
 
         if (data.status !== 200) {
             return (
