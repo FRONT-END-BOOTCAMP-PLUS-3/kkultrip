@@ -4,20 +4,24 @@ import path from "path";
 import fs from "fs";
 import { Image } from "@prisma/client";
 
-const UPLOAD_DIR = "/home/honeytrip/upload/images/tips"; // 새로운 저장 경로
+const UPLOAD_BASE_DIR = "/home/honeytrip/upload/images"; // 업로드 기본 경로
+const UPLOAD_TIP_DIR = path.join(UPLOAD_BASE_DIR, "tips"); // 팁 이미지 저장 경로
 export class PgImageRepository implements ImageRepository {
   async createImages(tipId: number, imageFiles: File[]): Promise<void> {
-    // const uploadDir = path.join(process.cwd(), "public/images/tips");
-
     // 저장 폴더가 없으면 생성
-    if (!fs.existsSync(UPLOAD_DIR)) {
-      fs.mkdirSync(UPLOAD_DIR, { recursive: true });
+    if (!fs.existsSync(UPLOAD_BASE_DIR)) {
+      fs.mkdirSync(UPLOAD_BASE_DIR, { recursive: true });
+    }
+
+    // 📌 팁 이미지 폴더가 없으면 생성
+    if (!fs.existsSync(UPLOAD_TIP_DIR)) {
+      fs.mkdirSync(UPLOAD_TIP_DIR, { recursive: true });
     }
 
     try {
       for (const file of imageFiles) {
         const fileName = `${tipId}_${Date.now()}_${file.name}`;
-        const filePath = path.join(UPLOAD_DIR, fileName);
+        const filePath = path.join(UPLOAD_TIP_DIR, fileName);
         const fileUrl = `/images/tips/${fileName}`;
 
         // 파일 저장
