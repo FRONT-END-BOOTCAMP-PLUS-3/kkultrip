@@ -683,28 +683,28 @@ const SpotsEditPage = () => {
                     handleDocentChange(index, "description", e.target.value)
                   }
                 />
+                <div className={styles.docentRow}>
+                  <input
+                    type="file"
+                    accept="audio/*"
+                    className={styles.inputField}
+                    onChange={(e) =>
+                      handleDocentChange(
+                        index,
+                        "audioPath",
+                        e.target.files?.[0] || null
+                      )
+                    }
+                  />
+                </div>
+                <div className={styles.docentRow}>
+                  {typeof docent.audioPath === "string" && (
+                    <p className={styles.inputField}>{docent.audioPath}</p>
+                  )}
+                </div>
                 <button type="button" onClick={() => removeDocent(index)}>
                   삭제
                 </button>
-              </div>
-              <div className={styles.docentRow}>
-                <input
-                  type="file"
-                  accept="audio/*"
-                  className={styles.inputField}
-                  onChange={(e) =>
-                    handleDocentChange(
-                      index,
-                      "audioPath",
-                      e.target.files?.[0] || null
-                    )
-                  }
-                />
-              </div>
-              <div className={styles.docentRow}>
-                {typeof docent.audioPath === "string" && (
-                  <p className={styles.inputField}>{docent.audioPath}</p>
-                )}
               </div>
             </div>
           ))}

@@ -1,5 +1,7 @@
 .container {
   max-width: 37.5rem;
+  height: 100vh;
+  overflow: auto;
   margin: 0 auto;
   padding: 2rem;
   background: white;
@@ -104,8 +106,7 @@
         text-align: center;
       }
 
-      .ticketRow,
-      .docentRow {
+      .ticketRow {
         margin-bottom: 1rem;
         align-items: center;
         display: flex;
@@ -114,15 +115,37 @@
 
         button {
           text-align: center;
-          width: 10%;
+          width: 95%;
+          background: var(--primary-color);
+          padding: 0.5rem 0.8rem;
+          border-radius: 0.25rem;
+          cursor: pointer;
+        }
+      }
+      .docentRow {
+        width: 100%;
+        margin-bottom: 1rem;
+        align-items: center;
+        display: flex;
+        gap: 0.5rem;
+        justify-content: space-between;
+        flex-direction: column;
+
+        button {
+          text-align: center;
+          width: 95%;
           background: var(--primary-color);
           padding: 0.5rem 0.8rem;
           border-radius: 0.25rem;
           cursor: pointer;
         }
 
+        .inputField {
+          width: 95%;
+        }
+
         .textareaField {
-          height: 3rem;
+          width: 100%;
         }
       }
     }

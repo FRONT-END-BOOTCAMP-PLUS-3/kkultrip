@@ -580,23 +580,23 @@ const SpotsCreatePage = () => {
                     handleDocentChange(index, "description", e.target.value)
                   }
                 />
+                <div className={styles.docentRow}>
+                  <input
+                    type="file"
+                    accept="audio/*"
+                    className={styles.inputField}
+                    onChange={(e) =>
+                      handleDocentChange(
+                        index,
+                        "audioPath",
+                        e.target.files?.[0] || null
+                      )
+                    }
+                  />
+                </div>
                 <button type="button" onClick={() => removeDocent(index)}>
                   삭제
                 </button>
-              </div>
-              <div className={styles.docentRow}>
-                <input
-                  type="file"
-                  accept="audio/*"
-                  className={styles.inputField}
-                  onChange={(e) =>
-                    handleDocentChange(
-                      index,
-                      "audioPath",
-                      e.target.files?.[0] || null
-                    )
-                  }
-                />
               </div>
             </div>
           ))}
