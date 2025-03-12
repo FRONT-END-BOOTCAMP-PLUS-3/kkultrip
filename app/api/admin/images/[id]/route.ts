@@ -5,7 +5,7 @@ import { PgImageRepository } from "@/infrastructure/repositories/PgImageReposito
 export async function DELETE(req: NextRequest) {
   try {
     const pathname = req.nextUrl.pathname;
-    const imageId = pathname.split("/").pop(); // Extract image ID from the URL
+    const imageId = pathname.split("/").pop();
 
     if (!imageId || isNaN(Number(imageId))) {
       return NextResponse.json(

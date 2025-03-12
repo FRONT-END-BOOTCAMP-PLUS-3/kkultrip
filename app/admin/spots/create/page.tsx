@@ -100,7 +100,6 @@ const SpotsCreatePage = () => {
     }));
   };
 
-  // 이미지 파일 변경 핸들러
   const handleImageFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {

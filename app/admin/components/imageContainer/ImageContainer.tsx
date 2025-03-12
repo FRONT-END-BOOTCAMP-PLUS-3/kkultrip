@@ -3,7 +3,7 @@ import styles from "./ImageContainer.module.scss";
 import { Image as PrismaImage } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { AiOutlineClose } from "react-icons/ai"; // Importing the X (close) icon
+import { AiOutlineClose } from "react-icons/ai";
 
 interface ImageContainerProps {
   images: (PrismaImage & { nickname: string; spotName: string })[];
@@ -49,11 +49,11 @@ const ImageContainer: React.FC<ImageContainerProps> = ({ images }) => {
               width={500}
               height={300}
             />
-            {/* Close (X) Icon in the top-right corner */}
+
             <div
               className={styles.closeIcon}
               onClick={(e) => {
-                e.stopPropagation(); // Prevent the image click handler from firing
+                e.stopPropagation();
                 handleDelete(image.id);
               }}
             >
@@ -62,10 +62,10 @@ const ImageContainer: React.FC<ImageContainerProps> = ({ images }) => {
           </div>
           <div className={styles.imageDetails}>
             <p>
-              <strong>작성자:</strong> {image.nickname} {/* 작성자 이름 */}
+              <strong>작성자:</strong> {image.nickname}
             </p>
             <p>
-              <strong>명소 이름:</strong> {image.spotName} {/* 명소 이름 */}
+              <strong>명소 이름:</strong> {image.spotName}
             </p>
             <p>
               <strong>꿀팁 ID:</strong> {image.tipId}

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, Suspense } from "react";
-import { useRouter, useSearchParams } from "next/navigation"; // useSearchParams 추가
+import { useRouter, useSearchParams } from "next/navigation";
 import { FaPlus } from "react-icons/fa";
 import SideBar from "../components/sideBar/SideBar";
 import Header from "../components/header/Header";
@@ -13,7 +13,7 @@ import SearchBar from "../components/searchBar/SearchBar";
 const AdminSpotsPageContent = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const currentPageFromUrl = parseInt(searchParams.get("page") || "1", 10); // URL에서 현재 페이지를 가져옴
+  const currentPageFromUrl = parseInt(searchParams.get("page") || "1", 10);
   const [spots, setSpots] = useState<Spot[]>([]);
   const [currentPage, setCurrentPage] = useState(currentPageFromUrl);
   const [totalPages, setTotalPages] = useState(1);
@@ -39,7 +39,7 @@ const AdminSpotsPageContent = () => {
   const handlePageChange = (page: number) => {
     if (page < 1 || page > totalPages) return;
     setCurrentPage(page);
-    // 페이지 번호를 URL에 반영
+
     router.push(`/admin/spots?page=${page}`);
   };
 

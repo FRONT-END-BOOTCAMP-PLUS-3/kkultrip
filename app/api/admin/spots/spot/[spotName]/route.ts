@@ -14,10 +14,8 @@ export async function GET(req: Request) {
   }
 
   try {
-    // Repositories
     const spotRepository = new PgSpotRepository();
 
-    // Usecase
     const getSpotsByNameUsecase = new GetSpotsByNameUseCase(spotRepository);
 
     const spots = await getSpotsByNameUsecase.execute(spotName);
