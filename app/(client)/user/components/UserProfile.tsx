@@ -73,7 +73,9 @@ const UserProfile = () => {
           src={img}
           fill
           alt="profile image"
+          sizes="10rem"
           className={styles.profileImage}
+          priority
         />
         {isEdit && (
           <>
