@@ -157,6 +157,7 @@ const TipForm = ({
               alt="기존 이미지"
               width={220}
               height={220}
+              unoptimized
             />
             <button
               className={styles.removeImage}
