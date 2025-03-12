@@ -40,7 +40,6 @@ const SpotHeader = async ({ spotId }: { spotId: string }) => {
         }
 
         const spotHeaderData: SpotHeaderDto | null = await data.json();
-        console.log(spotHeaderData);
 
         if (!spotHeaderData) {
             return <div>Spot not found</div>;

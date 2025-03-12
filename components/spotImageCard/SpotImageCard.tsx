@@ -35,6 +35,8 @@ const SpotImageCard = ({ spot, navigateTo, tipId }: SpotImageCardProps) => {
           alt={spot.name}
           fill
           style={{ objectFit: "cover" }}
+          sizes="10rem"
+          priority
         />
       </div>
       <div className={styles.textWrapper}>
