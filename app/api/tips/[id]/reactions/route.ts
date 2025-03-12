@@ -19,13 +19,13 @@ export async function POST(
 
     const createReactionUsecase = new CreateReactionUsecase(reactionRepository);
 
-    await createReactionUsecase.execute({
+    const createdReaction = await createReactionUsecase.execute({
         tipId: Number(id),
         userId,
         type,
     });
 
-    return NextResponse.json({ message: "Reaction created" }, { status: 200 });
+    return NextResponse.json(createdReaction, { status: 200 });
 }
 
 export async function GET(
