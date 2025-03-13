@@ -49,22 +49,13 @@ export async function POST(req: Request) {
       docentRepository
     );
 
-    // 이미지 업로드 경로 설정
     if (file) {
       const buffer = await file.arrayBuffer();
-
-      // 환경변수 HOME이 undefined일 수 있으므로 확인 후 경로 설정
-      const homeDir = process.env.HOME;
-      if (!homeDir) {
-        throw new Error("HOME environment variable is not defined");
-      }
-
-      const uploadDir = path.join(homeDir, "upload", "images", "spots");
+      const uploadDir = path.join(process.cwd(), "public", "images", "spots");
       let filePath = path.join(uploadDir, file.name);
       let fileName = path.parse(file.name).name;
       const fileExt = path.parse(file.name).ext;
 
-      // 파일 이름 중복 처리
       const existingFiles = await fs.readdir(uploadDir);
       const fileNames = existingFiles.map((f) => path.parse(f).name);
 
@@ -79,25 +70,16 @@ export async function POST(req: Request) {
       body.img = `/images/spots/${fileName}${fileExt}`;
     }
 
-    // docentAudio 파일 업로드 경로 설정 (이미지 파일과 동일한 로직)
     if (body.docents) {
       for (let i = 0; i < body.docents.length; i++) {
         const audioFile = formData.get(`docentAudio${i}`) as File;
         if (audioFile) {
           const buffer = await audioFile.arrayBuffer();
-
-          // 오디오 파일 업로드 경로 설정
-          const homeDir = process.env.HOME;
-          if (!homeDir) {
-            throw new Error("HOME environment variable is not defined");
-          }
-
-          const uploadDir = path.join(homeDir, "upload", "audios");
+          const uploadDir = path.join(process.cwd(), "public", "audios");
           let filePath = path.join(uploadDir, audioFile.name);
           let fileName = path.parse(audioFile.name).name;
           const fileExt = path.parse(audioFile.name).ext;
 
-          // 파일 이름 중복 처리
           const existingFiles = await fs.readdir(uploadDir);
           const fileNames = existingFiles.map((f) => path.parse(f).name);
 
@@ -109,7 +91,7 @@ export async function POST(req: Request) {
           }
 
           await fs.writeFile(filePath, Buffer.from(buffer));
-          body.docents[i].audioPath = `/audios/${fileName}${fileExt}`;
+          body.docents[i].audioPath = `/audio/${fileName}${fileExt}`;
         }
       }
     }
