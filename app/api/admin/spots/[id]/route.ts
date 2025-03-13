@@ -112,23 +112,6 @@ export async function PATCH(req: Request) {
       for (let i = 0; i < docents.length; i++) {
         const audioFile = formData.get(`docentAudio${i}`) as File;
         if (audioFile) {
-          // 새 오디오 파일이 제공된 경우에만 삭제 및 저장
-          if (docents[i].audioPath) {
-            try {
-              const audioFilename = path.basename(docents[i].audioPath);
-              const audioPath = path.join(uploadDirAudios, audioFilename);
-              await fs.access(audioPath);
-              await fs.unlink(audioPath);
-              console.log(`Deleted existing audio: ${audioFilename}`);
-            } catch (unlinkError) {
-              console.error("Failed to delete old audio:", unlinkError);
-              return NextResponse.json(
-                { error: "Failed to delete old audio" },
-                { status: 500 }
-              );
-            }
-          }
-
           const buffer = await audioFile.arrayBuffer();
           let filePath = path.join(uploadDirAudios, audioFile.name);
           let fileName = path.parse(audioFile.name).name;
@@ -142,6 +125,20 @@ export async function PATCH(req: Request) {
             fileName = `${fileName}_${counter}`;
             filePath = path.join(uploadDirAudios, `${fileName}${fileExt}`);
             counter++;
+          }
+
+          if (docents[i].audioPath) {
+            try {
+              const audioFilename = path.basename(docents[i].audioPath);
+              const existingAudioPath = path.join(
+                uploadDirAudios,
+                audioFilename
+              );
+              await fs.access(existingAudioPath);
+              await fs.unlink(existingAudioPath);
+            } catch (unlinkError) {
+              console.log("Failed to delete old audio:", unlinkError);
+            }
           }
 
           await fs.writeFile(filePath, Buffer.from(buffer));
@@ -159,7 +156,7 @@ export async function PATCH(req: Request) {
 
     return NextResponse.json(updatedSpot, { status: 200 });
   } catch (error) {
-    console.error("Error updating spot:", error);
+    console.log("Error updating spot:", error);
     return NextResponse.json(
       { error: "Failed to update spot" },
       { status: 500 }
