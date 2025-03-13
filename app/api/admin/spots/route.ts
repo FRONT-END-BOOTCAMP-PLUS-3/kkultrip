@@ -55,7 +55,11 @@ export async function POST(req: Request) {
 
     if (file) {
       const buffer = await file.arrayBuffer();
-      const uploadDir = UPLOAD_SPOT_DIR; // 변경된 경로
+      const uploadDir = path.join("/home/honeytrip/upload", "images", "spots");
+
+      // 디렉터리가 존재하지 않으면 생성
+      await fs.mkdir(uploadDir, { recursive: true });
+
       let filePath = path.join(uploadDir, file.name);
       let fileName = path.parse(file.name).name;
       const fileExt = path.parse(file.name).ext;
@@ -79,7 +83,11 @@ export async function POST(req: Request) {
         const audioFile = formData.get(`docentAudio${i}`) as File;
         if (audioFile) {
           const buffer = await audioFile.arrayBuffer();
-          const uploadDir = UPLOAD_AUDIOS_DIR; // 변경된 경로
+          const uploadDir = path.join("/home/honeytrip/upload", "audio");
+
+          // 디렉터리가 존재하지 않으면 생성
+          await fs.mkdir(uploadDir, { recursive: true });
+
           let filePath = path.join(uploadDir, audioFile.name);
           let fileName = path.parse(audioFile.name).name;
           const fileExt = path.parse(audioFile.name).ext;
@@ -95,7 +103,7 @@ export async function POST(req: Request) {
           }
 
           await fs.writeFile(filePath, Buffer.from(buffer));
-          body.docents[i].audioPath = `/audios/${fileName}${fileExt}`;
+          body.docents[i].audioPath = `/audio/${fileName}${fileExt}`;
         }
       }
     }
