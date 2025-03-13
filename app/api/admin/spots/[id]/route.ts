@@ -80,13 +80,8 @@ export async function PATCH(req: Request) {
       return NextResponse.json({ error: "Spot not found" }, { status: 404 });
     }
 
-    const uploadDirImages = path.join(
-      process.cwd(),
-      "public",
-      "images",
-      "spots"
-    );
-    const uploadDirAudios = path.join(process.cwd(), "public", "audios");
+    const uploadDirImages = "/home/honeytrip/upload/images/spots";
+    const uploadDirAudios = "/home/honeytrip/upload/audios";
 
     if (formData.has("file")) {
       const file = formData.get("file") as File;

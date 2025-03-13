@@ -52,22 +52,22 @@ export async function POST(req: Request) {
 
     if (file) {
       const buffer = await file.arrayBuffer();
-      const uploadDir = path.join("/home/honeytrip/upload", "images", "spots");
+      const uploadDirImages = "/home/honeytrip/upload/images/spots";
 
       // 디렉터리가 존재하지 않으면 생성
-      await fs.mkdir(uploadDir, { recursive: true });
+      await fs.mkdir(uploadDirImages, { recursive: true });
 
-      let filePath = path.join(uploadDir, file.name);
+      let filePath = path.join(uploadDirImages, file.name);
       let fileName = path.parse(file.name).name;
       const fileExt = path.parse(file.name).ext;
 
-      const existingFiles = await fs.readdir(uploadDir);
+      const existingFiles = await fs.readdir(uploadDirImages);
       const fileNames = existingFiles.map((f) => path.parse(f).name);
 
       let counter = 1;
       while (fileNames.includes(fileName)) {
         fileName = `${fileName}_${counter}`;
-        filePath = path.join(uploadDir, `${fileName}${fileExt}`);
+        filePath = path.join(uploadDirImages, `${fileName}${fileExt}`);
         counter++;
       }
 
@@ -80,22 +80,22 @@ export async function POST(req: Request) {
         const audioFile = formData.get(`docentAudio${i}`) as File;
         if (audioFile) {
           const buffer = await audioFile.arrayBuffer();
-          const uploadDir = path.join("/home/honeytrip/upload", "audios");
+          const uploadDirAudios = "/home/honeytrip/upload/audios";
 
           // 디렉터리가 존재하지 않으면 생성
-          await fs.mkdir(uploadDir, { recursive: true });
+          await fs.mkdir(uploadDirAudios, { recursive: true });
 
-          let filePath = path.join(uploadDir, audioFile.name);
+          let filePath = path.join(uploadDirAudios, audioFile.name);
           let fileName = path.parse(audioFile.name).name;
           const fileExt = path.parse(audioFile.name).ext;
 
-          const existingFiles = await fs.readdir(uploadDir);
+          const existingFiles = await fs.readdir(uploadDirAudios);
           const fileNames = existingFiles.map((f) => path.parse(f).name);
 
           let counter = 1;
           while (fileNames.includes(fileName)) {
             fileName = `${fileName}_${counter}`;
-            filePath = path.join(uploadDir, `${fileName}${fileExt}`);
+            filePath = path.join(uploadDirAudios, `${fileName}${fileExt}`);
             counter++;
           }
 
