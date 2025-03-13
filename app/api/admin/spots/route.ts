@@ -51,7 +51,7 @@ export async function POST(req: Request) {
 
     if (file) {
       const buffer = await file.arrayBuffer();
-      const uploadDir = path.join(process.cwd(), "public", "images", "spots");
+      const uploadDir = path.join("/home/honeytrip/upload", "images", "spots");
       let filePath = path.join(uploadDir, file.name);
       let fileName = path.parse(file.name).name;
       const fileExt = path.parse(file.name).ext;
