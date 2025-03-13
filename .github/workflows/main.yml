@@ -11,14 +11,14 @@ on:
 jobs:
   # 첫번째 단계 : 빌드
   build:
-    runs-on: [self-hosted, next15-ts-ssr-server]
+    runs-on: [self-hosted, kkultrip-runner]
 
     steps:
       - name: Build Next.js Project
         run: echo "Build Next.js Project"
   # 두번째 단계: 테스트
   test:
-    runs-on: [self-hosted, next15-ts-ssr-server]
+    runs-on: [self-hosted, kkultrip-runner]
 
     steps:
       - name: Test Next.js Project
@@ -26,7 +26,7 @@ jobs:
 
   # 세번째 단계: 배포
   deploy:
-    runs-on: [self-hosted, next15-ts-ssr-server]
+    runs-on: [self-hosted, kkultrip-runner]
 
     steps:
       - name: Deploy Next.js Project
