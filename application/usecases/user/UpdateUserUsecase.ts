@@ -45,6 +45,6 @@ export class UpdateUserUsecase {
     }
 
     // 유저 정보 업데이트 (이미지 경로 포함)
-    await this.userRepository.updateUser(userId, nickname, imagePath);
+    return await this.userRepository.updateUser(userId, nickname, imagePath);
   }
 }
