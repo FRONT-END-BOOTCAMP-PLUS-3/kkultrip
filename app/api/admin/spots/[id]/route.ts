@@ -100,19 +100,10 @@ export async function PATCH(req: Request) {
         counter++;
       }
 
-      if (existingSpot.img) {
-        try {
-          const existingImagePath = path.join(
-            uploadDirImages,
-            existingSpot.img
-          );
-          await fs.access(existingImagePath);
-          await fs.unlink(existingImagePath);
-        } catch (unlinkError) {
-          console.log("Failed to delete old image:", unlinkError);
-        }
-      }
-
+      const existingImgFilename = path.basename(existingSpot.img);
+      const existingImgPath = path.join(uploadDirImages, existingImgFilename);
+      await fs.access(existingImgPath);
+      await fs.unlink(existingImgPath);
       await fs.writeFile(filePath, Buffer.from(buffer));
       updateData.img = `/images/spots/${fileName}${fileExt}`;
     }
