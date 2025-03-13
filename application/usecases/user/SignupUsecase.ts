@@ -20,7 +20,7 @@ export default class SignupUsecase {
       id: "",
       isAdmin: false,
       kakaoId: 0,
-      img: "/images/users/default.png",
+      img: "",
       createdAt: new Date(),
       updatedAt: new Date(),
     });

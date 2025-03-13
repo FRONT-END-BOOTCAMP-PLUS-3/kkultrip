@@ -130,12 +130,17 @@ export class PgUserRepository implements UserRepository {
   }
 
   // 유저 정보 업데이트(닉네임, 프로필)
-  async updateUser(id: string, nickname: string, img: string): Promise<void> {
+  async updateUser(
+    id: string,
+    nickname: string,
+    img: string
+  ): Promise<User | null> {
     try {
-      await prisma.user.update({
+      const updatedUser = await prisma.user.update({
         where: { id },
         data: { nickname, img },
       });
+      return updatedUser ?? null;
     } finally {
       await prisma.$disconnect();
     }
