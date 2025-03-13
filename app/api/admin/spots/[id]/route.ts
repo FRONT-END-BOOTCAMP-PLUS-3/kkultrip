@@ -116,12 +116,12 @@ export async function PATCH(req: Request) {
     if (docents) {
       for (let i = 0; i < docents.length; i++) {
         const audioFile = formData.get(`docentAudio${i}`) as File;
-        console.log(existingDocent);
+        console.log(existingDocent); // 해당 스팟 도슨트 조회
         if (audioFile) {
           const buffer = await audioFile.arrayBuffer();
-          let fileName = path.parse(audioFile.name).name;
+          const fileName = path.parse(audioFile.name).name;
           const fileExt = path.parse(audioFile.name).ext;
-          let filePath = path.join(uploadDirAudios, `${fileName}${fileExt}`);
+          const filePath = path.join(uploadDirAudios, `${fileName}${fileExt}`);
           const newAudioPath = `/audios/${fileName}${fileExt}`; // 상대 경로
 
           // 기존 오디오 경로 확인 및 삭제
