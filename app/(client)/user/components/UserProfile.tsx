@@ -8,17 +8,18 @@ import useUserStore from "@/store/useUserStore";
 
 const UserProfile = () => {
   const { nickname, img, setNickname, setImg } = useUserStore();
+
   const [isEdit, setIsEdit] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const [prevNickname, setPrevNickname] = useState(nickname);
-  const [prevImg, setPrevImg] = useState(img);
+  const [, setPrevImg] = useState(img);
 
   const handleEditToggle = async () => {
     if (isEdit) {
       try {
         const formData = new FormData();
-        if (nickname) {
-          formData.append("nickname", nickname);
+        if (prevNickname) {
+          formData.append("nickname", prevNickname as string);
         }
         if (file) formData.append("file", file);
         const response = await fetch("/api/user", {
@@ -30,12 +31,10 @@ const UserProfile = () => {
 
         const updatedData = await response.json();
 
-        setImg(updatedData.user.img);
         setNickname(updatedData.user.nickname);
+        setImg(updatedData.user.img);
       } catch (error) {
         console.error("프로필 수정 오류:", error);
-        setNickname(prevNickname as string);
-        setImg(prevImg as string);
       }
     } else {
       setPrevNickname(nickname);
@@ -47,7 +46,7 @@ const UserProfile = () => {
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      setImg(URL.createObjectURL(file));
+      setPrevImg(URL.createObjectURL(file));
       setFile(file);
     }
   };
@@ -84,8 +83,8 @@ const UserProfile = () => {
         {isEdit ? (
           <input
             type="text"
-            value={nickname as string}
-            onChange={(e) => setNickname(e.target.value)}
+            value={prevNickname as string}
+            onChange={(e) => setPrevNickname(e.target.value)}
             className={styles.nicknameInput}
           />
         ) : (
