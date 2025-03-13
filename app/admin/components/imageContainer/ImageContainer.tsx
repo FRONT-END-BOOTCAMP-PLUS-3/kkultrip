@@ -43,7 +43,7 @@ const ImageContainer: React.FC<ImageContainerProps> = ({ images }) => {
             onClick={() => handleImageClick(image.tipId)}
           >
             <Image
-              src={`${process.env.SERVICE_URL}${image.path}`}
+              src={`${process.env.NEXT_PUBLIC_SERVICE_URL}${image.path}`}
               alt={`Image ${image.id}`}
               className={styles.image}
               width={500}
