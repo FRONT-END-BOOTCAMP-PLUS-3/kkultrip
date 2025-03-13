@@ -80,6 +80,11 @@ export async function PATCH(req: Request) {
       return NextResponse.json({ error: "Spot not found" }, { status: 404 });
     }
 
+    const existingDocent = await docentRepository.getDocentBySpotId(Number(id));
+    if (!existingDocent || existingDocent.length === 0) {
+      return NextResponse.json({ error: "Docent not found" }, { status: 404 });
+    }
+
     const uploadDirImages = "/home/honeytrip/upload/images/spots";
     const uploadDirAudios = "/home/honeytrip/upload/audios";
 
@@ -114,20 +119,20 @@ export async function PATCH(req: Request) {
 
         if (audioFile) {
           const buffer = await audioFile.arrayBuffer();
-          const newFileName = path.parse(audioFile.name).name;
-          const newFileExt = path.parse(audioFile.name).ext;
-          const newFilePath = path.join(
-            uploadDirAudios,
-            `${newFileName}${newFileExt}`
-          );
-          const newAudioPath = `/audios/${newFileName}${newFileExt}`; // 상대 경로
+          let fileName = path.parse(audioFile.name).name;
+          const fileExt = path.parse(audioFile.name).ext;
+          let filePath = path.join(uploadDirAudios, `${fileName}${fileExt}`);
+          const newAudioPath = `/audios/${fileName}${fileExt}`; // 상대 경로
 
-          // ✅ 기존 오디오 경로 확인
-          if (docents[i].audioPath && docents[i].audioPath !== newAudioPath) {
+          // 기존 오디오 경로 확인 및 삭제
+          if (
+            existingDocent[i].audioPath &&
+            existingDocent[i].audioPath !== newAudioPath
+          ) {
             try {
               const existingAudioPath = path.join(
                 uploadDirAudios,
-                path.basename(docents[i].audioPath)
+                path.basename(existingDocent[i].audioPath)
               );
               console.log(`🛠 기존 오디오 삭제 시도: ${existingAudioPath}`);
               await fs.access(existingAudioPath); // 파일 존재 여부 확인
@@ -141,12 +146,12 @@ export async function PATCH(req: Request) {
             }
           }
 
-          // ✅ 새로운 오디오 저장
-          await fs.writeFile(newFilePath, Buffer.from(buffer));
-          console.log(`✅ 새 오디오 저장됨: ${newFilePath}`);
+          // 새 오디오 파일 저장
+          await fs.writeFile(filePath, Buffer.from(buffer));
+          console.log(`✅ 새 오디오 저장됨: ${filePath}`);
 
-          // ✅ 새로운 오디오 경로 업데이트
-          docents[i].audioPath = newAudioPath;
+          // 새 오디오 경로 업데이트
+          existingDocent[i].audioPath = newAudioPath;
         }
       }
     }
@@ -155,7 +160,7 @@ export async function PATCH(req: Request) {
       ...updateData,
       tickets,
       times,
-      docents,
+      docents: existingDocent, // updated docents with new audio paths
     });
 
     return NextResponse.json(updatedSpot, { status: 200 });
