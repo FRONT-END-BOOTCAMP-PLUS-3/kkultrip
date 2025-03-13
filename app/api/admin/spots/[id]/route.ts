@@ -113,34 +113,36 @@ export async function PATCH(req: Request) {
         const audioFile = formData.get(`docentAudio${i}`) as File;
         if (audioFile) {
           const buffer = await audioFile.arrayBuffer();
-          let filePath = path.join(uploadDirAudios, audioFile.name);
-          let fileName = path.parse(audioFile.name).name;
           const fileExt = path.parse(audioFile.name).ext;
+          let fileName = path.parse(audioFile.name).name;
+          let filePath = path.join(uploadDirAudios, `${fileName}${fileExt}`);
 
-          const existingFiles = await fs.readdir(uploadDirAudios);
-          const fileNames = existingFiles.map((f) => path.parse(f).name);
-
-          let counter = 1;
-          while (fileNames.includes(fileName)) {
-            fileName = `${fileName}_${counter}`;
-            filePath = path.join(uploadDirAudios, `${fileName}${fileExt}`);
-            counter++;
-          }
-
+          // ✅ 기존 오디오 파일 삭제 (이전 로직과 차이점)
           if (docents[i].audioPath) {
             try {
-              const audioFilename = path.basename(docents[i].audioPath);
-              const existingAudioPath = path.join(
-                uploadDirAudios,
-                audioFilename
-              );
-              await fs.access(existingAudioPath);
-              await fs.unlink(existingAudioPath);
+              const oldAudioFilename = path.basename(docents[i].audioPath);
+              const oldAudioPath = path.join(uploadDirAudios, oldAudioFilename);
+              await fs.access(oldAudioPath); // 기존 파일 존재 여부 확인
+              await fs.unlink(oldAudioPath); // 기존 파일 삭제
+              console.log(`Deleted old audio file: ${oldAudioFilename}`);
             } catch (unlinkError) {
               console.log("Failed to delete old audio:", unlinkError);
             }
           }
 
+          // ✅ 중복 파일명 처리
+          const existingFiles = await fs.readdir(uploadDirAudios);
+          const fileNames = existingFiles.map((f) => path.parse(f).name);
+
+          let counter = 1;
+          let originalFileName = fileName; // 원래 이름 유지
+          while (fileNames.includes(fileName)) {
+            fileName = `${originalFileName}_${counter}`;
+            filePath = path.join(uploadDirAudios, `${fileName}${fileExt}`);
+            counter++;
+          }
+
+          // ✅ 새로운 오디오 파일 저장
           await fs.writeFile(filePath, Buffer.from(buffer));
           docents[i].audioPath = `/audios/${fileName}${fileExt}`;
         }
