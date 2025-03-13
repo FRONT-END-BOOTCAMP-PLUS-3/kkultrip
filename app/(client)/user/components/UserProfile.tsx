@@ -1,42 +1,25 @@
 "use client";
 
-import Loading from "@/components/loading/Loading";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { FaCamera } from "react-icons/fa";
 import styles from "./UserProfile.module.scss";
+import useUserStore from "@/store/useUserStore";
 
 const UserProfile = () => {
-  const [loading, setLoading] = useState(true);
+  const { nickname, img, setNickname, setImg } = useUserStore();
   const [isEdit, setIsEdit] = useState(false);
-  const [nickname, setNickname] = useState("");
-  const [img, setImg] = useState("");
   const [file, setFile] = useState<File | null>(null);
-
-  useEffect(() => {
-    const fetchUserInfo = async () => {
-      try {
-        const response = await fetch("/api/user");
-        if (!response.ok) throw new Error("사용자 정보를 불러올 수 없습니다.");
-
-        const data = await response.json();
-        setNickname(data.user.nickname);
-        setImg(data.user.img);
-      } catch (error) {
-        console.error("사용자 정보 불러오기 실패:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchUserInfo();
-  }, []);
+  const [prevNickname, setPrevNickname] = useState(nickname);
+  const [prevImg, setPrevImg] = useState(img);
 
   const handleEditToggle = async () => {
     if (isEdit) {
       try {
         const formData = new FormData();
-        formData.append("nickname", nickname);
+        if (nickname) {
+          formData.append("nickname", nickname);
+        }
         if (file) formData.append("file", file);
         const response = await fetch("/api/user", {
           method: "PUT",
@@ -46,10 +29,17 @@ const UserProfile = () => {
         if (!response.ok) throw new Error("프로필 수정 실패");
 
         const updatedData = await response.json();
+
         setImg(updatedData.user.img);
+        setNickname(updatedData.user.nickname);
       } catch (error) {
         console.error("프로필 수정 오류:", error);
+        setNickname(prevNickname as string);
+        setImg(prevImg as string);
       }
+    } else {
+      setPrevNickname(nickname);
+      setPrevImg(img);
     }
     setIsEdit((prev) => !prev);
   };
@@ -61,10 +51,6 @@ const UserProfile = () => {
       setFile(file);
     }
   };
-
-  if (loading) {
-    return <Loading />;
-  }
 
   return (
     <div className={styles.profileContainer}>
@@ -98,7 +84,7 @@ const UserProfile = () => {
         {isEdit ? (
           <input
             type="text"
-            value={nickname}
+            value={nickname as string}
             onChange={(e) => setNickname(e.target.value)}
             className={styles.nicknameInput}
           />
