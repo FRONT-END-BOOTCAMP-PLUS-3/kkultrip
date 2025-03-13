@@ -32,6 +32,7 @@ const TipDetailPage = () => {
         const data = await response.json();
         setTip(data.tip);
         setReaction(data.reaction);
+        console.log(data);
       } catch (error) {
         console.log("❌ Error fetching tip or reaction:", error);
       }
