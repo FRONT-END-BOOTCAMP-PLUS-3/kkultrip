@@ -103,8 +103,7 @@ export async function PATCH(req: Request) {
       if (existingSpot.img) {
         try {
           const existingImagePath = path.join(
-            process.cwd(),
-            "public",
+            uploadDirImages,
             existingSpot.img
           );
           await fs.unlink(existingImagePath);
@@ -139,8 +138,7 @@ export async function PATCH(req: Request) {
           if (docents[i].audioPath) {
             try {
               const existingAudioPath = path.join(
-                process.cwd(),
-                "public",
+                uploadDirAudios,
                 docents[i].audioPath
               );
               await fs.unlink(existingAudioPath);
@@ -206,13 +204,7 @@ export async function DELETE(
     if (spot.img) {
       try {
         const existingImgFilename = path.basename(spot.img);
-        const existingImgPath = path.join(
-          uploadDirImages,
-          "public",
-          "images",
-          "spots",
-          existingImgFilename
-        );
+        const existingImgPath = path.join(uploadDirImages, existingImgFilename);
         await fs.access(existingImgPath);
         await fs.unlink(existingImgPath);
         console.log(`Deleted existing image: ${existingImgFilename}`);
@@ -225,12 +217,7 @@ export async function DELETE(
       if (docent.audioPath) {
         try {
           const audioFilename = path.basename(docent.audioPath);
-          const audioPath = path.join(
-            uploadDirAudios,
-            "public",
-            "audios",
-            audioFilename
-          );
+          const audioPath = path.join(uploadDirAudios, audioFilename);
           await fs.access(audioPath);
           await fs.unlink(audioPath);
           console.log(`Deleted audio file: ${audioFilename}`);
