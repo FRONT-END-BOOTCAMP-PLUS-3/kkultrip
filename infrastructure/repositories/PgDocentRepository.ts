@@ -36,6 +36,21 @@ export default class PgDocentRepository implements DocentRepository {
     }
   }
 
+  async getDocentById(id: number): Promise<Docent | null> {
+    try {
+      return await prisma.docent.findUnique({
+        where: {
+          id,
+        },
+      });
+    } catch (error) {
+      console.log("❌ getDocentById 오류 발생:", error);
+      throw new Error("해당 도슨트 정보를 가져오는 데 실패했습니다.");
+    } finally {
+      await prisma.$disconnect();
+    }
+  }
+
   async deleteDocent(id: number): Promise<Docent | null> {
     try {
       return await prisma.docent.delete({
