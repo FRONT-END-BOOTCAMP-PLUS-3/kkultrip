@@ -200,11 +200,14 @@ export async function DELETE(
       return NextResponse.json({ error: "Spot not found" }, { status: 404 });
     }
 
+    const uploadDirImages = "/home/honeytrip/upload/images/spots";
+    const uploadDirAudios = "/home/honeytrip/upload/audios";
+
     if (spot.img) {
       try {
         const existingImgFilename = path.basename(spot.img);
         const existingImgPath = path.join(
-          process.cwd(),
+          uploadDirImages,
           "public",
           "images",
           "spots",
@@ -223,7 +226,7 @@ export async function DELETE(
         try {
           const audioFilename = path.basename(docent.audioPath);
           const audioPath = path.join(
-            process.cwd(),
+            uploadDirAudios,
             "public",
             "audios",
             audioFilename
