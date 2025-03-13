@@ -117,6 +117,23 @@ export async function PATCH(req: Request) {
           let fileName = path.parse(audioFile.name).name;
           const fileExt = path.parse(audioFile.name).ext;
 
+          // 기존 오디오 a 삭제 (수정된 부분)
+          if (docents[i].audioPath) {
+            try {
+              const existingAudioFilename = path.basename(docents[i].audioPath);
+              const existingAudioPath = path.join(
+                uploadDirAudios,
+                existingAudioFilename
+              );
+              await fs.access(existingAudioPath);
+              await fs.unlink(existingAudioPath);
+              console.log(`Deleted old audio file: ${existingAudioPath}`);
+            } catch (unlinkError) {
+              console.log("Failed to delete old audio:", unlinkError);
+            }
+          }
+
+          // 새 오디오 b 저장 (이전 로직 유지)
           const existingFiles = await fs.readdir(uploadDirAudios);
           const fileNames = existingFiles.map((f) => path.parse(f).name);
 
@@ -125,20 +142,6 @@ export async function PATCH(req: Request) {
             fileName = `${fileName}_${counter}`;
             filePath = path.join(uploadDirAudios, `${fileName}${fileExt}`);
             counter++;
-          }
-
-          if (docents[i].audioPath) {
-            try {
-              const audioFilename = path.basename(docents[i].audioPath);
-              const existingAudioPath = path.join(
-                uploadDirAudios,
-                audioFilename
-              );
-              await fs.access(existingAudioPath);
-              await fs.unlink(existingAudioPath);
-            } catch (unlinkError) {
-              console.log("Failed to delete old audio:", unlinkError);
-            }
           }
 
           await fs.writeFile(filePath, Buffer.from(buffer));
