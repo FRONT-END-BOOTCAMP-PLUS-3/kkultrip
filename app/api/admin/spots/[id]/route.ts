@@ -116,7 +116,7 @@ export async function PATCH(req: Request) {
     if (docents) {
       for (let i = 0; i < docents.length; i++) {
         const audioFile = formData.get(`docentAudio${i}`) as File;
-
+        console.log(existingDocent);
         if (audioFile) {
           const buffer = await audioFile.arrayBuffer();
           let fileName = path.parse(audioFile.name).name;
