@@ -77,12 +77,9 @@ export async function PUT(req: NextRequest) {
     const userRepository: UserRepository = new PgUserRepository();
     const usecase = new UpdateUserUsecase(userRepository);
 
-    await usecase.execute(userId, nickname, file);
+    const updatedUser = await usecase.execute(userId, nickname, file);
 
-    return NextResponse.json(
-      { message: "프로필 업데이트 성공" },
-      { status: 200 }
-    );
+    return NextResponse.json({ user: updatedUser }, { status: 200 });
   } catch (error) {
     console.error("유저 프로필 수정 오류:", error);
     return NextResponse.json({ message: "서버 오류 발생" }, { status: 500 });
