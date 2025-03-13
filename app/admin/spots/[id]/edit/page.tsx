@@ -554,11 +554,12 @@ const SpotsEditPage = () => {
         {formData.img && (
           <div className={styles.imagePreviewContainer}>
             <Image
-              src={formData.img}
+              src={`${process.env.NEXT_PUBLIC_SERVICE_URL}${formData.img}`}
               alt="미리보기"
               className={styles.imagePreview}
               width={300}
               height={300}
+              unoptimized
             />
           </div>
         )}
