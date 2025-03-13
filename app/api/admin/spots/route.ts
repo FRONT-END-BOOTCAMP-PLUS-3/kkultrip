@@ -32,6 +32,7 @@ export async function GET(req: Request) {
   }
 }
 
+// POST 메서드 내에서 파일 저장 부분 수정
 export async function POST(req: Request) {
   try {
     const formData = await req.formData();
@@ -79,7 +80,7 @@ export async function POST(req: Request) {
         const audioFile = formData.get(`docentAudio${i}`) as File;
         if (audioFile) {
           const buffer = await audioFile.arrayBuffer();
-          const uploadDir = path.join("/home/honeytrip/upload", "audio");
+          const uploadDir = path.join("/home/honeytrip/upload", "audios");
 
           // 디렉터리가 존재하지 않으면 생성
           await fs.mkdir(uploadDir, { recursive: true });
