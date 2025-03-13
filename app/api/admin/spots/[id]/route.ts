@@ -117,7 +117,7 @@ export async function PATCH(req: Request) {
           let fileName = path.parse(audioFile.name).name;
           const fileExt = path.parse(audioFile.name).ext;
 
-          // 기존 오디오 a 삭제 (수정된 부분)
+          // ✅ 기존 오디오 a 경로 확인
           if (docents[i].audioPath) {
             try {
               const existingAudioFilename = path.basename(docents[i].audioPath);
@@ -125,15 +125,22 @@ export async function PATCH(req: Request) {
                 uploadDirAudios,
                 existingAudioFilename
               );
+
+              console.log(`🛠 기존 오디오 파일 경로: ${existingAudioPath}`);
+
+              // 파일이 존재하는지 체크
               await fs.access(existingAudioPath);
+              console.log(`✅ 기존 오디오 존재함: ${existingAudioPath}`);
+
+              // 기존 오디오 삭제
               await fs.unlink(existingAudioPath);
-              console.log(`Deleted old audio file: ${existingAudioPath}`);
+              console.log(`🗑 기존 오디오 삭제됨: ${existingAudioPath}`);
             } catch (unlinkError) {
-              console.log("Failed to delete old audio:", unlinkError);
+              console.error("❌ 기존 오디오 삭제 실패:", unlinkError);
             }
           }
 
-          // 새 오디오 b 저장 (이전 로직 유지)
+          // 새 오디오 저장
           const existingFiles = await fs.readdir(uploadDirAudios);
           const fileNames = existingFiles.map((f) => path.parse(f).name);
 
@@ -145,6 +152,8 @@ export async function PATCH(req: Request) {
           }
 
           await fs.writeFile(filePath, Buffer.from(buffer));
+          console.log(`✅ 새 오디오 저장됨: ${filePath}`);
+
           docents[i].audioPath = `/audios/${fileName}${fileExt}`;
         }
       }
