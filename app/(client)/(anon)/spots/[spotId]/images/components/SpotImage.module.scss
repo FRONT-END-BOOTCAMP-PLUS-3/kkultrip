@@ -1,6 +1,13 @@
+
+.imageLink {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  display: block;
+}
+
 .spotImage {
-    width: 10.625rem;
-    height: 10.625rem;
-    border-radius: 0.625rem;
-    object-fit: cover;
+  width: 100%;
+  height: 100%;
+  border-radius: 0.625rem;
+  object-fit: cover;
 }

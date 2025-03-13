@@ -1,21 +1,26 @@
 import TipRepository from "@/domain/repositories/TipRepository";
 import SpotRepository from "@/domain/repositories/SpotRepository";
+import { ImageRepository } from "@/domain/repositories/ImageRepository";
 
 export default class DeleteTipUsecase {
     constructor(
         private tipRepository: TipRepository,
-        private spotRepository: SpotRepository
+        private spotRepository: SpotRepository,
+        private imageRepository: ImageRepository // 이미지 레포지토리 추가
     ) {}
 
     async execute(tipId: number, spotId: number): Promise<void> {
-        // 1. 삭제할 팁의 정보 가져오기
         const tip = await this.tipRepository.getTipById(tipId);
 
-        // 2. 현재 Spot의 평균 값 가져오기
+        const imagePaths = await this.imageRepository.getImagesByTipId(tipId);
+
+        if (imagePaths.length > 0) {
+            await this.imageRepository.deleteImagesByPaths(imagePaths);
+        }
+
         const spotAvg = await this.spotRepository.getSpotAvg(spotId);
         const tipCount = await this.tipRepository.countBySpot(spotId);
 
-        // 3. 새로운 평균 값 계산
         const newAvgPrice =
             tipCount > 1
                 ? ((spotAvg?.avgPrice || 0) * tipCount - (tip?.price || 0)) /
@@ -28,14 +33,12 @@ export default class DeleteTipUsecase {
                   (tipCount - 1)
                 : 0;
 
-        // 4. Spot의 평균 가격과 대기시간 업데이트
         await this.spotRepository.updateSpotAvg(
             spotId,
             newAvgPrice,
             newAvgWaitingTime
         );
 
-        // 5. 팁 삭제
         await this.tipRepository.deleteTip(tipId);
     }
 }
