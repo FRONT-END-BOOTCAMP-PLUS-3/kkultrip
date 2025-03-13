@@ -1,6 +1,7 @@
 import { GetTipUsecase } from "@/application/usecases/spot/tip/GetTipUsecase";
 import { UpdateTipUsecase } from "@/application/usecases/spot/tip/UpdateTipUsecase";
 import DeleteTipUsecase from "@/application/usecases/spot/tips/DeleteTipUsecase";
+import { ImageRepository } from "@/domain/repositories/ImageRepository";
 import SpotRepository from "@/domain/repositories/SpotRepository";
 import TipRepository from "@/domain/repositories/TipRepository";
 import { PgImageRepository } from "@/infrastructure/repositories/PgImageRepository";
@@ -121,7 +122,12 @@ export async function DELETE(
   const { spotId } = body;
   const tipRepository: TipRepository = new PgTipRepository();
   const spotRepository: SpotRepository = new PgSpotRepository();
-  const deleteTipUsecase = new DeleteTipUsecase(tipRepository, spotRepository);
+  const imageRepository: ImageRepository = new PgImageRepository();
+  const deleteTipUsecase = new DeleteTipUsecase(
+    tipRepository,
+    spotRepository,
+    imageRepository
+  );
   await deleteTipUsecase.execute(Number(id), Number(spotId));
 
   return NextResponse.json({ message: "Tip deleted" }, { status: 200 });
