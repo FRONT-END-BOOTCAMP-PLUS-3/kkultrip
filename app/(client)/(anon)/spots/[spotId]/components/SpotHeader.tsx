@@ -16,8 +16,9 @@ const SpotHeader = async ({ spotId }: { spotId: string }) => {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
-                Cookie: `token=${token}`,
+                Authorization: `Bearer ${token}`,  
             },
+            credentials: "include",
             cache: "no-cache",
         });
 

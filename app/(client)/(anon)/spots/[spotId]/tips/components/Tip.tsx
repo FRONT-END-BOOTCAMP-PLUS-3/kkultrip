@@ -3,12 +3,17 @@ import styles from "./Tip.module.scss";
 import { SpotTipDto } from "@/application/usecases/spot/tips/dto/SpotTipDto";
 import TipImage from "./TipImage";
 import TipButton from "./TipButton";
+import Link from "next/link";
+
 
 const Tip = ({ tip }: { tip: SpotTipDto }) => {
+
   return (
     <div id={tip.id.toString()} className={styles.tipContainer}>
       <h3 className={styles.srOnly}>{tip.userName}의 꿀팁</h3>
       <div className={styles.profileWrapper}>
+
+        <Link href={`/users?nickname=${tip.userName}&sort=latest`} className={styles.link}>
         <figure className={styles.profileWrapper}>
           <Image
             src={`${process.env.NEXT_PUBLIC_SERVICE_URL}${tip.profileImage}`}
@@ -22,6 +27,7 @@ const Tip = ({ tip }: { tip: SpotTipDto }) => {
             <h4>{tip.userName}</h4>
           </figcaption>
         </figure>
+        </Link>
 
         <TipButton tipId={tip.id} spotId={tip.spotId} nickName={tip.userName} />
       </div>
