@@ -13,6 +13,10 @@ import DocentRepository from "@/domain/repositories/DocentRepository";
 import { PgTimeRepository } from "@/infrastructure/repositories/PgTimeRepository";
 import PgDocentRepository from "@/infrastructure/repositories/PgDocentRepository";
 
+const UPLOAD_IMAGES_DIR = "/home/honeytrip/upload/images"; // 이미지 업로드 기본 경로
+const UPLOAD_SPOT_DIR = path.join(UPLOAD_IMAGES_DIR, "spots"); // 스팟 이미지 저장 경로
+const UPLOAD_AUDIOS_DIR = "/home/honeytrip/upload/audios"; // 오디오 업로드 경로
+
 export async function GET(req: Request) {
   try {
     const url = new URL(req.url);
@@ -51,7 +55,7 @@ export async function POST(req: Request) {
 
     if (file) {
       const buffer = await file.arrayBuffer();
-      const uploadDir = "/home/honeytrip/upload/images/spots";
+      const uploadDir = UPLOAD_SPOT_DIR; // 변경된 경로
       let filePath = path.join(uploadDir, file.name);
       let fileName = path.parse(file.name).name;
       const fileExt = path.parse(file.name).ext;
@@ -75,7 +79,7 @@ export async function POST(req: Request) {
         const audioFile = formData.get(`docentAudio${i}`) as File;
         if (audioFile) {
           const buffer = await audioFile.arrayBuffer();
-          const uploadDir = "/home/honeytrip/upload/audios"; // 경로 수정
+          const uploadDir = UPLOAD_AUDIOS_DIR; // 변경된 경로
           let filePath = path.join(uploadDir, audioFile.name);
           let fileName = path.parse(audioFile.name).name;
           const fileExt = path.parse(audioFile.name).ext;
@@ -91,7 +95,7 @@ export async function POST(req: Request) {
           }
 
           await fs.writeFile(filePath, Buffer.from(buffer));
-          body.docents[i].audioPath = `/audio/${fileName}${fileExt}`;
+          body.docents[i].audioPath = `/audios/${fileName}${fileExt}`;
         }
       }
     }
