@@ -100,7 +100,7 @@ export async function POST(req: Request) {
           }
 
           await fs.writeFile(filePath, Buffer.from(buffer));
-          body.docents[i].audioPath = `/audio/${fileName}${fileExt}`;
+          body.docents[i].audioPath = `/audios/${fileName}${fileExt}`;
         }
       }
     }
