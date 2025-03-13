@@ -16,6 +16,11 @@
     clip: rect(0 0 0 0);
   }
 
+  .link {
+    text-decoration: none;
+    color: black;
+  }
+
   .profileWrapper {
     display: flex;
     gap: 0.625rem;
