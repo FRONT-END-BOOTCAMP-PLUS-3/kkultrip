@@ -30,4 +30,6 @@ export default interface SpotRepository {
   ): Promise<void>;
 
   getSpotsByPartialName(name: string): Promise<Spot[] | null>;
+
+  getSpotsByAddress(address: string): Promise<Spot[] | null>;
 }

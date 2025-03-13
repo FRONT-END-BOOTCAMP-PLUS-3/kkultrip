@@ -121,7 +121,7 @@ const SpotsEditPage = () => {
           setInitialDocents(data.docents || []);
         });
     }
-  }, [defaultOperatingHours, spotId]);
+  }, [spotId]);
 
   const handlePhoneChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -432,7 +432,7 @@ const SpotsEditPage = () => {
             onClick={handleConvertAddress}
             className={styles.convertButton}
           >
-            변환
+            위도/경도 변환
           </button>
         </div>
         <input
@@ -516,6 +516,7 @@ const SpotsEditPage = () => {
             onChange={handleChange}
             className={styles.textareaField}
             maxLength={100}
+            placeholder="정보"
           />
           <span className={styles.charCount}>
             {(formData.info ?? "").length} / 100
@@ -682,28 +683,28 @@ const SpotsEditPage = () => {
                     handleDocentChange(index, "description", e.target.value)
                   }
                 />
+                <div className={styles.docentRow}>
+                  <input
+                    type="file"
+                    accept="audio/*"
+                    className={styles.inputField}
+                    onChange={(e) =>
+                      handleDocentChange(
+                        index,
+                        "audioPath",
+                        e.target.files?.[0] || null
+                      )
+                    }
+                  />
+                </div>
+                <div className={styles.docentRow}>
+                  {typeof docent.audioPath === "string" && (
+                    <p className={styles.inputField}>{docent.audioPath}</p>
+                  )}
+                </div>
                 <button type="button" onClick={() => removeDocent(index)}>
                   삭제
                 </button>
-              </div>
-              <div className={styles.docentRow}>
-                <input
-                  type="file"
-                  accept="audio/*"
-                  className={styles.inputField}
-                  onChange={(e) =>
-                    handleDocentChange(
-                      index,
-                      "audioPath",
-                      e.target.files?.[0] || null
-                    )
-                  }
-                />
-              </div>
-              <div className={styles.docentRow}>
-                {typeof docent.audioPath === "string" && (
-                  <p className={styles.inputField}>{docent.audioPath}</p>
-                )}
               </div>
             </div>
           ))}

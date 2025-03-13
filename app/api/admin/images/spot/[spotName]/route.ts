@@ -17,13 +17,11 @@ export async function GET(req: Request) {
   }
 
   try {
-    // Initialize repositories
     const spotRepository = new PgSpotRepository();
     const tipRepository = new PgTipRepository();
     const imageRepository = new PgImageRepository();
     const userRepository = new PgUserRepository();
 
-    // Create the use case
     const getImageBySpotNameUseCase = new GetImageBySpotNameUseCase(
       spotRepository,
       tipRepository,

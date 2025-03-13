@@ -100,7 +100,6 @@ const SpotsCreatePage = () => {
     }));
   };
 
-  // 이미지 파일 변경 핸들러
   const handleImageFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -341,7 +340,7 @@ const SpotsCreatePage = () => {
             onClick={handleConvertAddress}
             className={styles.convertButton}
           >
-            변환
+            위도/경도 변환
           </button>
         </div>
         <input
@@ -411,6 +410,7 @@ const SpotsCreatePage = () => {
             onChange={handleChange}
             className={styles.textareaField}
             maxLength={100}
+            placeholder="정보"
           />
           <span className={styles.charCount}>
             {(formData.info ?? "").length} / 100
@@ -579,23 +579,23 @@ const SpotsCreatePage = () => {
                     handleDocentChange(index, "description", e.target.value)
                   }
                 />
+                <div className={styles.docentRow}>
+                  <input
+                    type="file"
+                    accept="audio/*"
+                    className={styles.inputField}
+                    onChange={(e) =>
+                      handleDocentChange(
+                        index,
+                        "audioPath",
+                        e.target.files?.[0] || null
+                      )
+                    }
+                  />
+                </div>
                 <button type="button" onClick={() => removeDocent(index)}>
                   삭제
                 </button>
-              </div>
-              <div className={styles.docentRow}>
-                <input
-                  type="file"
-                  accept="audio/*"
-                  className={styles.inputField}
-                  onChange={(e) =>
-                    handleDocentChange(
-                      index,
-                      "audioPath",
-                      e.target.files?.[0] || null
-                    )
-                  }
-                />
               </div>
             </div>
           ))}

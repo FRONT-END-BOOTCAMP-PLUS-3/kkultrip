@@ -17,13 +17,11 @@ export async function GET(req: Request) {
   }
 
   try {
-    // Repository 인스턴스 생성
     const userRepository = new PgUserRepository();
     const tipRepository = new PgTipRepository();
     const imageRepository = new PgImageRepository();
     const spotRepository = new PgSpotRepository();
 
-    // UseCase 인스턴스 생성
     const getImageByUserNameUseCase = new GetImageByUserNameUseCase(
       userRepository,
       tipRepository,
@@ -31,7 +29,6 @@ export async function GET(req: Request) {
       spotRepository
     );
 
-    // 유저 이름으로 이미지 가져오기
     const images = await getImageByUserNameUseCase.execute(userName);
 
     if (!images) {
@@ -41,7 +38,6 @@ export async function GET(req: Request) {
       );
     }
 
-    // 유저 이름에 해당하는 이미지들 반환
     return NextResponse.json({ images }, { status: 200 });
   } catch (error) {
     console.log(error);

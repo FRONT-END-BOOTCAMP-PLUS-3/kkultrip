@@ -10,5 +10,6 @@ export default interface UserRepository {
   deleteUser(id: string): Promise<void>;
   getUserByName(nickname: string): Promise<User | null>;
   getUserIdByNickname(nickname: string): Promise<{ id: string } | null>;
+  getUsersByPartialName(name: string): Promise<User[] | null>;
   updateUser(id: string, nickname: string, img: string): Promise<void>;
 }

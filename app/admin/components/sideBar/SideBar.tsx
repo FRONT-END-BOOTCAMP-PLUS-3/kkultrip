@@ -3,12 +3,40 @@
 import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
 import styles from "./SideBar.module.scss";
+import useUserStore from "@/store/useUserStore";
 
 const SideBar = () => {
   const router = useRouter();
   const pathname = usePathname();
+  const clearInfo = useUserStore((state) => state.clearInfo);
+  const userLat = useUserStore((state) => state.userLat);
+  const userLon = useUserStore((state) => state.userLon);
   const handleNavigation = (path: string) => {
     router.push(`/admin/${path}`);
+  };
+
+  const handleLogout = async () => {
+    const confirmLogout = confirm("로그아웃하시겠습니까?");
+    if (!confirmLogout) {
+      return;
+    }
+
+    try {
+      const response = await fetch("/api/logout", {
+        method: "POST",
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to logout");
+      }
+
+      clearInfo();
+      document.cookie =
+        "prevUrl=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+      router.push(`/spots?lat=${userLat}&lon=${userLon}`);
+    } catch (error) {
+      console.log("로그아웃 에러:", error);
+    }
   };
 
   return (
@@ -50,6 +78,9 @@ const SideBar = () => {
           </li>
         </ul>
       </nav>
+      <button className={styles.logoutButton} onClick={handleLogout}>
+        로그아웃
+      </button>
     </aside>
   );
 };

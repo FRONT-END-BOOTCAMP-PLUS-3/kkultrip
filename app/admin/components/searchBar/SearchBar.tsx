@@ -5,15 +5,19 @@ import styles from "./SearchBar.module.scss";
 
 interface SearchBarProps {
   onSearch: (query: string, category: string) => void;
+  options?: string[];
 }
 
-const SearchBar = ({ onSearch }: SearchBarProps) => {
+const SearchBar = ({
+  onSearch,
+  options = ["user", "spot", "address"],
+}: SearchBarProps) => {
   const [query, setQuery] = useState<string>("");
-  const [category, setCategory] = useState<string>("user");
+  const [category, setCategory] = useState<string>(options[0]);
 
   const handleSearch = () => {
     if (query.trim()) {
-      onSearch(query, category); // 검색어와 선택된 카테고리 전달
+      onSearch(query, category);
     }
   };
 
@@ -31,8 +35,15 @@ const SearchBar = ({ onSearch }: SearchBarProps) => {
         onChange={(e) => setCategory(e.target.value)}
         className={styles.select}
       >
-        <option value="user">작성자 이름</option>
-        <option value="spot">명소 이름</option>
+        {options.map((option) => (
+          <option key={option} value={option}>
+            {option === "user"
+              ? "작성자 이름"
+              : option === "spot"
+              ? "명소 이름"
+              : "주소명"}
+          </option>
+        ))}
       </select>
       <button onClick={handleSearch} className={styles.button}>
         검색

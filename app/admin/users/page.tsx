@@ -12,7 +12,7 @@ import SearchBar from "../components/searchBar/SearchBar";
 const UsersContent = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const currentPageFromUrl = parseInt(searchParams.get("page") || "1", 10); // URL에서 현재 페이지를 가져옴
+  const currentPageFromUrl = parseInt(searchParams.get("page") || "1", 10);
   const [users, setUsers] = useState<GetUserListDto[]>([]);
   const [currentPage, setCurrentPage] = useState(currentPageFromUrl);
   const [totalPages, setTotalPages] = useState(1);
@@ -63,7 +63,7 @@ const UsersContent = () => {
   return (
     <div>
       <div className={styles.contentsContainer}>
-        <SearchBar onSearch={handleSearch} />
+        <SearchBar onSearch={handleSearch} options={["user"]} />
         <UserTable users={users} />
         <div className={styles.pagination}>
           <button

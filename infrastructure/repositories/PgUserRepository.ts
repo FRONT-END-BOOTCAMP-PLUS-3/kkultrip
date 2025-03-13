@@ -97,6 +97,24 @@ export class PgUserRepository implements UserRepository {
     }
   }
 
+  async getUsersByPartialName(name: string): Promise<User[] | null> {
+    try {
+      return await prisma.user.findMany({
+        where: {
+          nickname: {
+            contains: name,
+            mode: "insensitive",
+          },
+        },
+      });
+    } catch (error) {
+      console.log("❌ getUsersByPartialName 오류 발생:", error);
+      throw new Error("유저 데이터를 가져오지 못했습니다.");
+    } finally {
+      await prisma.$disconnect();
+    }
+  }
+
   // 닉네임으로 유저 정보 찾기
   async getUserIdByNickname(nickname: string): Promise<{ id: string } | null> {
     try {

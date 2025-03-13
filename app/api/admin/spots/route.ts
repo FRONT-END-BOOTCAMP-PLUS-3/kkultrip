@@ -20,7 +20,7 @@ export async function GET(req: Request) {
 
     const spotRepository: SpotRepository = new PgSpotRepository();
     const getSpotListUseCase = new GetSpotListUseCase(spotRepository);
-    const spots = await getSpotListUseCase.execute(page); // 페이지 번호를 전달
+    const spots = await getSpotListUseCase.execute(page);
     return NextResponse.json(spots, { status: 200 });
   } catch (error) {
     console.log("Error fetching spots:", error);

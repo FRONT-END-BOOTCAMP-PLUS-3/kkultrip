@@ -80,6 +80,36 @@ export class PgImageRepository implements ImageRepository {
     }
   }
 
+  async deleteImageById(id: number): Promise<void> {
+    try {
+      // 이미지 경로를 DB에서 조회
+      const image = await prisma.image.findUnique({
+        where: { id },
+        select: { path: true },
+      });
+
+      if (!image) {
+        throw new Error("이미지를 찾을 수 없습니다.");
+      }
+
+      // 로컬 파일 삭제
+      const filePath = path.join(process.cwd(), "public", image.path!);
+      if (fs.existsSync(filePath)) {
+        fs.unlinkSync(filePath);
+      }
+
+      // DB에서 이미지 삭제
+      await prisma.image.delete({
+        where: { id },
+      });
+    } catch (error) {
+      console.log("❌ deleteImage 오류 발생:", error);
+      throw new Error("이미지 삭제 중 오류가 발생했습니다.");
+    } finally {
+      await prisma.$disconnect();
+    }
+  }
+
   async getImageByTipId(tipId: number): Promise<Image[]> {
     const images = await prisma.image.findMany({
       where: { tipId },

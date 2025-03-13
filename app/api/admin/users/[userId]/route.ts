@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import GetUserUseCase from "@/application/usecases/admin/user/GetUserUseCase";
 import { PgUserRepository } from "@/infrastructure/repositories/PgUserRepository";
 import { UpdateUserRoleUseCase } from "@/application/usecases/admin/user/UpdateUserRoleUseCase";
+import DeleteUserUsecase from "@/application/usecases/admin/user/DeleteUserUseCase";
 
 export async function GET(req: NextRequest) {
   try {
@@ -63,6 +64,35 @@ export async function PATCH(req: NextRequest) {
     console.log("Error updating user role:", error);
     return NextResponse.json(
       { error: "Failed to update user role" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function DELETE(req: NextRequest) {
+  try {
+    const pathname = req.nextUrl.pathname;
+    const userId = pathname.split("/").pop();
+
+    if (!userId) {
+      return NextResponse.json(
+        { error: "User ID is missing" },
+        { status: 400 }
+      );
+    }
+
+    const userRepository = new PgUserRepository();
+    const deleteUserUseCase = new DeleteUserUsecase(userRepository);
+    await deleteUserUseCase.execute(userId);
+
+    return NextResponse.json(
+      { message: "User deleted successfully" },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.log("Error deleting user:", error);
+    return NextResponse.json(
+      { error: "Failed to delete user" },
       { status: 500 }
     );
   }

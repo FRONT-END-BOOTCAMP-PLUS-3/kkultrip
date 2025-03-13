@@ -12,7 +12,7 @@ import SearchBar from "../components/searchBar/SearchBar";
 const AdminTipsPageContent = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const currentPageFromUrl = parseInt(searchParams.get("page") || "1", 10); // URL에서 현재 페이지를 가져옴
+  const currentPageFromUrl = parseInt(searchParams.get("page") || "1", 10);
   const [tips, setTips] = useState<(GetTipListDto & { spotName: string })[]>(
     []
   );
@@ -36,13 +36,12 @@ const AdminTipsPageContent = () => {
     };
 
     fetchTips();
-  }, [currentPage]); // currentPage가 변경될 때마다 데이터를 다시 가져옴
+  }, [currentPage]);
 
   const handlePageChange = (page: number) => {
-    if (page < 1 || page > totalPages) return; // 유효한 페이지 범위 체크
-    setCurrentPage(page); // 페이지 변경
+    if (page < 1 || page > totalPages) return;
+    setCurrentPage(page);
 
-    // 페이지 번호를 URL에 반영
     router.push(`/admin/tips?page=${page}`);
   };
 
@@ -77,7 +76,7 @@ const AdminTipsPageContent = () => {
       <SideBar />
       <main className={styles.main}>
         <Header title="꿀팁 관리" />
-        <SearchBar onSearch={handleSearch} />
+        <SearchBar onSearch={handleSearch} options={["user", "spot"]} />
         <div className={styles.contentsContainer}>
           <TipTable tips={tips} />
           <div className={styles.pagination}>
