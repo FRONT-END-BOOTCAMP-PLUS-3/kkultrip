@@ -152,7 +152,13 @@ const TipForm = ({
       >
         {imageUrls.map((img, index) => (
           <div key={index} className={styles.imageContainer}>
-            <Image src={img} alt="기존 이미지" width={220} height={220} />
+            <Image
+              src={`${process.env.NEXT_PUBLIC_SERVICE_URL}${img}`}
+              alt="기존 이미지"
+              width={220}
+              height={220}
+              unoptimized
+            />
             <button
               className={styles.removeImage}
               onClick={() => handleExistingImageRemove(index)}

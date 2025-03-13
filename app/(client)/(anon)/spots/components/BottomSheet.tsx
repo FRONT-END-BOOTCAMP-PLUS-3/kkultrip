@@ -148,9 +148,10 @@ const BottomSheet = ({ spots }: { spots: GetSpotsDTO[] }) => {
                 <Image
                   width={100}
                   height={100}
-                  src={spot.img}
+                  src={`${process.env.NEXT_PUBLIC_SERVICE_URL}${spot.img}`}
                   alt={spot.name}
                   className={styles.image}
+                  unoptimized
                 />
               </Link>
             </div>

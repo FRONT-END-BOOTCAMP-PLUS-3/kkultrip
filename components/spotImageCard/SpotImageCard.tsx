@@ -31,10 +31,13 @@ const SpotImageCard = ({ spot, navigateTo, tipId }: SpotImageCardProps) => {
     <div className={styles.spotImageCardContainer} onClick={handleImageClick}>
       <div className={styles.imageBox}>
         <Image
-          src={spot.img}
+          src={`${process.env.NEXT_PUBLIC_SERVICE_URL}${spot.img}`}
           alt={spot.name}
           fill
           style={{ objectFit: "cover" }}
+          sizes="10rem"
+          priority
+          unoptimized
         />
       </div>
       <div className={styles.textWrapper}>
