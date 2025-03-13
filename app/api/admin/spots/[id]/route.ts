@@ -83,7 +83,6 @@ export async function PATCH(req: Request) {
     const uploadDirImages = "/home/honeytrip/upload/images/spots";
     const uploadDirAudios = "/home/honeytrip/upload/audios";
 
-    // 이미지 파일 처리
     if (formData.has("file")) {
       const file = formData.get("file") as File;
       const buffer = await file.arrayBuffer();
@@ -101,27 +100,22 @@ export async function PATCH(req: Request) {
         counter++;
       }
 
-      // 기존 이미지 삭제
       if (existingSpot.img) {
         try {
-          const existingImagePath = path.resolve(
+          const existingImagePath = path.join(
             uploadDirImages,
             existingSpot.img
           );
-          await fs.access(existingImagePath); // 파일 존재 여부 확인
-          await fs.unlink(existingImagePath); // 파일 삭제
-          console.log(`Deleted existing image: ${existingSpot.img}`);
+          await fs.unlink(existingImagePath);
         } catch (unlinkError) {
           console.log("Failed to delete old image:", unlinkError);
         }
       }
 
-      // 새 이미지 저장
       await fs.writeFile(filePath, Buffer.from(buffer));
       updateData.img = `/images/spots/${fileName}${fileExt}`;
     }
 
-    // 오디오 파일 처리
     if (docents) {
       for (let i = 0; i < docents.length; i++) {
         const audioFile = formData.get(`docentAudio${i}`) as File;
@@ -141,22 +135,18 @@ export async function PATCH(req: Request) {
             counter++;
           }
 
-          // 기존 오디오 파일 삭제
           if (docents[i].audioPath) {
             try {
-              const existingAudioPath = path.resolve(
+              const existingAudioPath = path.join(
                 uploadDirAudios,
                 docents[i].audioPath
               );
-              await fs.access(existingAudioPath); // 파일 존재 여부 확인
-              await fs.unlink(existingAudioPath); // 오디오 파일 삭제
-              console.log(`Deleted existing audio: ${docents[i].audioPath}`);
+              await fs.unlink(existingAudioPath);
             } catch (unlinkError) {
               console.log("Failed to delete old audio:", unlinkError);
             }
           }
 
-          // 새 오디오 저장
           await fs.writeFile(filePath, Buffer.from(buffer));
           docents[i].audioPath = `/audios/${fileName}${fileExt}`;
         }
@@ -211,33 +201,30 @@ export async function DELETE(
     const uploadDirImages = "/home/honeytrip/upload/images/spots";
     const uploadDirAudios = "/home/honeytrip/upload/audios";
 
-    // 이미지 삭제
     if (spot.img) {
       try {
-        const existingImagePath = path.resolve(uploadDirImages, spot.img);
-        await fs.access(existingImagePath); // 파일 존재 여부 확인
-        await fs.unlink(existingImagePath); // 파일 삭제
-        console.log(`Deleted existing image: ${spot.img}`);
-      } catch (unlinkError) {
-        console.log(
-          "No existing image found or failed to delete:",
-          unlinkError
-        );
+        const existingImgFilename = path.basename(spot.img);
+        const existingImgPath = path.join(uploadDirImages, existingImgFilename);
+        await fs.access(existingImgPath);
+        await fs.unlink(existingImgPath);
+        console.log(`Deleted existing image: ${existingImgFilename}`);
+      } catch (error) {
+        console.log("No existing image found or failed to delete:", error);
       }
     }
 
-    // 오디오 삭제
     for (const docent of spot.docents || []) {
       if (docent.audioPath) {
         try {
-          const audioPath = path.resolve(uploadDirAudios, docent.audioPath);
-          await fs.access(audioPath); // 파일 존재 여부 확인
-          await fs.unlink(audioPath); // 오디오 파일 삭제
-          console.log(`Deleted audio file: ${docent.audioPath}`);
-        } catch (unlinkError) {
+          const audioFilename = path.basename(docent.audioPath);
+          const audioPath = path.join(uploadDirAudios, audioFilename);
+          await fs.access(audioPath);
+          await fs.unlink(audioPath);
+          console.log(`Deleted audio file: ${audioFilename}`);
+        } catch (error) {
           console.log(
             "No existing audio file found or failed to delete:",
-            unlinkError
+            error
           );
         }
       }
