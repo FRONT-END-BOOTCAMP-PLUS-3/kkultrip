@@ -51,7 +51,7 @@ export async function POST(req: Request) {
 
     if (file) {
       const buffer = await file.arrayBuffer();
-      const uploadDir = path.join("/home/honeytrip/upload", "images", "spots");
+      const uploadDir = "/home/honeytrip/upload/images/spots";
       let filePath = path.join(uploadDir, file.name);
       let fileName = path.parse(file.name).name;
       const fileExt = path.parse(file.name).ext;
@@ -75,7 +75,7 @@ export async function POST(req: Request) {
         const audioFile = formData.get(`docentAudio${i}`) as File;
         if (audioFile) {
           const buffer = await audioFile.arrayBuffer();
-          const uploadDir = path.join(process.cwd(), "public", "audios");
+          const uploadDir = "/home/honeytrip/upload/audios"; // 경로 수정
           let filePath = path.join(uploadDir, audioFile.name);
           let fileName = path.parse(audioFile.name).name;
           const fileExt = path.parse(audioFile.name).ext;
