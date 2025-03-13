@@ -9,11 +9,13 @@ export class UpdateUserUsecase {
   constructor(private userRepository: UserRepository) {}
 
   async execute(userId: string, nickname: string, file: File) {
-    let imagePath: string | undefined;
+    let imagePath: string;
 
     // 기존 유저 정보 조회
     const existingUser = await this.userRepository.getUserById(userId);
-    imagePath = existingUser?.img;
+    if (!existingUser) throw new Error("유저 정보가 조회되지 않습니다.");
+
+    imagePath = existingUser.img;
 
     if (file) {
       // 저장 디렉토리가 없으면 생성
@@ -22,7 +24,7 @@ export class UpdateUserUsecase {
       }
 
       // 기존 이미지가 기본 이미지가 아니라면 삭제
-      if (imagePath && imagePath !== DEFAULT_IMAGE_PATH) {
+      if (imagePath !== DEFAULT_IMAGE_PATH) {
         const oldFilePath = path.join("/home/honeytrip/upload", imagePath);
         if (fs.existsSync(oldFilePath)) {
           fs.unlinkSync(oldFilePath);
@@ -43,10 +45,6 @@ export class UpdateUserUsecase {
     }
 
     // 유저 정보 업데이트 (이미지 경로 포함)
-    await this.userRepository.updateUser(
-      userId,
-      nickname,
-      imagePath ?? (existingUser?.img as string)
-    );
+    await this.userRepository.updateUser(userId, nickname, imagePath);
   }
 }

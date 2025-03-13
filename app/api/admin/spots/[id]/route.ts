@@ -80,13 +80,8 @@ export async function PATCH(req: Request) {
       return NextResponse.json({ error: "Spot not found" }, { status: 404 });
     }
 
-    const uploadDirImages = path.join(
-      process.cwd(),
-      "public",
-      "images",
-      "spots"
-    );
-    const uploadDirAudios = path.join(process.cwd(), "public", "audios");
+    const uploadDirImages = "/home/honeytrip/upload/images/spots";
+    const uploadDirAudios = "/home/honeytrip/upload/audios";
 
     if (formData.has("file")) {
       const file = formData.get("file") as File;
@@ -105,19 +100,10 @@ export async function PATCH(req: Request) {
         counter++;
       }
 
-      if (existingSpot.img) {
-        try {
-          const existingImagePath = path.join(
-            process.cwd(),
-            "public",
-            existingSpot.img
-          );
-          await fs.unlink(existingImagePath);
-        } catch (unlinkError) {
-          console.log("Failed to delete old image:", unlinkError);
-        }
-      }
-
+      const existingImgFilename = path.basename(existingSpot.img);
+      const existingImgPath = path.join(uploadDirImages, existingImgFilename);
+      await fs.access(existingImgPath);
+      await fs.unlink(existingImgPath);
       await fs.writeFile(filePath, Buffer.from(buffer));
       updateData.img = `/images/spots/${fileName}${fileExt}`;
     }
@@ -143,12 +129,10 @@ export async function PATCH(req: Request) {
 
           if (docents[i].audioPath) {
             try {
-              const existingAudioPath = path.join(
-                process.cwd(),
-                "public",
-                docents[i].audioPath
-              );
-              await fs.unlink(existingAudioPath);
+              const audioFilename = path.basename(docents.audioPath);
+              const audioPath = path.join(uploadDirAudios, audioFilename);
+              await fs.access(audioPath);
+              await fs.unlink(audioPath);
             } catch (unlinkError) {
               console.log("Failed to delete old audio:", unlinkError);
             }
@@ -205,16 +189,13 @@ export async function DELETE(
       return NextResponse.json({ error: "Spot not found" }, { status: 404 });
     }
 
+    const uploadDirImages = "/home/honeytrip/upload/images/spots";
+    const uploadDirAudios = "/home/honeytrip/upload/audios";
+
     if (spot.img) {
       try {
         const existingImgFilename = path.basename(spot.img);
-        const existingImgPath = path.join(
-          process.cwd(),
-          "public",
-          "images",
-          "spots",
-          existingImgFilename
-        );
+        const existingImgPath = path.join(uploadDirImages, existingImgFilename);
         await fs.access(existingImgPath);
         await fs.unlink(existingImgPath);
         console.log(`Deleted existing image: ${existingImgFilename}`);
@@ -227,12 +208,7 @@ export async function DELETE(
       if (docent.audioPath) {
         try {
           const audioFilename = path.basename(docent.audioPath);
-          const audioPath = path.join(
-            process.cwd(),
-            "public",
-            "audios",
-            audioFilename
-          );
+          const audioPath = path.join(uploadDirAudios, audioFilename);
           await fs.access(audioPath);
           await fs.unlink(audioPath);
           console.log(`Deleted audio file: ${audioFilename}`);

@@ -46,6 +46,7 @@ const UserProfile = () => {
         if (!response.ok) throw new Error("프로필 수정 실패");
 
         const updatedData = await response.json();
+        console.log("updatedData", updatedData);
         setImg(updatedData.user.img);
       } catch (error) {
         console.error("프로필 수정 오류:", error);
@@ -57,7 +58,9 @@ const UserProfile = () => {
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      setImg(URL.createObjectURL(file));
+      const imageUrl = URL.createObjectURL(file);
+      console.log("imageUrl", imageUrl);
+      setImg(imageUrl);
       setFile(file);
     }
   };
@@ -70,7 +73,7 @@ const UserProfile = () => {
     <div className={styles.profileContainer}>
       <div className={styles.profile}>
         <Image
-          src={`${process.env.NEXT_PUBLIC_SERVICE_URL}${img}`}
+          src={isEdit ? img : `${process.env.NEXT_PUBLIC_SERVICE_URL}${img}`}
           fill
           alt="profile image"
           sizes="10rem"

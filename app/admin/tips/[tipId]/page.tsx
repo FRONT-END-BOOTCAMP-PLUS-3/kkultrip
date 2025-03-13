@@ -89,10 +89,11 @@ const TipDetailPage = () => {
               tip.images.map((image, index) => (
                 <Image
                   key={index}
-                  src={image}
+                  src={`${process.env.NEXT_PUBLIC_SERVICE_URL}${image}`}
                   alt={`Tip Image ${index + 1}`}
                   width={500}
                   height={300}
+                  unoptimized
                 />
               ))
             ) : (

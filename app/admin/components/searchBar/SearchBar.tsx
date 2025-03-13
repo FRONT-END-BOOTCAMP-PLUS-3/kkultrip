@@ -38,7 +38,7 @@ const SearchBar = ({
         {options.map((option) => (
           <option key={option} value={option}>
             {option === "user"
-              ? "작성자 이름"
+              ? "유저 이름"
               : option === "spot"
               ? "명소 이름"
               : "주소명"}
