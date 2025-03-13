@@ -129,10 +129,13 @@ export async function PATCH(req: Request) {
 
           if (docents[i].audioPath) {
             try {
-              const audioFilename = path.basename(docents.audioPath);
-              const audioPath = path.join(uploadDirAudios, audioFilename);
-              await fs.access(audioPath);
-              await fs.unlink(audioPath);
+              const audioFilename = path.basename(docents[i].audioPath);
+              const existingAudioPath = path.join(
+                uploadDirAudios,
+                audioFilename
+              );
+              await fs.access(existingAudioPath);
+              await fs.unlink(existingAudioPath);
             } catch (unlinkError) {
               console.log("Failed to delete old audio:", unlinkError);
             }
