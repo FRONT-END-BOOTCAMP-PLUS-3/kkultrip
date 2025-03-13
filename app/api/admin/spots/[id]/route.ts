@@ -116,7 +116,6 @@ export async function PATCH(req: Request) {
     if (docents) {
       for (let i = 0; i < docents.length; i++) {
         const audioFile = formData.get(`docentAudio${i}`) as File;
-        console.log(existingDocent); // 해당 스팟 도슨트 조회
         if (audioFile) {
           const buffer = await audioFile.arrayBuffer();
           const fileName = path.parse(audioFile.name).name;
@@ -134,12 +133,10 @@ export async function PATCH(req: Request) {
                 uploadDirAudios,
                 path.basename(existingDocent[i].audioPath)
               );
-              console.log(`🛠 기존 오디오 삭제 시도: ${existingAudioPath}`);
               await fs.access(existingAudioPath); // 파일 존재 여부 확인
               await fs.unlink(existingAudioPath); // 삭제 실행
-              console.log(`🗑 기존 오디오 삭제됨: ${existingAudioPath}`);
             } catch (unlinkError) {
-              console.error(
+              console.log(
                 "❌ 기존 오디오 삭제 실패 (파일이 없을 수도 있음):",
                 unlinkError
               );
@@ -148,7 +145,6 @@ export async function PATCH(req: Request) {
 
           // 새 오디오 파일 저장
           await fs.writeFile(filePath, Buffer.from(buffer));
-          console.log(`✅ 새 오디오 저장됨: ${filePath}`);
 
           // 새 오디오 경로 업데이트
           existingDocent[i].audioPath = newAudioPath;
