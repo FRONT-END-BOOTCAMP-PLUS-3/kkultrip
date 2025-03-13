@@ -2,6 +2,7 @@
   display: flex;
   height: 100vh;
   .main {
+    overflow: auto;
     flex: 1;
     padding: 2rem;
     background: white;
