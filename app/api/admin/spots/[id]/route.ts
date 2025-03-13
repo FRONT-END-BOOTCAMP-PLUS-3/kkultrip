@@ -106,6 +106,7 @@ export async function PATCH(req: Request) {
             uploadDirImages,
             existingSpot.img
           );
+          await fs.access(existingImagePath);
           await fs.unlink(existingImagePath);
         } catch (unlinkError) {
           console.log("Failed to delete old image:", unlinkError);
@@ -141,6 +142,7 @@ export async function PATCH(req: Request) {
                 uploadDirAudios,
                 docents[i].audioPath
               );
+              await fs.access(existingAudioPath);
               await fs.unlink(existingAudioPath);
             } catch (unlinkError) {
               console.log("Failed to delete old audio:", unlinkError);
