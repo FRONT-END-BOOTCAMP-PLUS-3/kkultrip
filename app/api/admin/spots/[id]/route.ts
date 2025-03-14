@@ -80,6 +80,11 @@ export async function PATCH(req: Request) {
       return NextResponse.json({ error: "Spot not found" }, { status: 404 });
     }
 
+    const existingDocent = await docentRepository.getDocentBySpotId(Number(id));
+    if (!existingDocent || existingDocent.length === 0) {
+      return NextResponse.json({ error: "Docent not found" }, { status: 404 });
+    }
+
     const uploadDirImages = "/home/honeytrip/upload/images/spots";
     const uploadDirAudios = "/home/honeytrip/upload/audios";
 
@@ -113,36 +118,36 @@ export async function PATCH(req: Request) {
         const audioFile = formData.get(`docentAudio${i}`) as File;
         if (audioFile) {
           const buffer = await audioFile.arrayBuffer();
-          let filePath = path.join(uploadDirAudios, audioFile.name);
-          let fileName = path.parse(audioFile.name).name;
+          const fileName = path.parse(audioFile.name).name;
           const fileExt = path.parse(audioFile.name).ext;
+          const filePath = path.join(uploadDirAudios, `${fileName}${fileExt}`);
+          const newAudioPath = `/audios/${fileName}${fileExt}`; // 상대 경로
 
-          const existingFiles = await fs.readdir(uploadDirAudios);
-          const fileNames = existingFiles.map((f) => path.parse(f).name);
-
-          let counter = 1;
-          while (fileNames.includes(fileName)) {
-            fileName = `${fileName}_${counter}`;
-            filePath = path.join(uploadDirAudios, `${fileName}${fileExt}`);
-            counter++;
-          }
-
-          if (docents[i].audioPath) {
+          // 기존 오디오 경로 확인 및 삭제
+          if (
+            existingDocent[i].audioPath &&
+            existingDocent[i].audioPath !== newAudioPath
+          ) {
             try {
-              const audioFilename = path.basename(docents[i].audioPath);
               const existingAudioPath = path.join(
                 uploadDirAudios,
-                audioFilename
+                path.basename(existingDocent[i].audioPath)
               );
-              await fs.access(existingAudioPath);
-              await fs.unlink(existingAudioPath);
+              await fs.access(existingAudioPath); // 파일 존재 여부 확인
+              await fs.unlink(existingAudioPath); // 삭제 실행
             } catch (unlinkError) {
-              console.log("Failed to delete old audio:", unlinkError);
+              console.log(
+                "❌ 기존 오디오 삭제 실패 (파일이 없을 수도 있음):",
+                unlinkError
+              );
             }
           }
 
+          // 새 오디오 파일 저장
           await fs.writeFile(filePath, Buffer.from(buffer));
-          docents[i].audioPath = `/audios/${fileName}${fileExt}`;
+
+          // 새 오디오 경로 업데이트
+          existingDocent[i].audioPath = newAudioPath;
         }
       }
     }
@@ -151,7 +156,7 @@ export async function PATCH(req: Request) {
       ...updateData,
       tickets,
       times,
-      docents,
+      docents: existingDocent, // updated docents with new audio paths
     });
 
     return NextResponse.json(updatedSpot, { status: 200 });
