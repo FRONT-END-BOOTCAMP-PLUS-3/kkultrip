@@ -35,7 +35,7 @@ const BottomSheet = ({ spots }: { spots: GetSpotsDTO[] }) => {
       );
     } else if (selectedSort === "bookmark") {
       sortedData.sort((a, b) => (b.bookmarkCnt || 0) - (a.bookmarkCnt || 0));
-    } else if (selectedSort === "tip") {
+    } else if (selectedSort === "tips") {
       sortedData.sort((a, b) => (b.tipCnt || 0) - (a.tipCnt || 0));
     } else if (selectedSort === "price") {
       sortedData.sort((a, b) => (a.avgPrice || 0) - (b.avgPrice || 0));
