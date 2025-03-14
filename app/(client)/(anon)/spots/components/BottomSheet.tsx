@@ -38,7 +38,11 @@ const BottomSheet = ({ spots }: { spots: GetSpotsDTO[] }) => {
     } else if (selectedSort === "tips") {
       sortedData.sort((a, b) => (b.tipCnt || 0) - (a.tipCnt || 0));
     } else if (selectedSort === "price") {
-      sortedData.sort((a, b) => (a.avgPrice || 0) - (b.avgPrice || 0));
+      sortedData.sort((a, b) => {
+        const priceA = a.avgPrice ?? Infinity; // null 값을 Infinity로 변환
+        const priceB = b.avgPrice ?? Infinity;
+        return priceA - priceB;
+      });
     }
 
     setSortedSpots(sortedData);
