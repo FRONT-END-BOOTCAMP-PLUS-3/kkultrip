@@ -11,14 +11,12 @@ const SpotHeader = async ({ spotId }: { spotId: string }) => {
     try {
         const cookieStore = await cookies();
         const token = cookieStore.get("token")?.value;
-
         const data = await fetch(`${apiBaseUrl}/api/spots/${spotId}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,  
+                Cookie: `token=${token}`,
             },
-            credentials: "include",
             cache: "no-cache",
         });
 
