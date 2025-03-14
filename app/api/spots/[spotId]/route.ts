@@ -6,8 +6,9 @@ import BookmarkRepository from "@/domain/repositories/BookmarkRepository";
 import SpotRepository from "@/domain/repositories/SpotRepository";
 import { PgBookmarkRepository } from "@/infrastructure/repositories/PgBookmarkRepository";
 import PgSpotRepository from "@/infrastructure/repositories/PgSpotRepository";
-import { NextResponse, NextRequest } from "next/server";
 import { GetUserInfoByJWT } from "@/utils/jwt";
+import { NextRequest, NextResponse } from "next/server";
+
 export async function GET(
     req: NextRequest,
     props: { params: Promise<{ spotId: string }> }
