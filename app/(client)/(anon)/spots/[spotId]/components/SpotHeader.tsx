@@ -47,12 +47,13 @@ const SpotHeader = async ({ spotId }: { spotId: string }) => {
         return (
             <>
                 <Image
-                    src={spotHeaderData.img}
+                    src={`${process.env.NEXT_PUBLIC_SERVICE_URL}${spotHeaderData.img}`}
                     alt={spotHeaderData.name}
                     width={100}
                     height={100}
                     className={styles.spotImage}
                     priority
+                    unoptimized
                 />
                 <div className={styles.spotContainer}>
                     <div className={styles.spotHeader}>
