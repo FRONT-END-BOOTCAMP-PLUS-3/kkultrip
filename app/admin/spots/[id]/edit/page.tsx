@@ -455,22 +455,6 @@ const SpotsEditPage = () => {
           step="any"
           required
         />
-        <input
-          type="number"
-          name="lon"
-          value={formData.lon ?? ""}
-          onChange={handleChange}
-          className={styles.inputField}
-          required
-        />
-        <input
-          type="number"
-          name="lat"
-          value={formData.lat ?? ""}
-          onChange={handleChange}
-          className={styles.inputField}
-          required
-        />
         <div className={styles.phoneInputContainer}>
           <input
             type="text"
