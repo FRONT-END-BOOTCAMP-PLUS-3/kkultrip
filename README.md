@@ -42,7 +42,7 @@
 
 ---
 
-## 🏗 주요 기능
+## 주요 기능
 
 1. 명소 조회, 검색필터, 지도표시
 <img src="https://github.com/user-attachments/assets/2048171c-edb4-4af1-ba50-29cfabfdca63" width="300" alt="명소조회"/>
@@ -53,12 +53,13 @@
 
 7. 유저 조회 (다른유저가 올린 꿀팁조회, 마이페이지)
 8. 어드민 페이지 (명소,꿀팁,유저 등록/조회/삭제)
+<img width="1051" alt="스크린샷 2025-03-14 오후 5 24 26" src="https://github.com/user-attachments/assets/cee0f41e-6c6e-4810-af7f-4562b576593a" />
 
 ---
 
 ## 🖥️ 프로젝트 실행 방법
 
-### 1️⃣ **환경 변수 설정**
+### 1 **환경 변수 설정**
 프로젝트 루트 디렉토리에 `.env.local` 파일을 생성하고, 다음 내용을 추가하세요.
 
 ```env
@@ -69,17 +70,17 @@ NEXT_PUBLIC_SERVICE_URL=https://kkultrip.newlecture.com
 JWT_SECRET_KEY=68dd241f460048656e0b8448bc7109b78b90a8feaefac542bdb640d1e2d7b62b
 ```
 
-### 2️⃣ **의존성 설치**
+### 2 **의존성 설치**
 ```bash
 npm install
 ```
 
-### 3️⃣ **개발 서버 실행**
+### 3 **개발 서버 실행**
 ```bash
 npm run dev
 ```
 
-### 4️⃣ **빌드 후 실행**
+### 4 **빌드 후 실행**
 ```bash
 npm run build
 npm start
