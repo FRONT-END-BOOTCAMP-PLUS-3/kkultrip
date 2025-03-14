@@ -70,12 +70,16 @@ const SearchFilter = () => {
             const spot = data.spots[0];
             params.set("lat", spot.lat.toString());
             params.set("lon", spot.lon.toString());
+            setUserLat(spot.lat);
+            setUserLon(spot.lon);
           } else {
             // 2. DB에 없을 경우, 일반 주소 geocode 검색
             const geocode = await getGeocode(updates.query);
             if (geocode) {
               params.set("lat", geocode.lat.toString());
               params.set("lon", geocode.lon.toString());
+              setUserLat(geocode.lat);
+              setUserLon(geocode.lon);
             }
           }
         } catch (error) {
