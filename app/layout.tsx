@@ -36,6 +36,11 @@ const RootLayout = ({
         />
         <meta property="og:url" content="https://kkultrip.newlecture.com/" />
         <meta property="og:type" content="website" />
+        {/* 확대금지 */}
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+        />
       </head>
       <body>{children}</body>
     </html>
