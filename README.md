@@ -53,7 +53,13 @@
 
 7. 유저 조회 (다른유저가 올린 꿀팁조회, 마이페이지)
 8. 어드민 페이지 (명소,꿀팁,유저 등록/조회/삭제)
-<img width="1051" alt="스크린샷 2025-03-14 오후 5 24 26" src="https://github.com/user-attachments/assets/cee0f41e-6c6e-4810-af7f-4562b576593a" />
+<img width="1051" alt="관리자 명소조회" src="https://github.com/user-attachments/assets/cee0f41e-6c6e-4810-af7f-4562b576593a" />
+
+<img width="1053" alt="관리자 꿀팁조회" src="https://github.com/user-attachments/assets/56a4b09b-8200-4e6f-b6d1-83df398af4f8" />
+
+<img width="1048" alt="관리자 이미지관리" src="https://github.com/user-attachments/assets/fb85d166-0e60-4024-94e0-e95aad9c626a" />
+
+![화면 기록 2025-03-14 오후 5 29 55](https://github.com/user-attachments/assets/411e3f37-46c5-481e-a830-a462c3f7656b)
 
 ---
 
