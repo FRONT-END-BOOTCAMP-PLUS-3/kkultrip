@@ -17,7 +17,7 @@
 ## 👥 팀원
 | 이름 | 역할 | Github |
 |------|------|------------|
-| 김재연 | 어드민페이지 | [GitHub]() |
+| 김재연 | 어드민페이지 |[GitHub](https://github.com/getsoss) |
 | 김종윤 | 명소상세조회 |[GitHub]() |
 | 박소정 | 로그인, 유저페이지 |[GitHub]() |
 | 심동섭 | 명소 조회/검색, 꿀팁 등록/수정 |[GitHub](https://github.com/ShimDongseup) |
