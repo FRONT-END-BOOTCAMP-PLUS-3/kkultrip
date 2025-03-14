@@ -5,5 +5,5 @@
   background-color: var(--primary-color);
   position: fixed;
   bottom: 6rem;
-  right: 2rem;
+  right: calc(50% - 200px + 1rem);
 }
