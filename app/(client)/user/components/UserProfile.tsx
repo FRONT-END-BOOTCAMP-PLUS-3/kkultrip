@@ -66,7 +66,7 @@ const UserProfile = () => {
   };
 
   if (loading) {
-    return <Loading />;
+    return <Loading size={45} color={"#fdbb09"} />;
   }
 
   return (

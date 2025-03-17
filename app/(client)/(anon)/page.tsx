@@ -6,12 +6,14 @@ import Image from "next/image";
 import styles from "./IndexPage.module.scss";
 import { getMyLocation } from "@/utils/getMyLocation";
 import useUserStore from "@/store/useUserStore";
+import Loading from "@/components/loading/Loading";
 
 const IndexPage = () => {
   const router = useRouter();
   const completionWord: string = "여행의 달콤함,꿀트립";
   const [loginStatus, setLoginStatus] = useState<string>("");
   const [count, setCount] = useState<number>(0);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const userLat = useUserStore((state) => state.userLat);
   const userLon = useUserStore((state) => state.userLon);
   const { setUserLat, setUserLon } = useUserStore();
@@ -22,6 +24,7 @@ const IndexPage = () => {
         setUserLat(lat);
         setUserLon(lon);
         router.replace(`/spots?lat=${lat}&lon=${lon}`);
+        setIsLoading(false);
       })
       .catch(() => {
         router.replace(`/spots?lat=${userLat}&lon=${userLon}`);
@@ -33,6 +36,7 @@ const IndexPage = () => {
       setLoginStatus((prevStatusValue) => {
         if (count >= completionWord.length) {
           clearInterval(typingInterval);
+          setIsLoading(true);
           return prevStatusValue;
         }
         const result = prevStatusValue
@@ -58,6 +62,7 @@ const IndexPage = () => {
           priority
         />
         <h1>{loginStatus}</h1>
+        {isLoading && <Loading size={45} color="#000" />}
       </div>
     </div>
   );

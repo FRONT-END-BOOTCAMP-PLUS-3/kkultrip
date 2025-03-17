@@ -127,7 +127,7 @@ const UserTipsFetcher = () => {
 
 const UsersPage = () => {
   return (
-    <Suspense fallback={<Loading />}>
+    <Suspense fallback={<Loading size={45} color={"#fdbb09"} />}>
       <UserTipsFetcher />
     </Suspense>
   );

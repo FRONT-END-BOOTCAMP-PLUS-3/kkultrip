@@ -1,10 +1,11 @@
-import { ClipLoader } from "react-spinners";
+import { MoonLoader } from "react-spinners";
 import styles from "./Loading.module.scss";
 
-const Loading = () => {
+const Loading = (props: { color: string; size: number }) => {
+  const { color, size } = props;
   return (
     <div className={styles.loadingContainer}>
-      <ClipLoader size={60} color="#fdbb09" />
+      <MoonLoader size={size} color={color} />
     </div>
   );
 };

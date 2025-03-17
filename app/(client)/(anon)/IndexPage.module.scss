@@ -9,7 +9,7 @@
   .logoContainer {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: space-be÷tween;
     align-items: center;
     width: 100%;
     height: 25%;
@@ -18,6 +18,7 @@
       color: white;
       font-size: 2rem;
       font-weight: bold;
+      margin-top: 1rem;
     }
   }
 }

@@ -9,6 +9,7 @@ import Image from "next/image";
 import { getGeocode } from "@/utils/getGeocode";
 import { getMyLocation } from "@/utils/getMyLocation";
 import useUserStore from "@/store/useUserStore";
+import Loading from "@/components/loading/Loading";
 
 const SearchFilter = () => {
   const searchParams = useSearchParams();
@@ -20,6 +21,7 @@ const SearchFilter = () => {
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
   const [isRecentVisible, setIsRecentVisible] = useState(false);
   const [tempQuery, setTempQuery] = useState(query);
+  const [isLoading, setIsLoading] = useState(false);
   const { setUserLat, setUserLon } = useUserStore();
   const userLat = useUserStore((state) => state.userLat);
   const userLon = useUserStore((state) => state.userLon);
@@ -156,8 +158,10 @@ const SearchFilter = () => {
   // 내 위치 업데이트 기능 (위도/경도 가져오기)
   const handleUpdateLocation = async () => {
     try {
+      setIsLoading(true);
       const location = await getMyLocation();
       if (location) {
+        setIsLoading(false);
         setUserLat(location.lat);
         setUserLon(location.lon);
         updateFilters({ lat: location.lat, lon: location.lon, query: "" });
@@ -167,6 +171,7 @@ const SearchFilter = () => {
         updateFilters({ lat: userLat, lon: userLon, query: "" });
       }
     } catch (error) {
+      setIsLoading(false);
       console.log("위치 정보를 가져올 수 없음:", error);
       alert(
         "현재 위치를 가져올 수 없습니다. 기본 위치(서울시청)로 이동합니다."
@@ -262,7 +267,11 @@ const SearchFilter = () => {
         className={styles.updateLocationBtn}
         onClick={handleUpdateLocation}
       >
-        <TbCurrentLocation className={styles.icon} />
+        {isLoading ? (
+          <Loading size={20} color="#3196f3" />
+        ) : (
+          <TbCurrentLocation className={styles.icon} />
+        )}
       </button>
     </div>
   );
