@@ -46,7 +46,7 @@ const MyTips = () => {
   };
 
   if (isLoading) {
-    return <Loading />;
+    return <Loading size={45} color={"#fdbb09"} />;
   }
 
   return (
