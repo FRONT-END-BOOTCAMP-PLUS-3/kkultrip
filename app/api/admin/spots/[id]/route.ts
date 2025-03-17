@@ -81,10 +81,6 @@ export async function PATCH(req: Request) {
     }
 
     const existingDocent = await docentRepository.getDocentBySpotId(Number(id));
-    if (!existingDocent || existingDocent.length === 0) {
-      return NextResponse.json({ error: "Docent not found" }, { status: 404 });
-    }
-
     const uploadDirImages = "/home/honeytrip/upload/images/spots";
     const uploadDirAudios = "/home/honeytrip/upload/audios";
 
@@ -123,31 +119,33 @@ export async function PATCH(req: Request) {
           const filePath = path.join(uploadDirAudios, `${fileName}${fileExt}`);
           const newAudioPath = `/audios/${fileName}${fileExt}`; // 상대 경로
 
-          // 기존 오디오 경로 확인 및 삭제
-          if (
-            existingDocent[i].audioPath &&
-            existingDocent[i].audioPath !== newAudioPath
-          ) {
-            try {
-              const existingAudioPath = path.join(
-                uploadDirAudios,
-                path.basename(existingDocent[i].audioPath)
-              );
-              await fs.access(existingAudioPath); // 파일 존재 여부 확인
-              await fs.unlink(existingAudioPath); // 삭제 실행
-            } catch (unlinkError) {
-              console.log(
-                "❌ 기존 오디오 삭제 실패 (파일이 없을 수도 있음):",
-                unlinkError
-              );
+          if (existingDocent) {
+            // 기존 오디오 경로 확인 및 삭제
+            if (
+              existingDocent[i].audioPath &&
+              existingDocent[i].audioPath !== newAudioPath
+            ) {
+              try {
+                const existingAudioPath = path.join(
+                  uploadDirAudios,
+                  path.basename(existingDocent[i].audioPath)
+                );
+                await fs.access(existingAudioPath); // 파일 존재 여부 확인
+                await fs.unlink(existingAudioPath); // 삭제 실행
+              } catch (unlinkError) {
+                console.log(
+                  "❌ 기존 오디오 삭제 실패 (파일이 없을 수도 있음):",
+                  unlinkError
+                );
+              }
             }
+
+            // 새 오디오 파일 저장
+            await fs.writeFile(filePath, Buffer.from(buffer));
+
+            // 새 오디오 경로 업데이트
+            existingDocent[i].audioPath = newAudioPath;
           }
-
-          // 새 오디오 파일 저장
-          await fs.writeFile(filePath, Buffer.from(buffer));
-
-          // 새 오디오 경로 업데이트
-          existingDocent[i].audioPath = newAudioPath;
         }
       }
     }
