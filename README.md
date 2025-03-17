@@ -40,14 +40,14 @@
 ## ❗️ 주요 기능
 
 1. 명소 조회, 검색필터, 지도표시
-<img src="https://github.com/user-attachments/assets/2048171c-edb4-4af1-ba50-29cfabfdca63" width="300" alt="명소조회"/>
+<img src="https://github.com/user-attachments/assets/0708576d-51f9-4085-841f-818c83917d28" width="300" alt="명소조회"/>
 
-2. 명소 상세검색 (명소정보, 도슨트, 꿀팁, 사진)
-3. 꿀팁 등록/수정
-<img src="https://github.com/user-attachments/assets/797e324e-8853-4eb7-955d-0cb752fb5042" width="300" alt="명소조회"/>
+3. 명소 상세검색 (명소정보, 도슨트, 꿀팁, 사진)
+4. 꿀팁 등록/수정
+<img src="https://github.com/user-attachments/assets/23581872-41d7-49b8-8011-9f93e17d507b" width="300" alt="명소조회"/>
 
-4. 유저 조회 (다른유저가 올린 꿀팁조회, 마이페이지)
-5. 어드민 페이지 (명소,꿀팁,유저 등록/조회/삭제)
+5. 유저 조회 (다른유저가 올린 꿀팁조회, 마이페이지)
+6. 어드민 페이지 (명소,꿀팁,유저 등록/조회/삭제)
 <img width="1051" alt="관리자 명소조회" src="https://github.com/user-attachments/assets/cee0f41e-6c6e-4810-af7f-4562b576593a" />
 
 <img width="1053" alt="관리자 꿀팁조회" src="https://github.com/user-attachments/assets/56a4b09b-8200-4e6f-b6d1-83df398af4f8" />
