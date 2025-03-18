@@ -47,8 +47,14 @@
 3. 꿀팁 등록/수정
 <img src="https://github.com/user-attachments/assets/e4ede0d6-3749-4d8e-8637-eaf27d25cfc7" width="300" alt="꿀팁등록수정"/>
 
-4. 유저 조회 (다른유저가 올린 꿀팁조회, 마이페이지)
-<img src="https://github.com/user-attachments/assets/84dfc8d1-47cc-434d-ac4c-8cc1520da361" width="300" alt="다른유저꿀팁조회페이지"/>
+4. 유저 조회 (마이페이지, 다른유저가 올린 꿀팁조회)
+<table>
+  <tr>
+    <td><img src="https://github.com/user-attachments/assets/1ae1bb10-c55b-49c8-bd17-026fe51cc64b" width="100%" alt="마이페이지"/></td>
+    <td width="100"></td>
+    <td><img src="https://github.com/user-attachments/assets/aa7dd7ba-258b-4bc6-9a4c-5abaa340c9fb" width="300" alt="다른유저꿀팁조회페이지"/></td>
+  </tr>
+</table>
 
 5. 어드민 페이지 (명소,꿀팁,유저 등록/조회/삭제)
 <img width="1051" alt="관리자 명소조회" src="https://github.com/user-attachments/assets/cee0f41e-6c6e-4810-af7f-4562b576593a" />
