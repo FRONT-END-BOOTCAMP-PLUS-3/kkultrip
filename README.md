@@ -42,18 +42,18 @@
 1. 명소 조회, 검색필터, 지도표시
 <img src="https://github.com/user-attachments/assets/8c09ad4c-32f0-4cbb-bdad-7b0efe99ee42" width="300" alt="명소조회"/>
 
-3. 명소 상세검색 (명소정보, 도슨트, 꿀팁, 사진)
-4. 꿀팁 등록/수정
+2. 명소 상세검색 (명소정보, 도슨트, 꿀팁, 사진)
+
+3. 꿀팁 등록/수정
 <img src="https://github.com/user-attachments/assets/e4ede0d6-3749-4d8e-8637-eaf27d25cfc7" width="300" alt="꿀팁등록수정"/>
 
-5. 유저 조회 (다른유저가 올린 꿀팁조회, 마이페이지)
-6. 어드민 페이지 (명소,꿀팁,유저 등록/조회/삭제)
+4. 유저 조회 (다른유저가 올린 꿀팁조회, 마이페이지)
+<img src="https://github.com/user-attachments/assets/84dfc8d1-47cc-434d-ac4c-8cc1520da361" width="300" alt="다른유저꿀팁조회페이지"/>
+
+5. 어드민 페이지 (명소,꿀팁,유저 등록/조회/삭제)
 <img width="1051" alt="관리자 명소조회" src="https://github.com/user-attachments/assets/cee0f41e-6c6e-4810-af7f-4562b576593a" />
-
 <img width="1053" alt="관리자 꿀팁조회" src="https://github.com/user-attachments/assets/56a4b09b-8200-4e6f-b6d1-83df398af4f8" />
-
 <img width="1048" alt="관리자 이미지관리" src="https://github.com/user-attachments/assets/fb85d166-0e60-4024-94e0-e95aad9c626a" />
-
 <img src="https://github.com/user-attachments/assets/411e3f37-46c5-481e-a830-a462c3f7656b" width="300" alt="명소 수정"/>
 
 
