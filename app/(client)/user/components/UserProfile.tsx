@@ -1,43 +1,25 @@
 "use client";
 
-import Loading from "@/components/loading/Loading";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { FaCamera } from "react-icons/fa";
 import styles from "./UserProfile.module.scss";
+import useUserStore from "@/store/useUserStore";
 
 const UserProfile = () => {
-  const [loading, setLoading] = useState(true);
   const [isEdit, setIsEdit] = useState(false);
-  const [nickname, setNickname] = useState("");
-  const [img, setImg] = useState("");
+  const { img, nickname, setImg, setNickname } = useUserStore();
+  const [tempNickname, setTempNickname] = useState(nickname || "");
+  const [tempImg, setTempImg] = useState(img || "");
   const [file, setFile] = useState<File | null>(null);
-
-  useEffect(() => {
-    const fetchUserInfo = async () => {
-      try {
-        const response = await fetch("/api/user");
-        if (!response.ok) throw new Error("사용자 정보를 불러올 수 없습니다.");
-
-        const data = await response.json();
-        setNickname(data.user.nickname);
-        setImg(data.user.img);
-      } catch (error) {
-        console.error("사용자 정보 불러오기 실패:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchUserInfo();
-  }, []);
 
   const handleEditToggle = async () => {
     if (isEdit) {
       try {
         const formData = new FormData();
-        formData.append("nickname", nickname);
+        formData.append("nickname", tempNickname);
         if (file) formData.append("file", file);
+
         const response = await fetch("/api/user", {
           method: "PUT",
           body: formData,
@@ -47,6 +29,8 @@ const UserProfile = () => {
 
         const updatedData = await response.json();
         console.log("updatedData", updatedData);
+
+        setNickname(updatedData.user.nickname);
         setImg(updatedData.user.img);
       } catch (error) {
         console.error("프로필 수정 오류:", error);
@@ -59,21 +43,18 @@ const UserProfile = () => {
     const file = e.target.files?.[0];
     if (file) {
       const imageUrl = URL.createObjectURL(file);
-      console.log("imageUrl", imageUrl);
-      setImg(imageUrl);
+      setTempImg(imageUrl);
       setFile(file);
     }
   };
-
-  if (loading) {
-    return <Loading size={45} color={"#fdbb09"} />;
-  }
 
   return (
     <div className={styles.profileContainer}>
       <div className={styles.profile}>
         <Image
-          src={isEdit ? img : `${process.env.NEXT_PUBLIC_SERVICE_URL}${img}`}
+          src={
+            isEdit ? tempImg : `${process.env.NEXT_PUBLIC_SERVICE_URL}${img}`
+          }
           fill
           alt="profile image"
           sizes="10rem"
@@ -101,8 +82,8 @@ const UserProfile = () => {
         {isEdit ? (
           <input
             type="text"
-            value={nickname}
-            onChange={(e) => setNickname(e.target.value)}
+            value={tempNickname}
+            onChange={(e) => setTempNickname(e.target.value)}
             className={styles.nicknameInput}
           />
         ) : (
