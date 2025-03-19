@@ -33,7 +33,14 @@ const useUserStore = create<UserStore>()(
       setUserLon: (lon) => set({ userLon: lon }),
       setId: (id) => set({ id }),
       clearInfo: () =>
-        set({ img: null, nickname: null, isLoggedIn: false, id: null }),
+        set({
+          img: null,
+          nickname: null,
+          isLoggedIn: false,
+          userLat: 37.5665,
+          userLon: 126.978,
+          id: null,
+        }),
     }),
     {
       name: "user-storage",
