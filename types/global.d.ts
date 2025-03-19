@@ -7,6 +7,8 @@ declare global {
     namespace maps {
       class LatLng {
         constructor(lat: number, lng: number);
+        lat(): number;
+        lng(): number;
       }
 
       class Map {
@@ -20,6 +22,7 @@ declare global {
 
         setCenter(center: LatLng): void;
         setZoom(zoom: number): void;
+        getCenter(): LatLng;
       }
 
       class Marker {
