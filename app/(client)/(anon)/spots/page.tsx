@@ -2,7 +2,6 @@ import { GetSpotsDTO } from "@/application/usecases/spot/dto/GetSpotsDto";
 import SearchFilter from "./components/SearchFilter";
 import NaverMap from "./components/NaverMap";
 import BottomSheet from "./components/BottomSheet";
-import styles from "./SpotsPage.module.scss";
 
 // 기본 위치 설정 (서울)
 const DEFAULT_LAT = 37.5665;
@@ -88,41 +87,6 @@ const Spots = async ({
 
   return (
     <>
-      {/* SEO 최적화를 위한 숨겨진 검색 결과 */}
-      <div className={styles.hiddenSeo}>
-        <h1>주변 명소 검색 결과</h1>
-        <p>
-          현재 위치: {lat}, {lon}
-        </p>
-        {query && <p>검색어: {query}</p>}
-        {category && <p>카테고리: {category}</p>}
-        {maxPrice !== undefined && (
-          <p>최대 가격: {maxPrice.toLocaleString()}원</p>
-        )}
-        <ul>
-          {Array.isArray(spots) && spots.length > 0 ? (
-            spots.map((spot) => (
-              <li key={spot.id}>
-                <h2>{spot.name}</h2>
-                <p>카테고리: {spot.category}</p>
-                <p>
-                  위치: {spot.lat}, {spot.lon}
-                </p>
-                <p>
-                  평균 가격:{" "}
-                  {spot.avgPrice
-                    ? `${spot.avgPrice.toLocaleString()}원`
-                    : "가격 정보 없음"}
-                </p>
-              </li>
-            ))
-          ) : (
-            <p>검색된 명소가 없습니다.</p>
-          )}
-        </ul>
-      </div>
-
-      {/* 검색 필터 / 네이버 지도 / 바텀시트 */}
       <SearchFilter />
       <NaverMap lat={lat} lon={lon} spots={spots} />
       <BottomSheet spots={spots} />
